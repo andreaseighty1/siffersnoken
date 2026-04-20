@@ -85,6 +85,9 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
   font-size:11px;font-weight:800;cursor:pointer;transition:.12s;white-space:nowrap;}
 .tq-btn:hover{border-color:var(--accent);color:var(--text)}
 .tq-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+.table-multi-row{display:flex;align-items:center;gap:7px;margin:4px 0 8px;color:var(--muted);font-size:11px;font-weight:700;}
+.table-multi-row input{accent-color:var(--accent);cursor:pointer;}
+.table-multi-row label{cursor:pointer;}
 .table-grid{display:flex;gap:4px;flex-wrap:wrap}
 .tb-btn{padding:4px 6px;border:1px solid var(--line);border-radius:6px;
   background:transparent;color:var(--muted);font-family:'Orbitron',monospace;
@@ -436,6 +439,10 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
             <button class="tq-btn" data-tq="1,2,3,4,5,6,7,8,9,10,11,12">×1–12</button>
           </div>
           <div class="panel-desc" id="tableDescIndiv">Välj enskilda:</div>
+          <div class="table-multi-row">
+            <input type="checkbox" id="tableMultiChk">
+            <label for="tableMultiChk" id="tableMultiLabel">Välj flera tabeller</label>
+          </div>
           <div class="table-grid" id="tableGrid"></div>
         </div>
       </div>
@@ -648,6 +655,7 @@ const STRINGS={
     panelTables:'✖️ Multiplikationstabeller',
     panelTableQuick:'Snabbval:',
     panelTableIndiv:'Välj enskilda:',
+    panelTableMulti:'Välj flera tabeller',
     panelSpeed:'🏃 Hastighetsökning',
     panelWalls:'🧱 Väggar',
     panelMode:'🎮 Spelläge',panelAppearance:'🎨 Utseende',
@@ -731,6 +739,7 @@ const STRINGS={
     panelTables:'✖️ Multiplication tables',
     panelTableQuick:'Quick select:',
     panelTableIndiv:'Choose individual:',
+    panelTableMulti:'Choose multiple tables',
     panelSpeed:'🏃 Speed increase',
     panelWalls:'🧱 Walls',
     speedNone:'No change',
@@ -861,6 +870,7 @@ function applyLang(){
   if($('tablePanelTitle'))$('tablePanelTitle').textContent=t('panelTables');
   if($('tableDescQuick'))$('tableDescQuick').textContent=t('panelTableQuick');
   if($('tableDescIndiv'))$('tableDescIndiv').textContent=t('panelTableIndiv');
+  if($('tableMultiLabel'))$('tableMultiLabel').textContent=t('panelTableMulti');
   if($('hintPause'))$('hintPause').textContent=t('hintPause');
   if($('hintMenu'))$('hintMenu').textContent=t('hintMenu');
   if($('hintMusic'))$('hintMusic').textContent=t('hintMusic');
@@ -1113,7 +1123,7 @@ function toggleHeadAccessory(){
    ═══════════════════════════════════════ */
 function saveSettings(){
   localStorage.setItem(SETTINGS_KEY,JSON.stringify({
-    ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap
+    ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap,multiTableSelect
   }));
 }
 function loadSettings(){
@@ -1122,13 +1132,14 @@ function loadSettings(){
     if(!s)return;
     if(s.ops&&s.ops.length)activeOps=new Set(s.ops);
     if(s.numRange)numRange=s.numRange;
-    if(s.tables&&s.tables.length)tables=new Set(s.tables);
+    if(Array.isArray(s.tables))tables=new Set(s.tables);
     if(s.speedMode)speedMode=s.speedMode;
     if(typeof s.wallWrap==='boolean')wallWrap=s.wallWrap;
+    if(typeof s.multiTableSelect==='boolean')multiTableSelect=s.multiTableSelect;
   }catch(e){}
 }
 let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
-let speedMode='none',wallWrap=false;
+let speedMode='none',wallWrap=false,multiTableSelect=false;
 
 /* ═══════════════════════════════════════
    SPELVARIABLER
@@ -1543,13 +1554,13 @@ function genFreshProblem(){
     if(op==='*'){
       if(!tables.size)continue;
       const tArr=[...tables],t=tArr[Math.floor(Math.random()*tArr.length)];
-      const o=R(1,12);let a=t,b=o;if(Math.random()>.5)[a,b]=[b,a];
+      const o=R(1,(t===11||t===12)?12:10);let a=t,b=o;if(Math.random()>.5)[a,b]=[b,a];
       return{expr:`${a} × ${b}`,answer:a*b,op:'*'};
     }
     if(op==='/'){
       if(!tables.size)continue;
       const tArr=[...tables],d=tArr[Math.floor(Math.random()*tArr.length)];
-      if(!d)continue;const q=R(1,12);
+      if(!d)continue;const q=R(1,(d===11||d===12)?12:10);
       return{expr:`${q*d} ÷ ${d}`,answer:q,op:'/'};
     }
   }
@@ -1771,12 +1782,14 @@ function drawObsidianGlimmer(){
 }
 function drawAuroraShimmer(){
   const T=performance.now(),W=canvas.width,H=canvas.height;
-  for(let i=0;i<15;i++){
-    const hue=(T/30+i*24)%360;
-    const sy=(i*63.7)%H;
-    const a=0.04+0.04*Math.sin(T/800+i);
-    ctx.fillStyle=`hsla(${hue},90%,65%,${a})`;
-    ctx.fillRect(0,sy,W,4);
+  for(let i=0;i<28;i++){
+    const hue=(T/40+i*13)%360;
+    const sx=(i*137.5+Math.sin(T/1200+i)*12)%W;
+    const sy=(i*97.3+Math.cos(T/1000+i*0.7)*10)%H;
+    const a=0.12+0.18*Math.abs(Math.sin(T/700+i*0.9));
+    const size=0.8+(i%3)*0.6;
+    ctx.fillStyle=`hsla(${hue},90%,75%,${a})`;
+    ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
   }
 }
 function drawParticles(type){
@@ -1824,6 +1837,7 @@ function drawParticles(type){
   }
 }
 function drawBackground(theme){
+  ctx.shadowBlur=0;ctx.shadowColor='transparent';
   ctx.fillStyle=theme.bgA||'#060c08';
   ctx.fillRect(0,0,canvas.width,canvas.height);
   ctx.strokeStyle=theme.gridColor||'rgba(0,255,100,.033)';ctx.lineWidth=1;
@@ -2076,7 +2090,13 @@ function updateHUD(){
     for(let i=0;i<3;i++){const d=document.createElement('div');d.className='life'+(i>=lives?' lost':'');d.textContent='❤️';ld.appendChild(d);}
   }
 }
-function flashFx(type){const el=type==='good'?$('flashGood'):$('flashBad');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),170);}
+function flashFx(type){
+  const el=type==='good'?$('flashGood'):$('flashBad');
+  if(type==='good'&&loadActiveSkin()==='aurora')el.style.background='rgba(120,255,220,.035)';
+  else el.style.background='';
+  el.classList.add('show');
+  setTimeout(()=>{el.classList.remove('show');el.style.background='';},170);
+}
 
 /* ═══════════════════════════════════════
    GAME OVER — med statistik
@@ -2180,8 +2200,20 @@ function buildTableGrid(){
     const btn=document.createElement('button');btn.className='tb-btn'+(tables.has(n)?' sel':'');
     btn.textContent=`×${n}`;btn.dataset.n=n;
     btn.addEventListener('click',()=>{
-      if(tables.has(n)){tables.delete(n);btn.classList.remove('sel');}else{tables.add(n);btn.classList.add('sel');}
-      updateTableQuickSel();deselectPreset();saveSettings();});
+      if(multiTableSelect){
+        const next=[...tables];
+        const i=next.indexOf(n);
+        if(i!==-1){
+          if(next.length===1)return;
+          next.splice(i,1);
+        }else next.push(n);
+        setTables(next);
+      }else{
+        if(tables.size===1&&tables.has(n))return;
+        setTables([n]);
+      }
+      deselectPreset();
+    });
     grid.appendChild(btn);
   }
 }
@@ -2194,10 +2226,22 @@ function setTables(arr){
   tables=new Set(arr);
   document.querySelectorAll('.tb-btn').forEach(btn=>btn.classList.toggle('sel',tables.has(parseInt(btn.dataset.n))));
   updateTableQuickSel();
+  saveSettings();
+  updateMenuSettingsSummary();
+}
+function syncTableMultiToggle(){
+  if($('tableMultiChk'))$('tableMultiChk').checked=multiTableSelect;
 }
 document.querySelectorAll('.tq-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{setTables(btn.dataset.tq.split(',').map(Number));deselectPreset();});
 });
+if($('tableMultiChk')){
+  $('tableMultiChk').addEventListener('change',()=>{
+    multiTableSelect=$('tableMultiChk').checked;
+    if(!multiTableSelect&&tables.size>1)setTables([...tables].sort((a,b)=>a-b).slice(0,1));
+    else saveSettings();
+  });
+}
 function updateTablePanelVisibility(){$('tablePanel').style.display=(activeOps.has('*')||activeOps.has('/'))? 'block':'none';}
 document.querySelectorAll('.op-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{const op=btn.dataset.op;
@@ -2598,6 +2642,8 @@ renderHS();updateMedalNavBtn();updateSkinNavBtn();updatePlayerBar();setupDpad();
 applyUITheme(loadUITheme());
 applyMode(localStorage.getItem('mattormen_mode')||'standard');
 loadSettings();
+setTables([...tables]);
+syncTableMultiToggle();
 document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
 document.querySelectorAll('.range-btn').forEach(rb=>rb.classList.toggle('sel',parseInt(rb.dataset.r)===numRange));
 document.querySelectorAll('.speed-btn').forEach(sb=>sb.classList.toggle('sel',sb.dataset.sm===speedMode));
