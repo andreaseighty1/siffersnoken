@@ -37,10 +37,11 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .screen{display:none;flex-direction:column;align-items:center;justify-content:flex-start;
         width:100%;height:100%;padding:16px 8px 36px;overflow-y:hidden}
 .screen.active{display:flex}
-#menuScreen{justify-content:center;}
+#menuScreen{justify-content:flex-start;overflow-y:auto;padding-top:12px;}
 
 /* ── MENY ── */
-.player-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:14px;font-weight:700;color:var(--accent)}
+.player-bar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
+  margin-bottom:6px;font-size:14px;font-weight:700;color:var(--accent)}
 .player-bar button{background:none;border:1px solid var(--line);border-radius:6px;color:var(--muted);
   font-size:12px;padding:2px 7px;cursor:pointer;transition:.12s;}
 .player-bar button:hover{border-color:var(--accent);color:var(--accent)}
@@ -304,10 +305,11 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .copyright{margin-top:12px;width:100%;text-align:center;font-size:13px;line-height:1.5;
   color:var(--text);pointer-events:none;letter-spacing:.06em;opacity:.7;
   font-family:'Exo 2',sans-serif;}
+@media(min-height:861px){#menuScreen{justify-content:center;padding-top:16px;overflow-y:hidden}}
+@media(max-height:860px){#menuScreen{padding-bottom:20px}#menuBanner{width:min(340px,62vw)!important}}
 @media(max-height:660px){.menu-sub{margin-bottom:6px}.menu-cols{gap:7px}.play-btn{margin-bottom:5px}}
 
 /* ── GAMEWRAPPER (Windows/WebView2) ── */
-#gameWrapper{width:1100px;height:760px;overflow:hidden;transform-origin:top center;position:relative;}
 
 /* ── TITELSKÄRM NAV-GRID ── */
 .menu-nav-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:520px;margin-top:10px;}
@@ -336,7 +338,6 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 <audio id="bgMusic"   src="siffersnoken_musik.mp3"  loop preload="auto"></audio>
 <audio id="fastMusic" src="siffersnoken_snabb.mp3"  loop preload="auto"></audio>
 
-<div id="gameWrapper">
 
 <!-- NAMNMODAL -->
 <div class="overlay" id="nameModal">
@@ -2512,16 +2513,6 @@ function exportSessionStats(){
 }
 
 /* ─── Skalning för WebView2/Windows ─── */
-function scaleToFit(){
-  const w=document.getElementById('gameWrapper');if(!w)return;
-  const sw=window.innerWidth,sh=window.innerHeight;
-  const scale=Math.min(1,sw/1100,sh/760);
-  if(scale<0.999){
-    w.style.transform=`scale(${scale.toFixed(4)})`;
-    w.style.marginTop=`${Math.max(0,Math.floor((sh-760*scale)/2))}px`;
-  }else{w.style.transform='none';w.style.marginTop='0';}
-}
-window.addEventListener('resize',scaleToFit);
 
 function pauseGame(){
   if(state!=='playing')return;
@@ -2620,8 +2611,6 @@ applyLang();
 if(!loadPlayer())showNameModal();
 // WebView2: försök låsa upp audio utan user gesture
 setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
-scaleToFit();
 </script>
-</div><!-- /gameWrapper -->
 </body>
 </html>
