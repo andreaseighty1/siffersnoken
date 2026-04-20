@@ -1,0 +1,2627 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SifferSnoken V2.6 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Nunito:wght@700;900&display=swap');
+:root{
+  --bg:#060c08;--panel:rgba(255,255,255,.05);--line:rgba(0,255,100,.15);
+  --text:#d8fde8;--muted:#5a8c6a;--accent:#00ff88;--gold:#ffd700;
+  --ov-card-bg:rgba(6,12,8,.96);--toast-bg:rgba(10,30,15,.96);
+}
+/* ── UI-TEMAN ── */
+[data-theme="skog"]{
+  --panel:rgba(180,50,220,.08);--line:rgba(180,80,255,.25);
+  --text:#f0c8f8;--muted:#8a5aaa;--accent:#cc44ff;--gold:#ffd700;
+  --ov-card-bg:rgba(20,5,35,.97);--toast-bg:rgba(30,8,50,.97);
+  --dpad-bg:rgba(120,30,180,.5);--dpad-border:rgba(160,60,220,.8);--dpad-color:#2a0044;
+}
+[data-theme="hav"]{
+  --panel:rgba(0,60,160,.07);--line:rgba(0,100,200,.25);
+  --text:#b8d8f8;--muted:#4a7aaa;--accent:#44aaff;--gold:#ffd700;
+  --ov-card-bg:rgba(235,245,255,.97);--toast-bg:rgba(220,238,255,.97);
+  --dpad-bg:rgba(0,60,160,.45);--dpad-border:rgba(0,80,200,.8);--dpad-color:#001830;
+}
+[data-theme="solnedgang"]{
+  --panel:rgba(255,255,255,.05);--line:rgba(255,120,30,.2);
+  --text:#ffe0c8;--muted:#8a6050;--accent:#ff8844;--gold:#ffcc00;
+  --ov-card-bg:rgba(18,8,4,.96);--toast-bg:rgba(25,10,5,.96);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%}body{height:100dvh;min-height:100%;background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;overflow:hidden}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,255,100,.06),transparent 60%),
+             linear-gradient(180deg,#060c08,#03080a);}
+.screen{display:none;flex-direction:column;align-items:center;justify-content:flex-start;
+        width:100%;height:100%;padding:16px 8px 36px;overflow-y:hidden}
+.screen.active{display:flex}
+#menuScreen{justify-content:center;}
+
+/* ── MENY ── */
+.player-bar{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:14px;font-weight:700;color:var(--accent)}
+.player-bar button{background:none;border:1px solid var(--line);border-radius:6px;color:var(--muted);
+  font-size:12px;padding:2px 7px;cursor:pointer;transition:.12s;}
+.player-bar button:hover{border-color:var(--accent);color:var(--accent)}
+.lang-row{display:flex;gap:6px;justify-content:center;margin-bottom:10px;}
+.lang-btn{padding:4px 12px;border:1px solid var(--line);border-radius:8px;
+  background:transparent;color:var(--muted);font-family:'Exo 2',sans-serif;
+  font-size:12px;font-weight:800;cursor:pointer;transition:.12s;}
+.lang-btn:hover{border-color:var(--accent);color:var(--text)}
+.lang-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+.menu-sub{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.1em;text-transform:uppercase}
+.menu-cols{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;
+           justify-content:center;margin-bottom:10px;width:100%;max-width:940px}
+.menu-panel{border:1px solid var(--line);border-radius:13px;background:var(--panel);
+            padding:11px 13px;flex:1;min-width:155px;max-width:295px}
+.panel-title{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
+             margin-bottom:7px;font-weight:700}
+.panel-desc{font-size:10px;color:var(--muted);margin-bottom:6px;line-height:1.5}
+.grade-row{display:flex;flex-wrap:wrap;gap:5px}
+.preset-btn{padding:4px 10px;border:1px solid var(--line);border-radius:8px;
+  background:transparent;color:var(--muted);font-family:'Exo 2',sans-serif;
+  font-size:12px;font-weight:800;cursor:pointer;transition:.12s;}
+.preset-btn:hover{border-color:var(--accent);color:var(--text)}
+.preset-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+.op-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.op-btn{padding:12px 6px;border:2px solid var(--line);border-radius:10px;
+  background:transparent;color:var(--muted);font-family:'Orbitron',monospace;
+  font-size:17px;font-weight:900;cursor:pointer;transition:.12s;text-align:center;}
+.op-btn:hover{border-color:var(--accent);color:var(--accent)}
+.op-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.12);
+            color:var(--accent);box-shadow:0 0 10px rgba(0,255,136,.15)}
+.range-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
+.range-btn{padding:5px 10px;border:1px solid var(--line);border-radius:8px;
+  background:transparent;color:var(--muted);font-family:'Orbitron',monospace;
+  font-size:11px;font-weight:700;cursor:pointer;transition:.12s;white-space:nowrap;}
+.range-btn:hover{border-color:var(--accent);color:var(--text)}
+.range-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+.range-hint{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5}
+.table-quick{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:6px}
+.tq-btn{padding:3px 8px;border:1px solid var(--line);border-radius:6px;
+  background:transparent;color:var(--muted);font-family:'Exo 2',sans-serif;
+  font-size:11px;font-weight:800;cursor:pointer;transition:.12s;white-space:nowrap;}
+.tq-btn:hover{border-color:var(--accent);color:var(--text)}
+.tq-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+.table-grid{display:flex;gap:4px;flex-wrap:wrap}
+.tb-btn{padding:4px 6px;border:1px solid var(--line);border-radius:6px;
+  background:transparent;color:var(--muted);font-family:'Orbitron',monospace;
+  font-size:11px;font-weight:700;cursor:pointer;transition:.12s;min-width:34px;text-align:center;}
+.tb-btn:hover{border-color:var(--accent);color:var(--text)}
+.tb-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+.speed-row{display:flex;flex-direction:column;gap:5px;margin-bottom:6px}
+.speed-btn{padding:6px 10px;border:1px solid var(--line);border-radius:8px;
+  background:transparent;color:var(--muted);font-family:'Exo 2',sans-serif;
+  font-size:11px;font-weight:700;cursor:pointer;transition:.12s;text-align:left;}
+.speed-btn:hover{border-color:var(--accent);color:var(--text)}
+.speed-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+/* Toggle-rad (väggar + svårighets-combo) */
+.toggle-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.toggle-btn{padding:5px 10px;border:1px solid var(--line);border-radius:8px;
+  background:transparent;color:var(--muted);font-family:'Exo 2',sans-serif;
+  font-size:11px;font-weight:700;cursor:pointer;transition:.12s;flex:1;text-align:center;}
+.toggle-btn:hover{border-color:var(--accent);color:var(--text)}
+.toggle-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+
+.play-btn{padding:12px 44px;border:2px solid var(--accent);border-radius:13px;
+  background:rgba(0,255,136,.12);color:var(--accent);font-family:'Orbitron',monospace;
+  font-size:16px;font-weight:700;cursor:pointer;transition:.15s;letter-spacing:.06em;
+  box-shadow:0 0 20px rgba(0,255,136,.2);margin-bottom:8px;}
+.play-btn:hover{background:rgba(0,255,136,.22);box-shadow:0 0 32px rgba(0,255,136,.35);transform:translateY(-1px)}
+
+/* ── MENY BOTTEN ── */
+.menu-bottom{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;
+             justify-content:center;width:100%;max-width:560px;margin-bottom:6px;}
+.hs-panel{border:1px solid var(--line);border-radius:13px;background:var(--panel);
+          padding:11px 15px;flex:2;min-width:260px;}
+.medals-nav-btn{border:1px solid var(--line);border-radius:13px;background:var(--panel);
+  padding:11px 18px;flex:1;min-width:140px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;cursor:pointer;transition:.15s;gap:4px;}
+.medals-nav-btn:hover{border-color:var(--accent);background:rgba(0,255,136,.07);}
+.medals-nav-btn .mn-emoji{font-size:28px}
+.medals-nav-btn .mn-label{font-family:'Orbitron',monospace;font-size:10px;color:var(--accent);letter-spacing:.1em;}
+.medals-nav-btn .mn-count{font-size:11px;color:var(--muted);}
+.hs-title{font-family:'Orbitron',monospace;font-size:11px;color:var(--accent);letter-spacing:.1em;margin-bottom:8px;text-align:center}
+.hs-row{display:flex;justify-content:space-between;gap:8px;padding:4px 0;
+        border-bottom:1px solid rgba(0,255,100,.06);font-size:11px;align-items:center}
+.hs-row:last-child{border-bottom:none}
+.hs-rank{color:var(--muted);font-weight:800;width:20px;flex-shrink:0}
+.hs-name{flex:1;color:var(--text)}
+.hs-meta{font-size:10px;color:var(--muted)}
+.hs-score{color:var(--gold);font-weight:800;font-family:'Orbitron',monospace;font-size:11px}
+.hs-empty{color:var(--muted);font-size:12px;text-align:center;padding:6px 0}
+.export-row{display:flex;gap:8px;justify-content:center;margin-bottom:4px;flex-wrap:wrap}
+.export-btn{padding:7px 16px;border:1px solid var(--line);border-radius:10px;
+  background:var(--panel);color:var(--muted);font-family:'Exo 2',sans-serif;
+  font-size:12px;font-weight:800;cursor:pointer;transition:.12s;}
+.export-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── SPELSKÄRM ── */
+/* ── STATISTIKSIDA ── */
+.stats-page{width:100%;max-width:680px;padding:8px 0 40px;}
+.stats-section{margin-bottom:18px;}
+.stats-section-title{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--line);}
+.stats-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+.stats-summary-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+  padding:10px 8px;text-align:center;}
+.stats-summary-val{font-family:'Orbitron',monospace;font-size:20px;color:var(--accent);font-weight:900;}
+.stats-summary-lbl{font-size:10px;color:var(--muted);margin-top:3px;}
+.stats-trend{font-size:13px;font-weight:700;margin-top:2px;}
+.stats-trend.up{color:#00ff88;} .stats-trend.down{color:#ff4444;} .stats-trend.flat{color:var(--muted);}
+.stats-op-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.stats-op-name{width:28px;font-family:'Orbitron',monospace;font-size:16px;font-weight:900;
+  color:var(--accent);text-align:center;}
+.stats-op-bar-wrap{flex:1;background:var(--line);border-radius:6px;height:18px;overflow:hidden;}
+.stats-op-bar{height:100%;border-radius:6px;transition:width .4s;}
+.stats-op-pct{width:38px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;text-align:right;}
+.stats-wrong-list{display:flex;flex-wrap:wrap;gap:6px;}
+.stats-wrong-item{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+  padding:5px 10px;font-family:'Orbitron',monospace;font-size:12px;color:var(--text);}
+.stats-wrong-count{font-size:10px;color:#ff4444;margin-left:4px;}
+.stats-hist-row{display:flex;align-items:center;gap:8px;padding:6px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;}
+.stats-hist-date{color:var(--muted);min-width:70px;font-size:11px;}
+.stats-hist-player{color:var(--accent);min-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.stats-hist-bar-wrap{flex:1;background:var(--line);border-radius:4px;height:10px;overflow:hidden;}
+.stats-hist-bar{height:100%;border-radius:4px;}
+.stats-hist-pct{min-width:36px;font-family:'Orbitron',monospace;font-size:11px;text-align:right;}
+.stats-hist-score{min-width:44px;color:var(--muted);font-size:11px;text-align:right;}
+.stats-clear-btn{padding:7px 18px;border:1px solid #ff4444;border-radius:8px;background:transparent;
+  color:#ff4444;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:700;cursor:pointer;
+  transition:.15s;margin-top:12px;}
+.stats-clear-btn:hover{background:rgba(255,68,68,.12);}
+
+.game-wrap{display:flex;flex-direction:column;align-items:center;width:100%;max-width:780px}
+.game-top{display:flex;justify-content:space-between;align-items:center;width:100%;padding:4px 2px}
+.g-stat{font-family:'Orbitron',monospace;font-size:10px;color:var(--muted)}
+.g-stat span{color:var(--accent);font-size:16px;display:block;line-height:1.1}
+.g-lives{display:flex;gap:4px;justify-content:center}
+.life{font-size:17px;transition:.2s} .life.lost{opacity:.18;filter:grayscale(1)}
+.combo{font-family:'Orbitron',monospace;font-size:11px;color:var(--gold);min-height:16px;text-align:center;margin-top:2px}
+.eq-bar{width:100%;display:flex;align-items:center;justify-content:center;
+  padding:10px 14px;margin:5px 0;border:1px solid var(--line);border-radius:12px;background:rgba(0,255,100,.04);}
+.eq-text{font-family:'Nunito','Exo 2',sans-serif;font-size:clamp(24px,3.8vw,44px);font-weight:900;
+  color:#fff;letter-spacing:.01em;text-shadow:0 0 16px rgba(0,255,136,.4);}
+canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
+       box-shadow:0 0 36px rgba(0,255,100,.07),inset 0 0 50px rgba(0,0,0,.5);display:block}
+.hint-row{display:flex;gap:10px;margin-top:5px;font-size:10px;color:var(--muted);flex-wrap:wrap;justify-content:center}
+.hk{background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:4px;
+    padding:1px 5px;font-family:monospace;font-size:10px;color:var(--text)}
+
+/* ── TOUCH D-PAD ── */
+#touchControls{
+  position:fixed;bottom:18px;right:18px;
+  display:none;flex-direction:column;align-items:center;gap:4px;z-index:20;
+}
+#touchControls.show{display:flex}
+.dpad-row{display:flex;gap:4px;}
+.dpad-btn{
+  width:54px;height:54px;border:2px solid rgba(0,255,136,.35);border-radius:12px;
+  background:rgba(0,255,136,.1);color:var(--accent);font-size:22px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  user-select:none;-webkit-user-select:none;touch-action:manipulation;
+  transition:background .08s;backdrop-filter:blur(4px);
+}
+.dpad-btn:active,.dpad-btn.pressed{background:rgba(0,255,136,.32);border-color:var(--accent);}
+#dUp,#dDown{font-size:18px;}
+#dLeft,#dRight{font-size:16px;}
+.dpad-center{width:54px;height:54px;}/* spacer */
+
+/* ── MEDALJER-SIDA ── */
+.medals-page{width:100%;max-width:640px;padding:8px 0 40px;}
+#medalsScreen,#hsScreen,#skinsScreen,#statsScreen{justify-content:flex-start;padding-top:12px;overflow-y:auto;}
+
+/* ── ORMSKINN-SIDA ── */
+.skins-grid{display:flex;flex-wrap:wrap;gap:10px;width:100%;max-width:640px;padding-bottom:24px;}
+.skin-card{display:flex;align-items:center;gap:10px;padding:10px 12px;
+  border:2px solid var(--line);border-radius:12px;background:var(--panel);
+  cursor:pointer;transition:.15s;flex:1;min-width:195px;max-width:310px;position:relative;}
+.skin-card:hover:not(.locked){border-color:var(--accent);}
+.skin-card.active{border-color:var(--accent);background:rgba(0,255,136,.1);box-shadow:0 0 12px rgba(0,255,136,.2);}
+.skin-card.locked{opacity:.45;cursor:default;}
+.skin-preview{width:64px;height:22px;border-radius:6px;flex-shrink:0;border:1px solid rgba(255,255,255,.15);}
+.skin-info{flex:1;min-width:0;}
+.skin-name{font-size:12px;font-weight:800;color:var(--text);}
+.skin-unlock{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4;}
+.skin-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-size:9px;font-weight:800;color:var(--accent);letter-spacing:.06em;}
+.skin-lock-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:15px;}
+.medals-page-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;width:100%;}
+.back-btn{padding:7px 14px;border:1px solid var(--line);border-radius:10px;
+  background:var(--panel);color:var(--muted);font-family:'Exo 2',sans-serif;
+  font-size:13px;font-weight:800;cursor:pointer;transition:.12s;flex-shrink:0;}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mp-title{font-family:'Orbitron',monospace;font-size:16px;color:var(--accent);letter-spacing:.08em;text-shadow:0 0 16px rgba(0,255,136,.4);}
+.mp-count{font-size:12px;color:var(--muted);margin-left:auto;}
+.medals-cat{margin-bottom:18px;width:100%;}
+.medals-cat-title{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;
+                  margin-bottom:8px;font-weight:700;border-bottom:1px solid var(--line);padding-bottom:4px;}
+.medals-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.medal-badge{display:flex;align-items:flex-start;gap:6px;padding:7px 11px;border-radius:9px;
+             border:1px solid;font-weight:700;transition:.15s;cursor:default;min-width:160px;}
+.medal-badge.unlocked{border-color:rgba(0,255,136,.45);background:rgba(0,255,136,.09);color:var(--text);}
+.medal-badge.locked{border-color:rgba(255,255,255,.07);background:rgba(0,0,0,.25);
+  color:rgba(255,255,255,.22);filter:grayscale(1);}
+.medal-badge .m-emoji{font-size:18px;line-height:1.3;flex-shrink:0;}
+.medal-badge .m-info{display:flex;flex-direction:column;flex:1;min-width:0;}
+.medal-badge .m-name{font-size:11px;font-weight:800;}
+.medal-badge .m-desc{font-size:9px;color:var(--muted);font-weight:400;}
+.medal-badge.unlocked .m-desc{color:rgba(0,255,136,.6);}
+/* Progress bar under locked medal */
+.medal-prog{height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin-top:4px;overflow:hidden;}
+.medal-prog-bar{height:100%;background:var(--accent);border-radius:2px;opacity:.65;transition:width .3s;}
+.medal-prog-text{font-size:8px;color:rgba(255,255,255,.3);margin-top:2px;display:block;}
+
+/* ── OVERLAYS ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.83);backdrop-filter:blur(8px);
+         display:none;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:12px}
+.overlay.show{display:flex}
+.ov-title{font-family:'Orbitron',monospace;font-size:clamp(22px,4vw,44px);font-weight:900;
+          color:var(--accent);text-shadow:0 0 26px rgba(0,255,136,.4);letter-spacing:.06em}
+.ov-title.bad{color:#ff3355;text-shadow:0 0 26px rgba(255,51,85,.5)}
+.ov-card{border:1px solid var(--line);border-radius:18px;background:var(--ov-card-bg);
+         padding:22px 26px;text-align:center;max-width:380px;width:90%}
+.ov-score{font-family:'Orbitron',monospace;font-size:19px;color:var(--gold);margin-bottom:3px}
+.ov-meta{font-size:11px;color:var(--muted);margin-bottom:6px}
+/* Statistik-rad i game over */
+.ov-stats{display:flex;gap:6px;justify-content:center;margin-bottom:12px;flex-wrap:wrap;}
+.stat-chip{padding:4px 10px;border:1px solid var(--line);border-radius:8px;
+  font-size:11px;font-weight:700;background:rgba(0,0,0,.3);}
+.stat-chip.good{border-color:rgba(0,255,136,.4);color:var(--accent);}
+.stat-chip.bad{border-color:rgba(255,51,85,.35);color:#ff6677;}
+.stat-chip.neutral{color:var(--muted);}
+.ov-inp{width:100%;background:rgba(0,0,0,.5);border:2px solid var(--line);border-radius:10px;
+        color:var(--text);font-family:'Exo 2',sans-serif;font-size:15px;font-weight:700;
+        padding:9px 13px;margin-bottom:12px;text-align:center}
+.ov-inp:focus{outline:none;border-color:var(--accent)}
+.ov-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.ov-btn{padding:9px 18px;border:2px solid var(--line);border-radius:11px;
+        background:var(--panel);color:var(--text);font-family:'Exo 2',sans-serif;
+        font-size:13px;font-weight:800;cursor:pointer;transition:.12s}
+.ov-btn:hover{border-color:var(--accent);color:var(--accent)}
+.ov-btn.primary{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
+.ov-btn.primary:hover{background:rgba(0,255,136,.2)}
+.flash-good,.flash-bad{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0;transition:opacity .08s}
+.flash-good{background:rgba(0,255,136,.09)} .flash-bad{background:rgba(255,51,85,.15)}
+.flash-good.show,.flash-bad.show{opacity:1}
+
+/* ── MEDAL TOAST ── */
+#medalToast{position:fixed;right:18px;top:18px;z-index:200;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.medal-toast-item{background:var(--toast-bg);border:1px solid var(--accent);border-radius:12px;
+  padding:10px 16px;display:flex;align-items:center;gap:10px;min-width:220px;
+  box-shadow:0 0 20px rgba(0,255,136,.25);
+  animation:toastIn .3s ease,toastOut .4s ease 2.6s forwards;}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1}to{opacity:0;transform:translateX(40px)}}
+.mt-emoji{font-size:26px}.mt-text{display:flex;flex-direction:column}
+.mt-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.mt-name{font-size:13px;font-weight:800;color:var(--accent)}
+.mt-desc{font-size:10px;color:var(--text);opacity:.8}
+
+/* ── COPYRIGHT ── */
+.copyright{margin-top:12px;width:100%;text-align:center;font-size:13px;line-height:1.5;
+  color:var(--text);pointer-events:none;letter-spacing:.06em;opacity:.7;
+  font-family:'Exo 2',sans-serif;}
+@media(max-height:660px){.menu-sub{margin-bottom:6px}.menu-cols{gap:7px}.play-btn{margin-bottom:5px}}
+
+/* ── GAMEWRAPPER (Windows/WebView2) ── */
+#gameWrapper{width:1100px;height:760px;overflow:hidden;transform-origin:top center;position:relative;}
+
+/* ── TITELSKÄRM NAV-GRID ── */
+.menu-nav-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:520px;margin-top:10px;}
+.menu-nav-btn{padding:10px 8px;border:1px solid var(--line);border-radius:12px;background:var(--panel);
+  color:var(--muted);font-family:'Exo 2',sans-serif;font-size:12px;font-weight:800;cursor:pointer;
+  transition:.15s;display:flex;flex-direction:column;align-items:center;gap:4px;
+  min-height:76px;justify-content:center;text-align:center;}
+.menu-nav-btn:hover{border-color:var(--accent);background:rgba(0,255,136,.07);}
+.menu-nav-btn .nav-emoji{font-size:22px;line-height:1;}
+.menu-nav-btn .nav-label{font-family:'Orbitron',monospace;font-size:10px;color:var(--accent);letter-spacing:.08em;}
+.menu-nav-btn .nav-count{font-size:10px;color:var(--muted);font-weight:400;}
+
+/* ── INSTÄLLNINGSSIDA ── */
+#settingsScreen{justify-content:flex-start;padding-top:12px;}
+.settings-wrap{width:100%;max-width:960px;padding:0 12px;}
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin-top:12px;}
+.settings-col{display:flex;flex-direction:column;gap:12px;}
+.settings-col .menu-panel{max-width:none;min-width:0;flex:none;}
+
+/* ── INSTÄLLNINGSSUMMERING PÅ MENY ── */
+.menu-settings-summary{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.04em;}
+</style>
+</head>
+<body>
+<audio id="titelMusic" src="siffersnoken_titel.mp3"  loop preload="auto"></audio>
+<audio id="bgMusic"   src="siffersnoken_musik.mp3"  loop preload="auto"></audio>
+<audio id="fastMusic" src="siffersnoken_snabb.mp3"  loop preload="auto"></audio>
+
+<div id="gameWrapper">
+
+<!-- NAMNMODAL -->
+<div class="overlay" id="nameModal">
+  <div class="ov-card">
+    <div class="lang-row">
+      <button class="lang-btn sel" id="btnLangSv">🇸🇪 Svenska</button>
+      <button class="lang-btn" id="btnLangEn">🇬🇧 English</button>
+    </div>
+    <div class="ov-title" id="nameModalTitle" style="font-size:30px;margin-bottom:8px">👋 Hej!</div>
+    <div class="ov-meta" id="nameModalSub">Vad heter du? Ditt namn sparas på din dator.</div>
+    <input class="ov-inp" id="nameModalInp" maxlength="20" placeholder="Skriv ditt namn…">
+    <div class="ov-btns"><button class="ov-btn primary" id="btnNameOk">Spela! 🐍</button></div>
+  </div>
+</div>
+
+<!-- ══ MENYSIDA ══ -->
+<div class="screen active" id="menuScreen">
+  <div class="player-bar" id="playerBar">
+    <span id="playerGreeting"></span>
+    <button id="btnChangeName">✏️ Byt namn</button>
+    <button id="btnMenuMusic">🔊 Musik</button>
+    <button id="btnGoStats"><span id="statsBtnLabel">📊 Statistik</span></button>
+  </div>
+  <img id="menuBanner" src="siffersnoken_banner.png"
+       style="width:min(380px,70vw);margin-bottom:8px;filter:drop-shadow(0 0 22px rgba(0,200,80,.5))"
+       alt="SifferSnoken">
+  <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
+  <!-- Snabbval -->
+  <div class="menu-panel" style="width:100%;max-width:520px;min-width:0;margin-bottom:6px;flex:none;">
+    <div class="panel-title" id="panelPresetLabel">⚡ Snabbval (sätter standardvärden)</div>
+    <div class="grade-row" id="gradeRow"></div>
+    <div class="menu-settings-summary" id="menuSettingsSummary" style="margin-top:8px;margin-bottom:0;"></div>
+  </div>
+  <button class="play-btn" id="btnPlay">▶ STARTA SPELET</button>
+  <!-- Nav-grid -->
+  <div class="menu-nav-grid">
+    <button class="menu-nav-btn" id="btnGoSettings">
+      <span class="nav-emoji">⚙️</span>
+      <span class="nav-label" id="settingsBtnLabel">INSTÄLLNINGAR</span>
+    </button>
+    <button class="menu-nav-btn" id="btnGoMedals">
+      <span class="nav-emoji">🏅</span>
+      <span class="nav-label" id="medalsBtnLabel">MINA MEDALJER</span>
+      <span class="nav-count" id="medalsBtnCount">0 / 0</span>
+    </button>
+    <button class="menu-nav-btn" id="btnGoHS">
+      <span class="nav-emoji">🏆</span>
+      <span class="nav-label">HIGHSCORE</span>
+    </button>
+    <button class="menu-nav-btn" id="btnGoSkins">
+      <span class="nav-emoji">🎨</span>
+      <span class="nav-label" id="skinsBtnLabel">ORMSKINN</span>
+      <span class="nav-count" id="skinsBtnCount">0 / 0</span>
+    </button>
+  </div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.6</div>
+  <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
+</div>
+
+<!-- ══ INSTÄLLNINGSSIDA ══ -->
+<div class="screen" id="settingsScreen">
+  <div class="settings-wrap">
+    <div class="medals-page-top">
+      <button class="back-btn" id="btnBackFromSettings">← <span id="settingsBackText">Tillbaka</span></button>
+      <div class="mp-title" id="settingsTitleEl">⚙️ INSTÄLLNINGAR</div>
+    </div>
+    <div class="settings-grid">
+      <!-- Vänster kolumn -->
+      <div class="settings-col">
+        <div class="menu-panel">
+          <div class="panel-title"></div>
+          <div class="op-grid">
+            <button class="op-btn sel" data-op="+">+</button>
+            <button class="op-btn sel" data-op="-">−</button>
+            <button class="op-btn" data-op="*">×</button>
+            <button class="op-btn" data-op="/">÷</button>
+          </div>
+        </div>
+        <div class="menu-panel">
+          <div class="panel-title"></div>
+          <div class="range-row">
+            <button class="range-btn" data-r="10">Inom 10</button>
+            <button class="range-btn sel" data-r="20">Upp till 20</button>
+            <button class="range-btn" data-r="100">Upp till 100</button>
+            <button class="range-btn" data-r="1000">Upp till 1000</button>
+          </div>
+          <div class="range-hint" id="rangeHint"></div>
+        </div>
+        <div class="menu-panel" id="tablePanel" style="display:none;">
+          <div class="panel-title" id="tablePanelTitle">✖️ Multiplikationstabeller</div>
+          <div class="panel-desc" id="tableDescQuick">Snabbval:</div>
+          <div class="table-quick">
+            <button class="tq-btn" data-tq="2,5,10">×2, 5, 10</button>
+            <button class="tq-btn" data-tq="2,3,4,5,6,10">×2–6 och 10</button>
+            <button class="tq-btn" data-tq="1,2,3,4,5,6,7,8,9,10">×1–10</button>
+            <button class="tq-btn" data-tq="1,2,3,4,5,6,7,8,9,10,11,12">×1–12</button>
+          </div>
+          <div class="panel-desc" id="tableDescIndiv">Välj enskilda:</div>
+          <div class="table-grid" id="tableGrid"></div>
+        </div>
+      </div>
+      <!-- Höger kolumn -->
+      <div class="settings-col">
+        <div class="menu-panel">
+          <div class="panel-title"></div>
+          <div class="speed-row">
+            <button class="speed-btn sel" data-sm="none">Ingen ändring</button>
+            <button class="speed-btn" data-sm="score">⬆ Poängbaserad</button>
+            <button class="speed-btn" data-sm="length">⬆ Längdbaserad</button>
+          </div>
+          <div class="panel-desc" id="speedDesc">Konstant hastighet hela spelet.</div>
+          <div class="panel-title" style="margin-top:9px;">🧱 Väggar</div>
+          <div class="toggle-row">
+            <button class="toggle-btn sel" data-ww="false">☠️ Dör av väggar</button>
+            <button class="toggle-btn" data-ww="true">🔄 Runda väggar</button>
+          </div>
+        </div>
+        <div class="menu-panel">
+          <div class="panel-title"></div>
+          <div class="toggle-row">
+            <button class="toggle-btn mode-btn sel" data-mode="standard">⚔️ Standard</button>
+            <button class="toggle-btn mode-btn" data-mode="practice">📚 Övning</button>
+          </div>
+          <div class="panel-desc" id="modeDesc" style="margin-top:6px;">3 liv. Fel svar krymper ormen och tappar ett liv.</div>
+        </div>
+        <div class="menu-panel">
+          <div class="panel-title"></div>
+          <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
+            <button class="toggle-btn theme-btn sel" data-theme="natt">🌑 Natt</button>
+            <button class="toggle-btn theme-btn" data-theme="skog">🌸 Rosy</button>
+            <button class="toggle-btn theme-btn" data-theme="hav">🌊 Hav</button>
+            <button class="toggle-btn theme-btn" data-theme="solnedgang">🌅 Solnedgång</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MEDALJER-SIDA ══ -->
+<div class="screen" id="medalsScreen">
+  <div class="medals-page">
+    <div class="medals-page-top">
+      <button class="back-btn" id="btnBackFromMedals">← Tillbaka</button>
+      <div class="mp-title" id="mpTitleEl">🏅 MINA MEDALJER</div>
+      <div class="mp-count" id="mpCount"></div>
+    </div>
+    <div id="medalsPageContent"></div>
+  </div>
+</div>
+
+<!-- ══ HIGHSCORE-SIDA ══ -->
+<div class="screen" id="hsScreen">
+  <div class="medals-page">
+    <div class="medals-page-top">
+      <button class="back-btn" id="btnBackFromHS">← Tillbaka</button>
+      <div class="mp-title">🏆 HIGHSCORE</div>
+      <div class="mp-count" id="hsPageCount"></div>
+    </div>
+    <div id="hsPageContent"></div>
+    <div class="export-row" style="margin-top:12px">
+      <button class="export-btn" id="btnClearHS">🗑️ Rensa highscore</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ORMSKINN-SIDA ══ -->
+<div class="screen" id="skinsScreen">
+  <div class="medals-page">
+    <div class="medals-page-top">
+      <button class="back-btn" id="btnBackFromSkins">← Tillbaka</button>
+      <div class="mp-title" id="skinsTitleEl">🎨 ORMSKINN</div>
+      <div class="mp-count" id="skinsPageCount"></div>
+    </div>
+    <div id="skinsPageContent" class="skins-grid"></div>
+  </div>
+</div>
+
+<!-- ══ STATISTIKSIDA ══ -->
+<div class="screen" id="statsScreen">
+  <div class="stats-page">
+    <div class="medals-page-top">
+      <button class="back-btn" id="btnBackFromStats"><span id="statsBackText">← Tillbaka</span></button>
+      <div class="mp-title" id="statsTitleEl">📊 STATISTIK</div>
+    </div>
+    <div id="statsPageContent"></div>
+  </div>
+</div>
+
+<!-- ══ SPELSKÄRM ══ -->
+<div class="screen" id="gameScreen">
+  <div class="game-wrap">
+    <div class="game-top">
+      <div class="g-stat" id="statPoang">POÄNG<span id="scoreDisp">0</span></div>
+      <div style="text-align:center">
+        <div class="g-lives" id="livesDisp"></div>
+        <div class="combo" id="comboDisp"></div>
+      </div>
+      <div class="g-stat" style="text-align:right" id="statLage">LÄGE<span id="levelDisp"></span></div>
+    </div>
+    <div class="eq-bar"><div class="eq-text" id="eqText">? + ? = ?</div></div>
+    <canvas id="c"></canvas>
+    <div class="hint-row" id="hintRow"><span><span class="hk">↑↓←→</span> WASD</span><span><span class="hk">P</span> <span id="hintPause">paus</span></span><span><span class="hk">ESC</span> <span id="hintMenu">meny</span></span><span><span class="hk">M</span> <span id="hintMusic">musik</span></span></div>
+  </div>
+</div>
+
+<!-- Touch D-pad (synlig under spel) -->
+<div id="touchControls">
+  <div class="dpad-row">
+    <div class="dpad-center"></div>
+    <button class="dpad-btn" id="dUp">▲</button>
+    <div class="dpad-center"></div>
+  </div>
+  <div class="dpad-row">
+    <button class="dpad-btn" id="dLeft">◀</button>
+    <div class="dpad-center"></div>
+    <button class="dpad-btn" id="dRight">▶</button>
+  </div>
+  <div class="dpad-row">
+    <div class="dpad-center"></div>
+    <button class="dpad-btn" id="dDown">▼</button>
+    <div class="dpad-center"></div>
+  </div>
+</div>
+
+<!-- Overlays -->
+<div class="overlay" id="pauseOverlay">
+  <div class="ov-title" id="pauseTitle">PAUS</div>
+  <div class="ov-btns">
+    <button class="ov-btn primary" id="btnResume">▶ Fortsätt</button>
+    <button class="ov-btn" id="btnPauseMenu">Meny</button>
+  </div>
+</div>
+<div class="overlay" id="gameoverOverlay">
+  <div class="ov-card">
+    <div class="ov-title bad" style="font-size:27px;margin-bottom:8px">GAME OVER</div>
+    <div class="ov-score" id="goScore"></div>
+    <div class="ov-meta" id="goMeta"></div>
+    <div class="ov-stats" id="goStats"></div>
+    <input class="ov-inp" id="hsNameInp" maxlength="20" placeholder="Ditt namn för highscore…">
+    <div class="ov-btns">
+      <button class="ov-btn" id="btnPracticeList" style="display:none">📚 Öva på dessa</button>
+      <button class="ov-btn primary" id="btnSaveScore">💾 Spara poäng</button>
+      <button class="ov-btn" id="btnGoMenu">Hoppa över</button>
+    </div>
+  </div>
+</div>
+<!-- ══ ÖVNINGSLISTA OVERLAY ══ -->
+<div class="overlay" id="practiceOverlay">
+  <div class="ov-card" style="max-width:320px;text-align:center;">
+    <div class="ov-title" id="practiceTitleEl" style="font-size:20px;margin-bottom:14px;">📚</div>
+    <div id="practiceListContent" style="text-align:left;font-family:'Nunito','Exo 2',sans-serif;font-size:18px;line-height:2.4;"></div>
+    <div class="ov-btns" style="margin-top:16px;">
+      <button class="ov-btn primary" id="btnPracticeClose">Stäng</button>
+    </div>
+  </div>
+</div>
+<!-- ══ OM-SIDA OVERLAY ══ -->
+<div class="overlay" id="aboutOverlay">
+  <div class="ov-card" style="max-width:340px;text-align:center;">
+    <div style="font-size:32px;margin-bottom:4px;">🐍</div>
+    <div class="ov-title" id="aboutTitleEl" style="font-size:18px;margin-bottom:4px;"></div>
+    <div class="ov-meta" id="aboutVersionEl" style="margin-bottom:8px;"></div>
+    <div class="ov-meta" id="aboutDevEl" style="margin-bottom:14px;line-height:1.6;font-size:11px;"></div>
+    <div style="border-top:1px solid var(--line);padding-top:12px;margin-bottom:12px;">
+      <div id="aboutThanksLabel" style="font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;font-weight:700;"></div>
+      <div id="aboutThanksText" style="font-size:12px;color:var(--text);line-height:1.9;white-space:pre-line;"></div>
+    </div>
+    <div class="ov-btns">
+      <button class="ov-btn primary" id="btnAboutClose"></button>
+    </div>
+  </div>
+</div>
+<div class="flash-good" id="flashGood"></div>
+<div class="flash-bad"  id="flashBad"></div>
+<div id="medalToast"></div>
+
+<script>
+/* ═══════════════════════════════════════
+   KONSTANTER
+   ═══════════════════════════════════════ */
+const CELL=34,COLS=21,ROWS=16;
+const HS_KEY='mattormen_v3_hs', PLAYER_KEY='mattormen_player',
+      MEDALS_KEY='mattormen_medals_v1', OP_SCORES_KEY='mattormen_op_scores',
+      STATS_KEY='mattormen_stats', LANG_KEY='mattormen_lang',
+      SKINS_KEY='mattormen_skins_v1', ACTIVE_SKIN_KEY='mattormen_active_skin',
+      ACTIVE_HEAD_KEY='mattormen_head_acc',
+      SETTINGS_KEY='mattormen_settings',
+      DEVICE_KEY='siffersnoken_device_id',
+      HIST_KEY='siffersnoken_hist';
+
+// RANGE_HINTS är nu i STRINGS — se t('rangeHint10') etc.
+// SPEED_DESCS är nu i STRINGS — se t('speedDescNone') etc.
+
+/* ═══════════════════════════════════════
+   SPRÅK / LANGUAGE
+   ═══════════════════════════════════════ */
+const STRINGS={
+  sv:{
+    greeting:'Hej, {name}! 👋',
+    changeName:'✏️ Byt namn',
+    menuMusic:'🔊 Musik',
+    menuMusicOff:'🔇 Musik',
+    menuSub:'Ät rätt svar — väx! Fel svar — krymper!',
+    panelPreset:'⚡ Snabbval (sätter standardvärden)',
+    panelOps:'🔢 Räknesätt',
+    panelRange:'📏 Talområde (för + och −)',
+    panelTables:'✖️ Multiplikationstabeller',
+    panelTableQuick:'Snabbval:',
+    panelTableIndiv:'Välj enskilda:',
+    panelSpeed:'🏃 Hastighetsökning',
+    panelWalls:'🧱 Väggar',
+    panelMode:'🎮 Spelläge',panelAppearance:'🎨 Utseende',
+    modeStandard:'⚔️ Standard',modePractice:'📚 Övning',
+    modeDescStandard:'3 liv. Fel svar krymper ormen och tappar ett liv.',
+    modeDescPractice:'Inga liv. Fel svar → minuspoäng och ormen krymper. Game over när ormen är för kort!',
+    themeNight:'🌑 Natt',themeForest:'🌸 Rosy',themeOcean:'🌊 Hav',themeSunset:'🌅 Solnedgång',
+    settingsTitle:'⚙️ INSTÄLLNINGAR',settingsBack:'Tillbaka',goScoreLabel:'Poäng:',
+    speedNone:'Ingen ändring',
+    speedScore:'⬆ Poängbaserad',
+    speedLength:'⬆ Längdbaserad',
+    speedDescNone:'Konstant hastighet hela spelet.',
+    speedDescScore:'Ormen snabbas upp ju fler poäng du samlar.',
+    speedDescLength:'Ormen snabbas upp ju längre den blir.',
+    wallDie:'☠️ Dör av väggar',
+    wallWrap:'🔄 Runda väggar',
+    panelMode:'🎮 Spelläge',panelAppearance:'🎨 Utseende',
+    modeStandard:'⚔️ Standard',modePractice:'📚 Övning',
+    modeDescStandard:'3 liv. Fel svar krymper ormen och tappar ett liv.',
+    modeDescPractice:'Inga liv. Fel svar → minuspoäng och ormen krymper. Game over när ormen är för kort!',
+    themeNight:'🌑 Natt',themeForest:'🌸 Rosy',themeOcean:'🌊 Hav',themeSunset:'🌅 Solnedgång',
+    settingsTitle:'⚙️ INSTÄLLNINGAR',settingsBack:'Tillbaka',goScoreLabel:'Poäng:',
+    rangeHint10:'Ex: 3+4, 9−5, 1+8',
+    rangeHint20:'Ex: 8+5, 14−7, 9+7 (överbryggning)',
+    rangeHint100:'Ex: 23+45, 71−38, 56+19',
+    rangeHint1000:'Ex: 234+185, 730−264, 450+320',
+    rangeW10:'Inom 10',rangeW20:'Upp till 20',rangeW100:'Upp till 100',rangeW1000:'Upp till 1000',
+    btnPlay:'▶ STARTA SPELET',
+    hsTitle:'🏆 HIGHSCORE',
+    hsShowAll:'— visa alla →',
+    hsEmpty:'Inga poäng ännu — var den första! 🐍',
+    mpTitle:'🏅 MINA MEDALJER',
+    hsEntries:'poster',
+    statsBtn:'📊 Statistik',statsTitle:'📊 STATISTIK',
+    statsEmpty:'Inga spel registrerade ännu.<br>Spela lite och kom tillbaka! 🐍',
+    statsBack:'← Tillbaka',
+    medalsLabel:'MINA MEDALJER',
+    medalsCount:'{n} / {tot} upplåsta',
+    btnExport:'',btnImport:'',
+    statPoang:'POÄNG',statLage:'LÄGE',
+    hintPause:'paus',hintMenu:'meny',hintMusic:'musik',
+    pauseTitle:'PAUS',btnResume:'▶ Fortsätt',btnPauseMenu:'Meny',
+    gameOver:'GAME OVER',
+    hsPlaceholder:'Ditt namn för highscore…',
+    btnSaveScore:'💾 Spara poäng',btnGoMenu:'Hoppa över',
+    nameModalTitle:'👋 Hej!',
+    nameModalSub:'Vad heter du? Ditt namn sparas på din dator.',
+    nameModalBtn:'Spela! 🐍',
+    nameModalInpPlaceholder:'Skriv ditt namn…',
+    btnBack:'← Tillbaka',
+    aboutBtn:'ℹ️ Om SifferSnoken',
+    mpTitle:'🏅 MINA MEDALJER',    
+    hsPageTitle:'🏆 HIGHSCORE',
+    btnClearHS:'🗑️ Rensa highscore',
+    comboBonus:'🔥 Combo ×{n} (+{b} bonus)',
+    comboGold:'💡 Titta på guldsvaret!',
+    chipCorrect:'✅ {c} rätt av {t}',
+    chipPct:'{p}% träffsäkerhet',
+    chipPractice:'🔁 {n} frågor att öva',
+    newRecord:'🏆 Nytt rekord!',
+    copyright:'© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.6',
+    skinsBtnLabel:'ORMSKINN',
+    skinsTitle:'🎨 ORMSKINN',
+    skinsCount:'{n} / {tot} upplåsta',
+    skinActive:'AKTIV',
+    skinUnlockedToast:'Ormskinn upplåst!',
+    skinFree:'Tillgänglig från start',
+    headAccOn:'🎭 Huvuddekoration: PÅ',
+    headAccOff:'🎭 Huvuddekoration: AV',
+    seasonalActive:'Årstidsläge aktivt:',
+  },
+  en:{
+    greeting:'Hi, {name}! 👋',
+    changeName:'✏️ Change name',
+    menuMusic:'🔊 Music',
+    menuMusicOff:'🔇 Music',
+    menuSub:'Eat the right answer — grow! Wrong answer — shrink!',
+    panelPreset:'⚡ Quick select (sets defaults)',
+    panelOps:'🔢 Operations',
+    panelRange:'📏 Number range (for + and −)',
+    panelTables:'✖️ Multiplication tables',
+    panelTableQuick:'Quick select:',
+    panelTableIndiv:'Choose individual:',
+    panelSpeed:'🏃 Speed increase',
+    panelWalls:'🧱 Walls',
+    speedNone:'No change',
+    speedScore:'⬆ Score based',
+    speedLength:'⬆ Length based',
+    speedDescNone:'Constant speed throughout the game.',
+    speedDescScore:'The snake speeds up the more points you collect.',
+    speedDescLength:'The snake speeds up the longer it gets.',
+    wallDie:'☠️ Die on walls',
+    wallWrap:'🔄 Wrap around',
+    panelMode:'🎮 Game mode',panelAppearance:'🎨 Appearance',
+    modeStandard:'⚔️ Standard',modePractice:'📚 Practice',
+    modeDescStandard:'3 lives. Wrong answer shrinks the snake and costs a life.',
+    modeDescPractice:'No lives. Wrong answer → minus points, snake shrinks. Game over when too short!',
+    themeNight:'🌑 Night',themeForest:'🌸 Rosy',themeOcean:'🌊 Ocean',themeSunset:'🌅 Sunset',
+    settingsTitle:'⚙️ SETTINGS',settingsBack:'Back',goScoreLabel:'Score:',
+    rangeHint10:'E.g: 3+4, 9−5, 1+8',
+    rangeHint20:'E.g: 8+5, 14−7, 9+7 (bridging)',
+    rangeHint100:'E.g: 23+45, 71−38, 56+19',
+    rangeHint1000:'E.g: 234+185, 730−264, 450+320',
+    rangeW10:'Within 10',rangeW20:'Up to 20',rangeW100:'Up to 100',rangeW1000:'Up to 1000',
+    btnPlay:'▶ START GAME',
+    hsTitle:'🏆 HIGHSCORE',
+    hsShowAll:'— show all →',
+    nameModalSub:"What's your name? Saved on your device.",
+    hsEmpty:'No scores yet — be the first! 🐍',
+    mpTitle:'🏅 MY MEDALS',
+    hsEntries:'entries',
+    statsBtn:'📊 Stats',statsTitle:'📊 STATISTICS',
+    statsEmpty:'No games recorded yet.<br>Play a little and come back! 🐍',
+    statsBack:'← Back',
+    medalsLabel:'MY MEDALS',
+    medalsCount:'{n} / {tot} unlocked',
+    btnExport:'',btnImport:'',
+    statPoang:'SCORE',statLage:'MODE',
+    hintPause:'pause',hintMenu:'menu',hintMusic:'music',
+    pauseTitle:'PAUSE',btnResume:'▶ Resume',btnPauseMenu:'Menu',
+    gameOver:'GAME OVER',
+    hsPlaceholder:'Your name for highscore…',
+    btnSaveScore:'💾 Save score',btnGoMenu:'Skip',
+    nameModalTitle:'👋 Hi!',
+    nameModalSub:"What's your name? Saved on your device.",
+    nameModalBtn:'Play! 🐍',
+    nameModalInpPlaceholder:'Type your name…',
+    btnBack:'← Back',
+    aboutBtn:'ℹ️ About NumNoodle',
+    mpTitle:'🏅 MY MEDALS',
+    hsPageTitle:'🏆 HIGHSCORE',
+    btnClearHS:'🗑️ Clear highscore',
+    comboBonus:'🔥 Combo ×{n} (+{b} bonus)',
+    comboGold:'💡 Look at the gold answer!',
+    chipCorrect:'✅ {c} correct of {t}',
+    chipPct:'{p}% accuracy',
+    chipPractice:'🔁 {n} questions to practice',
+    newRecord:'🏆 New record!',
+    copyright:'© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.6',
+    skinsBtnLabel:'SNAKE SKINS',
+    skinsTitle:'🎨 SNAKE SKINS',
+    skinsCount:'{n} / {tot} unlocked',
+    skinActive:'ACTIVE',
+    skinUnlockedToast:'Snake skin unlocked!',
+    skinFree:'Available from the start',
+    headAccOn:'🎭 Head decoration: ON',
+    headAccOff:'🎭 Head decoration: OFF',
+    seasonalActive:'Seasonal mode active:',
+  }
+};
+function getLang(){
+  const saved=localStorage.getItem(LANG_KEY);
+  if(saved)return saved;
+  const bl=navigator.language||'sv';
+  return bl.toLowerCase().startsWith('sv')?'sv':'en';
+}
+function t(key,vars={}){
+  const s=STRINGS[getLang()]||STRINGS.sv;
+  let str=s[key]||STRINGS.sv[key]||key;
+  Object.entries(vars).forEach(([k,v])=>{str=str.replace('{'+k+'}',v);});
+  return str;
+}
+function setLang(lang){
+  localStorage.setItem(LANG_KEY,lang);
+  document.getElementById('btnLangSv').classList.toggle('sel',lang==='sv');
+  document.getElementById('btnLangEn').classList.toggle('sel',lang==='en');
+  applyLang();
+}
+function applyLang(){
+  const l=getLang();
+  const banner=$('menuBanner');
+  if(banner)banner.src=l==='en'?'siffersnoken_banner_en.png':'siffersnoken_banner.png';
+  // Namnmodal
+  $('nameModalTitle').textContent=t('nameModalTitle');
+  $('nameModalSub').textContent=t('nameModalSub');
+  $('btnNameOk').textContent=t('nameModalBtn');
+  $('nameModalInp').placeholder=t('nameModalInpPlaceholder');
+  // Menyknappar
+  $('menuSub').textContent=t('menuSub');
+  $('btnPlay').textContent=t('btnPlay');
+  $('btnChangeName').textContent=t('changeName');
+  updateMenuMusicBtn();
+  // Meny panel-titlar via querySelectorAll (index-baserat)
+  const pts=document.querySelectorAll('.panel-title');
+  if(pts[0])pts[0].textContent=t('panelPreset');
+  if(pts[1])pts[1].textContent=t('panelOps');
+  if(pts[2])pts[2].textContent=t('panelRange');
+  if(pts[3])pts[3].textContent=t('panelTables');
+  if(pts[4])pts[4].textContent=t('panelSpeed');
+  if(pts[5])pts[5].textContent=t('panelWalls');
+  // Range buttons
+  document.querySelectorAll('.range-btn').forEach(b=>{
+    const r=b.dataset.r;
+    const map={'10':t('rangeW10'),'20':t('rangeW20'),'100':t('rangeW100'),'1000':t('rangeW1000')};
+    if(map[r])b.textContent=map[r];
+  });
+  // Speed buttons
+  const sbs=document.querySelectorAll('.speed-btn');
+  if(sbs[0])sbs[0].textContent=t('speedNone');
+  if(sbs[1])sbs[1].textContent=t('speedScore');
+  if(sbs[2])sbs[2].textContent=t('speedLength');
+  updateRangeHint();
+  // Toggle (wall) buttons
+  const tbs=document.querySelectorAll('.toggle-btn');
+  if(tbs[0])tbs[0].textContent=t('wallDie');
+  if(tbs[1])tbs[1].textContent=t('wallWrap');
+  // Play/HS/Medals
+  // Game screen
+  if($('statPoang')&&$('statPoang').childNodes[0]){$('statPoang').childNodes[0].nodeValue=t('statPoang');}
+  if($('statLage')&&$('statLage').childNodes[0]){$('statLage').childNodes[0].nodeValue=t('statLage');}
+  if($('tablePanelTitle'))$('tablePanelTitle').textContent=t('panelTables');
+  if($('tableDescQuick'))$('tableDescQuick').textContent=t('panelTableQuick');
+  if($('tableDescIndiv'))$('tableDescIndiv').textContent=t('panelTableIndiv');
+  if($('hintPause'))$('hintPause').textContent=t('hintPause');
+  if($('hintMenu'))$('hintMenu').textContent=t('hintMenu');
+  if($('hintMusic'))$('hintMusic').textContent=t('hintMusic');
+  // Pausoverlay
+  if($('pauseTitle'))$('pauseTitle').textContent=t('pauseTitle');
+  if($('btnResume'))$('btnResume').textContent=t('btnResume');
+  if($('btnPauseMenu'))$('btnPauseMenu').textContent=t('btnPauseMenu');
+  // Game over
+  if($('hsNameInp'))$('hsNameInp').placeholder=t('hsPlaceholder');
+  if($('btnSaveScore'))$('btnSaveScore').textContent=t('btnSaveScore');
+  if($('btnGoMenu'))$('btnGoMenu').textContent=t('btnGoMenu');
+  // Medaljer / HS sidor
+  if($('btnBackFromMedals'))$('btnBackFromMedals').textContent=t('btnBack');
+  if($('btnBackFromHS'))$('btnBackFromHS').textContent=t('btnBack');
+  if($('btnBackFromSkins'))$('btnBackFromSkins').textContent=t('btnBack');
+  if($('btnClearHS'))$('btnClearHS').textContent=t('btnClearHS');
+  if($('skinsBtnLabel'))$('skinsBtnLabel').textContent=t('skinsBtnLabel');
+  if($('medalsLabel'))$('medalsLabel').textContent=t('medalsLabel');
+  if($('medalsBtnLabel'))$('medalsBtnLabel').textContent=t('medalsLabel');
+  updateSkinNavBtn();
+  // HS panel show-all text
+  const hsShowAll=document.querySelector('#btnGoHS .hs-title');
+  if(hsShowAll)hsShowAll.innerHTML=t('hsTitle')+' <span style="font-size:9px;color:var(--muted);letter-spacing:.05em">'+t('hsShowAll')+'</span>';
+  // Medaljer nav
+  const mnLabel=document.querySelector('.mn-label');
+  if(mnLabel)mnLabel.textContent=t('medalsLabel');
+  // Medals/HS page titles
+  if($('mpTitleEl'))$('mpTitleEl').textContent=t('mpTitle');
+  if($('copyrightEl'))$('copyrightEl').innerHTML=t('copyright');
+  if($('btnAbout'))$('btnAbout').textContent=t('aboutBtn');
+  if($('statsBtnLabel'))$('statsBtnLabel').textContent=t('statsBtn');
+  if($('statsTitleEl'))$('statsTitleEl').textContent=t('statsTitle');
+  if($('statsBackText'))$('statsBackText').textContent=t('statsBack');
+  // Inställningssidan
+  if($('settingsTitleEl'))$('settingsTitleEl').textContent=t('settingsTitle');
+  if($('settingsBtnLabel'))$('settingsBtnLabel').textContent=l==='en'?'Settings':'Inställningar';
+  if($('settingsBackText'))$('settingsBackText').textContent=t('settingsBack');
+  updateMenuMusicBtn();
+  document.querySelectorAll('.mode-btn').forEach(b=>{
+    if(b.dataset.mode==='standard')b.textContent=t('modeStandard');
+    if(b.dataset.mode==='practice')b.textContent=t('modePractice');
+  });
+  if($('modeDesc'))$('modeDesc').textContent=t(typeof practiceMode!=='undefined'&&practiceMode?'modeDescPractice':'modeDescStandard');
+  // Inställningar: panel-titlar (Spelläge, Utseende osv)
+  document.querySelectorAll('#settingsScreen .panel-title').forEach((el,i)=>{
+    const keys=['panelOps','panelRange','panelTables','panelSpeed','panelWalls','panelMode','panelAppearance'];
+    if(keys[i])el.textContent=t(keys[i]);
+  });
+  document.querySelectorAll('.theme-btn').forEach(b=>{
+    const tmap={natt:t('themeNight'),skog:t('themeForest'),hav:t('themeOcean'),solnedgang:t('themeSunset')};
+    if(tmap[b.dataset.theme])b.textContent=tmap[b.dataset.theme];
+  });
+  buildGradeRow();
+  // Speed description (uppdatera med nuvarande speedMode)
+  const _sdMap={none:t('speedDescNone'),score:t('speedDescScore'),length:t('speedDescLength')};
+  if($('speedDesc'))$('speedDesc').textContent=_sdMap[speedMode]||'';
+  renderHS();updateMedalNavBtn();
+}
+
+const GRADES={
+  1:{label:'Åk 1',labelEn:'Yr 1',ops:['+','-'],          range:10,  tbls:[]},
+  2:{label:'Åk 2',labelEn:'Yr 2',ops:['+','-'],          range:20,  tbls:[]},
+  3:{label:'Åk 3',labelEn:'Yr 3',ops:['+','-','*','/'],  range:20,  tbls:[2,3,4,5,6,10]},
+  4:{label:'Åk 4',labelEn:'Yr 4',ops:['+','-','*','/'],  range:100, tbls:[1,2,3,4,5,6,7,8,9,10]},
+  5:{label:'Åk 5',labelEn:'Yr 5',ops:['+','-','*','/'],  range:100, tbls:[1,2,3,4,5,6,7,8,9,10,11,12]},
+  6:{label:'Åk 6',labelEn:'Yr 6',ops:['+','-','*','/'],  range:1000,tbls:[1,2,3,4,5,6,7,8,9,10,11,12]},
+};
+
+/* ═══════════════════════════════════════
+   MEDALJER (21 st)
+   ═══════════════════════════════════════ */
+const MEDALS_DEF=[
+  {id:'p500',    emoji:'⭐',name:'500 Poäng',              desc:'Nå 500 poäng i ett spel',                     cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'500 Points', descEn:'Score 500 points in one game'},
+  {id:'p2000',   emoji:'🌟',name:'2 000 Poäng',            desc:'Nå 2 000 poäng i ett spel',                   cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'2,000 Points', descEn:'Score 2,000 points in one game'},
+  {id:'p5000',   emoji:'🏆',name:'5 000 Poäng',            desc:'Nå 5 000 poäng i ett spel',                   cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'5,000 Points', descEn:'Score 5,000 points in one game'},
+  {id:'p7500',   emoji:'🔥',name:'7 500 Poäng',            desc:'Nå 7 500 poäng i ett spel',                   cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'7,500 Points',  descEn:'Score 7,500 points in one game'},
+  {id:'p10000',  emoji:'👑',name:'10 000 Poäng',           desc:'Nå 10 000 poäng i ett spel',                  cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'10,000 Points', descEn:'Score 10,000 points in one game'},
+  {id:'add1000', emoji:'➕',name:'Additionshjälte',        desc:'Tjäna 1 000p på additionstal (alla spel)',     cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Addition Hero', descEn:'Earn 1,000pts on addition (all games)'},
+  {id:'sub1000', emoji:'➖',name:'Subtraktionshjälte',     desc:'Tjäna 1 000p på subtraktionstal (alla spel)',  cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Subtraction Hero', descEn:'Earn 1,000pts on subtraction (all games)'},
+  {id:'mul500',  emoji:'✖️',name:'Multiplikationsmästare', desc:'Tjäna 500p på multiplikationstal (alla spel)', cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Multiplication Master', descEn:'Earn 500pts on multiplication (all games)'},
+  {id:'div500',  emoji:'➗',name:'Divisionsmästare',       desc:'Tjäna 500p på divisionstal (alla spel)',       cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Division Master', descEn:'Earn 500pts on division (all games)'},
+  {id:'c5',      emoji:'🔥',name:'Hetsar på!',             desc:'5 rätt i rad',                                 cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Heating Up!', descEn:'5 correct in a row'},
+  {id:'c10',     emoji:'💎',name:'Oöverträffad',           desc:'10 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Unbeatable', descEn:'10 correct in a row'},
+  {id:'c15',     emoji:'⚡',name:'Blixtfingrar',           desc:'15 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Lightning Fingers', descEn:'15 correct in a row'},
+  {id:'c20',     emoji:'🌊',name:'På vågen!',              desc:'20 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'On a Roll!', descEn:'20 correct in a row'},
+  {id:'c25',     emoji:'🎯',name:'Prickskytt',             desc:'25 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Sharpshooter', descEn:'25 correct in a row'},
+  {id:'c30',     emoji:'🚀',name:'Raketstart',             desc:'30 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Rocketstart', descEn:'30 correct in a row'},
+  {id:'c50',     emoji:'🦁',name:'Lejonhjärta',            desc:'50 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Lionheart', descEn:'50 correct in a row'},
+  {id:'c75',     emoji:'🌟',name:'Stjärnstatus',           desc:'75 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Star Status', descEn:'75 correct in a row'},
+  {id:'c100',    emoji:'💯',name:'HUNDRA I RAD!',          desc:'100 rätt i rad — legendariskt!',              cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'ONE HUNDRED!', descEn:'100 correct in a row — legendary!'},
+  {id:'len15',   emoji:'📏',name:'Stor orm',               desc:'Nå längd 15',                                  cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Big Snake', descEn:'Reach length 15'},
+  {id:'len25',   emoji:'🐍',name:'Jätteorm!',              desc:'Nå längd 25',                                  cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Giant Snake!',    descEn:'Reach length 25'},
+  {id:'len35',   emoji:'🦕',name:'Dinosarieorm!',          desc:'Nå längd 35',                                  cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Dinosaur Snake!', descEn:'Reach length 35'},
+  {id:'len50',   emoji:'🌍',name:'Världsrekordsorm!',      desc:'Nå längd 50 — nästan omöjligt!',               cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'World Record Snake!', descEn:'Reach length 50 — nearly impossible!'},
+  {id:'len75',   emoji:'🐲',name:'Legendarisk orm!',        desc:'Nå längd 75 — är du människa?!',               cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Legendary Snake!',    descEn:'Reach length 75 — are you even human?!'},
+  {id:'osviklig',emoji:'❤️',name:'Felfri',                 desc:'10 rätt utan att tappa ett enda liv',          cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Flawless', descEn:'10 correct without losing a single life'},
+  {id:'genius',  emoji:'🧠',name:'Mattegeni',              desc:'1 000p på Åk6 med alla 4 räknesätt',          cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Math Genius', descEn:'1,000pts on grade 6 with all 4 operations'},
+];
+
+/* ═══════════════════════════════════════
+   ORMSKINN
+   ═══════════════════════════════════════ */
+const SKINS_DEF=[
+  {id:'klassisk', emoji:'🟢', name:'Klassisk', nameEn:'Classic',
+   free:true, unlockMedal:null,
+   headA:'#ccffe0', headB:'#00cc55', shadow:'#00ff88',
+   bodyFn:(a)=>`rgba(0,${Math.floor(130+a*125)},${Math.floor(55*a)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#ccffe0,#00cc55)'},
+  {id:'isbla', emoji:'🔵', name:'Isblå', nameEn:'Ice Blue',
+   free:true, unlockMedal:null,
+   headA:'#c0e8ff', headB:'#0077cc', shadow:'#44aaff',
+   bodyFn:(a)=>`rgba(${Math.floor(30+a*60)},${Math.floor(100+a*100)},${Math.floor(180+a*60)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#c0e8ff,#0077cc)'},
+  {id:'rosa', emoji:'🩷', name:'Rosa', nameEn:'Pink',
+   free:true, unlockMedal:null,
+   headA:'#ffd6e8', headB:'#ff3399', shadow:'#ff88bb',
+   bodyFn:(a)=>`rgba(${Math.floor(180+a*60)},${Math.floor(40+a*60)},${Math.floor(80+a*80)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#ffd6e8,#ff3399)'},
+  {id:'lila', emoji:'💜', name:'Lila', nameEn:'Purple',
+   free:true, unlockMedal:null,
+   headA:'#e8d0ff', headB:'#7722ff', shadow:'#aa55ff',
+   bodyFn:(a)=>`rgba(${Math.floor(80+a*60)},${Math.floor(20+a*30)},${Math.floor(150+a*80)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#e8d0ff,#7722ff)'},
+  {id:'regnbage', emoji:'🌈', name:'Regnbåge', nameEn:'Rainbow',
+   free:false, unlockMedal:'c25',
+   descSv:'Lås upp: Combo 25 i rad', descEn:'Unlock: Combo 25 in a row',
+   headA:'#ff8888', headB:'#8844ff', shadow:'#ffaaff',
+   bodyFn:(a)=>`rgba(${Math.floor(150+a*80)},${Math.floor(100+a*80)},${Math.floor(200+a*55)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#ff6666,#ffaa00,#88ff44,#44aaff,#9933ff)',
+   rainbow:true},
+  {id:'guld', emoji:'⭐', name:'Guld', nameEn:'Gold',
+   free:false, unlockMedal:'p2000',
+   descSv:'Lås upp: Nå 2 000 poäng', descEn:'Unlock: Reach 2,000 points',
+   headA:'#fff5a0', headB:'#cc7700', shadow:'#ffcc00',
+   bodyFn:(a)=>`rgba(${Math.floor(160+a*70)},${Math.floor(90+a*80)},0,${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#fff5a0,#cc7700)'},
+  {id:'kunglig', emoji:'👑', name:'Kunglig', nameEn:'Royal',
+   free:false, unlockMedal:'p5000',
+   descSv:'Lås upp: Nå 5 000 poäng', descEn:'Unlock: Reach 5,000 points',
+   headA:'#aaccff', headB:'#002299', shadow:'#3366ff',
+   bodyFn:(a)=>`rgba(${Math.floor(20+a*40)},${Math.floor(40+a*70)},${Math.floor(130+a*90)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#aaccff,#002299)'},
+  {id:'lava', emoji:'🌋', name:'Lava', nameEn:'Lava',
+   free:false, unlockMedal:'div500',
+   descSv:'Lås upp: Divisionsmedaljen', descEn:'Unlock: Division medal',
+   headA:'#ffee88', headB:'#cc2200', shadow:'#ff5500',
+   bodyFn:(a)=>`rgba(${Math.floor(180+a*60)},${Math.floor(30+a*50)},0,${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#ffee44,#ff4400,#220000)'},
+  {id:'eld', emoji:'🔥', name:'Eld', nameEn:'Fire',
+   free:false, unlockMedal:'c50',
+   descSv:'Lås upp: Combo 50 i rad', descEn:'Unlock: Combo 50 in a row',
+   headA:'#ffff88', headB:'#ff2200', shadow:'#ff6600',
+   bodyFn:(a)=>`rgba(${Math.floor(200+a*55)},${Math.floor(60+a*60)},0,${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#ffff44,#ff8800,#ff2200)'},
+  {id:'obsidian', emoji:'⚫', name:'Obsidian', nameEn:'Obsidian',
+   free:false, unlockMedal:'p10000',
+   descSv:'Lås upp: Nå 10 000 poäng', descEn:'Unlock: Reach 10,000 points',
+   headA:'#cccccc', headB:'#111111', shadow:'#aaaaaa',
+   bodyFn:(a)=>`rgba(${Math.floor(15+a*25)},${Math.floor(15+a*25)},${Math.floor(20+a*30)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#cccccc,#444444,#111111)',
+   obsidian:true},
+  {id:'polkagris', emoji:'🍭', name:'Polkagris', nameEn:'Candy Cane',
+   free:false, unlockMedal:'c100',
+   descSv:'Lås upp: Combo 100 i rad', descEn:'Unlock: Combo 100 in a row',
+   headA:'#ffffff', headB:'#dd0022', shadow:'#ff4455',
+   bodyFn:(a,i)=>{const even=Math.floor(i||0)%2===0;return even?`rgba(220,0,30,${Math.min(1,a+.1)})`:`rgba(255,255,255,${Math.min(1,a+.1)})`;},
+   previewCss:'repeating-linear-gradient(135deg,#dd0022 0px,#dd0022 8px,#ffffff 8px,#ffffff 16px)'},
+  {id:'galax', emoji:'🌌', name:'Galax', nameEn:'Galaxy',
+   free:false, unlockMedal:'genius',
+   descSv:'Lås upp: Mattegeni-medaljen', descEn:'Unlock: Math Genius medal',
+   headA:'#e8d0ff', headB:'#1a0044', shadow:'#cc88ff',
+   bodyFn:(a)=>`rgba(${Math.floor(60+a*80)},${Math.floor(10+a*30)},${Math.floor(120+a*100)},${Math.min(1,a+.05)})`,
+   previewCss:'linear-gradient(135deg,#e8d0ff,#6622cc,#1a0044)',
+   galaxy:true},
+  {id:'vattenmelon', emoji:'🍉', name:'Vattenmelon', nameEn:'Watermelon',
+   free:false, unlockMedal:'osviklig',
+   descSv:'Lås upp: Felfri-medaljen', descEn:'Unlock: Flawless medal',
+   headA:'#ffaaaa', headB:'#cc0033', shadow:'#ff4466',
+   bodyFn:(a,i)=>{const t=Math.floor(i||0)%3;return t===0?`rgba(200,0,40,${Math.min(1,a+.08)})`:`rgba(20,${Math.floor(140+a*80)},30,${Math.min(1,a+.08)})`;},
+   previewCss:'linear-gradient(135deg,#ff4466,#cc0033,#228833)'},
+  {id:'aurora', emoji:'🌠', name:'Aurora', nameEn:'Aurora',
+   free:false, unlockMedal:'p7500',
+   descSv:'Lås upp: Nå 7 500 poäng', descEn:'Unlock: Reach 7,500 points',
+   headA:'#aaffee', headB:'#0044aa', shadow:'#44ffcc',
+   bodyFn:(a,i)=>{const hue=(120+Math.floor((i||0)*25))%360;return `hsla(${hue},80%,${35+Math.floor(a*30)}%,${Math.min(1,a+.05)})`;},
+   previewCss:'linear-gradient(135deg,#00ffcc,#0088ff,#cc44ff)',
+   aurora:true},
+];
+
+
+/* ═══════════════════════════════════════
+   TEMAN & ÅRSTIDER
+   ═══════════════════════════════════════ */
+const SKIN_THEMES={
+  'klassisk': {bgA:'#060c08',bgB:'#030a05',gridColor:'rgba(0,255,100,.033)',particles:null,   headAcc:null},
+  'isbla':    {bgA:'#03070f',bgB:'#020510',gridColor:'rgba(80,160,255,.04)', particles:'snow',  headAcc:null},
+  'rosa':     {bgA:'#0f0308',bgB:'#0a0206',gridColor:'rgba(255,80,160,.04)', particles:null,   headAcc:null},
+  'lila':     {bgA:'#07030f',bgB:'#04020a',gridColor:'rgba(140,60,255,.04)', particles:null,   headAcc:null},
+  'regnbage': {bgA:'#050508',bgB:'#030308',gridColor:'rgba(180,130,255,.04)',particles:'rainbow',headAcc:null},
+  'guld':     {bgA:'#0f0900',bgB:'#080500',gridColor:'rgba(255,190,0,.04)',  particles:null,   headAcc:null},
+  'kunglig':  {bgA:'#03050f',bgB:'#02030a',gridColor:'rgba(60,100,255,.05)', particles:'stars', headAcc:'crown'},
+  'lava':     {bgA:'#0f0200',bgB:'#080100',gridColor:'rgba(255,80,0,.05)',   particles:'sparks',headAcc:null},
+  'eld':      {bgA:'#0f0400',bgB:'#0a0200',gridColor:'rgba(255,90,0,.04)',   particles:'sparks',headAcc:null},
+  'obsidian': {bgA:'#020202',bgB:'#010101',gridColor:'rgba(180,180,200,.03)',particles:'stars', headAcc:null},
+  'diamant':  {bgA:'#02070f',bgB:'#01040a',gridColor:'rgba(80,180,255,.05)', particles:'stars', headAcc:null},
+  'galax':    {bgA:'#04010f',bgB:'#020009',gridColor:'rgba(180,100,255,.05)',particles:'stars', headAcc:null},
+  'aurora':   {bgA:'#010a08',bgB:'#010705',gridColor:'rgba(0,255,180,.04)',  particles:'rainbow',headAcc:null},
+  'polkagris':{bgA:'#0f0003',bgB:'#090002',gridColor:'rgba(255,80,100,.05)', particles:null,   headAcc:null},
+  'vattenmelon':{bgA:'#010f02',bgB:'#010802',gridColor:'rgba(255,80,100,.04)',particles:null,   headAcc:null},
+};
+const SEASONAL_THEMES={
+  halloween:{bgA:'#0f0400',bgB:'#050100',gridColor:'rgba(255,110,0,.05)',particles:'bats',  headAcc:'pumpkin',label:'🎃'},
+  xmas:     {bgA:'#020f02',bgB:'#010802',gridColor:'rgba(200,0,30,.04)',  particles:'snow',  headAcc:'santa',  label:'🎄'},
+  easter:   {bgA:'#090f03',bgB:'#060a02',gridColor:'rgba(160,255,80,.04)',particles:'eggs',  headAcc:'bunny',  label:'🐣'},
+  valentines:{bgA:'#0f0205',bgB:'#0a0203',gridColor:'rgba(255,70,110,.05)',particles:'hearts',headAcc:null,   label:'💝'},
+};
+function getEasterDate(year){
+  const a=year%19,b=Math.floor(year/100),c=year%100,d=Math.floor(b/4),e=b%4;
+  const f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30;
+  const i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451);
+  return{month:Math.floor((h+l-7*m+114)/31),day:((h+l-7*m+114)%31)+1};
+}
+function getSeasonalTheme(){
+  const now=new Date(),m=now.getMonth()+1,d=now.getDate(),y=now.getFullYear();
+  if((m===10&&d>=24)||(m===11&&d<=2))return 'halloween';
+  if(m===12&&d>=1)return 'xmas';
+  if(m===2&&d===14)return 'valentines';
+  const e=getEasterDate(y);
+  const eStart=new Date(y,e.month-1,e.day-3),eEnd=new Date(y,e.month-1,e.day+1);
+  if(now>=eStart&&now<=eEnd)return 'easter';
+  return null;
+}
+function getActiveTheme(){
+  const s=getSeasonalTheme();
+  if(s)return{...SEASONAL_THEMES[s],isSeasonal:true,seasonKey:s};
+  return SKIN_THEMES[loadActiveSkin()]||SKIN_THEMES['klassisk'];
+}
+function loadHeadAccessory(){
+  const v=localStorage.getItem(ACTIVE_HEAD_KEY);
+  return v===null?true:v==='true';
+}
+function saveHeadAccessory(v){localStorage.setItem(ACTIVE_HEAD_KEY,String(v));}
+function toggleHeadAccessory(){
+  const cur=loadHeadAccessory();saveHeadAccessory(!cur);renderSkinsPage();
+}
+
+
+/* ═══════════════════════════════════════
+   INSTÄLLNINGAR
+   ═══════════════════════════════════════ */
+function saveSettings(){
+  localStorage.setItem(SETTINGS_KEY,JSON.stringify({
+    ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap
+  }));
+}
+function loadSettings(){
+  try{
+    const s=JSON.parse(localStorage.getItem(SETTINGS_KEY));
+    if(!s)return;
+    if(s.ops&&s.ops.length)activeOps=new Set(s.ops);
+    if(s.numRange)numRange=s.numRange;
+    if(s.tables&&s.tables.length)tables=new Set(s.tables);
+    if(s.speedMode)speedMode=s.speedMode;
+    if(typeof s.wallWrap==='boolean')wallWrap=s.wallWrap;
+  }catch(e){}
+}
+let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
+let speedMode='none',wallWrap=false;
+
+/* ═══════════════════════════════════════
+   SPELVARIABLER
+   ═══════════════════════════════════════ */
+const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+canvas.width=COLS*CELL;canvas.height=ROWS*CELL;
+let snake=[],dir={x:1,y:0},nextDir={x:1,y:0};
+let tiles=[],problem=null;
+let score=0,lives=3,combo=0,growPending=0,correctStreak=0;
+let state='menu',lastTickTime=0,moveProgress=0;
+let musicOn=true,audioUnlocked=false,isFastMusic=false;
+let goldPhase=false,goldTimeout=null;
+let personalBestAtStart=0,recordSoundPlayed=false;
+let eatAnim=null; // {x,y,value,startTime}
+
+// Session-statistik
+let sessionCorrect=0,sessionTotal=0;
+// Per-räknesätt session-statistik: {op: {correct, total}}
+let sessionOpStats={};
+
+// Fel-pool: problem som eleven svarat fel på, visas mer frekvent
+const MAX_WRONG_POOL=6;
+let wrongPool=[];
+
+/* ═══════════════════════════════════════
+   SPELARPROFIL
+   ═══════════════════════════════════════ */
+const loadPlayer=()=>localStorage.getItem(PLAYER_KEY)||'';
+const savePlayer=n=>localStorage.setItem(PLAYER_KEY,n);
+const getPlayer=()=>loadPlayer()||'Spelare';
+function updatePlayerBar(){
+  const n=loadPlayer();
+  document.getElementById('playerGreeting').textContent=n?t('greeting',{name:n}):'';
+  document.getElementById('playerBar').style.display=n?'flex':'none';
+}
+
+/* ═══════════════════════════════════════
+   STATISTIK (persistent: bestCombo, bestLength, bestStreak)
+   ═══════════════════════════════════════ */
+function loadStats(){
+  try{return JSON.parse(localStorage.getItem(STATS_KEY))||{bestCombo:0,bestLength:0,bestStreak:0};}
+  catch(e){return{bestCombo:0,bestLength:0,bestStreak:0};}
+}
+function saveStats(s){localStorage.setItem(STATS_KEY,JSON.stringify(s));}
+function updateStats(){
+  const s=loadStats();
+  let changed=false;
+  if(combo>s.bestCombo){s.bestCombo=combo;changed=true;}
+  if(snake.length>s.bestLength){s.bestLength=snake.length;changed=true;}
+  if(correctStreak>s.bestStreak){s.bestStreak=correctStreak;changed=true;}
+  if(changed)saveStats(s);
+}
+
+/* ═══════════════════════════════════════
+   MEDALJER
+   ═══════════════════════════════════════ */
+function loadMedals(){try{return new Set(JSON.parse(localStorage.getItem(MEDALS_KEY))||[]);}catch(e){return new Set();}}
+function saveMedals(s){localStorage.setItem(MEDALS_KEY,JSON.stringify([...s]));}
+function loadOpScores(){try{return JSON.parse(localStorage.getItem(OP_SCORES_KEY))||{'+':0,'-':0,'*':0,'/':0};}catch(e){return{'+':0,'-':0,'*':0,'/':0};}}
+function saveOpScores(s){localStorage.setItem(OP_SCORES_KEY,JSON.stringify(s));}
+
+
+/* ═══════════════════════════════════════
+   ORMSKINN - FUNKTIONER
+   ═══════════════════════════════════════ */
+function loadUnlockedSkins(){try{return new Set(JSON.parse(localStorage.getItem(SKINS_KEY))||[]);}catch(e){return new Set();}}
+function saveUnlockedSkins(s){localStorage.setItem(SKINS_KEY,JSON.stringify([...s]));}
+function loadActiveSkin(){return localStorage.getItem(ACTIVE_SKIN_KEY)||'klassisk';}
+function saveActiveSkin(id){localStorage.setItem(ACTIVE_SKIN_KEY,id);}
+function isSkinUnlocked(id){
+  const def=SKINS_DEF.find(s=>s.id===id);
+  if(!def)return false;
+  if(def.free)return true;
+  return loadUnlockedSkins().has(id);
+}
+function getActiveSkinDef(){
+  const id=loadActiveSkin();
+  return SKINS_DEF.find(s=>s.id===id)||SKINS_DEF[0];
+}
+function unlockSkin(id){
+  const skins=loadUnlockedSkins();if(skins.has(id))return;
+  skins.add(id);saveUnlockedSkins(skins);
+  const def=SKINS_DEF.find(s=>s.id===id);if(def)showSkinToast(def);
+  updateSkinNavBtn();
+}
+function checkSkinUnlocks(medalId){
+  SKINS_DEF.forEach(skin=>{if(skin.unlockMedal===medalId)unlockSkin(skin.id);});
+}
+// Synka skinn från redan upplåsta medaljer (fix för uppgradering från äldre version)
+function syncSkinsFromMedals(){
+  const earned=loadMedals();
+  earned.forEach(medalId=>checkSkinUnlocks(medalId));
+}
+function showSkinToast(def){
+  const c=document.getElementById('medalToast');
+  const el=document.createElement('div');el.className='medal-toast-item';
+  el.style.borderColor='rgba(255,215,0,.55)';
+  const name=getLang()==='en'&&def.nameEn?def.nameEn:def.name;
+  el.innerHTML=`<div class="mt-emoji">${def.emoji}</div>
+    <div class="mt-text"><div class="mt-label">🎨 ${t('skinUnlockedToast')}</div>
+    <div class="mt-name">${name}</div></div>`;
+  c.appendChild(el);setTimeout(()=>el.remove(),3200);
+}
+function updateSkinNavBtn(){
+  const unlocked=SKINS_DEF.filter(s=>isSkinUnlocked(s.id)).length;
+  const total=SKINS_DEF.length;
+  if(document.getElementById('skinsBtnCount'))
+    document.getElementById('skinsBtnCount').textContent=t('skinsCount',{n:unlocked,tot:total});
+}
+function renderSkinsPage(){
+  const activeSkin=loadActiveSkin();
+  const el=document.getElementById('skinsPageContent');el.innerHTML='';
+  const unlocked=SKINS_DEF.filter(s=>isSkinUnlocked(s.id)).length;
+  document.getElementById('skinsPageCount').textContent=t('skinsCount',{n:unlocked,tot:SKINS_DEF.length});
+  document.getElementById('skinsTitleEl').textContent=t('skinsTitle');
+  // Head accessory toggle
+  const headOn=loadHeadAccessory();
+  const toggleDiv=document.createElement('div');
+  toggleDiv.style.cssText='width:100%;margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;';
+  const toggleBtn=document.createElement('button');
+  toggleBtn.className='export-btn';
+  toggleBtn.style.cssText='border-color:'+(headOn?'var(--accent)':'var(--line)')+';color:'+(headOn?'var(--accent)':'var(--muted)')+';';
+  toggleBtn.textContent=t(headOn?'headAccOn':'headAccOff');
+  toggleBtn.addEventListener('click',toggleHeadAccessory);
+  toggleDiv.appendChild(toggleBtn);
+  // Seasonal indicator
+  const season=getSeasonalTheme();
+  if(season){
+    const st=SEASONAL_THEMES[season];
+    const seasonSpan=document.createElement('span');
+    seasonSpan.style.cssText='font-size:11px;color:var(--accent);font-weight:700;';
+    seasonSpan.textContent=t('seasonalActive')+' '+st.label;
+    toggleDiv.appendChild(seasonSpan);
+  }
+  el.appendChild(toggleDiv);
+  SKINS_DEF.forEach(skin=>{
+    const isUnlocked=isSkinUnlocked(skin.id);
+    const isActive=skin.id===activeSkin;
+    const name=getLang()==='en'&&skin.nameEn?skin.nameEn:skin.name;
+    let unlockText=skin.free?t('skinFree'):(getLang()==='en'&&skin.descEn?skin.descEn:skin.descSv)||'';
+    const card=document.createElement('div');
+    card.className='skin-card'+(isActive?' active':'')+(isUnlocked?'':' locked');
+    card.innerHTML=`
+      <div class="skin-preview" style="background:${skin.previewCss}"></div>
+      <div class="skin-info">
+        <div class="skin-name">${skin.emoji} ${name}</div>
+        <div class="skin-unlock">${unlockText}</div>
+      </div>
+      ${isActive?`<span class="skin-badge">${t('skinActive')}</span>`:''}
+      ${!isUnlocked?'<span class="skin-lock-badge">🔒</span>':''}
+    `;
+    if(isUnlocked){
+      card.addEventListener('click',()=>{
+        saveActiveSkin(skin.id);
+        renderSkinsPage();
+      });
+    }
+    el.appendChild(card);
+  });
+}
+function goToSkins(){renderSkinsPage();showScreen('skinsScreen');}
+
+function unlockMedal(id){
+  const earned=loadMedals();if(earned.has(id))return;
+  earned.add(id);saveMedals(earned);
+  const def=MEDALS_DEF.find(m=>m.id===id);if(def)showMedalToast(def);
+  updateMedalNavBtn();
+  checkSkinUnlocks(id);
+}
+function showMedalToast(def){
+  const c=document.getElementById('medalToast');
+  const el=document.createElement('div');el.className='medal-toast-item';
+  el.innerHTML=`<div class="mt-emoji">${def.emoji}</div>
+    <div class="mt-text"><div class="mt-label">🏅 Medalj upplåst!</div>
+    <div class="mt-name">${def.name}</div><div class="mt-desc">${def.desc}</div></div>`;
+  c.appendChild(el);setTimeout(()=>el.remove(),3200);
+}
+function checkMedals(){
+  if(score>=500)   unlockMedal('p500');
+  if(score>=2000)  unlockMedal('p2000');
+  if(score>=5000)  unlockMedal('p5000');
+  if(score>=7500)  unlockMedal('p7500');
+  if(score>=10000) unlockMedal('p10000');
+  if(snake.length>=15) unlockMedal('len15');
+  if(snake.length>=25) unlockMedal('len25');
+  if(snake.length>=35) unlockMedal('len35');
+  if(snake.length>=50) unlockMedal('len50');
+  if(snake.length>=75) unlockMedal('len75');
+  if(score>=1000&&activeOps.size===4&&numRange===1000) unlockMedal('genius');
+}
+function checkOpMedals(){
+  const os=loadOpScores();
+  if(os['+']>=1000) unlockMedal('add1000');
+  if(os['-']>=1000) unlockMedal('sub1000');
+  if(os['*']>=500)  unlockMedal('mul500');
+  if(os['/']>=500)  unlockMedal('div500');
+}
+function updateMedalNavBtn(){
+  const earned=loadMedals();
+  document.getElementById('medalsBtnCount').textContent=t('medalsCount',{n:earned.size,tot:MEDALS_DEF.length});
+}
+
+/* Progress mot varje medalj */
+function getMedalProgress(id){
+  const os=loadOpScores(),stats=loadStats();
+  const bestScore=loadHS().reduce((m,h)=>Math.max(m,h.score),0);
+  const map={
+    p500:{cur:bestScore,max:500},p2000:{cur:bestScore,max:2000},
+    p5000:{cur:bestScore,max:5000},p7500:{cur:bestScore,max:7500},p10000:{cur:bestScore,max:10000},
+    add1000:{cur:os['+']||0,max:1000},sub1000:{cur:os['-']||0,max:1000},
+    mul500:{cur:os['*']||0,max:500},div500:{cur:os['/']||0,max:500},
+    c5:{cur:stats.bestCombo,max:5},c10:{cur:stats.bestCombo,max:10},
+    c15:{cur:stats.bestCombo,max:15},c20:{cur:stats.bestCombo,max:20},
+    c25:{cur:stats.bestCombo,max:25},c30:{cur:stats.bestCombo,max:30},
+    c50:{cur:stats.bestCombo,max:50},c75:{cur:stats.bestCombo,max:75},
+    c100:{cur:stats.bestCombo,max:100},
+    len15:{cur:stats.bestLength,max:15},len25:{cur:stats.bestLength,max:25},len35:{cur:stats.bestLength,max:35},len50:{cur:stats.bestLength,max:50},len75:{cur:stats.bestLength,max:75},
+    osviklig:{cur:stats.bestStreak,max:10},
+    genius:null,
+  };
+  return map[id]||null;
+}
+
+function renderMedalsPage(){
+  const earned=loadMedals();
+  document.getElementById('mpCount').textContent=t('medalsCount',{n:earned.size,tot:MEDALS_DEF.length});
+  const cats={};
+  MEDALS_DEF.forEach(m=>{const c=getLang()==='en'&&m.catEn?m.catEn:m.cat;if(!cats[c])cats[c]=[];cats[c].push(m);});
+  const el=document.getElementById('medalsPageContent');el.innerHTML='';
+  Object.entries(cats).forEach(([cat,medals])=>{
+    const sec=document.createElement('div');sec.className='medals-cat';
+    const t=document.createElement('div');t.className='medals-cat-title';t.textContent=cat;sec.appendChild(t);
+    const g=document.createElement('div');g.className='medals-grid';
+    medals.forEach(m=>{
+      const isUnlocked=earned.has(m.id);
+      const b=document.createElement('div');
+      b.className='medal-badge '+(isUnlocked?'unlocked':'locked');
+      const prog=(!isUnlocked)?getMedalProgress(m.id):null;
+      const pct=prog?Math.min(100,Math.round((prog.cur/prog.max)*100)):0;
+      b.innerHTML=`<span class="m-emoji">${m.emoji}</span>
+        <span class="m-info">
+          <span class="m-name">${getLang()==='en'&&m.nameEn?m.nameEn:m.name}</span>
+          <span class="m-desc">${getLang()==='en'&&m.descEn?m.descEn:m.desc}</span>
+          ${(!isUnlocked&&prog)?`
+            <div class="medal-prog"><div class="medal-prog-bar" style="width:${pct}%"></div></div>
+            <span class="medal-prog-text">${Math.min(prog.cur,prog.max).toLocaleString('sv')} / ${prog.max.toLocaleString('sv')}</span>
+          `:''}
+        </span>`;
+      g.appendChild(b);
+    });
+    sec.appendChild(g);el.appendChild(sec);
+  });
+}
+
+/* ═══════════════════════════════════════
+   EXPORT / IMPORT
+   ═══════════════════════════════════════ */
+async function exportData(){
+  const exportedAt=new Date().toISOString().slice(0,10);
+  const data={player:loadPlayer(),medals:[...loadMedals()],opScores:loadOpScores(),
+    stats:loadStats(),highscores:loadHS(),
+    unlockedSkins:[...loadUnlockedSkins()],activeSkin:loadActiveSkin(),
+    exportedAt,version:4};
+  const json=JSON.stringify(data,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const fname=`matteormen_${(loadPlayer()||'spelare').replace(/\s+/g,'_')}_${exportedAt}.json`;
+  if(window.showSaveFilePicker){
+    try{
+      const fh=await window.showSaveFilePicker({
+        suggestedName:fname,
+        types:[{description:'JSON sparfil',accept:{'application/json':['.json']}}]
+      });
+      const w=await fh.createWritable();
+      await w.write(blob);await w.close();return;
+    }catch(e){if(e.name==='AbortError')return;}
+  }
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=fname;a.click();URL.revokeObjectURL(url);
+}
+function importData(file){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(d.player)savePlayer(d.player);
+      if(Array.isArray(d.medals))saveMedals(new Set(d.medals));
+      if(d.opScores)saveOpScores(d.opScores);
+      if(d.stats)saveStats(d.stats);
+      if(Array.isArray(d.highscores))localStorage.setItem(HS_KEY,JSON.stringify(d.highscores.slice(0,10)));
+      if(Array.isArray(d.unlockedSkins))saveUnlockedSkins(new Set(d.unlockedSkins));
+      if(d.activeSkin)saveActiveSkin(d.activeSkin);
+      updatePlayerBar();updateMedalNavBtn();renderHS();updateSkinNavBtn();
+      alert('✅ Sparfil laddad! Välkommen tillbaka, '+loadPlayer()+'!');
+    }catch(err){alert('❌ Kunde inte läsa filen. Är det en giltig sparfil?');}
+  };reader.readAsText(file);
+}
+
+/* ═══════════════════════════════════════
+   AUDIO
+   ═══════════════════════════════════════ */
+const bgMusic=document.getElementById('bgMusic'),fastMusic=document.getElementById('fastMusic');
+const titelMusic=document.getElementById('titelMusic');
+let audioCtx=null;
+function getAC(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+function beep(freq,type,dur,vol=0.27){
+  try{const ac=getAC(),o=ac.createOscillator(),g=ac.createGain();
+  o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,ac.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+dur);
+  o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+dur);}catch(e){}
+}
+// Räknesätts-toner
+const OP_FREQS={'+':660,'-':520,'*':740,'/':880};
+function sfxOk(op){
+  const f=OP_FREQS[op]||660;
+  beep(f,'sine',.11);setTimeout(()=>beep(f*(4/3),'sine',.11),65);
+}
+function sfxCombo(n){
+  if(n===5) {beep(660,'sine',.08);setTimeout(()=>beep(880,'sine',.08),80);setTimeout(()=>beep(1100,'sine',.14),160);}
+  else if(n===10){[660,880,1100,1320].forEach((f,i)=>setTimeout(()=>beep(f,'sine',.1),i*70));}
+  else if(n===20){[660,770,880,990,1100,1320].forEach((f,i)=>setTimeout(()=>beep(f,'triangle',.11),i*55));}
+  else if(n===50){[440,550,660,880,1100,1320,1760].forEach((f,i)=>setTimeout(()=>beep(f,'sine',.13),i*50));}
+  else if(n>=100){for(let i=0;i<8;i++)setTimeout(()=>{beep(880+Math.random()*440,'sine',.08);},i*40);}
+}
+function sfxGold(){beep(1400,'sine',.06,.18);setTimeout(()=>beep(1800,'sine',.08,.12),70);}
+function sfxRecord(){
+  [330,440,550,660,880].forEach((f,i)=>setTimeout(()=>beep(f,'sine',.13),i*55));
+  setTimeout(()=>{beep(880,'triangle',.25,.18);},300);
+}
+function sfxBad(){beep(180,'sawtooth',.2,.2);}
+function sfxDie(){beep(220,'sawtooth',.38,.22);setTimeout(()=>beep(140,'sawtooth',.48,.17),190);}
+function shouldFast(){if(speedMode==='score')return score>=500;if(speedMode==='length')return snake.length>=15;return false;}
+function tryTitelMusic(){
+  if(!musicOn)return;
+  titelMusic.play().then(()=>{audioUnlocked=true;}).catch(()=>{});
+}
+function stopTitelMusic(resetTime){
+  titelMusic.pause();if(resetTime)titelMusic.currentTime=0;
+}
+function tryMusic(){
+  if(!musicOn)return;
+  stopTitelMusic(false);
+  if(shouldFast()){bgMusic.pause();fastMusic.play().then(()=>{audioUnlocked=true;isFastMusic=true;}).catch(()=>{});}
+  else{fastMusic.pause();bgMusic.play().then(()=>{audioUnlocked=true;isFastMusic=false;}).catch(()=>{});}
+}
+function updateMusicMode(){
+  if(!musicOn||!audioUnlocked)return;
+  const fast=shouldFast();
+  if(fast&&!isFastMusic){bgMusic.pause();fastMusic.play().catch(()=>{});isFastMusic=true;}
+  else if(!fast&&isFastMusic){fastMusic.pause();bgMusic.play().catch(()=>{});isFastMusic=false;}
+}
+function updateMenuMusicBtn(){
+  const icon=musicOn?'🔊 ':'🔇 ';
+  const txt=getLang()==='en'?'Music':'Musik';
+  $('btnMenuMusic').textContent=icon+txt;
+}
+function toggleMusic(){
+  musicOn=!musicOn;
+  updateMenuMusicBtn();
+  if(musicOn){
+    if(state==='menu')tryTitelMusic();
+    else tryMusic();
+  }else{
+    titelMusic.pause();bgMusic.pause();fastMusic.pause();isFastMusic=false;
+  }
+}
+
+/* ═══════════════════════════════════════
+   UTILS
+   ═══════════════════════════════════════ */
+const $=id=>document.getElementById(id);
+const R=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const lerp=(a,b,t)=>a+(b-a)*t;
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ═══════════════════════════════════════
+   HASTIGHET
+   ═══════════════════════════════════════ */
+function getSpeed(){
+  let base=290;
+  if(numRange>=1000)base=175;else if(numRange>=100)base=210;else if(numRange>=20)base=255;
+  const maxT=tables.size>0?Math.max(...tables):2;
+  if(maxT>=12)base-=25;else if(maxT>=9)base-=15;
+  if(speedMode==='score')  return Math.max(120,base-Math.floor(score/50)*8);
+  if(speedMode==='length') return Math.max(120,base-(Math.max(0,snake.length-4))*4);
+  return Math.max(140,base);
+}
+
+/* ═══════════════════════════════════════
+   PROBLEM — med fel-pool
+   ═══════════════════════════════════════ */
+function genProblem(){
+  // 35% chans att välja ett tidigare felsvarats problem
+  if(wrongPool.length>0 && Math.random()<0.35){
+    const p={...wrongPool[Math.floor(Math.random()*wrongPool.length)]};
+    return p;
+  }
+  return genFreshProblem();
+}
+function genFreshProblem(){
+  const ops=[...activeOps];if(!ops.length)return{expr:'2 + 2',answer:4,op:'+'};
+  const op=ops[Math.floor(Math.random()*ops.length)];
+  for(let att=0;att<120;att++){
+    if(op==='+'){
+      const max=numRange,a=R(1,Math.floor(max*.9)),b=R(1,Math.min(Math.floor(max*.9),max-a));
+      if(b<1)continue;const ans=a+b;if(ans>max)continue;return{expr:`${a} + ${b}`,answer:ans,op:'+'};
+    }
+    if(op==='-'){
+      const max=numRange,a=R(Math.max(2,Math.floor(max*.1)),max),b=R(1,a);
+      const ans=a-b;if(ans<0)continue;return{expr:`${a} − ${b}`,answer:ans,op:'-'};
+    }
+    if(op==='*'){
+      if(!tables.size)continue;
+      const tArr=[...tables],t=tArr[Math.floor(Math.random()*tArr.length)];
+      const o=R(1,12);let a=t,b=o;if(Math.random()>.5)[a,b]=[b,a];
+      return{expr:`${a} × ${b}`,answer:a*b,op:'*'};
+    }
+    if(op==='/'){
+      if(!tables.size)continue;
+      const tArr=[...tables],d=tArr[Math.floor(Math.random()*tArr.length)];
+      if(!d)continue;const q=R(1,12);
+      return{expr:`${q*d} ÷ ${d}`,answer:q,op:'/'};
+    }
+  }
+  return{expr:'2 + 3',answer:5,op:'+'};
+}
+function genWrongs(correct){
+  const spread=numRange>=1000?60:numRange>=100?15:numRange>=20?6:3;
+  const s=new Set();let att=0;
+  while(s.size<3&&att++<600){const off=R(-spread,spread);if(!off)continue;
+    const w=correct+off;if(w<0||w===correct||s.has(w))continue;s.add(w);}
+  for(let f=correct+1;s.size<3;f++)if(f!==correct&&f>=0)s.add(f);
+  return[...s].slice(0,3);
+}
+function addToWrongPool(prob){
+  if(wrongPool.some(p=>p.expr===prob.expr))return;
+  if(wrongPool.length>=MAX_WRONG_POOL)wrongPool.shift();
+  wrongPool.push({...prob});
+}
+function removeFromWrongPool(expr){
+  const i=wrongPool.findIndex(p=>p.expr===expr);
+  if(i!==-1)wrongPool.splice(i,1);
+}
+
+/* ═══════════════════════════════════════
+   BRICKOR
+   ═══════════════════════════════════════ */
+function placeTiles(){
+  tiles=[];
+  const occ=new Set(snake.map(s=>`${s.x},${s.y}`));
+  const head=snake[0];
+  const MIN_DIST=3;      // generellt minsta avstånd
+  const CONE_LEN=7;      // antal steg framåt som är förbjudna
+  function isTooClose(p){
+    const dist=Math.abs(p.x-head.x)+Math.abs(p.y-head.y);
+    if(dist<MIN_DIST)return true;
+    // Riktningszon — exkludera steg rakt framåt
+    for(let s=1;s<=CONE_LEN;s++){
+      const fx=((head.x+dir.x*s)%COLS+COLS)%COLS;
+      const fy=((head.y+dir.y*s)%ROWS+ROWS)%ROWS;
+      if(p.x===fx&&p.y===fy)return true;
+    }
+    return false;
+  }
+  shuffle([problem.answer,...genWrongs(problem.answer)]).forEach(val=>{
+    let p,att=0,ok=false;
+    while(!ok&&att<300){
+      p={x:R(0,COLS-1),y:R(0,ROWS-1)};att++;
+      ok=!isTooClose(p)&&!occ.has(`${p.x},${p.y}`)&&!tiles.some(t=>t.x===p.x&&t.y===p.y);
+    }
+    tiles.push({x:p.x,y:p.y,value:val,correct:val===problem.answer,isGold:false});
+  });
+}
+
+/* ═══════════════════════════════════════
+   SPEL: START & LOOP
+   ═══════════════════════════════════════ */
+function startGame(){
+  if(!activeOps.size){alert('Välj minst ett räknesätt!');return;}
+  if((activeOps.has('*')||activeOps.has('/'))&&!tables.size){alert('Välj minst en multiplikationstabell!');return;}
+  if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}
+  goldPhase=false;isFastMusic=false;
+  wrongPool=[];
+  sessionCorrect=0;sessionTotal=0;sessionOpStats={};
+  const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
+  snake=[];for(let i=0;i<4;i++)snake.push({x:mx-i,y:my,px:mx-i,py:my});
+  dir={x:1,y:0};nextDir={x:1,y:0};
+  score=0;lives=practiceMode?0:3;combo=0;growPending=0;correctStreak=0;
+  personalBestAtStart=loadHS().reduce((m,h)=>Math.max(m,h.score),0);
+  recordSoundPlayed=false;
+  problem=genProblem();placeTiles();updateHUD();
+  $('hsNameInp').value=loadPlayer();
+  state='playing';showScreen('gameScreen');hideOverlays();
+  showTouchControls(true);
+  stopTitelMusic(false);
+  lastTickTime=performance.now();tryMusic();requestAnimationFrame(gameLoop);
+}
+/* ═══════════════════════════════════════
+   GAMEPAD
+   ═══════════════════════════════════════ */
+let _gpLastDir=null;
+function pollGamepad(){
+  const gps=navigator.getGamepads?navigator.getGamepads():[];
+  for(let i=0;i<gps.length;i++){
+    const gp=gps[i];if(!gp)continue;
+    const DEAD=0.4;
+    // Vänster analog + d-pad (axlarna 0/1, d-pad axlar 6/7 eller knappar 12-15)
+    const ax=gp.axes[0]||0, ay=gp.axes[1]||0;
+    let nd=null;
+    if(Math.abs(ax)>Math.abs(ay)){
+      if(ax< -DEAD)nd={x:-1,y:0};
+      else if(ax>DEAD)nd={x:1,y:0};
+    }else{
+      if(ay< -DEAD)nd={x:0,y:-1};
+      else if(ay>DEAD)nd={x:0,y:1};
+    }
+    // D-pad knappar (standard layout: 12=upp,13=ner,14=vänster,15=höger)
+    if(!nd){
+      if(gp.buttons[12]?.pressed)nd={x:0,y:-1};
+      else if(gp.buttons[13]?.pressed)nd={x:0,y:1};
+      else if(gp.buttons[14]?.pressed)nd={x:-1,y:0};
+      else if(gp.buttons[15]?.pressed)nd={x:1,y:0};
+    }
+    // Trigga bara om riktningen ändrats (undviker spam)
+    if(nd){
+      const key=`${nd.x},${nd.y}`;
+      if(key!==_gpLastDir){_gpLastDir=key;applyDir(nd);}
+    }else{_gpLastDir=null;}
+    // Start-knapp (9) = paus, Select (8) = meny
+    if(gp.buttons[9]?.pressed&&state==='playing')pauseGame();
+    break; // använd bara första anslutna gamepad
+  }
+}
+
+function gameLoop(ts){
+  if(state!=='playing')return;
+  pollGamepad();
+  const spd=getSpeed(),elapsed=ts-lastTickTime;
+  moveProgress=Math.min(1,elapsed/spd);
+  if(elapsed>=spd){lastTickTime=ts;moveProgress=0;tick();if(state!=='playing')return;}
+  draw(moveProgress);requestAnimationFrame(gameLoop);
+}
+
+/* ═══════════════════════════════════════
+   TICK
+   ═══════════════════════════════════════ */
+function applyDir(nd){if(nd&&!(nd.x===-dir.x&&nd.y===-dir.y))nextDir=nd;}
+
+function tick(){
+  dir={...nextDir};
+  const old=snake.map(s=>({x:s.x,y:s.y}));
+  let hx=snake[0].x+dir.x, hy=snake[0].y+dir.y;
+
+  if(wallWrap){
+    hx=((hx%COLS)+COLS)%COLS;
+    hy=((hy%ROWS)+ROWS)%ROWS;
+  }else{
+    if(hx<0||hx>=COLS||hy<0||hy>=ROWS){triggerGameOver();return;}
+  }
+  for(let i=0;i<snake.length-1;i++){if(snake[i].x===hx&&snake[i].y===hy){triggerGameOver();return;}}
+
+  snake.unshift({x:hx,y:hy,px:old[0].x,py:old[0].y});
+  if(growPending>0)growPending--;else snake.pop();
+  for(let i=1;i<snake.length;i++){snake[i].px=old[i]?old[i].x:snake[i].x;snake[i].py=old[i]?old[i].y:snake[i].y;}
+
+  if(goldPhase){
+    const gt=tiles.find(t=>t.isGold);
+    if(gt&&gt.x===hx&&gt.y===hy){clearTimeout(goldTimeout);goldTimeout=null;goldPhase=false;problem=genProblem();placeTiles();}
+    updateHUD();updateMusicMode();return;
+  }
+
+  const ti=tiles.findIndex(t=>t.x===hx&&t.y===hy);
+  if(ti!==-1){
+    const tile=tiles.splice(ti,1)[0];
+    sessionTotal++;
+    if(!sessionOpStats[problem.op])sessionOpStats[problem.op]={correct:0,total:0};
+    sessionOpStats[problem.op].total++;
+
+    if(tile.correct){
+      combo++;correctStreak++;sessionCorrect++;
+      sessionOpStats[problem.op].correct++;
+      const base=10+(getSpeed()/10|0),bonus=combo>1?Math.floor(base*(combo-1)*.4):0;
+      const pts=base+bonus;score+=pts;growPending+=1;sfxOk(problem.op);flashFx('good');
+      eatAnim={x:tile.x,y:tile.y,value:tile.value,startTime:performance.now()};
+
+      // Cumulative op-scores
+      const os=loadOpScores();os[problem.op]=(os[problem.op]||0)+pts;saveOpScores(os);
+      checkOpMedals();
+
+      // Ta bort från fel-pool om den var där
+      removeFromWrongPool(problem.expr);
+
+      // Combo-medaljer
+      [[5,'c5'],[10,'c10'],[15,'c15'],[20,'c20'],[25,'c25'],[30,'c30'],[50,'c50'],[75,'c75'],[100,'c100']]
+        .forEach(([n,id])=>{if(combo===n){unlockMedal(id);sfxCombo(n);}});
+      if(!recordSoundPlayed&&score>personalBestAtStart&&personalBestAtStart>0){recordSoundPlayed=true;sfxRecord();}
+      if(correctStreak>=10)unlockMedal('osviklig');
+      updateStats();checkMedals();
+      problem=genProblem();placeTiles();
+    }else{
+      combo=0;correctStreak=0;
+      addToWrongPool(problem);
+      sfxBad();flashFx('bad');
+      if(practiceMode){
+        score=Math.max(0,score-Math.floor(5+getSpeed()/20));
+        if(snake.length>1)snake.pop();
+        if(snake.length<=1){triggerGameOver();return;}
+      }else{
+        for(let i=0;i<2;i++)if(snake.length>2)snake.pop();
+        lives--;
+        if(lives<=0||snake.length<2){triggerGameOver();return;}
+      }
+      const ct=tiles.find(t=>t.correct);
+      if(ct){
+        ct.isGold=true;goldPhase=true;sfxGold();
+        if(goldTimeout)clearTimeout(goldTimeout);
+        goldTimeout=setTimeout(()=>{goldPhase=false;goldTimeout=null;tiles.forEach(t=>t.isGold=false);
+          if(state==='playing'||state==='paused'){problem=genProblem();placeTiles();}},1500);
+      }else{problem=genProblem();placeTiles();}
+    }
+  }
+  updateMusicMode();updateHUD();
+}
+
+/* ═══════════════════════════════════════
+   RITNING
+   ═══════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   BAKGRUNDSTEMA & PARTIKLAR
+   ═══════════════════════════════════════ */
+function drawObsidianGlimmer(){
+  const T=performance.now(),W=canvas.width,H=canvas.height;
+  for(let i=0;i<20;i++){
+    const sx=(i*137.5)%W, sy=(i*97.3)%H;
+    const a=0.1+0.15*Math.abs(Math.sin(T/600+i*0.7));
+    const size=0.5+(i%3)*0.5;
+    ctx.fillStyle=`rgba(200,200,220,${a})`;
+    ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
+  }
+}
+function drawAuroraShimmer(){
+  const T=performance.now(),W=canvas.width,H=canvas.height;
+  for(let i=0;i<15;i++){
+    const hue=(T/30+i*24)%360;
+    const sy=(i*63.7)%H;
+    const a=0.04+0.04*Math.sin(T/800+i);
+    ctx.fillStyle=`hsla(${hue},90%,65%,${a})`;
+    ctx.fillRect(0,sy,W,4);
+  }
+}
+function drawParticles(type){
+  const T=performance.now(),W=canvas.width,H=canvas.height;
+  const N=type==='bats'?8:type==='hearts'?12:32;
+  for(let i=0;i<N;i++){
+    const sx=(i*137.508*1.618)%W, sy=(i*137.508*2.414)%H;
+    if(type==='stars'){
+      const a=0.15+0.2*Math.sin(T/900+i*1.3);
+      ctx.fillStyle=`rgba(255,255,255,${a})`;
+      ctx.beginPath();ctx.arc(sx,sy,1+(i%3)*0.5,0,Math.PI*2);ctx.fill();
+    }else if(type==='snow'){
+      const y=(sy+T/55*(0.4+(i%5)*0.25))%H;
+      const a=0.25+0.15*Math.sin(T/700+i);
+      ctx.fillStyle=`rgba(200,230,255,${a})`;
+      ctx.beginPath();ctx.arc(sx+Math.sin(T/1200+i)*6,y,1+(i%3),0,Math.PI*2);ctx.fill();
+    }else if(type==='sparks'){
+      const y=H-(sy+T/45*(0.4+(i%4)*0.35))%H;
+      const a=0.15+0.25*Math.sin(T/450+i*0.9);
+      ctx.fillStyle=`rgba(255,${90+(i%5)*30},0,${a})`;
+      ctx.beginPath();ctx.arc(sx,y,1.5,0,Math.PI*2);ctx.fill();
+    }else if(type==='rainbow'){
+      const hue=(T/25+i*28)%360,a=0.06+0.04*Math.sin(T/800+i);
+      ctx.fillStyle=`hsla(${hue},90%,65%,${a})`;
+      ctx.beginPath();ctx.arc(sx,sy,2+(i%3),0,Math.PI*2);ctx.fill();
+    }else if(type==='bats'){
+      const bx=sx+Math.sin(T/1400+i*0.9)*50,by=(sy+T/75)%H;
+      const a=0.2+0.1*Math.sin(T/600+i);
+      ctx.fillStyle=`rgba(140,40,0,${a})`;
+      ctx.save();ctx.translate(bx,by);ctx.rotate(Math.sin(T/900+i)*0.4);
+      ctx.beginPath();ctx.ellipse(0,0,7,3,0,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }else if(type==='hearts'){
+      const hx=sx+Math.sin(T/1800+i)*25,hy=(sy+T/95)%H;
+      const a=0.12+0.08*Math.sin(T/700+i);
+      ctx.fillStyle=`rgba(255,70,110,${a})`;
+      ctx.beginPath();ctx.arc(hx-3,hy,3.5,0,Math.PI*2);
+      ctx.arc(hx+3,hy,3.5,0,Math.PI*2);ctx.fill();
+    }else if(type==='eggs'){
+      const hy2=(sy+T/110)%H;
+      const hue=(i*47+30)%360,a=0.12+0.06*Math.sin(T/900+i);
+      ctx.fillStyle=`hsla(${hue},80%,70%,${a})`;
+      ctx.beginPath();ctx.ellipse(sx,hy2,3,4,0,0,Math.PI*2);ctx.fill();
+    }
+  }
+}
+function drawBackground(theme){
+  ctx.fillStyle=theme.bgA||'#060c08';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle=theme.gridColor||'rgba(0,255,100,.033)';ctx.lineWidth=1;
+  for(let x=0;x<=COLS;x++){ctx.beginPath();ctx.moveTo(x*CELL,0);ctx.lineTo(x*CELL,canvas.height);ctx.stroke();}
+  for(let y=0;y<=ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*CELL);ctx.lineTo(canvas.width,y*CELL);ctx.stroke();}
+  if(theme.particles)drawParticles(theme.particles);
+  const _sid=loadActiveSkin();
+  if(_sid==='obsidian')drawObsidianGlimmer();
+  if(_sid==='aurora')drawAuroraShimmer();
+}
+
+function draw(t){
+  const _theme=getActiveTheme();
+  drawBackground(_theme);
+  tiles.forEach(tile=>drawTile(tile));
+  // Tugga-animation: rätt svar krymper mot huvudet
+  if(eatAnim){
+    const prog=Math.min(1,(performance.now()-eatAnim.startTime)/260);
+    if(prog>=1){eatAnim=null;}
+    else{
+      const hx=lerp(snake[0].px,snake[0].x,t);
+      const hy=lerp(snake[0].py,snake[0].y,t);
+      const ex=lerp(eatAnim.x,hx,prog);
+      const ey=lerp(eatAnim.y,hy,prog);
+      const sc=1-prog*0.92;
+      ctx.save();
+      ctx.translate(ex*CELL+CELL/2,ey*CELL+CELL/2);
+      ctx.scale(sc,sc);
+      ctx.translate(-CELL/2,-CELL/2);
+      const val=String(eatAnim.value),fs=val.length<=2?17:val.length===3?13:11;
+      const fade=1-prog;
+      ctx.shadowColor='rgba(255,215,0,.9)';ctx.shadowBlur=18*fade;
+      ctx.fillStyle=`rgba(255,215,0,${0.35*fade})`;rRect(3,3,CELL-6,CELL-6,12);ctx.fill();
+      ctx.strokeStyle=`rgba(255,215,0,${fade})`;ctx.lineWidth=2.5;rRect(3,3,CELL-6,CELL-6,12);ctx.stroke();
+      ctx.shadowBlur=0;ctx.fillStyle=`rgba(255,229,102,${fade})`;
+      ctx.font=`900 ${fs}px 'Orbitron',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(val,CELL/2,CELL/2);
+      ctx.restore();
+    }
+  }
+  for(let i=snake.length-1;i>=0;i--){
+    const s=snake[i],isHead=i===0;
+    const dx=s.x-s.px,dy=s.y-s.py;
+    if(Math.abs(dx)>1){
+      // Svänger horisontellt
+      const ry=lerp(s.py,s.y,t);
+      if(dx<-1){drawSeg(lerp(s.px,COLS,t),ry,i,isHead);drawSeg(lerp(-1,s.x,t),ry,i,isHead);}
+      else     {drawSeg(lerp(s.px,-1,t),ry,i,isHead);  drawSeg(lerp(COLS,s.x,t),ry,i,isHead);}
+    }else if(Math.abs(dy)>1){
+      // Svänger vertikalt
+      const rx=lerp(s.px,s.x,t);
+      if(dy<-1){drawSeg(rx,lerp(s.py,ROWS,t),i,isHead);drawSeg(rx,lerp(-1,s.y,t),i,isHead);}
+      else     {drawSeg(rx,lerp(s.py,-1,t),i,isHead);  drawSeg(rx,lerp(ROWS,s.y,t),i,isHead);}
+    }else{
+      drawSeg(lerp(s.px,s.x,t),lerp(s.py,s.y,t),i,isHead);
+    }
+  }
+  // Subtil indikator om runda väggar är på
+  if(wallWrap){
+    ctx.strokeStyle='rgba(0,255,136,.14)';ctx.lineWidth=3;ctx.strokeRect(1,1,canvas.width-2,canvas.height-2);
+  }
+}
+function drawTile(t){
+  const r=Math.floor(CELL*0.18);
+  const px=t.x*CELL+2,py=t.y*CELL+2,s=CELL-4;
+  const cx=t.x*CELL+CELL/2,cy=t.y*CELL+CELL/2;
+  const val=String(t.value);
+  const fs=val.length<=2?Math.min(19,Math.floor(CELL*0.52)):val.length===3?Math.min(15,Math.floor(CELL*0.4)):Math.min(12,Math.floor(CELL*0.32));
+  ctx.save();
+  if(t.isGold){
+    ctx.shadowColor='rgba(255,200,0,.9)';ctx.shadowBlur=16;
+    ctx.fillStyle='rgba(255,200,0,.3)';rRect(px,py,s,s,r);ctx.fill();
+    ctx.strokeStyle='#ffd700';ctx.lineWidth=2;rRect(px,py,s,s,r);ctx.stroke();
+    ctx.shadowBlur=0;
+    ctx.font=`900 ${fs}px Nunito,'Exo 2',sans-serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='#fff176';
+    ctx.shadowColor='rgba(255,220,0,.9)';ctx.shadowBlur=8;
+    ctx.fillText(val,cx,cy);
+  }else{
+    ctx.fillStyle='rgba(15,30,80,.88)';rRect(px,py,s,s,r);ctx.fill();
+    ctx.strokeStyle='rgba(180,220,255,.95)';ctx.lineWidth=1.5;rRect(px,py,s,s,r);ctx.stroke();
+    ctx.font=`900 ${fs}px Nunito,'Exo 2',sans-serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='#ffffff';
+    ctx.shadowColor='rgba(150,210,255,.9)';ctx.shadowBlur=6;
+    ctx.fillText(val,cx,cy);
+  }
+  ctx.restore();
+}
+function drawSeg(rx,ry,i,isHead){
+  const skin=getActiveSkinDef();
+  const isTail=!isHead&&i===snake.length-1;
+  // Fix 1: Ta bort 1px gap — segment ritas flush mot varandra
+  const px=rx*CELL,py=ry*CELL,s=CELL;
+  const alpha=isHead?1:Math.max(0.15,1-i*.04);
+  // Fix 3: Svansspets — sista segmentet skalas ner till 60%
+  const ts=isTail?s*0.6:s;
+  let tpx=isTail?px+(s-ts)/2:px;
+  let tpy=isTail?py+(s-ts)/2:py;
+  // Förankra svansen mot föregående segment så inget gap uppstår
+  if(isTail&&snake.length>=2){
+    const tail=snake[snake.length-1],prev=snake[snake.length-2];
+    let ddx=prev.x-tail.x,ddy=prev.y-tail.y;
+    if(Math.abs(ddx)>1)ddx=ddx>0?-1:1;
+    if(Math.abs(ddy)>1)ddy=ddy>0?-1:1;
+    tpx+=Math.sign(ddx)*(s-ts)/2;
+    tpy+=Math.sign(ddy)*(s-ts)/2;
+  }
+  ctx.shadowColor=skin.shadow;ctx.shadowBlur=isHead?20:20;
+  const _segIdx=i||0;
+  if(isHead){
+    const g=ctx.createLinearGradient(px,py,px+s,py+s);
+    if(skin.rainbow){
+      const hue=(performance.now()/18+i*22)%360;
+      g.addColorStop(0,`hsl(${hue},100%,85%)`);
+      g.addColorStop(1,`hsl(${(hue+80)%360},100%,45%)`);
+    }else{g.addColorStop(0,skin.headA);g.addColorStop(1,skin.headB);}
+    ctx.fillStyle=g;
+  }else{
+    if(skin.rainbow){
+      const hue=(performance.now()/18+i*22)%360;
+      ctx.fillStyle=`hsla(${hue},90%,${35+alpha*20}%,${Math.min(1,alpha+.05)})`;
+    }else{ctx.fillStyle=skin.bodyFn(alpha,_segIdx);}
+  }
+  rRect(tpx,tpy,ts,ts,13);ctx.fill();
+  // Fix 2: Inner highlight — subtil radial gradient för 3D-djup
+  if(!isTail){
+    ctx.shadowBlur=0;
+    const hg=ctx.createRadialGradient(tpx+ts*0.28,tpy+ts*0.22,1,tpx+ts*0.35,tpy+ts*0.3,ts*0.55);
+    hg.addColorStop(0,'rgba(255,255,255,0.15)');
+    hg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=hg;
+    rRect(tpx,tpy,ts,ts,13);ctx.fill();
+  }
+  ctx.shadowBlur=0;
+  if(isHead){
+    const cx=rx*CELL+CELL/2,cy=ry*CELL+CELL/2;ctx.fillStyle='#060c08';
+    let e1x,e1y,e2x,e2y;
+    if(dir.x===1){e1x=cx+6;e1y=cy-5;e2x=cx+6;e2y=cy+5;}
+    else if(dir.x===-1){e1x=cx-6;e1y=cy-5;e2x=cx-6;e2y=cy+5;}
+    else if(dir.y===1){e1x=cx-5;e1y=cy+6;e2x=cx+5;e2y=cy+6;}
+    else{e1x=cx-5;e1y=cy-6;e2x=cx+5;e2y=cy-6;}
+    ctx.beginPath();ctx.arc(e1x,e1y,3,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(e2x,e2y,3,0,Math.PI*2);ctx.fill();
+    // Head accessory
+    const _th=getActiveTheme();
+    const _acc=_th.headAcc||(SKIN_THEMES[loadActiveSkin()]||{}).headAcc;
+    const _showAcc=_th.isSeasonal||loadHeadAccessory();
+    if(_acc&&_showAcc)drawHeadAccessory(_acc,cx,cy);
+  }
+}
+function drawHeadAccessory(acc,cx,cy){
+  // Kronan sitter mellan ögonen och kroppen
+  // Ögonen sitter på pannans sida (rörelseriktningen)
+  // Kronan sitter BAKOM ögonen = mot kroppen = MOTSATT rörelseriktning
+  // Taggarna pekar BORT från ögonen = mot kroppen = MOTSATT rörelseriktning
+  const off=Math.floor(CELL*0.42);
+  let ox=0,oy=0,angle=0;
+  if(dir.y===1) {oy=-off;angle=Math.PI;}    // nedåt: ögon nertill, krona ovanför, taggar upp
+  else if(dir.y===-1){oy=off;angle=0;}       // uppåt: ögon upptill, krona nedanför, taggar ner
+  else if(dir.x===1) {ox=-off;angle=Math.PI/2;}  // höger: ögon till höger, krona till vänster, taggar vänster
+  else               {ox=off; angle=-Math.PI/2;}  // vänster: ögon till vänster, krona till höger, taggar höger
+  const tx=cx+ox, ty=cy+oy;
+  ctx.save();
+  ctx.translate(tx,ty);
+  ctx.rotate(angle);
+  if(acc==='crown'){
+    // 3 spetsar, taggar pekar nedåt i lokalt koordinatsystem (roteras av ctx.rotate)
+    ctx.fillStyle='#ffd700';ctx.shadowColor='#ffcc00';ctx.shadowBlur=7;
+    ctx.beginPath();
+    ctx.moveTo(-7,-4);         // vänster bas (mot ögonen)
+    ctx.lineTo(-6,3);          // vänster spets (bort från ögonen)
+    ctx.lineTo(-2,-1);         // vänster dal
+    ctx.lineTo(0,4);           // mitten spets
+    ctx.lineTo(2,-1);          // höger dal
+    ctx.lineTo(6,3);           // höger spets
+    ctx.lineTo(7,-4);          // höger bas
+    ctx.closePath();ctx.fill();
+    ctx.shadowBlur=0;
+  }else if(acc==='santa'){
+    ctx.fillStyle='#cc1111';ctx.shadowColor='#ff2222';ctx.shadowBlur=6;
+    ctx.beginPath();
+    ctx.moveTo(-9,-5);ctx.lineTo(9,-5);
+    ctx.lineTo(3,7);ctx.lineTo(-3,7);ctx.closePath();ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='rgba(255,255,255,0.95)';
+    ctx.fillRect(-9,-1,18,5);
+    ctx.beginPath();ctx.arc(0,8,4,0,Math.PI*2);ctx.fill();
+  }else if(acc==='pumpkin'){
+    ctx.fillStyle='#ff6a00';ctx.shadowColor='#ff4400';ctx.shadowBlur=9;
+    ctx.beginPath();ctx.arc(0,2,7,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#000';
+    ctx.beginPath();ctx.arc(-3,3,1.5,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(3,3,1.5,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#000';ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.arc(0,0,2.5,0.1,Math.PI-0.1);ctx.stroke();
+    ctx.strokeStyle='#2d8a00';ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,9);ctx.lineTo(3,12);ctx.stroke();
+  }else if(acc==='bunny'){
+    ctx.fillStyle='#ffaacc';ctx.shadowColor='#ff88bb';ctx.shadowBlur=5;
+    ctx.beginPath();ctx.ellipse(-5,6,3,8,-0.15,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(5,6,3,8,0.15,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#ff5599';
+    ctx.beginPath();ctx.ellipse(-5,6,1.5,5,-0.15,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(5,6,1.5,5,0.15,0,Math.PI*2);ctx.fill();
+  }else if(acc==='glasses'){
+    ctx.restore();
+    ctx.save();
+    ctx.strokeStyle='rgba(60,60,60,0.9)';ctx.lineWidth=1.5;
+    ctx.fillStyle='rgba(40,40,80,0.45)';
+    let g1x=cx,g1y=cy,g2x=cx,g2y=cy;
+    if(dir.x===1) {g1x=cx+5;g1y=cy-5;g2x=cx+5;g2y=cy+5;}
+    else if(dir.x===-1){g1x=cx-5;g1y=cy-5;g2x=cx-5;g2y=cy+5;}
+    else if(dir.y===1) {g1x=cx-5;g1y=cy+5;g2x=cx+5;g2y=cy+5;}
+    else               {g1x=cx-5;g1y=cy-5;g2x=cx+5;g2y=cy-5;}
+    ctx.beginPath();ctx.arc(g1x,g1y,3.5,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.arc(g2x,g2y,3.5,0,Math.PI*2);ctx.fill();ctx.stroke();
+    ctx.beginPath();ctx.moveTo(g1x+(g2x-g1x)*0.35,g1y+(g2y-g1y)*0.35);
+    ctx.lineTo(g1x+(g2x-g1x)*0.65,g1y+(g2y-g1y)*0.65);ctx.stroke();
+  }
+  ctx.restore();
+}
+function rRect(x,y,w,h,r){
+  ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();
+}
+
+/* ═══════════════════════════════════════
+   HUD & FLASH
+   ═══════════════════════════════════════ */
+function updateHUD(){
+  $('scoreDisp').textContent=score;
+  $('levelDisp').textContent=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join('/');
+  $('eqText').textContent=`${problem.expr} = ?`;
+  const base=10+(getSpeed()/10|0);
+  $('comboDisp').textContent=combo>1?t('comboBonus',{n:combo,b:Math.floor(base*(combo-1)*.4)}):
+                              goldPhase?t('comboGold'):'';
+  const ld=$('livesDisp');ld.innerHTML='';
+  if(practiceMode){
+    const d=document.createElement('div');
+    d.style.cssText='font-size:12px;font-family:\'Orbitron\',monospace;display:flex;align-items:center;gap:4px;';
+    d.innerHTML='🐍 <span style="color:var(--accent);font-size:16px;font-weight:900">'+snake.length+'</span>';
+    ld.appendChild(d);
+  }else{
+    for(let i=0;i<3;i++){const d=document.createElement('div');d.className='life'+(i>=lives?' lost':'');d.textContent='❤️';ld.appendChild(d);}
+  }
+}
+function flashFx(type){const el=type==='good'?$('flashGood'):$('flashBad');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),170);}
+
+/* ═══════════════════════════════════════
+   GAME OVER — med statistik
+   ═══════════════════════════════════════ */
+function triggerGameOver(){
+  if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
+  state='gameover';sfxDie();bgMusic.pause();fastMusic.pause();isFastMusic=false;
+  stopTitelMusic(true); // börja om från början när spelaren går till menyn
+  showTouchControls(false);
+  $('goScore').textContent=`${t('goScoreLabel')} ${score}`;
+  const opsStr=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join(' ');
+  const tStr=tables.size>0?` | tabellerna ${[...tables].sort((a,b)=>a-b).join(',')}`:'';
+  $('goMeta').textContent=`${opsStr} · inom ${numRange}${tStr}`;
+
+  // Bygg statistik-chips
+  const statsEl=$('goStats');statsEl.innerHTML='';
+  const pct=sessionTotal>0?Math.round((sessionCorrect/sessionTotal)*100):0;
+  const accClass=pct>=80?'good':pct>=50?'neutral':'bad';
+
+  const addChip=(text,cls)=>{
+    const c=document.createElement('div');c.className=`stat-chip ${cls}`;c.textContent=text;statsEl.appendChild(c);
+  };
+  addChip(t('chipCorrect',{c:sessionCorrect,t:sessionTotal}),accClass);
+  addChip(t('chipPct',{p:pct}),accClass);
+  if(wrongPool.length>0)addChip(t('chipPractice',{n:wrongPool.length}),'neutral');
+
+  if($('btnPracticeList'))$('btnPracticeList').style.display=wrongPool.length>0?'':'none';
+  $('hsNameInp').style.display=practiceMode?'none':'';
+  $('btnSaveScore').style.display=practiceMode?'none':'';
+  $('btnGoMenu').textContent=practiceMode?'🏠 '+t('btnBack'):t('btnGoMenu');
+  exportSessionStats();
+  recordSession();
+  $('gameoverOverlay').classList.add('show');
+}
+
+/* ═══════════════════════════════════════
+   HIGHSCORE
+   ═══════════════════════════════════════ */
+const loadHS=()=>{try{return JSON.parse(localStorage.getItem(HS_KEY))||[];}catch(e){return[];}};
+const saveHS=hs=>localStorage.setItem(HS_KEY,JSON.stringify(hs));
+function addScore(name){
+  const hs=loadHS();
+  const desc=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join('/')+' inom '+numRange;
+  hs.push({name:name.trim()||getPlayer(),score,desc});
+  hs.sort((a,b)=>b.score-a.score);saveHS(hs.slice(0,10));
+}
+function renderHS(){
+  const hs=loadHS(),el=$('menuHs');
+  if(!el)return; // menuHs finns inte på titelskärmen i Windows-versionen
+  if(!hs.length){el.innerHTML='<div class="hs-empty">'+t('hsEmpty')+'</div>';return;}
+  el.innerHTML=hs.slice(0,5).map((h,i)=>`
+    <div class="hs-row"><div class="hs-rank">${['🥇','🥈','🥉','4.','5.'][i]}</div>
+    <div class="hs-name">${esc(h.name)}</div><div class="hs-meta">${esc(h.desc||'')}</div>
+    <div class="hs-score">${h.score}</div></div>`).join('');
+}
+
+/* ═══════════════════════════════════════
+   SKÄRMAR & NAVIGERING
+   ═══════════════════════════════════════ */
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
+function hideOverlays(){document.querySelectorAll('.overlay').forEach(o=>o.classList.remove('show'));}
+function showTouchControls(on){$('touchControls').classList.toggle('show',on);}
+function goToMenu(){
+  state='menu';bgMusic.pause();bgMusic.currentTime=0;fastMusic.pause();fastMusic.currentTime=0;isFastMusic=false;
+  if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
+  showTouchControls(false);
+  hideOverlays();showScreen('menuScreen');renderHS();updateMedalNavBtn();updatePlayerBar();updateMenuSettingsSummary();
+  tryTitelMusic();
+}
+function goToMedals(){renderMedalsPage();showScreen('medalsScreen');}
+function goToHS(){renderHSPage();showScreen('hsScreen');}
+function renderHSPage(){
+  const hs=loadHS();
+  $('hsPageCount').textContent=`${hs.length} / 10 ${t('hsEntries')}`;
+  const el=$('hsPageContent');el.innerHTML='';
+  if(!hs.length){el.innerHTML='<div class="hs-empty" style="padding:20px 0;font-size:13px">'+t('hsEmpty')+'</div>';return;}
+  const medals=['🥇','🥈','🥉'];
+  hs.forEach((h,i)=>{
+    const row=document.createElement('div');
+    row.className='hs-row';row.style.cssText='padding:8px 4px;font-size:13px;';
+    row.innerHTML=`<div class="hs-rank" style="font-size:16px;width:28px">${medals[i]||`${i+1}.`}</div>
+      <div class="hs-name" style="font-size:13px">${esc(h.name)}</div>
+      <div class="hs-meta" style="font-size:11px">${esc(h.desc||'')}</div>
+      <div class="hs-score" style="font-size:14px">${h.score}</div>`;
+    el.appendChild(row);
+  });
+}
+
+/* ═══════════════════════════════════════
+   MENY: BUILDERS
+   ═══════════════════════════════════════ */
+function updateRangeHint(){const map={10:t('rangeHint10'),20:t('rangeHint20'),100:t('rangeHint100'),1000:t('rangeHint1000')};$('rangeHint').textContent=map[numRange]||'';}
+document.querySelectorAll('.range-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{numRange=parseInt(btn.dataset.r);
+    document.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');updateRangeHint();deselectPreset();saveSettings();updateMenuSettingsSummary();});
+});
+function buildTableGrid(){
+  const grid=$('tableGrid');grid.innerHTML='';
+  for(let n=1;n<=12;n++){
+    const btn=document.createElement('button');btn.className='tb-btn'+(tables.has(n)?' sel':'');
+    btn.textContent=`×${n}`;btn.dataset.n=n;
+    btn.addEventListener('click',()=>{
+      if(tables.has(n)){tables.delete(n);btn.classList.remove('sel');}else{tables.add(n);btn.classList.add('sel');}
+      updateTableQuickSel();deselectPreset();saveSettings();});
+    grid.appendChild(btn);
+  }
+}
+function updateTableQuickSel(){
+  const cur=[...tables].sort((a,b)=>a-b).join(',');
+  document.querySelectorAll('.tq-btn').forEach(btn=>{
+    btn.classList.toggle('sel',btn.dataset.tq.split(',').map(Number).sort((a,b)=>a-b).join(',')===cur);});
+}
+function setTables(arr){
+  tables=new Set(arr);
+  document.querySelectorAll('.tb-btn').forEach(btn=>btn.classList.toggle('sel',tables.has(parseInt(btn.dataset.n))));
+  updateTableQuickSel();
+}
+document.querySelectorAll('.tq-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{setTables(btn.dataset.tq.split(',').map(Number));deselectPreset();});
+});
+function updateTablePanelVisibility(){$('tablePanel').style.display=(activeOps.has('*')||activeOps.has('/'))? 'block':'none';}
+document.querySelectorAll('.op-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{const op=btn.dataset.op;
+    if(activeOps.has(op)){if(activeOps.size===1)return;activeOps.delete(op);btn.classList.remove('sel');}
+    else{activeOps.add(op);btn.classList.add('sel');}
+    updateTablePanelVisibility();deselectPreset();saveSettings();updateMenuSettingsSummary();});
+});
+document.querySelectorAll('.speed-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{speedMode=btn.dataset.sm;
+    document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');const sdMap={none:t('speedDescNone'),score:t('speedDescScore'),length:t('speedDescLength')};$('speedDesc').textContent=sdMap[speedMode]||'';saveSettings();});
+});
+// Väggar-toggle
+document.querySelectorAll('.toggle-btn[data-ww]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    wallWrap=btn.dataset.ww==='true';
+    btn.closest('.toggle-row').querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel');
+    saveSettings();
+  });
+});
+function buildGradeRow(){
+  const row=$('gradeRow');row.innerHTML='';
+  Object.entries(GRADES).forEach(([g,cfg])=>{
+    const btn=document.createElement('button');btn.className='preset-btn';btn.textContent=getLang()==='en'&&cfg.labelEn?cfg.labelEn:cfg.label;
+    btn.addEventListener('click',()=>{
+      activeOps=new Set(cfg.ops);numRange=cfg.range;if(cfg.tbls.length)setTables(cfg.tbls);
+      document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
+      document.querySelectorAll('.range-btn').forEach(rb=>rb.classList.toggle('sel',parseInt(rb.dataset.r)===numRange));
+      updateRangeHint();updateTablePanelVisibility();saveSettings();updateMenuSettingsSummary();
+      document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');});
+    row.appendChild(btn);
+  });
+}
+function deselectPreset(){document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('sel'));}
+
+/* ═══════════════════════════════════════
+   NAMNMODAL
+   ═══════════════════════════════════════ */
+function showNameModal(){$('nameModalInp').value='';$('nameModal').classList.add('show');setTimeout(()=>$('nameModalInp').focus(),100);}
+function confirmName(){
+  const n=$('nameModalInp').value.trim();if(!n){$('nameModalInp').focus();return;}
+  savePlayer(n);$('nameModal').classList.remove('show');updatePlayerBar();
+}
+$('btnNameOk').addEventListener('click',confirmName);
+$('nameModalInp').addEventListener('keydown',e=>{if(e.key==='Enter')confirmName();});
+$('btnChangeName').addEventListener('click',showNameModal);
+$('btnLangSv').addEventListener('click',()=>setLang('sv'));
+$('btnLangEn').addEventListener('click',()=>setLang('en'));
+
+/* ═══════════════════════════════════════
+   TOUCH D-PAD & SVEP
+   ═══════════════════════════════════════ */
+function dpadPress(nd){if(state==='playing')applyDir(nd);}
+function setupDpad(){
+  const dirs={dUp:{x:0,y:-1},dDown:{x:0,y:1},dLeft:{x:-1,y:0},dRight:{x:1,y:0}};
+  Object.entries(dirs).forEach(([id,nd])=>{
+    const btn=$(id);
+    // Touch (snabbare respons)
+    btn.addEventListener('touchstart',e=>{e.preventDefault();dpadPress(nd);btn.classList.add('pressed');},{passive:false});
+    btn.addEventListener('touchend',e=>{e.preventDefault();btn.classList.remove('pressed');},{passive:false});
+    // Mus (för testning)
+    btn.addEventListener('mousedown',()=>{dpadPress(nd);});
+  });
+}
+
+// Svep-styrning på canvas
+let touchStartX=0,touchStartY=0,touchStartTime=0;
+canvas.addEventListener('touchstart',e=>{
+  e.preventDefault();
+  touchStartX=e.touches[0].clientX;
+  touchStartY=e.touches[0].clientY;
+  touchStartTime=Date.now();
+},{passive:false});
+canvas.addEventListener('touchend',e=>{
+  e.preventDefault();
+  if(state!=='playing')return;
+  const dx=e.changedTouches[0].clientX-touchStartX;
+  const dy=e.changedTouches[0].clientY-touchStartY;
+  const dt=Date.now()-touchStartTime;
+  if(dt>500)return; // för långsam = ingen svep
+  const MIN_SWIPE=25;
+  if(Math.abs(dx)<MIN_SWIPE&&Math.abs(dy)<MIN_SWIPE)return;
+  if(Math.abs(dx)>Math.abs(dy)){
+    applyDir(dx>0?{x:1,y:0}:{x:-1,y:0});
+  }else{
+    applyDir(dy>0?{x:0,y:1}:{x:0,y:-1});
+  }
+},{passive:false});
+
+/* ═══════════════════════════════════════
+   UI-TEMAN
+   ═══════════════════════════════════════ */
+const UI_THEME_BG={
+  natt:'radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,255,100,.06),transparent 60%),linear-gradient(180deg,#060c08,#03080a)',
+  skog:'radial-gradient(ellipse 80% 60% at 50% 0%,rgba(180,50,255,.12),transparent 60%),linear-gradient(180deg,#1a0a2e,#0d0518)',
+  hav:'radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,100,220,.12),transparent 60%),linear-gradient(180deg,#0d1f35,#071525)',
+  solnedgang:'radial-gradient(ellipse 80% 60% at 50% 0%,rgba(255,100,0,.1),transparent 60%),linear-gradient(180deg,#120808,#0a0404)',
+};
+function loadUITheme(){return localStorage.getItem('mattormen_ui_theme')||'natt';}
+function applyUITheme(id){
+  document.body.dataset.theme=id==='natt'?'':id;
+  document.body.style.background=UI_THEME_BG[id]||UI_THEME_BG.natt;
+  localStorage.setItem('mattormen_ui_theme',id);
+  document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('sel',b.dataset.theme===id));
+}
+
+/* ═══════════════════════════════════════
+   SPELLÄGE (standard / övning)
+   ═══════════════════════════════════════ */
+let practiceMode=false;
+function applyMode(m){
+  practiceMode=(m==='practice');
+  localStorage.setItem('mattormen_mode',m);
+  document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.mode===m));
+  const desc={standard:'3 liv. Fel svar krymper ormen och tappar ett liv.',
+    practice:'Inga liv. Fel svar → minuspoäng och ormen krymper. Game over när ormen är för kort!'};
+  if($('modeDesc'))$('modeDesc').textContent=desc[m]||'';
+}
+
+/* ═══════════════════════════════════════
+   PAUS — nytt tal vid varje paus
+   ═══════════════════════════════════════ */
+
+/* ─── Inställningssida ─── */
+function goToSettings(){showScreen('settingsScreen');}
+
+function showAbout(){
+  const l=getLang();
+  if($('aboutTitleEl'))$('aboutTitleEl').textContent='SifferSnoken';
+  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 2.6';
+  if($('aboutDevEl'))$('aboutDevEl').textContent=
+    l==='en'?'© 2026 42 Improbable Owls & Andreas Jonsson':'© 2026 42 Improbable Owls & Andreas Jonsson';
+  if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=l==='en'?'Special thanks':'Tack till';
+  if($('aboutThanksText'))$('aboutThanksText').textContent=
+    'Alvin & Ludvig\n'+
+    'Cecilia Norlander – idéer och feedback\n'+
+    'Hugo Persson – som ihärdigt kämpade med att slå sitt personbästa!\n'+
+    'Noelle Brusberg Aschan – grym försäljare av Majblommor\n'+
+    'Alla elever på Slättenskolan i Norrahammar\n'+
+    'Anthropic / Claude AI – för ovärderlig hjälp med koden';
+  if($('btnAboutClose'))$('btnAboutClose').textContent=l==='en'?'Close':'Stäng';
+  $('aboutOverlay').classList.add('show');
+}
+
+function updateMenuSettingsSummary(){
+  const el=$('menuSettingsSummary');if(!el)return;
+  const om={'+':'➕','-':'➖','*':'✖️','/':'➗'};
+  const opsStr=[...activeOps].map(o=>om[o]||o).join(' ');
+  const tStr=(tables.size>0&&(activeOps.has('*')||activeOps.has('/')))?' · '+t('panelTables').replace('✖️ ','').split(' ')[0]+': '+[...tables].sort((a,b)=>a-b).join(', '):'';
+  el.textContent=opsStr+' · '+t('rangeW'+numRange)+tStr;
+}
+
+/* ─── WebView2: exportera spelstatistik ─── */
+/* ═══════════════════════════════════════
+   STATISTIK & HISTORIK
+   ═══════════════════════════════════════ */
+function getDeviceId(){
+  let id=localStorage.getItem(DEVICE_KEY);
+  if(!id){id='dev_'+Math.random().toString(36).slice(2,10);localStorage.setItem(DEVICE_KEY,id);}
+  return id;
+}
+function getHistKey(){return HIST_KEY+'_'+getDeviceId();}
+function loadHistory(){try{return JSON.parse(localStorage.getItem(getHistKey()))||[];}catch(e){return[];}}
+function saveHistory(hist){localStorage.setItem(getHistKey(),JSON.stringify(hist));}
+
+function recordSession(){
+  if(sessionTotal===0)return; // inget spel spelat, spara inte
+  const hist=loadHistory();
+  const now=new Date();
+  const entry={
+    date:now.toLocaleDateString('sv-SE'),
+    time:now.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'}),
+    player:loadPlayer()||'Okänd',
+    score,
+    correct:sessionCorrect,
+    total:sessionTotal,
+    length:snake.length,
+    ops:{...sessionOpStats},
+    wrongExprs:wrongPool.map(p=>p.expr)
+  };
+  hist.push(entry);
+  // Rulla bort äldsta om vi når 100
+  if(hist.length>100)hist.splice(0,hist.length-100);
+  saveHistory(hist);
+}
+
+function goToStats(){renderStatsPage();showScreen('statsScreen');}
+
+function renderStatsPage(){
+  const el=$('statsPageContent');
+  const hist=loadHistory();
+  if(!hist.length){
+    el.innerHTML='<div style="color:var(--muted);text-align:center;padding:40px 0;font-size:14px;">'+t('statsEmpty')+'</div>';
+    return;
+  }
+  const l=getLang();
+  const opLabel={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
+  const opLabelEn={'+':'➕ Addition','-':'➖ Subtraction','*':'✖️ Multiplication','/':'➗ Division'};
+  const opSym={'+':'+','-':'−','*':'×','/':'÷'};
+
+  // ── Sammanfattning ──
+  const totalGames=hist.length;
+  const avgAcc=Math.round(hist.reduce((s,h)=>s+(h.total>0?h.correct/h.total:0),0)/totalGames*100);
+  // Trend: genomsnitt senaste 5 vs föregående 5
+  let trendHtml='';
+  if(hist.length>=6){
+    const last5=hist.slice(-5).reduce((s,h)=>s+(h.total>0?h.correct/h.total:0),0)/5*100;
+    const prev5=hist.slice(-10,-5).reduce((s,h)=>s+(h.total>0?h.correct/h.total:0),0)/Math.min(5,hist.length-5)*100;
+    const diff=Math.round(last5-prev5);
+    if(diff>2)trendHtml=`<div class="stats-trend up">↑ +${diff}% senaste 5 spelen</div>`;
+    else if(diff<-2)trendHtml=`<div class="stats-trend down">↓ ${diff}% senaste 5 spelen</div>`;
+    else trendHtml=`<div class="stats-trend flat">→ Stabil nivå</div>`;
+  }
+
+  // ── Per räknesätt ──
+  const opAcc={};
+  hist.forEach(h=>{
+    if(!h.ops)return;
+    Object.entries(h.ops).forEach(([op,d])=>{
+      if(!opAcc[op])opAcc[op]={correct:0,total:0};
+      opAcc[op].correct+=d.correct||0;
+      opAcc[op].total+=d.total||0;
+    });
+  });
+  const opRows=Object.entries(opAcc).map(([op,d])=>{
+    const pct=d.total>0?Math.round(d.correct/d.total*100):0;
+    const col=pct>=80?'#00ff88':pct>=50?'#ffcc00':'#ff4444';
+    const lbl=l==='en'?(opLabelEn[op]||op):(opLabel[op]||op);
+    return `<div class="stats-op-row">
+      <div class="stats-op-name">${opSym[op]||op}</div>
+      <div style="flex:1">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">${lbl}</div>
+        <div class="stats-op-bar-wrap"><div class="stats-op-bar" style="width:${pct}%;background:${col}"></div></div>
+      </div>
+      <div class="stats-op-pct" style="color:${col}">${pct}%</div>
+    </div>`;
+  }).join('');
+
+  // ── Svåraste talen ──
+  const wrongCount={};
+  hist.forEach(h=>{(h.wrongExprs||[]).forEach(expr=>{wrongCount[expr]=(wrongCount[expr]||0)+1;});});
+  const topWrong=Object.entries(wrongCount).sort((a,b)=>b[1]-a[1]).slice(0,15);
+  const wrongHtml=topWrong.length
+    ? `<div class="stats-wrong-list">${topWrong.map(([expr,n])=>
+        `<div class="stats-wrong-item">${expr}<span class="stats-wrong-count">×${n}</span></div>`).join('')}</div>`
+    : `<div style="color:var(--muted);font-size:12px;">Inga fel registrerade ännu! 🎉</div>`;
+
+  // ── Senaste 10 sessioner ──
+  const recent=hist.slice(-10).reverse();
+  const histRows=recent.map(h=>{
+    const pct=h.total>0?Math.round(h.correct/h.total*100):0;
+    const col=pct>=80?'#00ff88':pct>=50?'#ffcc00':'#ff4444';
+    return `<div class="stats-hist-row">
+      <span class="stats-hist-date">${h.date} ${h.time}</span>
+      <span class="stats-hist-player">${esc(h.player)}</span>
+      <div class="stats-hist-bar-wrap"><div class="stats-hist-bar" style="width:${pct}%;background:${col}"></div></div>
+      <span class="stats-hist-pct" style="color:${col}">${pct}%</span>
+      <span class="stats-hist-score">${h.score}p</span>
+    </div>`;
+  }).join('');
+
+  el.innerHTML=`
+    <div class="stats-section">
+      <div class="stats-summary-grid">
+        <div class="stats-summary-card">
+          <div class="stats-summary-val">${totalGames}</div>
+          <div class="stats-summary-lbl">Spel totalt</div>
+        </div>
+        <div class="stats-summary-card">
+          <div class="stats-summary-val" style="color:${avgAcc>=80?'#00ff88':avgAcc>=50?'#ffcc00':'#ff4444'}">${avgAcc}%</div>
+          <div class="stats-summary-lbl">Snitt träffsäkerhet</div>
+          ${trendHtml}
+        </div>
+        <div class="stats-summary-card">
+          <div class="stats-summary-val">${Math.max(...hist.map(h=>h.score))}</div>
+          <div class="stats-summary-lbl">Bästa poäng</div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">📊 Träffsäkerhet per räknesätt</div>
+      ${opRows||'<div style="color:var(--muted);font-size:12px;">Ingen data ännu</div>'}
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">❌ Svåraste talen (alla spel)</div>
+      ${wrongHtml}
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">📅 Senaste 10 sessioner</div>
+      ${histRows}
+    </div>
+    <button class="stats-clear-btn" id="btnClearStats">🗑️ Rensa all statistik</button>
+  `;
+  $('btnClearStats').addEventListener('click',()=>{
+    if(confirm('Rensa all sparad statistik? Detta går inte att ångra.'))
+      {saveHistory([]);renderStatsPage();}
+  });
+}
+
+function exportSessionStats(){
+  const now=new Date();
+  const row=[
+    now.toLocaleDateString('sv-SE'),
+    now.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'}),
+    loadPlayer()||'Okänd',score,sessionCorrect,sessionTotal,
+    (sessionTotal>0?Math.round((sessionCorrect/sessionTotal)*100):0)+'%',
+    [...activeOps].map(o=>({'+':'+','-':'-','*':'*','/':'/'})[o]).join('+'),
+    numRange,snake.length,practiceMode?'Övning':'Standard'
+  ].join(';');
+  if(window.chrome&&window.chrome.webview)
+    window.chrome.webview.postMessage(JSON.stringify({type:'saveStats',data:row}));
+}
+
+/* ─── Skalning för WebView2/Windows ─── */
+function scaleToFit(){
+  const w=document.getElementById('gameWrapper');if(!w)return;
+  const sw=window.innerWidth,sh=window.innerHeight;
+  const scale=Math.min(1,sw/1100,sh/760);
+  if(scale<0.999){
+    w.style.transform=`scale(${scale.toFixed(4)})`;
+    w.style.marginTop=`${Math.max(0,Math.floor((sh-760*scale)/2))}px`;
+  }else{w.style.transform='none';w.style.marginTop='0';}
+}
+window.addEventListener('resize',scaleToFit);
+
+function pauseGame(){
+  if(state!=='playing')return;
+  state='paused';
+  $('pauseOverlay').classList.add('show');
+  bgMusic.pause();fastMusic.pause();
+  problem=genProblem();placeTiles();updateHUD();
+}
+
+/* ═══════════════════════════════════════
+   KNAPPAR
+   ═══════════════════════════════════════ */
+$('btnPlay').addEventListener('click',startGame);
+if($('btnPracticeList')){
+  $('btnPracticeList').addEventListener('click',()=>{
+    if($('practiceTitleEl'))$('practiceTitleEl').textContent='📚 Öva på dessa';
+    if($('btnPracticeClose'))$('btnPracticeClose').textContent='Stäng';
+    const el=$('practiceListContent');
+    if(el)el.innerHTML=wrongPool.map(p=>`<div>${p.expr} = <strong style="color:var(--accent);font-weight:900">${p.answer}</strong></div>`).join('');
+    $('practiceOverlay').classList.add('show');
+  });
+}
+if($('btnPracticeClose'))$('btnPracticeClose').addEventListener('click',()=>$('practiceOverlay').classList.remove('show'));
+if($('btnAbout')){
+  $('btnAbout').addEventListener('click',showAbout);
+  if($('btnAboutClose'))$('btnAboutClose').addEventListener('click',()=>$('aboutOverlay').classList.remove('show'));
+}
+document.querySelectorAll('.theme-btn').forEach(btn=>btn.addEventListener('click',()=>applyUITheme(btn.dataset.theme)));
+document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>applyMode(btn.dataset.mode)));
+$('btnGoMedals').addEventListener('click',goToMedals);
+$('btnGoHS').addEventListener('click',goToHS);
+$('btnGoSettings').addEventListener('click',goToSettings);
+$('btnBackFromSettings').addEventListener('click',()=>showScreen('menuScreen'));
+$('btnBackFromMedals').addEventListener('click',()=>showScreen('menuScreen'));
+$('btnBackFromSkins').addEventListener('click',()=>showScreen('menuScreen'));
+$('btnGoSkins').addEventListener('click',goToSkins);
+$('btnBackFromHS').addEventListener('click',()=>showScreen('menuScreen'));
+$('btnClearHS').addEventListener('click',()=>{if(confirm('Rensa hela highscorelistan?')){localStorage.removeItem(HS_KEY);renderHS();renderHSPage();}});
+$('btnMenuMusic').addEventListener('click',toggleMusic);
+$('btnGoStats').addEventListener('click',goToStats);
+$('btnBackFromStats').addEventListener('click',()=>showScreen('menuScreen'));
+$('btnResume').addEventListener('click',()=>{state='playing';$('pauseOverlay').classList.remove('show');tryMusic();lastTickTime=performance.now();requestAnimationFrame(gameLoop);});
+$('btnPauseMenu').addEventListener('click',goToMenu);
+$('btnSaveScore').addEventListener('click',()=>{addScore($('hsNameInp').value);goToMenu();});
+$('btnGoMenu').addEventListener('click',goToMenu);
+$('hsNameInp').addEventListener('keydown',e=>{if(e.key==='Enter')$('btnSaveScore').click();});
+document.addEventListener('pointerdown',()=>{if(!audioUnlocked&&musicOn)tryTitelMusic();},{once:true});
+
+/* ═══════════════════════════════════════
+   TANGENTBORDSINPUT
+   ═══════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();
+  if(state==='playing'){
+    const map={ArrowUp:{x:0,y:-1},w:{x:0,y:-1},W:{x:0,y:-1},
+      ArrowDown:{x:0,y:1},s:{x:0,y:1},S:{x:0,y:1},
+      ArrowLeft:{x:-1,y:0},a:{x:-1,y:0},A:{x:-1,y:0},
+      ArrowRight:{x:1,y:0},d:{x:1,y:0},D:{x:1,y:0}};
+    const nd=map[e.key];if(nd)applyDir(nd);
+    if(e.key==='p'||e.key==='P')pauseGame();
+    if(e.key==='Escape')goToMenu();if(e.key==='m'||e.key==='M')toggleMusic();
+  }else if(state==='paused'){
+    if(['p','P','Escape'].includes(e.key)){state='playing';$('pauseOverlay').classList.remove('show');tryMusic();lastTickTime=performance.now();requestAnimationFrame(gameLoop);}
+  }
+});
+
+/* ═══════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════ */
+// Init lang-knappar
+const _il=getLang();$('btnLangSv').classList.toggle('sel',_il==='sv');$('btnLangEn').classList.toggle('sel',_il==='en');
+buildGradeRow();buildTableGrid();updateRangeHint();updateTablePanelVisibility();
+const sdMap2={none:t('speedDescNone'),score:t('speedDescScore'),length:t('speedDescLength')};
+$('speedDesc').textContent=sdMap2[speedMode]||'';
+updateMenuMusicBtn();
+// Säkerställ att gratisormskinn är upplåsta
+const _us=loadUnlockedSkins();let _usc=false;
+SKINS_DEF.filter(s=>s.free).forEach(s=>{if(!_us.has(s.id)){_us.add(s.id);_usc=true;}});
+if(_usc)saveUnlockedSkins(_us);
+// Synka skinn från redan upplåsta medaljer
+syncSkinsFromMedals();
+renderHS();updateMedalNavBtn();updateSkinNavBtn();updatePlayerBar();setupDpad();
+applyUITheme(loadUITheme());
+applyMode(localStorage.getItem('mattormen_mode')||'standard');
+loadSettings();
+document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
+document.querySelectorAll('.range-btn').forEach(rb=>rb.classList.toggle('sel',parseInt(rb.dataset.r)===numRange));
+document.querySelectorAll('.speed-btn').forEach(sb=>sb.classList.toggle('sel',sb.dataset.sm===speedMode));
+document.querySelectorAll('.toggle-btn[data-ww]').forEach(tb=>tb.classList.toggle('sel',tb.dataset.ww===(wallWrap?'true':'false')));
+updateTablePanelVisibility();updateRangeHint();updateMenuSettingsSummary();
+if(!localStorage.getItem(LANG_KEY)){
+  const bl=navigator.language||'sv';
+  localStorage.setItem(LANG_KEY,bl.toLowerCase().startsWith('sv')?'sv':'en');
+}
+applyLang();
+if(!loadPlayer())showNameModal();
+// WebView2: försök låsa upp audio utan user gesture
+setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
+scaleToFit();
+</script>
+</div><!-- /gameWrapper -->
+</body>
+</html>
