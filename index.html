@@ -154,20 +154,29 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .stats-summary-lbl{font-size:10px;color:var(--muted);margin-top:3px;}
 .stats-trend{font-size:13px;font-weight:700;margin-top:2px;}
 .stats-trend.up{color:#00ff88;} .stats-trend.down{color:#ff4444;} .stats-trend.flat{color:var(--muted);}
+.stats-teacher-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
+.stats-insight-card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 10px;}
+.stats-insight-kicker{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin-bottom:6px;}
+.stats-insight-main{font-family:'Nunito','Exo 2',sans-serif;font-size:17px;font-weight:900;color:var(--text);line-height:1.25;}
+.stats-insight-sub{font-size:11px;color:var(--muted);line-height:1.5;margin-top:5px;}
 .stats-op-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
 .stats-op-name{width:28px;font-family:'Orbitron',monospace;font-size:16px;font-weight:900;
   color:var(--accent);text-align:center;}
 .stats-op-bar-wrap{flex:1;background:var(--line);border-radius:6px;height:18px;overflow:hidden;}
 .stats-op-bar{height:100%;border-radius:6px;transition:width .4s;}
 .stats-op-pct{width:38px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;text-align:right;}
+.stats-op-meta{font-size:10px;color:var(--muted);margin-top:3px;}
 .stats-wrong-list{display:flex;flex-wrap:wrap;gap:6px;}
 .stats-wrong-item{background:var(--panel);border:1px solid var(--line);border-radius:8px;
   padding:5px 10px;font-family:'Orbitron',monospace;font-size:12px;color:var(--text);}
 .stats-wrong-count{font-size:10px;color:#ff4444;margin-left:4px;}
+.stats-focus-list{display:flex;flex-wrap:wrap;gap:7px;}
+.stats-focus-chip{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--text);}
 .stats-hist-row{display:flex;align-items:center;gap:8px;padding:6px 0;
   border-bottom:1px solid rgba(255,255,255,.05);font-size:12px;}
+.stats-hist-date-wrap{min-width:180px;max-width:220px;}
 .stats-hist-date{color:var(--muted);min-width:70px;font-size:11px;}
-.stats-hist-player{color:var(--accent);min-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.stats-hist-meta{color:var(--accent);font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px;}
 .stats-hist-bar-wrap{flex:1;background:var(--line);border-radius:4px;height:10px;overflow:hidden;}
 .stats-hist-bar{height:100%;border-radius:4px;}
 .stats-hist-pct{min-width:36px;font-family:'Orbitron',monospace;font-size:11px;text-align:right;}
@@ -176,6 +185,11 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
   color:#ff4444;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:700;cursor:pointer;
   transition:.15s;margin-top:12px;}
 .stats-clear-btn:hover{background:rgba(255,68,68,.12);}
+@media(max-width:640px){
+  .stats-summary-grid,.stats-teacher-grid{grid-template-columns:1fr;}
+  .stats-hist-row{flex-wrap:wrap;}
+  .stats-hist-date-wrap{min-width:100%;max-width:none;}
+}
 
 .game-wrap{display:flex;flex-direction:column;align-items:center;width:100%;max-width:780px}
 .game-top{display:flex;justify-content:space-between;align-items:center;width:100%;padding:4px 2px}
@@ -1159,6 +1173,8 @@ let eatAnim=null; // {x,y,value,startTime}
 let sessionCorrect=0,sessionTotal=0;
 // Per-räknesätt session-statistik: {op: {correct, total}}
 let sessionOpStats={};
+// Faktiska felsvar under sessionen: {expr: count}
+let sessionWrongMap={};
 
 // Fel-pool: problem som eleven svarat fel på, visas mer frekvent
 const MAX_WRONG_POOL=6;
@@ -1623,7 +1639,7 @@ function startGame(){
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}
   goldPhase=false;isFastMusic=false;
   wrongPool=[];
-  sessionCorrect=0;sessionTotal=0;sessionOpStats={};
+  sessionCorrect=0;sessionTotal=0;sessionOpStats={};sessionWrongMap={};
   const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
   snake=[];for(let i=0;i<4;i++)snake.push({x:mx-i,y:my,px:mx-i,py:my});
   dir={x:1,y:0};nextDir={x:1,y:0};
@@ -1741,6 +1757,7 @@ function tick(){
       problem=genProblem();placeTiles();
     }else{
       combo=0;correctStreak=0;
+      sessionWrongMap[problem.expr]=(sessionWrongMap[problem.expr]||0)+1;
       addToWrongPool(problem);
       sfxBad();flashFx('bad');
       if(practiceMode){
@@ -2127,9 +2144,9 @@ function triggerGameOver(){
   $('hsNameInp').style.display=practiceMode?'none':'';
   $('btnSaveScore').style.display=practiceMode?'none':'';
   $('btnGoMenu').textContent=practiceMode?'🏠 '+t('btnBack'):t('btnGoMenu');
-  exportSessionStats();
-  recordSession();
   $('gameoverOverlay').classList.add('show');
+  try{exportSessionStats();}catch(e){console.warn('exportSessionStats failed',e);}
+  try{recordSession();}catch(e){console.warn('recordSession failed',e);}
 }
 
 /* ═══════════════════════════════════════
@@ -2420,7 +2437,12 @@ function recordSession(){
     correct:sessionCorrect,
     total:sessionTotal,
     length:snake.length,
+    selectedOps:[...activeOps],
+    numRange,
+    tables:[...tables],
+    practiceMode,
     ops:{...sessionOpStats},
+    wrongMap:{...sessionWrongMap},
     wrongExprs:wrongPool.map(p=>p.expr)
   };
   hist.push(entry);
@@ -2429,7 +2451,7 @@ function recordSession(){
   saveHistory(hist);
 }
 
-function goToStats(){renderStatsPage();showScreen('statsScreen');}
+function goToStats(){renderStatsTeacherPage();showScreen('statsScreen');}
 
 function renderStatsPage(){
   const el=$('statsPageContent');
@@ -2539,6 +2561,326 @@ function renderStatsPage(){
   $('btnClearStats').addEventListener('click',()=>{
     if(confirm('Rensa all sparad statistik? Detta går inte att ångra.'))
       {saveHistory([]);renderStatsPage();}
+  });
+}
+
+function renderStatsTeacherPage(){
+  const el=$('statsPageContent');
+  const hist=loadHistory();
+  if(!hist.length){
+    el.innerHTML='<div style="color:var(--muted);text-align:center;padding:40px 0;font-size:14px;">'+t('statsEmpty')+'</div>';
+    return;
+  }
+
+  const l=getLang();
+  const txt=l==='en'
+    ? {
+        totalGames:'Games played',
+        totalAnswered:'Questions answered',
+        recentAcc:'Accuracy last 10',
+        teacherTitle:'Teacher overview',
+        strongTitle:'Strongest now',
+        weakTitle:'Needs practice',
+        nextTitle:'Recommended next step',
+        opTitle:'📊 Accuracy by operation',
+        opCount:(c,t)=>`${c}/${t} correct`,
+        tableTitle:'🔎 Tables worth checking',
+        tableEmpty:'No clear table pattern yet.',
+        wrongTitle:'❌ Frequent mistakes right now',
+        wrongEmpty:'No mistakes recorded yet! 🎉',
+        historyTitle:'📅 Latest 10 sessions',
+        clearBtn:'🗑️ Clear all statistics',
+        clearConfirm:'Clear all saved statistics? This cannot be undone.',
+        noData:'No data yet',
+        stable:'→ Stable level',
+        recentUp:n=>`↑ +${n}% in the latest 5 games`,
+        recentDown:n=>`↓ ${n}% in the latest 5 games`,
+        strongSub:(pct,total)=>`${pct}% across ${total} answers`,
+        weakSub:(pct,total)=>`${pct}% across ${total} answers`,
+        nextFallbackMain:'Keep the current level',
+        nextFallbackSub:'A few more sessions are needed for a sharper recommendation.',
+        narrowTablesMain:'Narrow the table mix',
+        narrowTablesSub:'Choose one or two tables at a time until accuracy becomes steady.',
+        tablePracticeMain:n=>`Focus on the ${n} times table`,
+        tablePracticeSub:'Choose only that table and run a few short practice rounds.',
+        opPracticeMain:n=>`Practice ${n.toLowerCase()}`,
+        opPracticeRange:r=>`Keep the work up to ${r} for a few short rounds.`,
+        opPracticeSub:'Stay on a clear and limited level for a few short rounds.',
+        sessionModePractice:'practice',
+        sessionModeStandard:'standard',
+        tableChip:(n,c)=>`${n}× · ${c}`,
+        tablesLabel:'tables'
+      }
+    : {
+        totalGames:'Spel totalt',
+        totalAnswered:'Svar besvarade',
+        recentAcc:'Träffsäkerhet senaste 10',
+        teacherTitle:'🧑‍🏫 Läraröversikt',
+        strongTitle:'Starkast just nu',
+        weakTitle:'Behöver träna',
+        nextTitle:'Rekommenderat nästa steg',
+        opTitle:'📊 Träffsäkerhet per räknesätt',
+        opCount:(c,t)=>`${c}/${t} rätt`,
+        tableTitle:'🔎 Tabeller att titta extra på',
+        tableEmpty:'Inga tydliga tabellmönster ännu.',
+        wrongTitle:'❌ Vanliga fel just nu',
+        wrongEmpty:'Inga fel registrerade ännu! 🎉',
+        historyTitle:'📅 Senaste 10 sessioner',
+        clearBtn:'🗑️ Rensa all statistik',
+        clearConfirm:'Rensa all sparad statistik? Detta går inte att ångra.',
+        noData:'Ingen data ännu',
+        stable:'→ Stabil nivå',
+        recentUp:n=>`↑ +${n}% senaste 5 spelen`,
+        recentDown:n=>`↓ ${n}% senaste 5 spelen`,
+        strongSub:(pct,total)=>`${pct}% på ${total} svar`,
+        weakSub:(pct,total)=>`${pct}% på ${total} svar`,
+        nextFallbackMain:'Fortsätt med nuvarande nivå',
+        nextFallbackSub:'Några fler spel behövs för en säkrare rekommendation.',
+        narrowTablesMain:'Smalna av tabellvalet',
+        narrowTablesSub:'Välj en eller två tabeller åt gången tills träffsäkerheten blir stabil.',
+        tablePracticeMain:n=>`Fokusera på ${n}:ans tabell`,
+        tablePracticeSub:'Välj bara den tabellen och kör några korta övningsomgångar.',
+        opPracticeMain:n=>`Träna ${n.toLowerCase()}`,
+        opPracticeRange:r=>`Håll dig till upp till ${r} i några korta omgångar.`,
+        opPracticeSub:'Håll nivån tydlig och avgränsad i några korta omgångar.',
+        sessionModePractice:'övning',
+        sessionModeStandard:'standard',
+        tableChip:(n,c)=>`${n}:an · ${c}`,
+        tablesLabel:'tabeller'
+      };
+  const opLabel={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
+  const opLabelEn={'+':'➕ Addition','-':'➖ Subtraction','*':'✖️ Multiplication','/':'➗ Division'};
+  const opName={'+':'Addition','-':'Subtraktion','*':'Multiplikation','/':'Division'};
+  const opNameEn={'+':'Addition','-':'Subtraction','*':'Multiplication','/':'Division'};
+  const opSym={'+':'+','-':'−','*':'×','/':'÷'};
+  const pct=(correct,total)=>total>0?Math.round(correct/total*100):0;
+  const getWrongPairs=h=>{
+    if(h&&h.wrongMap&&typeof h.wrongMap==='object'&&Object.keys(h.wrongMap).length){
+      return Object.entries(h.wrongMap);
+    }
+    return (h.wrongExprs||[]).map(expr=>[expr,1]);
+  };
+  const getSessionOps=h=>{
+    if(Array.isArray(h.selectedOps)&&h.selectedOps.length)return h.selectedOps;
+    return Object.keys(h.ops||{});
+  };
+  const getMostCommonRangeForOp=op=>{
+    const counts={};
+    hist.forEach(h=>{
+      if(getSessionOps(h).includes(op)&&h.numRange){
+        counts[h.numRange]=(counts[h.numRange]||0)+1;
+      }
+    });
+    return Object.entries(counts).sort((a,b)=>b[1]-a[1]||Number(a[0])-Number(b[0]))[0]?.[0]||'';
+  };
+  const sessionMetaText=h=>{
+    const bits=[];
+    const ops=getSessionOps(h);
+    const opsText=ops.map(o=>opSym[o]||o).join('');
+    if(h.player)bits.push(h.player);
+    if(opsText)bits.push(opsText);
+    if(h.numRange)bits.push((l==='en'?'up to ':'upp till ')+h.numRange);
+    if(Array.isArray(h.tables)&&h.tables.length&&(ops.includes('*')||ops.includes('/'))){
+      bits.push(`${txt.tablesLabel} ${h.tables.slice().sort((a,b)=>a-b).join(',')}`);
+    }
+    if(typeof h.practiceMode==='boolean')bits.push(h.practiceMode?txt.sessionModePractice:txt.sessionModeStandard);
+    return bits.join(' · ');
+  };
+
+  const totalGames=hist.length;
+  const totalAnswered=hist.reduce((s,h)=>s+(h.total||0),0);
+  const recent10=hist.slice(-10);
+  const recentAcc=pct(
+    recent10.reduce((s,h)=>s+(h.correct||0),0),
+    recent10.reduce((s,h)=>s+(h.total||0),0)
+  );
+
+  let trendHtml=`<div class="stats-trend flat">${txt.stable}</div>`;
+  if(hist.length>=6){
+    const last5=hist.slice(-5);
+    const prev5=hist.slice(-10,-5);
+    const lastPct=pct(last5.reduce((s,h)=>s+(h.correct||0),0),last5.reduce((s,h)=>s+(h.total||0),0));
+    const prevPct=pct(prev5.reduce((s,h)=>s+(h.correct||0),0),prev5.reduce((s,h)=>s+(h.total||0),0));
+    const diff=lastPct-prevPct;
+    if(diff>2)trendHtml=`<div class="stats-trend up">${txt.recentUp(diff)}</div>`;
+    else if(diff<-2)trendHtml=`<div class="stats-trend down">${txt.recentDown(diff)}</div>`;
+  }
+
+  const opAcc={};
+  hist.forEach(h=>{
+    Object.entries(h.ops||{}).forEach(([op,d])=>{
+      if(!opAcc[op])opAcc[op]={correct:0,total:0};
+      opAcc[op].correct+=d.correct||0;
+      opAcc[op].total+=d.total||0;
+    });
+  });
+  const opStats=['+','-','*','/']
+    .map(op=>({
+      op,
+      correct:opAcc[op]?.correct||0,
+      total:opAcc[op]?.total||0,
+      pct:pct(opAcc[op]?.correct||0,opAcc[op]?.total||0)
+    }))
+    .filter(d=>d.total>0);
+  const strongest=opStats.slice().sort((a,b)=>b.pct-a.pct||b.total-a.total)[0]||null;
+  const weakest=opStats.slice().sort((a,b)=>a.pct-b.pct||b.total-a.total)[0]||null;
+
+  const opRows=opStats.map(d=>{
+    const col=d.pct>=80?'#00ff88':d.pct>=50?'#ffcc00':'#ff4444';
+    const lbl=l==='en'?(opLabelEn[d.op]||d.op):(opLabel[d.op]||d.op);
+    return `<div class="stats-op-row">
+      <div class="stats-op-name">${opSym[d.op]||d.op}</div>
+      <div style="flex:1">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">${lbl}</div>
+        <div class="stats-op-bar-wrap"><div class="stats-op-bar" style="width:${d.pct}%;background:${col}"></div></div>
+        <div class="stats-op-meta">${txt.opCount(d.correct,d.total)}</div>
+      </div>
+      <div class="stats-op-pct" style="color:${col}">${d.pct}%</div>
+    </div>`;
+  }).join('');
+
+  const wrongCount={};
+  const tableFocus={};
+  hist.forEach(h=>{
+    const selectedTables=Array.isArray(h.tables)?h.tables.map(n=>parseInt(n,10)).filter(Number.isFinite):[];
+    getWrongPairs(h).forEach(([expr,countRaw])=>{
+      const count=Math.max(1,parseInt(countRaw,10)||1);
+      wrongCount[expr]=(wrongCount[expr]||0)+count;
+
+      const divMatch=expr.match(/(\d+)\s*[÷/]\s*(\d+)/);
+      if(divMatch){
+        const d=parseInt(divMatch[2],10);
+        if(Number.isFinite(d)&&d>=1&&d<=12)tableFocus[d]=(tableFocus[d]||0)+count;
+        return;
+      }
+
+      const multMatch=expr.match(/(\d+)\s*[×x]\s*(\d+)/i);
+      if(!multMatch)return;
+      const a=parseInt(multMatch[1],10),b=parseInt(multMatch[2],10);
+      let candidates=[];
+      if(selectedTables.length===1)candidates=[selectedTables[0]];
+      else if(selectedTables.length>1)candidates=[a,b].filter(n=>selectedTables.includes(n));
+      else candidates=[a,b].filter(n=>n>=1&&n<=12);
+      [...new Set(candidates)].forEach(n=>{
+        if(Number.isFinite(n)&&n>=1&&n<=12)tableFocus[n]=(tableFocus[n]||0)+count;
+      });
+    });
+  });
+  const topWrong=Object.entries(wrongCount).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,12);
+  const topTables=Object.entries(tableFocus).sort((a,b)=>b[1]-a[1]||Number(a[0])-Number(b[0])).slice(0,6);
+
+  let nextStepMain=txt.nextFallbackMain;
+  let nextStepSub=txt.nextFallbackSub;
+  if(weakest){
+    const weakestName=l==='en'?(opNameEn[weakest.op]||weakest.op):(opName[weakest.op]||weakest.op);
+    if((weakest.op==='*'||weakest.op==='/')&&topTables.length){
+      const table=topTables[0][0];
+      nextStepMain=txt.tablePracticeMain(table);
+      nextStepSub=txt.tablePracticeSub;
+    }else if(weakest.op==='*'||weakest.op==='/'){
+      nextStepMain=txt.narrowTablesMain;
+      nextStepSub=txt.narrowTablesSub;
+    }else{
+      const commonRange=getMostCommonRangeForOp(weakest.op);
+      nextStepMain=txt.opPracticeMain(weakestName);
+      nextStepSub=commonRange?txt.opPracticeRange(commonRange):txt.opPracticeSub;
+    }
+  }
+
+  const wrongHtml=topWrong.length
+    ? `<div class="stats-wrong-list">${topWrong.map(([expr,n])=>
+        `<div class="stats-wrong-item">${expr}<span class="stats-wrong-count">×${n}</span></div>`).join('')}</div>`
+    : `<div style="color:var(--muted);font-size:12px;">${txt.wrongEmpty}</div>`;
+
+  const tableHtml=topTables.length
+    ? `<div class="stats-focus-list">${topTables.map(([table,count])=>
+        `<div class="stats-focus-chip">${txt.tableChip(table,count)}</div>`).join('')}</div>`
+    : `<div style="color:var(--muted);font-size:12px;">${txt.tableEmpty}</div>`;
+
+  const recent=hist.slice(-10).reverse();
+  const histRows=recent.map(h=>{
+    const sessionPct=pct(h.correct||0,h.total||0);
+    const col=sessionPct>=80?'#00ff88':sessionPct>=50?'#ffcc00':'#ff4444';
+    return `<div class="stats-hist-row">
+      <div class="stats-hist-date-wrap">
+        <div class="stats-hist-date">${h.date} ${h.time}</div>
+        <div class="stats-hist-meta">${esc(sessionMetaText(h))}</div>
+      </div>
+      <div class="stats-hist-bar-wrap"><div class="stats-hist-bar" style="width:${sessionPct}%;background:${col}"></div></div>
+      <span class="stats-hist-pct" style="color:${col}">${sessionPct}%</span>
+      <span class="stats-hist-score">${h.score}p</span>
+    </div>`;
+  }).join('');
+
+  const strongestMain=strongest
+    ? `${(l==='en'?opLabelEn[strongest.op]:opLabel[strongest.op])} · ${strongest.pct}%`
+    : txt.noData;
+  const strongestSub=strongest?txt.strongSub(strongest.pct,strongest.total):'';
+  const weakestMain=weakest
+    ? `${(l==='en'?opLabelEn[weakest.op]:opLabel[weakest.op])} · ${weakest.pct}%`
+    : txt.noData;
+  const weakestSub=weakest
+    ? txt.weakSub(weakest.pct,weakest.total)+(topTables.length&&['*','/'].includes(weakest.op)?` · ${txt.tableChip(topTables[0][0],topTables[0][1])}`:'')
+    : '';
+
+  el.innerHTML=`
+    <div class="stats-section">
+      <div class="stats-summary-grid">
+        <div class="stats-summary-card">
+          <div class="stats-summary-val">${totalGames}</div>
+          <div class="stats-summary-lbl">${txt.totalGames}</div>
+        </div>
+        <div class="stats-summary-card">
+          <div class="stats-summary-val">${totalAnswered}</div>
+          <div class="stats-summary-lbl">${txt.totalAnswered}</div>
+        </div>
+        <div class="stats-summary-card">
+          <div class="stats-summary-val" style="color:${recentAcc>=80?'#00ff88':recentAcc>=50?'#ffcc00':'#ff4444'}">${recentAcc}%</div>
+          <div class="stats-summary-lbl">${txt.recentAcc}</div>
+          ${trendHtml}
+        </div>
+      </div>
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">${txt.teacherTitle}</div>
+      <div class="stats-teacher-grid">
+        <div class="stats-insight-card">
+          <div class="stats-insight-kicker">${txt.strongTitle}</div>
+          <div class="stats-insight-main">${strongestMain}</div>
+          <div class="stats-insight-sub">${strongestSub}</div>
+        </div>
+        <div class="stats-insight-card">
+          <div class="stats-insight-kicker">${txt.weakTitle}</div>
+          <div class="stats-insight-main">${weakestMain}</div>
+          <div class="stats-insight-sub">${weakestSub}</div>
+        </div>
+        <div class="stats-insight-card">
+          <div class="stats-insight-kicker">${txt.nextTitle}</div>
+          <div class="stats-insight-main">${nextStepMain}</div>
+          <div class="stats-insight-sub">${nextStepSub}</div>
+        </div>
+      </div>
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">${txt.opTitle}</div>
+      ${opRows||'<div style="color:var(--muted);font-size:12px;">'+txt.noData+'</div>'}
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">${txt.tableTitle}</div>
+      ${tableHtml}
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">${txt.wrongTitle}</div>
+      ${wrongHtml}
+    </div>
+    <div class="stats-section">
+      <div class="stats-section-title">${txt.historyTitle}</div>
+      ${histRows}
+    </div>
+    <button class="stats-clear-btn" id="btnClearStats">${txt.clearBtn}</button>
+  `;
+  $('btnClearStats').addEventListener('click',()=>{
+    if(confirm(txt.clearConfirm)){saveHistory([]);renderStatsTeacherPage();}
   });
 }
 
