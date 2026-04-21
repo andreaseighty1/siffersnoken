@@ -985,7 +985,7 @@ const GRADES={
 };
 
 /* ═══════════════════════════════════════
-   MEDALJER (25 st)
+   MEDALJER (26 st)
    ═══════════════════════════════════════ */
 const MEDALS_DEF=[
   {id:'p500',    emoji:'⭐',name:'500 Poäng',              desc:'Nå 500 poäng i ett spel',                     cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'500 Points', descEn:'Score 500 points in one game'},
@@ -993,6 +993,7 @@ const MEDALS_DEF=[
   {id:'p5000',   emoji:'🏆',name:'5 000 Poäng',            desc:'Nå 5 000 poäng i ett spel',                   cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'5,000 Points', descEn:'Score 5,000 points in one game'},
   {id:'p7500',   emoji:'🔥',name:'7 500 Poäng',            desc:'Nå 7 500 poäng i ett spel',                   cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'7,500 Points',  descEn:'Score 7,500 points in one game'},
   {id:'p10000',  emoji:'👑',name:'10 000 Poäng',           desc:'Nå 10 000 poäng i ett spel',                  cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'10,000 Points', descEn:'Score 10,000 points in one game'},
+  {id:'p20000',  emoji:'🩷',name:'20 000 Poäng',           desc:'Nå 20 000 poäng i ett spel',                  cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'20,000 Points', descEn:'Score 20,000 points in one game'},
   {id:'add1000', emoji:'➕',name:'Additionshjälte',        desc:'Tjäna 1 000p på additionstal (alla spel)',     cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Addition Hero', descEn:'Earn 1,000pts on addition (all games)'},
   {id:'sub1000', emoji:'➖',name:'Subtraktionshjälte',     desc:'Tjäna 1 000p på subtraktionstal (alla spel)',  cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Subtraction Hero', descEn:'Earn 1,000pts on subtraction (all games)'},
   {id:'mul500',  emoji:'✖️',name:'Multiplikationsmästare', desc:'Tjäna 1 000p på multiplikationstal (alla spel)', cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Multiplication Master', descEn:'Earn 1,000pts on multiplication (all games)'},
@@ -1114,6 +1115,26 @@ const SKINS_DEF=[
    bodyFn:(a,i)=>{const t=Math.floor(i||0)%3;return t===0?`rgba(${Math.floor(160+a*70)},255,80,${Math.min(1,a+.06)})`:`rgba(${Math.floor(70+a*45)},${Math.floor(155+a*90)},0,${Math.min(1,a+.06)})`;},
    previewCss:'linear-gradient(135deg,#efff66,#a6ff00,#3d7f00)',
    radioactive:true},
+  {id:'blackpink', emoji:'🩷', name:'Black Pink', nameEn:'Black Pink',
+   free:false, unlockMedal:'p20000',
+   descSv:'Lås upp: Nå 20 000 poäng', descEn:'Unlock: Reach 20,000 points',
+   headA:'#ffb5e8', headB:'#220014', shadow:'#ff4db8',
+   bodyFn:(a,i)=>{const t=Math.floor(i||0)%3;return t===0?`rgba(${Math.floor(255-a*15)},${Math.floor(70+a*20)},${Math.floor(180+a*45)},${Math.min(1,a+.06)})`:`rgba(${Math.floor(12+a*18)},0,${Math.floor(20+a*18)},${Math.min(1,a+.06)})`;},
+   previewCss:'linear-gradient(135deg,#0b0208,#ff4db8,#2a0018)'},
+  {id:'plasma', emoji:'⚡', name:'Plasma', nameEn:'Plasma',
+   free:false, unlockMedal:'overhettad',
+   descSv:'Lås upp: Överhettad-medaljen', descEn:'Unlock: Overheated medal',
+   headA:'#eaffff', headB:'#005c99', shadow:'#66eeff',
+   bodyFn:(a,i)=>{const t=Math.floor(i||0)%4;return t<2?`rgba(${Math.floor(70+a*80)},${Math.floor(200+a*55)},255,${Math.min(1,a+.06)})`:`rgba(${Math.floor(10+a*25)},${Math.floor(80+a*70)},${Math.floor(170+a*70)},${Math.min(1,a+.06)})`;},
+   previewCss:'linear-gradient(135deg,#eaffff,#66eeff,#005c99)',
+   plasma:true},
+  {id:'inferno', emoji:'🔥', name:'Inferno', nameEn:'Inferno',
+   free:false, unlockMedal:'adrenalin',
+   descSv:'Lås upp: Adrenalinmästare-medaljen', descEn:'Unlock: Adrenaline Master medal',
+   headA:'#ffd27a', headB:'#3a0500', shadow:'#ff6a00',
+   bodyFn:(a,i)=>{const t=Math.floor(i||0)%3;return t===0?`rgba(${Math.floor(255-a*10)},${Math.floor(90+a*45)},0,${Math.min(1,a+.06)})`:`rgba(${Math.floor(70+a*40)},${Math.floor(8+a*18)},${Math.floor(2+a*8)},${Math.min(1,a+.06)})`;},
+   previewCss:'linear-gradient(135deg,#140200,#ff6a00,#ffd27a)',
+   inferno:true},
 ];
 
 
@@ -1135,6 +1156,9 @@ const SKIN_THEMES={
   'galax':    {bgA:'#04010f',bgB:'#020009',gridColor:'rgba(180,100,255,.05)',particles:'stars', headAcc:null},
   'aurora':   {bgA:'#010a08',bgB:'#010705',gridColor:'rgba(0,255,180,.04)',  particles:'stars',headAcc:null},
   'radioaktiv':{bgA:'#071004',bgB:'#040802',gridColor:'rgba(170,255,0,.05)', particles:null,   headAcc:null},
+  'blackpink':{bgA:'#090209',bgB:'#040104',gridColor:'rgba(255,90,190,.045)',particles:null,   headAcc:null},
+  'plasma':   {bgA:'#020914',bgB:'#01050d',gridColor:'rgba(90,220,255,.05)', particles:'stars',headAcc:null},
+  'inferno':  {bgA:'#120300',bgB:'#080100',gridColor:'rgba(255,110,0,.05)',  particles:'sparks',headAcc:null},
   'polkagris':{bgA:'#0f0003',bgB:'#090002',gridColor:'rgba(255,80,100,.05)', particles:null,   headAcc:null},
   'vattenmelon':{bgA:'#010f02',bgB:'#010802',gridColor:'rgba(255,80,100,.04)',particles:null,   headAcc:null},
 };
@@ -1382,6 +1406,7 @@ function checkMedals(){
   if(score>=5000)  unlockMedal('p5000');
   if(score>=7500)  unlockMedal('p7500');
   if(score>=10000) unlockMedal('p10000');
+  if(score>=20000) unlockMedal('p20000');
   if(snake.length>=15) unlockMedal('len15');
   if(snake.length>=25) unlockMedal('len25');
   if(snake.length>=35) unlockMedal('len35');
@@ -1411,7 +1436,7 @@ function getMedalProgress(id){
   const bestScore=loadHS().reduce((m,h)=>Math.max(m,h.score),0);
   const map={
     p500:{cur:bestScore,max:500},p2000:{cur:bestScore,max:2000},
-    p5000:{cur:bestScore,max:5000},p7500:{cur:bestScore,max:7500},p10000:{cur:bestScore,max:10000},
+    p5000:{cur:bestScore,max:5000},p7500:{cur:bestScore,max:7500},p10000:{cur:bestScore,max:10000},p20000:{cur:bestScore,max:20000},
     add1000:{cur:os['+']||0,max:1000},sub1000:{cur:os['-']||0,max:1000},
     mul500:{cur:os['*']||0,max:1000},div500:{cur:os['/']||0,max:1000},
     c5:{cur:stats.bestCombo,max:5},c10:{cur:stats.bestCombo,max:10},
@@ -1873,6 +1898,17 @@ function drawAuroraShimmer(){
     ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
   }
 }
+function drawPlasmaShimmer(){
+  const T=performance.now(),W=canvas.width,H=canvas.height;
+  for(let i=0;i<24;i++){
+    const sx=(i*149.3+Math.sin(T/420+i*0.9)*24)%W;
+    const sy=(i*83.7+Math.cos(T/530+i*0.6)*18)%H;
+    const a=0.14+0.14*Math.abs(Math.sin(T/480+i));
+    const size=1.1+(i%3)*0.8;
+    ctx.fillStyle=`hsla(${190+(i%4)*12},95%,70%,${a})`;
+    ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
+  }
+}
 function drawParticles(type){
   const T=performance.now(),W=canvas.width,H=canvas.height;
   const N=type==='bats'?8:type==='hearts'?12:32;
@@ -1928,6 +1964,7 @@ function drawBackground(theme){
   const _sid=loadActiveSkin();
   if(_sid==='obsidian')drawObsidianGlimmer();
   if(_sid==='aurora')drawAuroraShimmer();
+  if(_sid==='plasma')drawPlasmaShimmer();
 }
 
 function draw(t){
