@@ -985,7 +985,7 @@ const GRADES={
 };
 
 /* ═══════════════════════════════════════
-   MEDALJER (21 st)
+   MEDALJER (25 st)
    ═══════════════════════════════════════ */
 const MEDALS_DEF=[
   {id:'p500',    emoji:'⭐',name:'500 Poäng',              desc:'Nå 500 poäng i ett spel',                     cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'500 Points', descEn:'Score 500 points in one game'},
@@ -995,8 +995,8 @@ const MEDALS_DEF=[
   {id:'p10000',  emoji:'👑',name:'10 000 Poäng',           desc:'Nå 10 000 poäng i ett spel',                  cat:'🏅 Poäng', catEn:'🏅 Score', nameEn:'10,000 Points', descEn:'Score 10,000 points in one game'},
   {id:'add1000', emoji:'➕',name:'Additionshjälte',        desc:'Tjäna 1 000p på additionstal (alla spel)',     cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Addition Hero', descEn:'Earn 1,000pts on addition (all games)'},
   {id:'sub1000', emoji:'➖',name:'Subtraktionshjälte',     desc:'Tjäna 1 000p på subtraktionstal (alla spel)',  cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Subtraction Hero', descEn:'Earn 1,000pts on subtraction (all games)'},
-  {id:'mul500',  emoji:'✖️',name:'Multiplikationsmästare', desc:'Tjäna 500p på multiplikationstal (alla spel)', cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Multiplication Master', descEn:'Earn 500pts on multiplication (all games)'},
-  {id:'div500',  emoji:'➗',name:'Divisionsmästare',       desc:'Tjäna 500p på divisionstal (alla spel)',       cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Division Master', descEn:'Earn 500pts on division (all games)'},
+  {id:'mul500',  emoji:'✖️',name:'Multiplikationsmästare', desc:'Tjäna 1 000p på multiplikationstal (alla spel)', cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Multiplication Master', descEn:'Earn 1,000pts on multiplication (all games)'},
+  {id:'div500',  emoji:'➗',name:'Divisionsmästare',       desc:'Tjäna 1 000p på divisionstal (alla spel)',       cat:'🔢 Räknesätt', catEn:'🔢 Operations', nameEn:'Division Master', descEn:'Earn 1,000pts on division (all games)'},
   {id:'c5',      emoji:'🔥',name:'Hetsar på!',             desc:'5 rätt i rad',                                 cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Heating Up!', descEn:'5 correct in a row'},
   {id:'c10',     emoji:'💎',name:'Oöverträffad',           desc:'10 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Unbeatable', descEn:'10 correct in a row'},
   {id:'c15',     emoji:'⚡',name:'Blixtfingrar',           desc:'15 rätt i rad',                                cat:'🔥 Combo', catEn:'🔥 Combo', nameEn:'Lightning Fingers', descEn:'15 correct in a row'},
@@ -1011,8 +1011,12 @@ const MEDALS_DEF=[
   {id:'len35',   emoji:'🦕',name:'Dinosarieorm!',          desc:'Nå längd 35',                                  cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Dinosaur Snake!', descEn:'Reach length 35'},
   {id:'len50',   emoji:'🌍',name:'Världsrekordsorm!',      desc:'Nå längd 50 — nästan omöjligt!',               cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'World Record Snake!', descEn:'Reach length 50 — nearly impossible!'},
   {id:'len75',   emoji:'🐲',name:'Legendarisk orm!',        desc:'Nå längd 75 — är du människa?!',               cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Legendary Snake!',    descEn:'Reach length 75 — are you even human?!'},
+  {id:'mytisk',  emoji:'🐉',name:'Mytisk orm!',            desc:'Nå längd 100 — helt otroligt!',                cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Mythic Snake!', descEn:'Reach length 100 — unbelievable!'},
   {id:'osviklig',emoji:'❤️',name:'Felfri',                 desc:'10 rätt utan att tappa ett enda liv',          cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Flawless', descEn:'10 correct without losing a single life'},
   {id:'genius',  emoji:'🧠',name:'Mattegeni',              desc:'1 000p på Åk6 med alla 4 räknesätt',          cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Math Genius', descEn:'1,000pts on grade 6 with all 4 operations'},
+  {id:'fartdemon', emoji:'☢️',name:'Fartdemon',            desc:'Nå 10 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Speed Demon', descEn:'Reach 10,000 points with a speed mode active'},
+  {id:'overhettad', emoji:'🌡️',name:'Överhettad',          desc:'Nå 15 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Overheated', descEn:'Reach 15,000 points with a speed mode active'},
+  {id:'adrenalin', emoji:'⚠️',name:'Adrenalinmästare',     desc:'Nå 20 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Adrenaline Master', descEn:'Reach 20,000 points with a speed mode active'},
 ];
 
 /* ═══════════════════════════════════════
@@ -1103,6 +1107,13 @@ const SKINS_DEF=[
    bodyFn:(a,i)=>{const hue=(120+Math.floor((i||0)*25))%360;return `hsla(${hue},80%,${35+Math.floor(a*30)}%,${Math.min(1,a+.05)})`;},
    previewCss:'linear-gradient(135deg,#00ffcc,#0088ff,#cc44ff)',
    aurora:true},
+  {id:'radioaktiv', emoji:'☢️', name:'Radioaktiv', nameEn:'Radioactive',
+   free:false, unlockMedal:'fartdemon',
+   descSv:'Lås upp: Fartdemon-medaljen', descEn:'Unlock: Speed Demon medal',
+   headA:'#f2ff8a', headB:'#2c7a00', shadow:'#b8ff3b',
+   bodyFn:(a,i)=>{const t=Math.floor(i||0)%3;return t===0?`rgba(${Math.floor(160+a*70)},255,80,${Math.min(1,a+.06)})`:`rgba(${Math.floor(70+a*45)},${Math.floor(155+a*90)},0,${Math.min(1,a+.06)})`;},
+   previewCss:'linear-gradient(135deg,#efff66,#a6ff00,#3d7f00)',
+   radioactive:true},
 ];
 
 
@@ -1123,6 +1134,7 @@ const SKIN_THEMES={
   'diamant':  {bgA:'#02070f',bgB:'#01040a',gridColor:'rgba(80,180,255,.05)', particles:'stars', headAcc:null},
   'galax':    {bgA:'#04010f',bgB:'#020009',gridColor:'rgba(180,100,255,.05)',particles:'stars', headAcc:null},
   'aurora':   {bgA:'#010a08',bgB:'#010705',gridColor:'rgba(0,255,180,.04)',  particles:'stars',headAcc:null},
+  'radioaktiv':{bgA:'#071004',bgB:'#040802',gridColor:'rgba(170,255,0,.05)', particles:null,   headAcc:null},
   'polkagris':{bgA:'#0f0003',bgB:'#090002',gridColor:'rgba(255,80,100,.05)', particles:null,   headAcc:null},
   'vattenmelon':{bgA:'#010f02',bgB:'#010802',gridColor:'rgba(255,80,100,.04)',particles:null,   headAcc:null},
 };
@@ -1375,14 +1387,18 @@ function checkMedals(){
   if(snake.length>=35) unlockMedal('len35');
   if(snake.length>=50) unlockMedal('len50');
   if(snake.length>=75) unlockMedal('len75');
+  if(snake.length>=100) unlockMedal('mytisk');
   if(score>=1000&&activeOps.size===4&&numRange===1000) unlockMedal('genius');
+  if(speedMode!=='none'&&score>=10000) unlockMedal('fartdemon');
+  if(speedMode!=='none'&&score>=15000) unlockMedal('overhettad');
+  if(speedMode!=='none'&&score>=20000) unlockMedal('adrenalin');
 }
 function checkOpMedals(){
   const os=loadOpScores();
   if(os['+']>=1000) unlockMedal('add1000');
   if(os['-']>=1000) unlockMedal('sub1000');
-  if(os['*']>=500)  unlockMedal('mul500');
-  if(os['/']>=500)  unlockMedal('div500');
+  if(os['*']>=1000) unlockMedal('mul500');
+  if(os['/']>=1000) unlockMedal('div500');
 }
 function updateMedalNavBtn(){
   const earned=loadMedals();
@@ -1397,15 +1413,16 @@ function getMedalProgress(id){
     p500:{cur:bestScore,max:500},p2000:{cur:bestScore,max:2000},
     p5000:{cur:bestScore,max:5000},p7500:{cur:bestScore,max:7500},p10000:{cur:bestScore,max:10000},
     add1000:{cur:os['+']||0,max:1000},sub1000:{cur:os['-']||0,max:1000},
-    mul500:{cur:os['*']||0,max:500},div500:{cur:os['/']||0,max:500},
+    mul500:{cur:os['*']||0,max:1000},div500:{cur:os['/']||0,max:1000},
     c5:{cur:stats.bestCombo,max:5},c10:{cur:stats.bestCombo,max:10},
     c15:{cur:stats.bestCombo,max:15},c20:{cur:stats.bestCombo,max:20},
     c25:{cur:stats.bestCombo,max:25},c30:{cur:stats.bestCombo,max:30},
     c50:{cur:stats.bestCombo,max:50},c75:{cur:stats.bestCombo,max:75},
     c100:{cur:stats.bestCombo,max:100},
-    len15:{cur:stats.bestLength,max:15},len25:{cur:stats.bestLength,max:25},len35:{cur:stats.bestLength,max:35},len50:{cur:stats.bestLength,max:50},len75:{cur:stats.bestLength,max:75},
+    len15:{cur:stats.bestLength,max:15},len25:{cur:stats.bestLength,max:25},len35:{cur:stats.bestLength,max:35},len50:{cur:stats.bestLength,max:50},len75:{cur:stats.bestLength,max:75},mytisk:{cur:stats.bestLength,max:100},
     osviklig:{cur:stats.bestStreak,max:10},
     genius:null,
+    fartdemon:null,overhettad:null,adrenalin:null,
   };
   return map[id]||null;
 }
