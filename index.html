@@ -24,6 +24,36 @@
   --ov-card-bg:rgba(235,245,255,.97);--toast-bg:rgba(220,238,255,.97);
   --dpad-bg:rgba(0,60,160,.45);--dpad-border:rgba(0,80,200,.8);--dpad-color:#001830;
 }
+[data-theme="hav"] .ov-card{
+  background:rgba(9,22,46,.96);
+  border-color:rgba(80,170,255,.34);
+}
+[data-theme="hav"] .ov-meta,
+[data-theme="hav"] .stat-chip.neutral{
+  color:#87acd6;
+}
+[data-theme="hav"] .ov-inp{
+  background:rgba(6,20,46,.82);
+  border-color:rgba(80,170,255,.3);
+  color:#dcedff;
+}
+[data-theme="hav"] .ov-btn{
+  background:rgba(7,26,58,.88);
+  border-color:rgba(80,170,255,.3);
+  color:#dcedff;
+}
+[data-theme="hav"] .ov-btn:hover{
+  border-color:#44aaff;
+  color:#44aaff;
+}
+[data-theme="hav"] .ov-btn.primary{
+  background:rgba(68,170,255,.18);
+  border-color:#44aaff;
+  color:#44aaff;
+}
+[data-theme="hav"] .ov-btn.primary:hover{
+  background:rgba(68,170,255,.28);
+}
 [data-theme="solnedgang"]{
   --panel:rgba(255,255,255,.05);--line:rgba(255,120,30,.2);
   --text:#ffe0c8;--muted:#8a6050;--accent:#ff8844;--gold:#ffcc00;
@@ -1537,7 +1567,8 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 function getSpeed(){
   let base=290;
   if(numRange>=1000)base=175;else if(numRange>=100)base=210;else if(numRange>=20)base=255;
-  const maxT=tables.size>0?Math.max(...tables):2;
+  const useTables=activeOps.has('*')||activeOps.has('/');
+  const maxT=useTables&&tables.size>0?Math.max(...tables):2;
   if(maxT>=12)base-=25;else if(maxT>=9)base-=15;
   if(speedMode==='score')  return Math.max(120,base-Math.floor(score/50)*8);
   if(speedMode==='length') return Math.max(120,base-(Math.max(0,snake.length-4))*4);
@@ -1620,12 +1651,26 @@ function placeTiles(){
     }
     return false;
   }
+  function findFreeTile(relaxDistance){
+    const startX=R(0,COLS-1),startY=R(0,ROWS-1);
+    for(let oy=0;oy<ROWS;oy++){
+      for(let ox=0;ox<COLS;ox++){
+        const p={x:(startX+ox)%COLS,y:(startY+oy)%ROWS};
+        if(occ.has(`${p.x},${p.y}`)||tiles.some(t=>t.x===p.x&&t.y===p.y))continue;
+        if(!relaxDistance&&isTooClose(p))continue;
+        return p;
+      }
+    }
+    return null;
+  }
   shuffle([problem.answer,...genWrongs(problem.answer)]).forEach(val=>{
     let p,att=0,ok=false;
     while(!ok&&att<300){
       p={x:R(0,COLS-1),y:R(0,ROWS-1)};att++;
       ok=!isTooClose(p)&&!occ.has(`${p.x},${p.y}`)&&!tiles.some(t=>t.x===p.x&&t.y===p.y);
     }
+    if(!ok)p=findFreeTile(false)||findFreeTile(true);
+    if(!p)return;
     tiles.push({x:p.x,y:p.y,value:val,correct:val===problem.answer,isGold:false});
   });
 }
@@ -1715,7 +1760,8 @@ function tick(){
   }else{
     if(hx<0||hx>=COLS||hy<0||hy>=ROWS){triggerGameOver();return;}
   }
-  for(let i=0;i<snake.length-1;i++){if(snake[i].x===hx&&snake[i].y===hy){triggerGameOver();return;}}
+  const bodyCheckLen=growPending>0?snake.length:snake.length-1;
+  for(let i=0;i<bodyCheckLen;i++){if(snake[i].x===hx&&snake[i].y===hy){triggerGameOver();return;}}
 
   snake.unshift({x:hx,y:hy,px:old[0].x,py:old[0].y});
   if(growPending>0)growPending--;else snake.pop();
@@ -2285,7 +2331,7 @@ function buildGradeRow(){
   Object.entries(GRADES).forEach(([g,cfg])=>{
     const btn=document.createElement('button');btn.className='preset-btn';btn.textContent=getLang()==='en'&&cfg.labelEn?cfg.labelEn:cfg.label;
     btn.addEventListener('click',()=>{
-      activeOps=new Set(cfg.ops);numRange=cfg.range;if(cfg.tbls.length)setTables(cfg.tbls);
+      activeOps=new Set(cfg.ops);numRange=cfg.range;setTables(cfg.tbls);
       document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
       document.querySelectorAll('.range-btn').forEach(rb=>rb.classList.toggle('sel',parseInt(rb.dataset.r)===numRange));
       updateRangeHint();updateTablePanelVisibility();saveSettings();updateMenuSettingsSummary();
@@ -2374,8 +2420,8 @@ function applyMode(m){
   practiceMode=(m==='practice');
   localStorage.setItem('mattormen_mode',m);
   document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.mode===m));
-  const desc={standard:'3 liv. Fel svar krymper ormen och tappar ett liv.',
-    practice:'Inga liv. Fel svar → minuspoäng och ormen krymper. Game over när ormen är för kort!'};
+  const desc={standard:t('modeDescStandard'),
+    practice:t('modeDescPractice')};
   if($('modeDesc'))$('modeDesc').textContent=desc[m]||'';
 }
 
@@ -2914,8 +2960,8 @@ function pauseGame(){
 $('btnPlay').addEventListener('click',startGame);
 if($('btnPracticeList')){
   $('btnPracticeList').addEventListener('click',()=>{
-    if($('practiceTitleEl'))$('practiceTitleEl').textContent='📚 Öva på dessa';
-    if($('btnPracticeClose'))$('btnPracticeClose').textContent='Stäng';
+    if($('practiceTitleEl'))$('practiceTitleEl').textContent=getLang()==='en'?'📚 Practice these':'📚 Öva på dessa';
+    if($('btnPracticeClose'))$('btnPracticeClose').textContent=getLang()==='en'?'Close':'Stäng';
     const el=$('practiceListContent');
     if(el)el.innerHTML=wrongPool.map(p=>`<div>${p.expr} = <strong style="color:var(--accent);font-weight:900">${p.answer}</strong></div>`).join('');
     $('practiceOverlay').classList.add('show');
