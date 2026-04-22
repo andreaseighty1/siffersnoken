@@ -1091,9 +1091,9 @@ const SKINS_DEF=[
   {id:'galax', emoji:'🌌', name:'Galax', nameEn:'Galaxy',
    free:false, unlockMedal:'genius',
    descSv:'Lås upp: Mattegeni-medaljen', descEn:'Unlock: Math Genius medal',
-   headA:'#e8d0ff', headB:'#1a0044', shadow:'#cc88ff',
-   bodyFn:(a)=>`rgba(${Math.floor(60+a*80)},${Math.floor(10+a*30)},${Math.floor(120+a*100)},${Math.min(1,a+.05)})`,
-   previewCss:'linear-gradient(135deg,#e8d0ff,#6622cc,#1a0044)',
+   headA:'#f7f4ef', headB:'#0b1737', shadow:'#d9c27a',
+   bodyFn:(a,i)=>{const t=Math.floor(i||0)%4;return t===0?`rgba(${Math.floor(205+a*20)},${Math.floor(214+a*14)},${Math.floor(235+a*12)},${Math.min(1,a+.05)})`:t===1?`rgba(${Math.floor(32+a*22)},${Math.floor(54+a*28)},${Math.floor(118+a*45)},${Math.min(1,a+.05)})`:t===2?`rgba(${Math.floor(18+a*14)},${Math.floor(26+a*18)},${Math.floor(72+a*36)},${Math.min(1,a+.05)})`:`rgba(${Math.floor(160+a*24)},${Math.floor(138+a*20)},${Math.floor(88+a*18)},${Math.min(1,a+.05)})`;},
+   previewCss:'linear-gradient(135deg,#f7f4ef,#314f9f,#0b1737,#c9a85e)',
    galaxy:true},
   {id:'vattenmelon', emoji:'🍉', name:'Vattenmelon', nameEn:'Watermelon',
    free:false, unlockMedal:'osviklig',
@@ -1153,7 +1153,7 @@ const SKIN_THEMES={
   'eld':      {bgA:'#0f0400',bgB:'#0a0200',gridColor:'rgba(255,90,0,.04)',   particles:'sparks',headAcc:null},
   'obsidian': {bgA:'#020202',bgB:'#010101',gridColor:'rgba(180,180,200,.03)',particles:'stars', headAcc:null},
   'diamant':  {bgA:'#02070f',bgB:'#01040a',gridColor:'rgba(80,180,255,.05)', particles:'stars', headAcc:null},
-  'galax':    {bgA:'#04010f',bgB:'#020009',gridColor:'rgba(180,100,255,.05)',particles:'stars', headAcc:null},
+  'galax':    {bgA:'#050915',bgB:'#02040d',gridColor:'rgba(210,190,120,.045)',particles:'stars', headAcc:null},
   'aurora':   {bgA:'#010a08',bgB:'#010705',gridColor:'rgba(0,255,180,.04)',  particles:'stars',headAcc:null},
   'radioaktiv':{bgA:'#071004',bgB:'#040802',gridColor:'rgba(170,255,0,.05)', particles:null,   headAcc:null},
   'blackpink':{bgA:'#090209',bgB:'#040104',gridColor:'rgba(255,90,190,.045)',particles:null,   headAcc:null},
@@ -1608,11 +1608,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
    HASTIGHET
    ═══════════════════════════════════════ */
 function getSpeed(){
-  let base=290;
-  if(numRange>=1000)base=175;else if(numRange>=100)base=210;else if(numRange>=20)base=255;
-  const useTables=activeOps.has('*')||activeOps.has('/');
-  const maxT=useTables&&tables.size>0?Math.max(...tables):2;
-  if(maxT>=12)base-=25;else if(maxT>=9)base-=15;
+  const base=255;
   if(speedMode==='score')  return Math.max(120,base-Math.floor(score/50)*8);
   if(speedMode==='length') return Math.max(120,base-(Math.max(0,snake.length-4))*4);
   return Math.max(140,base);
@@ -1898,6 +1894,22 @@ function drawAuroraShimmer(){
     ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
   }
 }
+function drawGalaxyShimmer(){
+  const T=performance.now(),W=canvas.width,H=canvas.height;
+  for(let i=0;i<20;i++){
+    const sx=(i*173.3+Math.sin(T/780+i*0.7)*16)%W;
+    const sy=(i*101.9+Math.cos(T/860+i*0.6)*14)%H;
+    const a=0.1+0.15*Math.abs(Math.sin(T/640+i));
+    const size=1+(i%3)*0.7;
+    const palette=[
+      `rgba(245,244,239,${a})`,
+      `rgba(120,155,255,${a*.9})`,
+      `rgba(214,190,120,${a*.85})`
+    ];
+    ctx.fillStyle=palette[i%palette.length];
+    ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
+  }
+}
 function drawPlasmaShimmer(){
   const T=performance.now(),W=canvas.width,H=canvas.height;
   for(let i=0;i<24;i++){
@@ -1977,6 +1989,7 @@ function drawBackground(theme){
   if(theme.particles)drawParticles(theme.particles);
   const _sid=loadActiveSkin();
   if(_sid==='obsidian')drawObsidianGlimmer();
+  if(_sid==='galax')drawGalaxyShimmer();
   if(_sid==='aurora')drawAuroraShimmer();
   if(_sid==='plasma')drawPlasmaShimmer();
   if(_sid==='inferno')drawLightningShimmer();
