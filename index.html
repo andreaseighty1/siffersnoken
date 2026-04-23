@@ -441,7 +441,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <span class="nav-count" id="skinsBtnCount">0 / 0</span>
     </button>
   </div>
-  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.6</div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.8</div>
   <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
 </div>
 
@@ -667,6 +667,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
+<script src="translations.js"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -687,180 +688,23 @@ const HS_KEY='mattormen_v3_hs', PLAYER_KEY='mattormen_player',
 /* ═══════════════════════════════════════
    SPRÅK / LANGUAGE
    ═══════════════════════════════════════ */
-const STRINGS={
-  sv:{
-    greeting:'Hej, {name}! 👋',
-    changeName:'✏️ Byt namn',
-    menuMusic:'🔊 Musik',
-    menuMusicOff:'🔇 Musik',
-    menuSub:'Ät rätt svar — väx! Fel svar — krymper!',
-    panelPreset:'⚡ Snabbval (sätter standardvärden)',
-    panelOps:'🔢 Räknesätt',
-    panelRange:'📏 Talområde (för + och −)',
-    panelTables:'✖️ Multiplikationstabeller',
-    panelTableQuick:'Snabbval:',
-    panelTableIndiv:'Välj enskilda:',
-    panelTableMulti:'Välj flera tabeller',
-    panelSpeed:'🏃 Hastighetsökning',
-    panelWalls:'🧱 Väggar',
-    panelMode:'🎮 Spelläge',panelAppearance:'🎨 Utseende',
-    modeStandard:'⚔️ Standard',modePractice:'📚 Övning',
-    modeDescStandard:'3 liv. Fel svar krymper ormen och tappar ett liv.',
-    modeDescPractice:'Inga liv. Fel svar → minuspoäng och ormen krymper. Game over när ormen är för kort!',
-    themeNight:'🌑 Natt',themeForest:'🌸 Rosy',themeOcean:'🌊 Hav',themeSunset:'🌅 Solnedgång',
-    settingsTitle:'⚙️ INSTÄLLNINGAR',settingsBack:'Tillbaka',goScoreLabel:'Poäng:',
-    speedNone:'Ingen ändring',
-    speedScore:'⬆ Poängbaserad',
-    speedLength:'⬆ Längdbaserad',
-    speedDescNone:'Konstant hastighet hela spelet.',
-    speedDescScore:'Ormen snabbas upp ju fler poäng du samlar.',
-    speedDescLength:'Ormen snabbas upp ju längre den blir.',
-    wallDie:'☠️ Dör av väggar',
-    wallWrap:'🔄 Runda väggar',
-    panelMode:'🎮 Spelläge',panelAppearance:'🎨 Utseende',
-    modeStandard:'⚔️ Standard',modePractice:'📚 Övning',
-    modeDescStandard:'3 liv. Fel svar krymper ormen och tappar ett liv.',
-    modeDescPractice:'Inga liv. Fel svar → minuspoäng och ormen krymper. Game over när ormen är för kort!',
-    themeNight:'🌑 Natt',themeForest:'🌸 Rosy',themeOcean:'🌊 Hav',themeSunset:'🌅 Solnedgång',
-    settingsTitle:'⚙️ INSTÄLLNINGAR',settingsBack:'Tillbaka',goScoreLabel:'Poäng:',
-    rangeHint10:'Ex: 3+4, 9−5, 1+8',
-    rangeHint20:'Ex: 8+5, 14−7, 9+7 (överbryggning)',
-    rangeHint100:'Ex: 23+45, 71−38, 56+19',
-    rangeHint1000:'Ex: 234+185, 730−264, 450+320',
-    rangeW10:'Inom 10',rangeW20:'Upp till 20',rangeW100:'Upp till 100',rangeW1000:'Upp till 1000',
-    btnPlay:'▶ STARTA SPELET',
-    hsTitle:'🏆 HIGHSCORE',
-    hsShowAll:'— visa alla →',
-    hsEmpty:'Inga poäng ännu — var den första! 🐍',
-    mpTitle:'🏅 MINA MEDALJER',
-    hsEntries:'poster',
-    statsBtn:'📊 Statistik',statsTitle:'📊 STATISTIK',
-    statsEmpty:'Inga spel registrerade ännu.<br>Spela lite och kom tillbaka! 🐍',
-    statsBack:'← Tillbaka',
-    medalsLabel:'MINA MEDALJER',
-    medalsCount:'{n} / {tot} upplåsta',
-    btnExport:'',btnImport:'',
-    statPoang:'POÄNG',statLage:'LÄGE',
-    hintPause:'paus',hintMenu:'meny',hintMusic:'musik',
-    pauseTitle:'PAUS',btnResume:'▶ Fortsätt',btnPauseMenu:'Meny',
-    gameOver:'GAME OVER',
-    hsPlaceholder:'Ditt namn för highscore…',
-    btnSaveScore:'💾 Spara poäng',btnGoMenu:'Hoppa över',
-    nameModalTitle:'👋 Hej!',
-    nameModalSub:'Vad heter du? Ditt namn sparas på din dator.',
-    nameModalBtn:'Spela! 🐍',
-    nameModalInpPlaceholder:'Skriv ditt namn…',
-    btnBack:'← Tillbaka',
-    aboutBtn:'ℹ️ Om SifferSnoken',
-    mpTitle:'🏅 MINA MEDALJER',    
-    hsPageTitle:'🏆 HIGHSCORE',
-    btnClearHS:'🗑️ Rensa highscore',
-    comboBonus:'🔥 Combo ×{n} (+{b} bonus)',
-    comboGold:'💡 Titta på guldsvaret!',
-    chipCorrect:'✅ {c} rätt av {t}',
-    chipPct:'{p}% träffsäkerhet',
-    chipPractice:'🔁 {n} frågor att öva',
-    newRecord:'🏆 Nytt rekord!',
-    copyright:'© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.6',
-    skinsBtnLabel:'ORMSKINN',
-    skinsTitle:'🎨 ORMSKINN',
-    skinsCount:'{n} / {tot} upplåsta',
-    skinActive:'AKTIV',
-    skinUnlockedToast:'Ormskinn upplåst!',
-    skinFree:'Tillgänglig från start',
-    headAccOn:'🎭 Huvuddekoration: PÅ',
-    headAccOff:'🎭 Huvuddekoration: AV',
-    seasonalActive:'Årstidsläge aktivt:',
-  },
-  en:{
-    greeting:'Hi, {name}! 👋',
-    changeName:'✏️ Change name',
-    menuMusic:'🔊 Music',
-    menuMusicOff:'🔇 Music',
-    menuSub:'Eat the right answer — grow! Wrong answer — shrink!',
-    panelPreset:'⚡ Quick select (sets defaults)',
-    panelOps:'🔢 Operations',
-    panelRange:'📏 Number range (for + and −)',
-    panelTables:'✖️ Multiplication tables',
-    panelTableQuick:'Quick select:',
-    panelTableIndiv:'Choose individual:',
-    panelTableMulti:'Choose multiple tables',
-    panelSpeed:'🏃 Speed increase',
-    panelWalls:'🧱 Walls',
-    speedNone:'No change',
-    speedScore:'⬆ Score based',
-    speedLength:'⬆ Length based',
-    speedDescNone:'Constant speed throughout the game.',
-    speedDescScore:'The snake speeds up the more points you collect.',
-    speedDescLength:'The snake speeds up the longer it gets.',
-    wallDie:'☠️ Die on walls',
-    wallWrap:'🔄 Wrap around',
-    panelMode:'🎮 Game mode',panelAppearance:'🎨 Appearance',
-    modeStandard:'⚔️ Standard',modePractice:'📚 Practice',
-    modeDescStandard:'3 lives. Wrong answer shrinks the snake and costs a life.',
-    modeDescPractice:'No lives. Wrong answer → minus points, snake shrinks. Game over when too short!',
-    themeNight:'🌑 Night',themeForest:'🌸 Rosy',themeOcean:'🌊 Ocean',themeSunset:'🌅 Sunset',
-    settingsTitle:'⚙️ SETTINGS',settingsBack:'Back',goScoreLabel:'Score:',
-    rangeHint10:'E.g: 3+4, 9−5, 1+8',
-    rangeHint20:'E.g: 8+5, 14−7, 9+7 (bridging)',
-    rangeHint100:'E.g: 23+45, 71−38, 56+19',
-    rangeHint1000:'E.g: 234+185, 730−264, 450+320',
-    rangeW10:'Within 10',rangeW20:'Up to 20',rangeW100:'Up to 100',rangeW1000:'Up to 1000',
-    btnPlay:'▶ START GAME',
-    hsTitle:'🏆 HIGHSCORE',
-    hsShowAll:'— show all →',
-    nameModalSub:"What's your name? Saved on your device.",
-    hsEmpty:'No scores yet — be the first! 🐍',
-    mpTitle:'🏅 MY MEDALS',
-    hsEntries:'entries',
-    statsBtn:'📊 Stats',statsTitle:'📊 STATISTICS',
-    statsEmpty:'No games recorded yet.<br>Play a little and come back! 🐍',
-    statsBack:'← Back',
-    medalsLabel:'MY MEDALS',
-    medalsCount:'{n} / {tot} unlocked',
-    btnExport:'',btnImport:'',
-    statPoang:'SCORE',statLage:'MODE',
-    hintPause:'pause',hintMenu:'menu',hintMusic:'music',
-    pauseTitle:'PAUSE',btnResume:'▶ Resume',btnPauseMenu:'Menu',
-    gameOver:'GAME OVER',
-    hsPlaceholder:'Your name for highscore…',
-    btnSaveScore:'💾 Save score',btnGoMenu:'Skip',
-    nameModalTitle:'👋 Hi!',
-    nameModalSub:"What's your name? Saved on your device.",
-    nameModalBtn:'Play! 🐍',
-    nameModalInpPlaceholder:'Type your name…',
-    btnBack:'← Back',
-    aboutBtn:'ℹ️ About NumNoodle',
-    mpTitle:'🏅 MY MEDALS',
-    hsPageTitle:'🏆 HIGHSCORE',
-    btnClearHS:'🗑️ Clear highscore',
-    comboBonus:'🔥 Combo ×{n} (+{b} bonus)',
-    comboGold:'💡 Look at the gold answer!',
-    chipCorrect:'✅ {c} correct of {t}',
-    chipPct:'{p}% accuracy',
-    chipPractice:'🔁 {n} questions to practice',
-    newRecord:'🏆 New record!',
-    copyright:'© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.6',
-    skinsBtnLabel:'SNAKE SKINS',
-    skinsTitle:'🎨 SNAKE SKINS',
-    skinsCount:'{n} / {tot} unlocked',
-    skinActive:'ACTIVE',
-    skinUnlockedToast:'Snake skin unlocked!',
-    skinFree:'Available from the start',
-    headAccOn:'🎭 Head decoration: ON',
-    headAccOff:'🎭 Head decoration: OFF',
-    seasonalActive:'Seasonal mode active:',
-  }
-};
+const STRINGS=window.SIFFERSNOKEN_TRANSLATIONS||{};
+function getLangFallback(lang){
+  return lang==='sv'?'sv':'en';
+}
 function getLang(){
   const saved=localStorage.getItem(LANG_KEY);
   if(saved)return saved;
   const bl=navigator.language||'sv';
-  return bl.toLowerCase().startsWith('sv')?'sv':'en';
+  const primary=bl.toLowerCase().split('-')[0];
+  if(STRINGS[primary])return primary;
+  return getLangFallback(primary);
 }
 function t(key,vars={}){
-  const s=STRINGS[getLang()]||STRINGS.sv;
-  let str=s[key]||STRINGS.sv[key]||key;
+  const lang=getLang();
+  const fallback=getLangFallback(lang);
+  const s=STRINGS[lang]||STRINGS[fallback]||STRINGS.sv||{};
+  let str=s[key]||(STRINGS[fallback]&&STRINGS[fallback][key])||(STRINGS.sv&&STRINGS.sv[key])||key;
   Object.entries(vars).forEach(([k,v])=>{str=str.replace('{'+k+'}',v);});
   return str;
 }
@@ -873,7 +717,7 @@ function setLang(lang){
 function applyLang(){
   const l=getLang();
   const banner=$('menuBanner');
-  if(banner)banner.src=l==='en'?'siffersnoken_banner_en.png':'siffersnoken_banner.png';
+  if(banner)banner.src=l!=='sv'?'siffersnoken_banner_en.png':'siffersnoken_banner.png';
   // Namnmodal
   $('nameModalTitle').textContent=t('nameModalTitle');
   $('nameModalSub').textContent=t('nameModalSub');
@@ -951,7 +795,7 @@ function applyLang(){
   if($('statsBackText'))$('statsBackText').textContent=t('statsBack');
   // Inställningssidan
   if($('settingsTitleEl'))$('settingsTitleEl').textContent=t('settingsTitle');
-  if($('settingsBtnLabel'))$('settingsBtnLabel').textContent=l==='en'?'Settings':'Inställningar';
+  if($('settingsBtnLabel'))$('settingsBtnLabel').textContent=l!=='sv'?'Settings':'Inställningar';
   if($('settingsBackText'))$('settingsBackText').textContent=t('settingsBack');
   updateMenuMusicBtn();
   document.querySelectorAll('.mode-btn').forEach(b=>{
@@ -1333,7 +1177,7 @@ function showSkinToast(def){
   const c=document.getElementById('medalToast');
   const el=document.createElement('div');el.className='medal-toast-item';
   el.style.borderColor='rgba(255,215,0,.55)';
-  const name=getLang()==='en'&&def.nameEn?def.nameEn:def.name;
+  const name=getLang()!=='sv'&&def.nameEn?def.nameEn:def.name;
   el.innerHTML=`<div class="mt-emoji">${def.emoji}</div>
     <div class="mt-text"><div class="mt-label">🎨 ${t('skinUnlockedToast')}</div>
     <div class="mt-name">${name}</div></div>`;
@@ -1374,8 +1218,8 @@ function renderSkinsPage(){
   SKINS_DEF.forEach(skin=>{
     const isUnlocked=isSkinUnlocked(skin.id);
     const isActive=skin.id===activeSkin;
-    const name=getLang()==='en'&&skin.nameEn?skin.nameEn:skin.name;
-    let unlockText=skin.free?t('skinFree'):(getLang()==='en'&&skin.descEn?skin.descEn:skin.descSv)||'';
+    const name=getLang()!=='sv'&&skin.nameEn?skin.nameEn:skin.name;
+    let unlockText=skin.free?t('skinFree'):(getLang()!=='sv'&&skin.descEn?skin.descEn:skin.descSv)||'';
     const card=document.createElement('div');
     card.className='skin-card'+(isActive?' active':'')+(isUnlocked?'':' locked');
     card.innerHTML=`
@@ -1470,7 +1314,7 @@ function renderMedalsPage(){
   const earned=loadMedals();
   document.getElementById('mpCount').textContent=t('medalsCount',{n:earned.size,tot:MEDALS_DEF.length});
   const cats={};
-  MEDALS_DEF.forEach(m=>{const c=getLang()==='en'&&m.catEn?m.catEn:m.cat;if(!cats[c])cats[c]=[];cats[c].push(m);});
+  MEDALS_DEF.forEach(m=>{const c=getLang()!=='sv'&&m.catEn?m.catEn:m.cat;if(!cats[c])cats[c]=[];cats[c].push(m);});
   const el=document.getElementById('medalsPageContent');el.innerHTML='';
   Object.entries(cats).forEach(([cat,medals])=>{
     const sec=document.createElement('div');sec.className='medals-cat';
@@ -1484,8 +1328,8 @@ function renderMedalsPage(){
       const pct=prog?Math.min(100,Math.round((prog.cur/prog.max)*100)):0;
       b.innerHTML=`<span class="m-emoji">${m.emoji}</span>
         <span class="m-info">
-          <span class="m-name">${getLang()==='en'&&m.nameEn?m.nameEn:m.name}</span>
-          <span class="m-desc">${getLang()==='en'&&m.descEn?m.descEn:m.desc}</span>
+          <span class="m-name">${getLang()!=='sv'&&m.nameEn?m.nameEn:m.name}</span>
+          <span class="m-desc">${getLang()!=='sv'&&m.descEn?m.descEn:m.desc}</span>
           ${(!isUnlocked&&prog)?`
             <div class="medal-prog"><div class="medal-prog-bar" style="width:${pct}%"></div></div>
             <span class="medal-prog-text">${Math.min(prog.cur,prog.max).toLocaleString('sv')} / ${prog.max.toLocaleString('sv')}</span>
@@ -1596,7 +1440,7 @@ function updateMusicMode(){
 }
 function updateMenuMusicBtn(){
   const icon=musicOn?'🔊 ':'🔇 ';
-  const txt=getLang()==='en'?'Music':'Musik';
+  const txt=getLang()!=='sv'?'Music':'Musik';
   $('btnMenuMusic').textContent=icon+txt;
 }
 function toggleMusic(){
@@ -2546,7 +2390,7 @@ document.querySelectorAll('.toggle-btn[data-ww]').forEach(btn=>{
 function buildGradeRow(){
   const row=$('gradeRow');row.innerHTML='';
   Object.entries(GRADES).forEach(([g,cfg])=>{
-    const btn=document.createElement('button');btn.className='preset-btn';btn.textContent=getLang()==='en'&&cfg.labelEn?cfg.labelEn:cfg.label;
+    const btn=document.createElement('button');btn.className='preset-btn';btn.textContent=getLang()!=='sv'&&cfg.labelEn?cfg.labelEn:cfg.label;
     btn.addEventListener('click',()=>{
       activeOps=new Set(cfg.ops);numRange=cfg.range;setTables(cfg.tbls);
       document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
@@ -2654,18 +2498,27 @@ function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent='SifferSnoken';
   if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 2.8';
   if($('aboutDevEl'))$('aboutDevEl').textContent=
-    l==='en'?'© 2026 42 Improbable Owls & Andreas Jonsson':'© 2026 42 Improbable Owls & Andreas Jonsson';
-  if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=l==='en'?'Special thanks':'Tack till';
+    l!=='sv'?'© 2026 42 Improbable Owls & Andreas Jonsson':'© 2026 42 Improbable Owls & Andreas Jonsson';
+  if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=l!=='sv'?'Special thanks':'Tack till';
   if($('aboutThanksText'))$('aboutThanksText').textContent=
-    'Alvin & Ludvig\n'+
-    'Cecilia Norlander – idéer och feedback\n'+
-    'Hugo Persson – som ihärdigt kämpade med att slå sitt personbästa!\n'+
-    'Malin Wu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass\n'+
-    'Iris Kruslock – för idén med tydligare väggar och extraliv\n'+
-    'Noelle Brusberg Aschan – grym försäljare av Majblommor\n'+
-    'Alla elever på Slättenskolan i Norrahammar\n'+
-    'Anthropic / Claude AI – för ovärderlig hjälp med koden';
-  if($('btnAboutClose'))$('btnAboutClose').textContent=l==='en'?'Close':'Stäng';
+    l!=='sv'
+      ? 'Alvin & Ludvig\n'+
+        'Cecilia Norlander – ideas and feedback\n'+
+        'Hugo Persson – who persistently fought to beat his personal best!\n'+
+        'Malin Wu – math teacher at Slättenskolan who tried SifferSnoken with her class\n'+
+        'Iris Kruslock – for the idea of clearer walls and extra lives\n'+
+        'Noelle Brusberg Aschan – amazing seller of May flowers\n'+
+        'All students at Slättenskolan in Norrahammar\n'+
+        'Anthropic / Claude AI – for invaluable help with the code'
+      : 'Alvin & Ludvig\n'+
+        'Cecilia Norlander – idéer och feedback\n'+
+        'Hugo Persson – som ihärdigt kämpade med att slå sitt personbästa!\n'+
+        'Malin Wu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass\n'+
+        'Iris Kruslock – för idén med tydligare väggar och extraliv\n'+
+        'Noelle Brusberg Aschan – grym försäljare av Majblommor\n'+
+        'Alla elever på Slättenskolan i Norrahammar\n'+
+        'Anthropic / Claude AI – för ovärderlig hjälp med koden';
+  if($('btnAboutClose'))$('btnAboutClose').textContent=l!=='sv'?'Close':'Stäng';
   $('aboutOverlay').classList.add('show');
 }
 
@@ -2757,7 +2610,7 @@ function renderStatsPage(){
   const opRows=Object.entries(opAcc).map(([op,d])=>{
     const pct=d.total>0?Math.round(d.correct/d.total*100):0;
     const col=pct>=80?'#00ff88':pct>=50?'#ffcc00':'#ff4444';
-    const lbl=l==='en'?(opLabelEn[op]||op):(opLabel[op]||op);
+    const lbl=l!=='sv'?(opLabelEn[op]||op):(opLabel[op]||op);
     return `<div class="stats-op-row">
       <div class="stats-op-name">${opSym[op]||op}</div>
       <div style="flex:1">
@@ -2838,7 +2691,7 @@ function renderStatsTeacherPage(){
   }
 
   const l=getLang();
-  const txt=l==='en'
+  const txt=l!=='sv'
     ? {
         totalGames:'Games played',
         totalAnswered:'Questions answered',
@@ -2944,7 +2797,7 @@ function renderStatsTeacherPage(){
     const opsText=ops.map(o=>opSym[o]||o).join('');
     if(h.player)bits.push(h.player);
     if(opsText)bits.push(opsText);
-    if(h.numRange)bits.push((l==='en'?'up to ':'upp till ')+h.numRange);
+    if(h.numRange)bits.push((l!=='sv'?'up to ':'upp till ')+h.numRange);
     if(Array.isArray(h.tables)&&h.tables.length&&(ops.includes('*')||ops.includes('/'))){
       bits.push(`${txt.tablesLabel} ${h.tables.slice().sort((a,b)=>a-b).join(',')}`);
     }
@@ -2992,7 +2845,7 @@ function renderStatsTeacherPage(){
 
   const opRows=opStats.map(d=>{
     const col=d.pct>=80?'#00ff88':d.pct>=50?'#ffcc00':'#ff4444';
-    const lbl=l==='en'?(opLabelEn[d.op]||d.op):(opLabel[d.op]||d.op);
+    const lbl=l!=='sv'?(opLabelEn[d.op]||d.op):(opLabel[d.op]||d.op);
     return `<div class="stats-op-row">
       <div class="stats-op-name">${opSym[d.op]||d.op}</div>
       <div style="flex:1">
@@ -3037,7 +2890,7 @@ function renderStatsTeacherPage(){
   let nextStepMain=txt.nextFallbackMain;
   let nextStepSub=txt.nextFallbackSub;
   if(weakest){
-    const weakestName=l==='en'?(opNameEn[weakest.op]||weakest.op):(opName[weakest.op]||weakest.op);
+    const weakestName=l!=='sv'?(opNameEn[weakest.op]||weakest.op):(opName[weakest.op]||weakest.op);
     if((weakest.op==='*'||weakest.op==='/')&&topTables.length){
       const table=topTables[0][0];
       nextStepMain=txt.tablePracticeMain(table);
@@ -3078,11 +2931,11 @@ function renderStatsTeacherPage(){
   }).join('');
 
   const strongestMain=strongest
-    ? `${(l==='en'?opLabelEn[strongest.op]:opLabel[strongest.op])} · ${strongest.pct}%`
+    ? `${(l!=='sv'?opLabelEn[strongest.op]:opLabel[strongest.op])} · ${strongest.pct}%`
     : txt.noData;
   const strongestSub=strongest?txt.strongSub(strongest.pct,strongest.total):'';
   const weakestMain=weakest
-    ? `${(l==='en'?opLabelEn[weakest.op]:opLabel[weakest.op])} · ${weakest.pct}%`
+    ? `${(l!=='sv'?opLabelEn[weakest.op]:opLabel[weakest.op])} · ${weakest.pct}%`
     : txt.noData;
   const weakestSub=weakest
     ? txt.weakSub(weakest.pct,weakest.total)+(topTables.length&&['*','/'].includes(weakest.op)?` · ${txt.tableChip(topTables[0][0],topTables[0][1])}`:'')
@@ -3179,8 +3032,8 @@ function pauseGame(){
 $('btnPlay').addEventListener('click',startGame);
 if($('btnPracticeList')){
   $('btnPracticeList').addEventListener('click',()=>{
-    if($('practiceTitleEl'))$('practiceTitleEl').textContent=getLang()==='en'?'📚 Practice these':'📚 Öva på dessa';
-    if($('btnPracticeClose'))$('btnPracticeClose').textContent=getLang()==='en'?'Close':'Stäng';
+    if($('practiceTitleEl'))$('practiceTitleEl').textContent=getLang()!=='sv'?'📚 Practice these':'📚 Öva på dessa';
+    if($('btnPracticeClose'))$('btnPracticeClose').textContent=getLang()!=='sv'?'Close':'Stäng';
     const el=$('practiceListContent');
     if(el)el.innerHTML=wrongPool.map(p=>`<div>${p.expr} = <strong style="color:var(--accent);font-weight:900">${p.answer}</strong></div>`).join('');
     $('practiceOverlay').classList.add('show');
