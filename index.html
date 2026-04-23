@@ -1015,6 +1015,7 @@ const MEDALS_DEF=[
   {id:'mytisk',  emoji:'🐉',name:'Mytisk orm!',            desc:'Nå längd 100 — helt otroligt!',                cat:'🐍 Orm', catEn:'🐍 Snake', nameEn:'Mythic Snake!', descEn:'Reach length 100 — unbelievable!'},
   {id:'osviklig',emoji:'❤️',name:'Felfri',                 desc:'10 rätt utan att tappa ett enda liv',          cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Flawless', descEn:'10 correct without losing a single life'},
   {id:'genius',  emoji:'🧠',name:'Mattegeni',              desc:'1 000p på Åk6 med alla 4 räknesätt',          cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Math Genius', descEn:'1,000pts on grade 6 with all 4 operations'},
+  {id:'snabbaskrillor', emoji:'⛸️',name:'Snabba Skrillor',  desc:'Nå 5 000p med ett hastighetsläge aktiverat',   cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Fast Skates', descEn:'Reach 5,000 points with a speed mode active'},
   {id:'fartdemon', emoji:'☢️',name:'Fartdemon',            desc:'Nå 10 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Speed Demon', descEn:'Reach 10,000 points with a speed mode active'},
   {id:'overhettad', emoji:'🌡️',name:'Överhettad',          desc:'Nå 15 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Overheated', descEn:'Reach 15,000 points with a speed mode active'},
   {id:'adrenalin', emoji:'⚠️',name:'Adrenalinmästare',     desc:'Nå 20 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Adrenaline Master', descEn:'Reach 20,000 points with a speed mode active'},
@@ -1063,6 +1064,13 @@ const SKINS_DEF=[
    headA:'#aaccff', headB:'#002299', shadow:'#3366ff',
    bodyFn:(a)=>`rgba(${Math.floor(20+a*40)},${Math.floor(40+a*70)},${Math.floor(130+a*90)},${Math.min(1,a+.05)})`,
    previewCss:'linear-gradient(135deg,#aaccff,#002299)'},
+  {id:'hv71', emoji:'🏒', name:'HV71', nameEn:'HV71',
+   free:false, unlockMedal:'snabbaskrillor',
+   descSv:'Lås upp: Snabba Skrillor-medaljen', descEn:'Unlock: Fast Skates medal',
+   headA:'#ffffff', headB:'#12489c', shadow:'#f3d03f',
+   bodyFn:(a,i)=>{const t=Math.floor(i||0)%4;return t===0?`rgba(${Math.floor(18+a*30)},${Math.floor(73+a*42)},${Math.floor(166+a*35)},${Math.min(1,a+.06)})`:t===1?`rgba(${Math.floor(9+a*18)},${Math.floor(44+a*28)},${Math.floor(120+a*30)},${Math.min(1,a+.06)})`:t===2?`rgba(${Math.floor(30+a*26)},${Math.floor(95+a*34)},${Math.floor(194+a*28)},${Math.min(1,a+.06)})`:`rgba(${Math.floor(20+a*22)},${Math.floor(63+a*24)},${Math.floor(150+a*26)},${Math.min(1,a+.06)})`;},
+   previewCss:'linear-gradient(135deg,#f3d03f,#ffffff,#1a5dc5,#0b2f72)',
+   hv71:true},
   {id:'lava', emoji:'🌋', name:'Lava', nameEn:'Lava',
    free:false, unlockMedal:'div500',
    descSv:'Lås upp: Divisionsmedaljen', descEn:'Unlock: Division medal',
@@ -1149,6 +1157,7 @@ const SKIN_THEMES={
   'regnbage': {bgA:'#050508',bgB:'#030308',gridColor:'rgba(180,130,255,.04)',particles:'rainbow',headAcc:null},
   'guld':     {bgA:'#0f0900',bgB:'#080500',gridColor:'rgba(255,190,0,.04)',  particles:null,   headAcc:null},
   'kunglig':  {bgA:'#03050f',bgB:'#02030a',gridColor:'rgba(60,100,255,.05)', particles:'stars', headAcc:'crown'},
+  'hv71':     {bgA:'#071637',bgB:'#030b1d',gridColor:'rgba(243,208,63,.05)', particles:'stars', headAcc:null},
   'lava':     {bgA:'#0f0200',bgB:'#080100',gridColor:'rgba(255,80,0,.05)',   particles:'sparks',headAcc:null},
   'eld':      {bgA:'#0f0400',bgB:'#0a0200',gridColor:'rgba(255,90,0,.04)',   particles:'sparks',headAcc:null},
   'obsidian': {bgA:'#020202',bgB:'#010101',gridColor:'rgba(180,180,200,.03)',particles:'stars', headAcc:null},
@@ -1233,6 +1242,7 @@ let score=0,lives=3,combo=0,growPending=0,correctStreak=0;
 let state='menu',lastTickTime=0,moveProgress=0;
 let musicOn=true,audioUnlocked=false,isFastMusic=false;
 let goldPhase=false,goldTimeout=null;
+let bonusLife=null,bonusLifeUsedThisRound=false;
 let personalBestAtStart=0,recordSoundPlayed=false;
 let eatAnim=null; // {x,y,value,startTime}
 
@@ -1246,6 +1256,9 @@ let sessionWrongMap={};
 // Fel-pool: problem som eleven svarat fel på, visas mer frekvent
 const MAX_WRONG_POOL=6;
 let wrongPool=[];
+const BONUS_LIFE_MIN_SCORE=2000;
+const BONUS_LIFE_LIFETIME=3000;
+const BONUS_LIFE_SPAWN_CHANCE=0.16;
 
 /* ═══════════════════════════════════════
    SPELARPROFIL
@@ -1414,6 +1427,7 @@ function checkMedals(){
   if(snake.length>=75) unlockMedal('len75');
   if(snake.length>=100) unlockMedal('mytisk');
   if(score>=1000&&activeOps.size===4&&numRange===1000) unlockMedal('genius');
+  if(speedMode!=='none'&&score>=5000) unlockMedal('snabbaskrillor');
   if(speedMode!=='none'&&score>=10000) unlockMedal('fartdemon');
   if(speedMode!=='none'&&score>=15000) unlockMedal('overhettad');
   if(speedMode!=='none'&&score>=20000) unlockMedal('adrenalin');
@@ -1446,7 +1460,7 @@ function getMedalProgress(id){
     c100:{cur:stats.bestCombo,max:100},
     len15:{cur:stats.bestLength,max:15},len25:{cur:stats.bestLength,max:25},len35:{cur:stats.bestLength,max:35},len50:{cur:stats.bestLength,max:50},len75:{cur:stats.bestLength,max:75},mytisk:{cur:stats.bestLength,max:100},
     osviklig:{cur:stats.bestStreak,max:10},
-    genius:null,
+    genius:null,snabbaskrillor:null,
     fartdemon:null,overhettad:null,adrenalin:null,
   };
   return map[id]||null;
@@ -1553,6 +1567,7 @@ function sfxCombo(n){
   else if(n>=100){for(let i=0;i<8;i++)setTimeout(()=>{beep(880+Math.random()*440,'sine',.08);},i*40);}
 }
 function sfxGold(){beep(1400,'sine',.06,.18);setTimeout(()=>beep(1800,'sine',.08,.12),70);}
+function sfxLife(){beep(960,'sine',.08,.18);setTimeout(()=>beep(1280,'triangle',.1,.14),70);}
 function sfxRecord(){
   [330,440,550,660,880].forEach((f,i)=>setTimeout(()=>beep(f,'sine',.13),i*55));
   setTimeout(()=>{beep(880,'triangle',.25,.18);},300);
@@ -1670,6 +1685,43 @@ function removeFromWrongPool(expr){
   if(i!==-1)wrongPool.splice(i,1);
 }
 
+function updateBonusLife(now=performance.now()){
+  if(bonusLife&&now>=bonusLife.expiresAt)bonusLife=null;
+}
+function canSpawnBonusLife(){
+  return !practiceMode&&!bonusLife&&!bonusLifeUsedThisRound&&!goldPhase&&score>=BONUS_LIFE_MIN_SCORE&&lives>0&&lives<3;
+}
+function findBonusLifeSpot(){
+  const occ=new Set([
+    ...snake.map(s=>`${s.x},${s.y}`),
+    ...tiles.map(t=>`${t.x},${t.y}`)
+  ]);
+  const head=snake[0];
+  for(let att=0;att<220;att++){
+    const p={x:R(0,COLS-1),y:R(0,ROWS-1)};
+    const dist=Math.abs(p.x-head.x)+Math.abs(p.y-head.y);
+    if(dist<4)continue;
+    if(occ.has(`${p.x},${p.y}`))continue;
+    return p;
+  }
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      const dist=Math.abs(x-head.x)+Math.abs(y-head.y);
+      if(dist<3)continue;
+      if(!occ.has(`${x},${y}`))return{x,y};
+    }
+  }
+  return null;
+}
+function maybeSpawnBonusLife(){
+  if(!canSpawnBonusLife()||Math.random()>BONUS_LIFE_SPAWN_CHANCE)return false;
+  const p=findBonusLifeSpot();
+  if(!p)return false;
+  bonusLife={x:p.x,y:p.y,expiresAt:performance.now()+BONUS_LIFE_LIFETIME};
+  bonusLifeUsedThisRound=true;
+  return true;
+}
+
 /* ═══════════════════════════════════════
    BRICKOR
    ═══════════════════════════════════════ */
@@ -1722,6 +1774,7 @@ function startGame(){
   if((activeOps.has('*')||activeOps.has('/'))&&!tables.size){alert('Välj minst en multiplikationstabell!');return;}
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}
   goldPhase=false;isFastMusic=false;
+  bonusLife=null;bonusLifeUsedThisRound=false;
   wrongPool=[];
   sessionCorrect=0;sessionTotal=0;sessionOpStats={};sessionWrongMap={};
   const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
@@ -1776,6 +1829,7 @@ function pollGamepad(){
 
 function gameLoop(ts){
   if(state!=='playing')return;
+  updateBonusLife(ts);
   pollGamepad();
   const spd=getSpeed(),elapsed=ts-lastTickTime;
   moveProgress=Math.min(1,elapsed/spd);
@@ -1790,6 +1844,7 @@ function applyDir(nd){if(nd&&!(nd.x===-dir.x&&nd.y===-dir.y))nextDir=nd;}
 
 function tick(){
   dir={...nextDir};
+  updateBonusLife();
   const old=snake.map(s=>({x:s.x,y:s.y}));
   let hx=snake[0].x+dir.x, hy=snake[0].y+dir.y;
 
@@ -1806,9 +1861,15 @@ function tick(){
   if(growPending>0)growPending--;else snake.pop();
   for(let i=1;i<snake.length;i++){snake[i].px=old[i]?old[i].x:snake[i].x;snake[i].py=old[i]?old[i].y:snake[i].y;}
 
+  if(bonusLife&&bonusLife.x===hx&&bonusLife.y===hy){
+    bonusLife=null;
+    lives=Math.min(3,lives+1);
+    sfxLife();
+  }
+
   if(goldPhase){
     const gt=tiles.find(t=>t.isGold);
-    if(gt&&gt.x===hx&&gt.y===hy){clearTimeout(goldTimeout);goldTimeout=null;goldPhase=false;problem=genProblem();placeTiles();}
+    if(gt&&gt.x===hx&&gt.y===hy){clearTimeout(goldTimeout);goldTimeout=null;goldPhase=false;problem=genProblem();placeTiles();maybeSpawnBonusLife();}
     updateHUD();updateMusicMode();return;
   }
 
@@ -1839,7 +1900,7 @@ function tick(){
       if(!recordSoundPlayed&&score>personalBestAtStart&&personalBestAtStart>0){recordSoundPlayed=true;sfxRecord();}
       if(correctStreak>=10)unlockMedal('osviklig');
       updateStats();checkMedals();
-      problem=genProblem();placeTiles();
+      problem=genProblem();placeTiles();maybeSpawnBonusLife();
     }else{
       combo=0;correctStreak=0;
       sessionWrongMap[problem.expr]=(sessionWrongMap[problem.expr]||0)+1;
@@ -1854,13 +1915,14 @@ function tick(){
         lives--;
         if(lives<=0||snake.length<2){triggerGameOver();return;}
       }
+      bonusLife=null;
       const ct=tiles.find(t=>t.correct);
       if(ct){
         ct.isGold=true;goldPhase=true;sfxGold();
         if(goldTimeout)clearTimeout(goldTimeout);
         goldTimeout=setTimeout(()=>{goldPhase=false;goldTimeout=null;tiles.forEach(t=>t.isGold=false);
-          if(state==='playing'||state==='paused'){problem=genProblem();placeTiles();}},1500);
-      }else{problem=genProblem();placeTiles();}
+          if(state==='playing'||state==='paused'){problem=genProblem();placeTiles();maybeSpawnBonusLife();}},1500);
+      }else{problem=genProblem();placeTiles();maybeSpawnBonusLife();}
     }
   }
   updateMusicMode();updateHUD();
@@ -1935,6 +1997,22 @@ function drawLightningShimmer(){
     ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
   }
 }
+function drawHv71Shimmer(){
+  const T=performance.now(),W=canvas.width,H=canvas.height;
+  for(let i=0;i<18;i++){
+    const sx=(i*167.9+Math.sin(T/520+i*0.8)*18)%W;
+    const sy=(i*111.4+Math.cos(T/640+i*0.6)*16)%H;
+    const a=0.12+0.12*Math.abs(Math.sin(T/700+i));
+    const size=1+(i%3)*0.7;
+    const palette=[
+      `rgba(255,255,255,${a})`,
+      `rgba(243,208,63,${a*.9})`,
+      `rgba(150,190,255,${a*.75})`
+    ];
+    ctx.fillStyle=palette[i%palette.length];
+    ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
+  }
+}
 function drawParticles(type){
   const T=performance.now(),W=canvas.width,H=canvas.height;
   const N=type==='bats'?8:type==='hearts'?12:32;
@@ -1993,12 +2071,15 @@ function drawBackground(theme){
   if(_sid==='aurora')drawAuroraShimmer();
   if(_sid==='plasma')drawPlasmaShimmer();
   if(_sid==='inferno')drawLightningShimmer();
+  if(_sid==='hv71')drawHv71Shimmer();
 }
 
 function draw(t){
+  updateBonusLife();
   const _theme=getActiveTheme();
   drawBackground(_theme);
   tiles.forEach(tile=>drawTile(tile));
+  if(bonusLife)drawBonusLife();
   // Tugga-animation: rätt svar krymper mot huvudet
   if(eatAnim){
     const prog=Math.min(1,(performance.now()-eatAnim.startTime)/260);
@@ -2080,6 +2161,24 @@ function drawTile(t){
   }
   ctx.restore();
 }
+function drawBonusLife(){
+  if(!bonusLife)return;
+  const remain=Math.max(1,Math.ceil((bonusLife.expiresAt-performance.now())/1000));
+  const cx=bonusLife.x*CELL+CELL/2,cy=bonusLife.y*CELL+CELL/2;
+  ctx.save();
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.shadowColor='rgba(255,80,120,.55)';ctx.shadowBlur=14;
+  ctx.font=`900 ${Math.floor(CELL*0.8)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+  ctx.fillText('❤️',cx,cy+1);
+  ctx.shadowBlur=0;
+  ctx.lineWidth=3;
+  ctx.strokeStyle='rgba(0,0,0,.45)';
+  ctx.fillStyle='#ffffff';
+  ctx.font=`900 ${Math.min(13,Math.floor(CELL*0.34))}px Orbitron,monospace`;
+  ctx.strokeText(String(remain),cx,cy+1);
+  ctx.fillText(String(remain),cx,cy+1);
+  ctx.restore();
+}
 function drawSeg(rx,ry,i,isHead){
   const skin=getActiveSkinDef();
   const isTail=!isHead&&i===snake.length-1;
@@ -2116,6 +2215,12 @@ function drawSeg(rx,ry,i,isHead){
     }else{ctx.fillStyle=skin.bodyFn(alpha,_segIdx);}
   }
   rRect(tpx,tpy,ts,ts,13);ctx.fill();
+  if(skin.hv71){
+    ctx.shadowBlur=0;
+    ctx.strokeStyle=`rgba(255,255,255,${isHead?0.95:Math.min(0.88,alpha+.16)})`;
+    ctx.lineWidth=isHead?2.4:1.6;
+    rRect(tpx+1,tpy+1,ts-2,ts-2,12);ctx.stroke();
+  }
   // Fix 2: Inner highlight — subtil radial gradient för 3D-djup
   if(!isTail){
     ctx.shadowBlur=0;
@@ -2255,6 +2360,7 @@ function flashFx(type){
    ═══════════════════════════════════════ */
 function triggerGameOver(){
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
+  bonusLife=null;
   state='gameover';sfxDie();bgMusic.pause();fastMusic.pause();isFastMusic=false;
   stopTitelMusic(true); // börja om från början när spelaren går till menyn
   showTouchControls(false);
