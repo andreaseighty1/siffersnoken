@@ -714,6 +714,12 @@ function t(key,vars={}){
   Object.entries(vars).forEach(([k,v])=>{str=str.replace('{'+k+'}',v);});
   return str;
 }
+function pickLangText(sv,en,de=en){
+  const lang=getLang();
+  if(lang==='sv')return sv;
+  if(lang==='de')return de ?? en ?? sv;
+  return en ?? sv;
+}
 function setLang(lang){
   localStorage.setItem(LANG_KEY,lang);
   updateLangButtons(lang);
@@ -800,7 +806,7 @@ function applyLang(){
   if($('statsBackText'))$('statsBackText').textContent=t('statsBack');
   // Inställningssidan
   if($('settingsTitleEl'))$('settingsTitleEl').textContent=t('settingsTitle');
-  if($('settingsBtnLabel'))$('settingsBtnLabel').textContent=l!=='sv'?'Settings':'Inställningar';
+  if($('settingsBtnLabel'))$('settingsBtnLabel').textContent=pickLangText('Inställningar','Settings','Einstellungen');
   if($('settingsBackText'))$('settingsBackText').textContent=t('settingsBack');
   updateMenuMusicBtn();
   document.querySelectorAll('.mode-btn').forEach(b=>{
@@ -825,12 +831,12 @@ function applyLang(){
 }
 
 const GRADES={
-  1:{label:'Åk 1',labelEn:'Yr 1',ops:['+','-'],          range:10,  tbls:[]},
-  2:{label:'Åk 2',labelEn:'Yr 2',ops:['+','-'],          range:20,  tbls:[]},
-  3:{label:'Åk 3',labelEn:'Yr 3',ops:['+','-','*','/'],  range:20,  tbls:[2,3,4,5,6,10]},
-  4:{label:'Åk 4',labelEn:'Yr 4',ops:['+','-','*','/'],  range:100, tbls:[1,2,3,4,5,6,7,8,9,10]},
-  5:{label:'Åk 5',labelEn:'Yr 5',ops:['+','-','*','/'],  range:100, tbls:[1,2,3,4,5,6,7,8,9,10,11,12]},
-  6:{label:'Åk 6',labelEn:'Yr 6',ops:['+','-','*','/'],  range:1000,tbls:[1,2,3,4,5,6,7,8,9,10,11,12]},
+  1:{label:'Åk 1',labelEn:'Yr 1',labelDe:'Kl. 1',ops:['+','-'],          range:10,  tbls:[]},
+  2:{label:'Åk 2',labelEn:'Yr 2',labelDe:'Kl. 2',ops:['+','-'],          range:20,  tbls:[]},
+  3:{label:'Åk 3',labelEn:'Yr 3',labelDe:'Kl. 3',ops:['+','-','*','/'],  range:20,  tbls:[2,3,4,5,6,10]},
+  4:{label:'Åk 4',labelEn:'Yr 4',labelDe:'Kl. 4',ops:['+','-','*','/'],  range:100, tbls:[1,2,3,4,5,6,7,8,9,10]},
+  5:{label:'Åk 5',labelEn:'Yr 5',labelDe:'Kl. 5',ops:['+','-','*','/'],  range:100, tbls:[1,2,3,4,5,6,7,8,9,10,11,12]},
+  6:{label:'Åk 6',labelEn:'Yr 6',labelDe:'Kl. 6',ops:['+','-','*','/'],  range:1000,tbls:[1,2,3,4,5,6,7,8,9,10,11,12]},
 };
 
 /* ═══════════════════════════════════════
@@ -1445,7 +1451,7 @@ function updateMusicMode(){
 }
 function updateMenuMusicBtn(){
   const icon=musicOn?'🔊 ':'🔇 ';
-  const txt=getLang()!=='sv'?'Music':'Musik';
+  const txt=pickLangText('Musik','Music','Musik');
   $('btnMenuMusic').textContent=icon+txt;
 }
 function toggleMusic(){
@@ -2395,7 +2401,7 @@ document.querySelectorAll('.toggle-btn[data-ww]').forEach(btn=>{
 function buildGradeRow(){
   const row=$('gradeRow');row.innerHTML='';
   Object.entries(GRADES).forEach(([g,cfg])=>{
-    const btn=document.createElement('button');btn.className='preset-btn';btn.textContent=getLang()!=='sv'&&cfg.labelEn?cfg.labelEn:cfg.label;
+    const btn=document.createElement('button');btn.className='preset-btn';btn.textContent=pickLangText(cfg.label,cfg.labelEn||cfg.label,cfg.labelDe||cfg.labelEn||cfg.label);
     btn.addEventListener('click',()=>{
       activeOps=new Set(cfg.ops);numRange=cfg.range;setTables(cfg.tbls);
       document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
@@ -2505,7 +2511,7 @@ function showAbout(){
   if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 2.8';
   if($('aboutDevEl'))$('aboutDevEl').textContent=
     l!=='sv'?'© 2026 42 Improbable Owls & Andreas Jonsson':'© 2026 42 Improbable Owls & Andreas Jonsson';
-  if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=l!=='sv'?'Special thanks':'Tack till';
+  if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=
     l!=='sv'
       ? 'Alvin & Ludvig\n'+
@@ -2587,6 +2593,7 @@ function renderStatsPage(){
   const l=getLang();
   const opLabel={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
   const opLabelEn={'+':'➕ Addition','-':'➖ Subtraction','*':'✖️ Multiplication','/':'➗ Division'};
+  const opLabelDe={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
   const opSym={'+':'+','-':'−','*':'×','/':'÷'};
 
   // ── Sammanfattning ──
@@ -2616,7 +2623,7 @@ function renderStatsPage(){
   const opRows=Object.entries(opAcc).map(([op,d])=>{
     const pct=d.total>0?Math.round(d.correct/d.total*100):0;
     const col=pct>=80?'#00ff88':pct>=50?'#ffcc00':'#ff4444';
-    const lbl=l!=='sv'?(opLabelEn[op]||op):(opLabel[op]||op);
+    const lbl=pickLangText(opLabel[op]||op,opLabelEn[op]||op,opLabelDe[op]||op);
     return `<div class="stats-op-row">
       <div class="stats-op-name">${opSym[op]||op}</div>
       <div style="flex:1">
@@ -2777,6 +2784,8 @@ function renderStatsTeacherPage(){
   const opName={'+':'Addition','-':'Subtraktion','*':'Multiplikation','/':'Division'};
   const opNameEn={'+':'Addition','-':'Subtraction','*':'Multiplication','/':'Division'};
   const opSym={'+':'+','-':'−','*':'×','/':'÷'};
+  const opLabelDe={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
+  const opNameDe={'+':'Addition','-':'Subtraktion','*':'Multiplikation','/':'Division'};
   const pct=(correct,total)=>total>0?Math.round(correct/total*100):0;
   const getWrongPairs=h=>{
     if(h&&h.wrongMap&&typeof h.wrongMap==='object'&&Object.keys(h.wrongMap).length){
@@ -2803,7 +2812,7 @@ function renderStatsTeacherPage(){
     const opsText=ops.map(o=>opSym[o]||o).join('');
     if(h.player)bits.push(h.player);
     if(opsText)bits.push(opsText);
-    if(h.numRange)bits.push((l!=='sv'?'up to ':'upp till ')+h.numRange);
+    if(h.numRange)bits.push(pickLangText('upp till ','up to ','bis ')+h.numRange);
     if(Array.isArray(h.tables)&&h.tables.length&&(ops.includes('*')||ops.includes('/'))){
       bits.push(`${txt.tablesLabel} ${h.tables.slice().sort((a,b)=>a-b).join(',')}`);
     }
@@ -2851,7 +2860,7 @@ function renderStatsTeacherPage(){
 
   const opRows=opStats.map(d=>{
     const col=d.pct>=80?'#00ff88':d.pct>=50?'#ffcc00':'#ff4444';
-    const lbl=l!=='sv'?(opLabelEn[d.op]||d.op):(opLabel[d.op]||d.op);
+    const lbl=pickLangText(opLabel[d.op]||d.op,opLabelEn[d.op]||d.op,opLabelDe[d.op]||d.op);
     return `<div class="stats-op-row">
       <div class="stats-op-name">${opSym[d.op]||d.op}</div>
       <div style="flex:1">
@@ -2896,7 +2905,7 @@ function renderStatsTeacherPage(){
   let nextStepMain=txt.nextFallbackMain;
   let nextStepSub=txt.nextFallbackSub;
   if(weakest){
-    const weakestName=l!=='sv'?(opNameEn[weakest.op]||weakest.op):(opName[weakest.op]||weakest.op);
+    const weakestName=pickLangText(opName[weakest.op]||weakest.op,opNameEn[weakest.op]||weakest.op,opNameDe[weakest.op]||weakest.op);
     if((weakest.op==='*'||weakest.op==='/')&&topTables.length){
       const table=topTables[0][0];
       nextStepMain=txt.tablePracticeMain(table);
@@ -2937,11 +2946,11 @@ function renderStatsTeacherPage(){
   }).join('');
 
   const strongestMain=strongest
-    ? `${(l!=='sv'?opLabelEn[strongest.op]:opLabel[strongest.op])} · ${strongest.pct}%`
+    ? `${pickLangText(opLabel[strongest.op],opLabelEn[strongest.op],opLabelDe[strongest.op])} · ${strongest.pct}%`
     : txt.noData;
   const strongestSub=strongest?txt.strongSub(strongest.pct,strongest.total):'';
   const weakestMain=weakest
-    ? `${(l!=='sv'?opLabelEn[weakest.op]:opLabel[weakest.op])} · ${weakest.pct}%`
+    ? `${pickLangText(opLabel[weakest.op],opLabelEn[weakest.op],opLabelDe[weakest.op])} · ${weakest.pct}%`
     : txt.noData;
   const weakestSub=weakest
     ? txt.weakSub(weakest.pct,weakest.total)+(topTables.length&&['*','/'].includes(weakest.op)?` · ${txt.tableChip(topTables[0][0],topTables[0][1])}`:'')
@@ -3038,7 +3047,7 @@ function pauseGame(){
 $('btnPlay').addEventListener('click',startGame);
 if($('btnPracticeList')){
   $('btnPracticeList').addEventListener('click',()=>{
-    if($('practiceTitleEl'))$('practiceTitleEl').textContent=getLang()!=='sv'?'📚 Practice these':'📚 Öva på dessa';
+    if($('practiceTitleEl'))$('practiceTitleEl').textContent='📚 '+pickLangText('Öva på dessa','Practice these','Übe diese');
     if($('btnPracticeClose'))$('btnPracticeClose').textContent=getLang()!=='sv'?'Close':'Stäng';
     const el=$('practiceListContent');
     if(el)el.innerHTML=wrongPool.map(p=>`<div>${p.expr} = <strong style="color:var(--accent);font-weight:900">${p.answer}</strong></div>`).join('');
@@ -3060,7 +3069,7 @@ $('btnBackFromMedals').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnBackFromSkins').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnGoSkins').addEventListener('click',goToSkins);
 $('btnBackFromHS').addEventListener('click',()=>showScreen('menuScreen'));
-$('btnClearHS').addEventListener('click',()=>{if(confirm('Rensa hela highscorelistan?')){localStorage.removeItem(HS_KEY);renderHS();renderHSPage();}});
+$('btnClearHS').addEventListener('click',()=>{if(confirm(pickLangText('Rensa hela highscorelistan?','Clear the entire highscore list?','Die gesamte Highscore-Liste löschen?'))){localStorage.removeItem(HS_KEY);renderHS();renderHSPage();}});
 $('btnMenuMusic').addEventListener('click',toggleMusic);
 $('btnGoStats').addEventListener('click',goToStats);
 $('btnBackFromStats').addEventListener('click',()=>showScreen('menuScreen'));
