@@ -391,8 +391,9 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 <div class="overlay" id="nameModal">
   <div class="ov-card">
     <div class="lang-row">
-      <button class="lang-btn sel" id="btnLangSv">🇸🇪 Svenska</button>
-      <button class="lang-btn" id="btnLangEn">🇬🇧 English</button>
+      <button class="lang-btn sel" id="btnLangSv" data-lang="sv">🇸🇪 Svenska</button>
+      <button class="lang-btn" id="btnLangEn" data-lang="en">🇬🇧 English</button>
+      <button class="lang-btn" id="btnLangDe" data-lang="de">🇩🇪 Deutsch</button>
     </div>
     <div class="ov-title" id="nameModalTitle" style="font-size:30px;margin-bottom:8px">👋 Hej!</div>
     <div class="ov-meta" id="nameModalSub">Vad heter du? Ditt namn sparas på din dator.</div>
@@ -692,6 +693,11 @@ const STRINGS=window.SIFFERSNOKEN_TRANSLATIONS||{};
 function getLangFallback(lang){
   return lang==='sv'?'sv':'en';
 }
+function updateLangButtons(lang){
+  document.querySelectorAll('.lang-btn[data-lang]').forEach(btn=>{
+    btn.classList.toggle('sel',btn.dataset.lang===lang);
+  });
+}
 function getLang(){
   const saved=localStorage.getItem(LANG_KEY);
   if(saved)return saved;
@@ -710,8 +716,7 @@ function t(key,vars={}){
 }
 function setLang(lang){
   localStorage.setItem(LANG_KEY,lang);
-  document.getElementById('btnLangSv').classList.toggle('sel',lang==='sv');
-  document.getElementById('btnLangEn').classList.toggle('sel',lang==='en');
+  updateLangButtons(lang);
   applyLang();
 }
 function applyLang(){
@@ -2413,8 +2418,9 @@ function confirmName(){
 $('btnNameOk').addEventListener('click',confirmName);
 $('nameModalInp').addEventListener('keydown',e=>{if(e.key==='Enter')confirmName();});
 $('btnChangeName').addEventListener('click',showNameModal);
-$('btnLangSv').addEventListener('click',()=>setLang('sv'));
-$('btnLangEn').addEventListener('click',()=>setLang('en'));
+document.querySelectorAll('.lang-btn[data-lang]').forEach(btn=>{
+  btn.addEventListener('click',()=>setLang(btn.dataset.lang));
+});
 
 /* ═══════════════════════════════════════
    TOUCH D-PAD & SVEP
@@ -3087,7 +3093,7 @@ document.addEventListener('keydown',e=>{
    INIT
    ═══════════════════════════════════════ */
 // Init lang-knappar
-const _il=getLang();$('btnLangSv').classList.toggle('sel',_il==='sv');$('btnLangEn').classList.toggle('sel',_il==='en');
+const _il=getLang();updateLangButtons(_il);
 buildGradeRow();buildTableGrid();updateRangeHint();updateTablePanelVisibility();
 const sdMap2={none:t('speedDescNone'),score:t('speedDescScore'),length:t('speedDescLength')};
 $('speedDesc').textContent=sdMap2[speedMode]||'';
