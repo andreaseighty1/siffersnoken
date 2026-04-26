@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="sv">
 <head>
 <meta charset="utf-8">
@@ -80,6 +80,10 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .lang-btn{padding:4px 12px;border:1px solid var(--line);border-radius:8px;
   background:transparent;color:var(--muted);font-family:'Exo 2',sans-serif;
   font-size:12px;font-weight:800;cursor:pointer;transition:.12s;}
+.lang-flag{display:inline-block;width:18px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px;box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 0 0 1px rgba(0,0,0,.18);background-repeat:no-repeat;background-position:center;background-size:cover;}
+.flag-sv{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Crect width='60' height='40' fill='%23006aa7'/%3E%3Crect x='16' width='8' height='40' fill='%23fecc00'/%3E%3Crect y='16' width='60' height='8' fill='%23fecc00'/%3E%3C/svg%3E");}
+.flag-de{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Crect width='60' height='13.34' y='0' fill='%23000000'/%3E%3Crect width='60' height='13.33' y='13.34' fill='%23dd0000'/%3E%3Crect width='60' height='13.33' y='26.67' fill='%23ffce00'/%3E%3C/svg%3E");}
+.flag-gb{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 40'%3E%3Crect width='60' height='40' fill='%23012169'/%3E%3Cpath d='M0 0L60 40M60 0L0 40' stroke='%23fff' stroke-width='8'/%3E%3Cpath d='M0 0L60 40M60 0L0 40' stroke='%23c8102e' stroke-width='4'/%3E%3Cpath d='M30 0V40M0 20H60' stroke='%23fff' stroke-width='14'/%3E%3Cpath d='M30 0V40M0 20H60' stroke='%23c8102e' stroke-width='8'/%3E%3C/svg%3E");}
 .lang-btn:hover{border-color:var(--accent);color:var(--text)}
 .lang-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
 .menu-sub{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.1em;text-transform:uppercase}
@@ -263,20 +267,26 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 #medalsScreen,#hsScreen,#skinsScreen,#statsScreen{justify-content:flex-start;padding-top:12px;overflow-y:auto;}
 
 /* ── ORMSKINN-SIDA ── */
-.skins-grid{display:flex;flex-wrap:wrap;gap:10px;width:100%;max-width:640px;padding-bottom:24px;}
-.skin-card{display:flex;align-items:center;gap:10px;padding:10px 12px;
-  border:2px solid var(--line);border-radius:12px;background:var(--panel);
-  cursor:pointer;transition:.15s;flex:1;min-width:195px;max-width:310px;position:relative;}
-.skin-card:hover:not(.locked){border-color:var(--accent);}
-.skin-card.active{border-color:var(--accent);background:rgba(0,255,136,.1);box-shadow:0 0 12px rgba(0,255,136,.2);}
-.skin-card.locked{opacity:.45;cursor:default;}
-.skin-preview{width:64px;height:22px;border-radius:6px;flex-shrink:0;border:1px solid rgba(255,255,255,.15);}
-.skin-info{flex:1;min-width:0;}
-.skin-name{font-size:12px;font-weight:800;color:var(--text);}
-.skin-unlock{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4;}
-.skin-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);
-  font-size:9px;font-weight:800;color:var(--accent);letter-spacing:.06em;}
-.skin-lock-badge{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:15px;}
+.skins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;width:100%;max-width:700px;padding-bottom:28px;}
+.skin-card{display:flex;flex-direction:column;padding:0;overflow:hidden;
+  border:2px solid var(--line);border-radius:14px;background:var(--panel);
+  cursor:pointer;transition:border-color .15s,box-shadow .15s,transform .12s;position:relative;min-width:0;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;}
+.skin-card:hover:not(.locked){border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4);}
+.skin-card.active{border-color:var(--accent);box-shadow:0 0 18px rgba(0,255,136,.28);}
+.skin-card.locked{opacity:.38;cursor:default;}
+.skin-canvas-wrap{position:relative;width:100%;overflow:hidden;background:rgba(0,0,0,.35);}
+.skin-canvas-wrap canvas{display:block;width:100%;height:72px;}
+.skin-active-bar{position:absolute;top:6px;left:6px;
+  font-family:'Orbitron',monospace;font-size:8px;font-weight:900;letter-spacing:.1em;
+  color:#060c08;background:var(--accent);border-radius:5px;padding:2px 7px;line-height:1.6;}
+.skin-lock-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:22px;background:rgba(0,0,0,.18);}
+.skin-info{padding:9px 10px 10px;flex:1;}
+.skin-name{font-size:12px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.skin-unlock{font-size:9px;color:var(--muted);margin-top:3px;line-height:1.45;}
+.skin-badge{display:none;}
+.skin-lock-badge{display:none;}
 .medals-page-top{display:flex;align-items:center;gap:12px;margin-bottom:16px;width:100%;}
 .back-btn{padding:7px 14px;border:1px solid var(--line);border-radius:10px;
   background:var(--panel);color:var(--muted);font-family:'Exo 2',sans-serif;
@@ -391,9 +401,9 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 <div class="overlay" id="nameModal">
   <div class="ov-card">
     <div class="lang-row">
-      <button class="lang-btn sel" id="btnLangSv" data-lang="sv">🇸🇪 Svenska</button>
-      <button class="lang-btn" id="btnLangEn" data-lang="en">🇬🇧 English</button>
-      <button class="lang-btn" id="btnLangDe" data-lang="de">🇩🇪 Deutsch</button>
+      <button class="lang-btn sel" id="btnLangSv" data-lang="sv"><span class="lang-flag flag-sv" aria-hidden="true"></span>Svenska</button>
+      <button class="lang-btn" id="btnLangEn" data-lang="en"><span class="lang-flag flag-gb" aria-hidden="true"></span>English</button>
+      <button class="lang-btn" id="btnLangDe" data-lang="de"><span class="lang-flag flag-de" aria-hidden="true"></span>Deutsch</button>
     </div>
     <div class="ov-title" id="nameModalTitle" style="font-size:30px;margin-bottom:8px">👋 Hej!</div>
     <div class="ov-meta" id="nameModalSub">Vad heter du? Ditt namn sparas på din dator.</div>
@@ -720,6 +730,31 @@ function pickLangText(sv,en,de=en){
   if(lang==='de')return de ?? en ?? sv;
   return en ?? sv;
 }
+function getRangeLabel(range){
+  const key='rangeW'+range;
+  const label=t(key);
+  if(label!==key)return label;
+  return pickLangText(`upp till ${range}`,`up to ${range}`,`bis ${range}`);
+}
+function getTablesShortLabel(){
+  return pickLangText('Tabeller','Tables','Einmaleins');
+}
+function pickDefText(def,baseKey,deMap,svKey){
+  const lang=getLang();
+  if(lang==='de'&&deMap&&deMap[def.id]&&deMap[def.id][baseKey])return deMap[def.id][baseKey];
+  if(lang!=='sv'){
+    const enKey=baseKey+'En';
+    if(def[enKey])return def[enKey];
+  }
+  if(svKey&&def[svKey])return def[svKey];
+  return def[baseKey]||'';
+}
+function pickMedalCategory(def){
+  const lang=getLang();
+  if(lang==='de')return MEDAL_CAT_DE[def.cat]||def.catEn||def.cat;
+  if(lang!=='sv'&&def.catEn)return def.catEn;
+  return def.cat;
+}
 function setLang(lang){
   localStorage.setItem(LANG_KEY,lang);
   updateLangButtons(lang);
@@ -804,6 +839,8 @@ function applyLang(){
   if($('statsBtnLabel'))$('statsBtnLabel').textContent=t('statsBtn');
   if($('statsTitleEl'))$('statsTitleEl').textContent=t('statsTitle');
   if($('statsBackText'))$('statsBackText').textContent=t('statsBack');
+  if($('btnPracticeList'))$('btnPracticeList').textContent='📚 '+pickLangText('Öva på dessa','Practice these','Übe diese');
+  if($('btnPracticeClose'))$('btnPracticeClose').textContent=pickLangText('Stäng','Close','Schließen');
   // Inställningssidan
   if($('settingsTitleEl'))$('settingsTitleEl').textContent=t('settingsTitle');
   if($('settingsBtnLabel'))$('settingsBtnLabel').textContent=pickLangText('Inställningar','Settings','Einstellungen');
@@ -827,6 +864,7 @@ function applyLang(){
   // Speed description (uppdatera med nuvarande speedMode)
   const _sdMap={none:t('speedDescNone'),score:t('speedDescScore'),length:t('speedDescLength')};
   if($('speedDesc'))$('speedDesc').textContent=_sdMap[speedMode]||'';
+  updateMenuSettingsSummary();
   renderHS();updateMedalNavBtn();
 }
 
@@ -916,15 +954,34 @@ const SKINS_DEF=[
   {id:'kunglig', emoji:'👑', name:'Kunglig', nameEn:'Royal',
    free:false, unlockMedal:'p5000',
    descSv:'Lås upp: Nå 5 000 poäng', descEn:'Unlock: Reach 5,000 points',
-   headA:'#aaccff', headB:'#002299', shadow:'#3366ff',
-   bodyFn:(a)=>`rgba(${Math.floor(20+a*40)},${Math.floor(40+a*70)},${Math.floor(130+a*90)},${Math.min(1,a+.05)})`,
-   previewCss:'linear-gradient(135deg,#aaccff,#002299)'},
+   headA:'#ffd966', headB:'#3a0a55', shadow:'#9966dd',
+   bodyFn:(a,i)=>{
+     const v=Math.sin(i*0.4)*0.08;
+     return `rgba(${Math.floor(70+a*55+v*30)},${Math.floor(20+a*40)},${Math.floor(115+a*65+v*20)},${Math.min(1,a+.05)})`;
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     // Guldtrådsdiagonaler (tjockare så de syns på webbens 34px-celler)
+     cx.strokeStyle=`rgba(${Math.floor(220+a*30)},${Math.floor(180+a*30)},${Math.floor(60+a*40)},${0.4+a*0.25})`;
+     cx.lineWidth=1.4;
+     cx.beginPath();
+     cx.moveTo(px+s*0.15,py+s*0.95);cx.lineTo(px+s*0.45,py+s*0.05);
+     cx.moveTo(px+s*0.55,py+s*0.95);cx.lineTo(px+s*0.85,py+s*0.05);
+     cx.stroke();
+     // Heraldisk guld-knapp i mitten
+     cx.fillStyle=`rgba(255,215,80,${0.75+a*0.2})`;
+     cx.beginPath();cx.arc(px+s*0.5,py+s*0.5,s*0.09,0,Math.PI*2);cx.fill();
+     cx.strokeStyle=`rgba(140,90,15,${0.85+a*0.1})`;
+     cx.lineWidth=1;
+     cx.beginPath();cx.arc(px+s*0.5,py+s*0.5,s*0.09,0,Math.PI*2);cx.stroke();
+   },
+   previewCss:'linear-gradient(135deg,#ffd966 0%,#7a2299 35%,#3a0a55 100%)'},
   {id:'hv71', emoji:'🏒', name:'HV71', nameEn:'HV71',
    free:false, unlockMedal:'snabbaskrillor',
    descSv:'Lås upp: Snabba Skrillor-medaljen', descEn:'Unlock: Fast Skates medal',
-   headA:'#ffffff', headB:'#12489c', shadow:'#f3d03f',
-   bodyFn:(a,i)=>{const t=Math.floor(i||0)%4;return t===0?`rgba(${Math.floor(18+a*30)},${Math.floor(73+a*42)},${Math.floor(166+a*35)},${Math.min(1,a+.06)})`:t===1?`rgba(${Math.floor(9+a*18)},${Math.floor(44+a*28)},${Math.floor(120+a*30)},${Math.min(1,a+.06)})`:t===2?`rgba(${Math.floor(30+a*26)},${Math.floor(95+a*34)},${Math.floor(194+a*28)},${Math.min(1,a+.06)})`:`rgba(${Math.floor(20+a*22)},${Math.floor(63+a*24)},${Math.floor(150+a*26)},${Math.min(1,a+.06)})`;},
-   previewCss:'linear-gradient(135deg,#f3d03f,#ffffff,#1a5dc5,#0b2f72)',
+   headA:'#ffffff', headB:'#1a3d80', shadow:'#ffcb01',
+   bodyFn:(a)=>`rgba(${Math.floor(40+a*40)},${Math.floor(80+a*60)},${Math.floor(180+a*45)},${Math.min(1,a+.08)})`,
+   previewCss:'linear-gradient(135deg,#ffffff,#1a3d80 38%,#ffcb01 62%,#1a3d80)',
    hv71:true},
   {id:'lava', emoji:'🌋', name:'Lava', nameEn:'Lava',
    free:false, unlockMedal:'div500',
@@ -949,8 +1006,24 @@ const SKINS_DEF=[
    free:false, unlockMedal:'c100',
    descSv:'Lås upp: Combo 100 i rad', descEn:'Unlock: Combo 100 in a row',
    headA:'#ffffff', headB:'#dd0022', shadow:'#ff4455',
-   bodyFn:(a,i)=>{const even=Math.floor(i||0)%2===0;return even?`rgba(220,0,30,${Math.min(1,a+.1)})`:`rgba(255,255,255,${Math.min(1,a+.1)})`;},
-   previewCss:'repeating-linear-gradient(135deg,#dd0022 0px,#dd0022 8px,#ffffff 8px,#ffffff 16px)'},
+   bodyFn:(a)=>`rgba(255,255,255,${Math.min(1,a+.08)})`,
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     // Diagonal candy-cane stripes — 3 thick red bands at 45°
+     cx.save();
+     cx.strokeStyle=`rgba(210,0,28,${0.82+a*0.15})`;
+     cx.lineWidth=s*0.32;
+     cx.lineCap='butt';
+     const offsets=[-s*0.15, s*0.35, s*0.85];
+     offsets.forEach(off=>{
+       cx.beginPath();
+       cx.moveTo(px+off, py-s*0.1);
+       cx.lineTo(px+off+s*1.1, py+s*1.1);
+       cx.stroke();
+     });
+     cx.restore();
+   },
+   previewCss:'repeating-linear-gradient(135deg,#dd0022 0px,#dd0022 10px,#ffffff 10px,#ffffff 20px)'},
   {id:'galax', emoji:'🌌', name:'Galax', nameEn:'Galaxy',
    free:false, unlockMedal:'genius',
    descSv:'Lås upp: Mattegeni-medaljen', descEn:'Unlock: Math Genius medal',
@@ -998,33 +1071,218 @@ const SKINS_DEF=[
    bodyFn:(a,i)=>{const t=Math.floor(i||0)%4;return t===0?`rgba(${Math.floor(235+a*20)},${Math.floor(245+a*10)},255,${Math.min(1,a+.06)})`:t===1?`rgba(${Math.floor(110+a*50)},${Math.floor(210+a*40)},255,${Math.min(1,a+.06)})`:t===2?`rgba(${Math.floor(35+a*35)},${Math.floor(110+a*55)},${Math.floor(220+a*35)},${Math.min(1,a+.06)})`:`rgba(${Math.floor(255-a*8)},${Math.floor(230+a*12)},${Math.floor(90+a*15)},${Math.min(1,a+.06)})`;},
    previewCss:'linear-gradient(135deg,#081127,#66d8ff,#f5fbff,#ffe76a)',
    inferno:true},
+  {id:'smaragd', emoji:'💚', name:'Smaragd', nameEn:'Emerald',
+   free:false, unlockMedal:'p500',
+   descSv:'Lås upp: Nå 500 poäng', descEn:'Unlock: Reach 500 points',
+   headA:'#c2ffe3', headB:'#004d30', shadow:'#5eff9e',
+   bodyFn:(a)=>`rgba(${Math.floor(20+a*70)},${Math.floor(160+a*80)},${Math.floor(100+a*80)},${Math.min(1,a+.05)})`,
+   overlayFn:(cx,px,py,s,i,a)=>{
+     cx.strokeStyle=`rgba(255,255,255,${0.18+a*0.2})`;
+     cx.lineWidth=1.2;
+     cx.beginPath();
+     cx.moveTo(px+s*0.15,py+s*0.8);cx.lineTo(px+s*0.55,py+s*0.2);
+     cx.moveTo(px+s*0.5,py+s*0.9);cx.lineTo(px+s*0.85,py+s*0.4);
+     cx.stroke();
+   },
+   previewCss:'linear-gradient(135deg,#c2ffe3,#00a864,#004d30)'},
+  {id:'skog', emoji:'🌲', name:'Skog', nameEn:'Forest',
+   free:false, unlockMedal:'len15',
+   descSv:'Lås upp: Stor orm-medaljen (längd 15)', descEn:'Unlock: Big Snake medal (length 15)',
+   headA:'#b8cc94', headB:'#2d3f14', shadow:'#6b8e4e',
+   bodyFn:(a)=>`rgba(${Math.floor(50+a*55)},${Math.floor(95+a*60)},${Math.floor(30+a*35)},${Math.min(1,a+.05)})`,
+   overlayFn:(cx,px,py,s,i,a)=>{
+     const h=(i*71+13)%100/100, v=(i*41+7)%100/100, w=(i*97+3)%100/100;
+     cx.fillStyle=`rgba(160,210,100,${0.45+a*0.3})`;
+     cx.beginPath();cx.arc(px+s*(0.2+h*0.5),py+s*(0.2+v*0.5),s*0.09,0,Math.PI*2);cx.fill();
+     cx.fillStyle=`rgba(110,175,70,${0.4+a*0.3})`;
+     cx.beginPath();cx.arc(px+s*(0.6-h*0.3),py+s*(0.5+w*0.3),s*0.07,0,Math.PI*2);cx.fill();
+     cx.fillStyle=`rgba(80,50,20,${0.5+a*0.25})`;
+     cx.beginPath();cx.arc(px+s*(0.4+w*0.4),py+s*(0.7-v*0.4),s*0.05,0,Math.PI*2);cx.fill();
+   },
+   previewCss:'linear-gradient(135deg,#b8cc94,#3d5a1e,#5a3c1e)'},
+  {id:'tiger', emoji:'🐅', name:'Tiger', nameEn:'Tiger',
+   free:false, unlockMedal:'c10',
+   descSv:'Lås upp: Combo 10 i rad', descEn:'Unlock: Combo 10 in a row',
+   headA:'#ffd89a', headB:'#b34700', shadow:'#ff8833',
+   bodyFn:(a)=>`rgba(${Math.floor(230+a*25)},${Math.floor(120+a*50)},${Math.floor(30+a*30)},${Math.min(1,a+.05)})`,
+   overlayFn:(cx,px,py,s,i,a)=>{
+     cx.strokeStyle=`rgba(15,8,3,${0.88+a*0.1})`;
+     cx.lineCap='round';
+     cx.lineWidth=s*0.11;
+     for(let k=0;k<3;k++){
+       const baseY=py+s*(0.22+k*0.28);
+       const jitter=Math.sin(i*0.8+k*1.3)*s*0.035;
+       cx.beginPath();
+       cx.moveTo(px-s*0.05,baseY+jitter);
+       cx.quadraticCurveTo(px+s*0.25,baseY-s*0.08+jitter,px+s*0.5,baseY+jitter*0.5);
+       cx.quadraticCurveTo(px+s*0.75,baseY+s*0.08+jitter*0.3,px+s*1.05,baseY+jitter);
+       cx.stroke();
+     }
+   },
+   previewCss:'repeating-linear-gradient(110deg,#ff8833 0px,#ff8833 7px,#1a0f05 7px,#1a0f05 14px)'},
+  {id:'hav', emoji:'🌊', name:'Hav', nameEn:'Ocean',
+   free:false, unlockMedal:'len35',
+   descSv:'Lås upp: Dinosarieorm-medaljen (längd 35)', descEn:'Unlock: Dinosaur Snake medal (length 35)',
+   headA:'#9be8d6', headB:'#0a3b6b', shadow:'#4ae8c9',
+   bodyFn:(a)=>`rgba(${Math.floor(10+a*75)},${Math.floor(80+a*135)},${Math.floor(140+a*100)},${Math.min(1,a+.05)})`,
+   overlayFn:(cx,px,py,s,i,a)=>{
+     cx.strokeStyle=`rgba(180,245,240,${0.3+a*0.35})`;
+     cx.lineWidth=1.3;cx.lineCap='round';
+     for(let k=0;k<3;k++){
+       const y=py+s*(0.25+k*0.28)+Math.sin(i*0.7+k)*s*0.04;
+       cx.beginPath();
+       cx.moveTo(px+s*0.1,y);
+       cx.quadraticCurveTo(px+s*0.5,y-s*0.08,px+s*0.9,y);
+       cx.stroke();
+     }
+   },
+   previewCss:'linear-gradient(135deg,#9be8d6,#1a8eb5,#0a3b6b)'},
+  {id:'drake', emoji:'🐉', name:'Drake', nameEn:'Dragon',
+   free:false, unlockMedal:'len50',
+   descSv:'Lås upp: Världsrekordsorm-medaljen (längd 50)', descEn:'Unlock: World Record Snake medal (length 50)',
+   headA:'#ffe588', headB:'#5c0410', shadow:'#e6b34a',
+   bodyFn:(a)=>`rgba(${Math.floor(130+a*50)},${Math.floor(15+a*25)},${Math.floor(20+a*20)},${Math.min(1,a+.05)})`,
+   overlayFn:(cx,px,py,s,i,a)=>{
+     const rows=[[0,0.15,0.5,0.85],[1,0.3,0.7],[2,0.15,0.5,0.85]];
+     rows.forEach(r=>{
+       const row=r[0], cy=py+s*(0.2+row*0.3);
+       for(let k=1;k<r.length;k++){
+         const cxp=px+s*r[k];
+         cx.fillStyle=`rgba(${Math.floor(200+a*30)},${Math.floor(150+a*40)},${Math.floor(50+a*30)},${0.8+a*0.15})`;
+         cx.beginPath();cx.arc(cxp,cy,s*0.16,Math.PI,0);cx.closePath();cx.fill();
+         cx.strokeStyle=`rgba(90,30,10,${0.7+a*0.2})`;
+         cx.lineWidth=1;
+         cx.beginPath();cx.arc(cxp,cy,s*0.16,Math.PI,0);cx.stroke();
+       }
+     });
+   },
+   previewCss:'linear-gradient(135deg,#ffe588,#8b0a1a,#5c0410)'},
+  {id:'stjarnhimmel', emoji:'✨', name:'Stjärnhimmel', nameEn:'Starry Sky',
+   free:false, unlockMedal:'c75',
+   descSv:'Lås upp: Combo 75 i rad', descEn:'Unlock: Combo 75 in a row',
+   headA:'#e0d6ff', headB:'#0f0a2a', shadow:'#9980ff',
+   bodyFn:(a)=>`rgba(${Math.floor(20+a*30)},${Math.floor(15+a*30)},${Math.floor(55+a*50)},${Math.min(1,a+.08)})`,
+   overlayFn:(cx,px,py,s,i,a)=>{
+     const twinkle=(performance.now()/400+i*0.7)%(Math.PI*2);
+     const stars=[
+       [0.2,0.3,1.0],[0.7,0.25,0.7],[0.4,0.6,1.2],
+       [0.85,0.7,0.8],[0.15,0.8,0.6],[0.55,0.85,0.9]
+     ];
+     stars.forEach((st,k)=>{
+       const jx=((i*(k+1)*37)%100)/100-0.5;
+       const jy=((i*(k+3)*29)%100)/100-0.5;
+       const tw=0.55+0.45*Math.sin(twinkle+k*1.3);
+       const x=px+s*(st[0]+jx*0.15);
+       const y=py+s*(st[1]+jy*0.15);
+       const r=s*0.04*st[2];
+       cx.fillStyle=`rgba(220,210,255,${0.2*tw*a})`;
+       cx.beginPath();cx.arc(x,y,r*2.5,0,Math.PI*2);cx.fill();
+       cx.fillStyle=`rgba(255,252,230,${(0.85+a*0.1)*tw})`;
+       cx.beginPath();cx.arc(x,y,r,0,Math.PI*2);cx.fill();
+     });
+   },
+   previewCss:'radial-gradient(circle at 30% 40%,#e0d6ff 0%,transparent 8%),radial-gradient(circle at 70% 70%,#fff 0%,transparent 6%),linear-gradient(135deg,#2a1a5a,#0f0a2a)'},
 ];
+
+const MEDAL_CAT_DE={
+  '🏅 Poäng':'🏅 Punkte',
+  '🔢 Räknesätt':'🔢 Rechenarten',
+  '🔥 Combo':'🔥 Serie',
+  '🐍 Orm':'🐍 Schlange',
+  '⭐ Special':'⭐ Spezial'
+};
+const MEDAL_I18N_DE={
+  p500:{name:'500 Punkte',desc:'Erreiche 500 Punkte in einem Spiel'},
+  p2000:{name:'2.000 Punkte',desc:'Erreiche 2.000 Punkte in einem Spiel'},
+  p5000:{name:'5.000 Punkte',desc:'Erreiche 5.000 Punkte in einem Spiel'},
+  p7500:{name:'7.500 Punkte',desc:'Erreiche 7.500 Punkte in einem Spiel'},
+  p10000:{name:'10.000 Punkte',desc:'Erreiche 10.000 Punkte in einem Spiel'},
+  p20000:{name:'20.000 Punkte',desc:'Erreiche 20.000 Punkte in einem Spiel'},
+  add1000:{name:'Additionsheld',desc:'Verdiene 1.000 Punkte bei Additionsaufgaben (über alle Spiele)'},
+  sub1000:{name:'Subtraktionsheld',desc:'Verdiene 1.000 Punkte bei Subtraktionsaufgaben (über alle Spiele)'},
+  mul500:{name:'Multiplikationsmeister',desc:'Verdiene 1.000 Punkte bei Multiplikationsaufgaben (über alle Spiele)'},
+  div500:{name:'Divisionsmeister',desc:'Verdiene 1.000 Punkte bei Divisionsaufgaben (über alle Spiele)'},
+  c5:{name:'Heizt sich auf!',desc:'5 richtige in Folge'},
+  c10:{name:'Unschlagbar',desc:'10 richtige in Folge'},
+  c15:{name:'Blitzfinger',desc:'15 richtige in Folge'},
+  c20:{name:'Im Flow!',desc:'20 richtige in Folge'},
+  c25:{name:'Scharfschütze',desc:'25 richtige in Folge'},
+  c30:{name:'Raketenstart',desc:'30 richtige in Folge'},
+  c50:{name:'Löwenherz',desc:'50 richtige in Folge'},
+  c75:{name:'Sternenstatus',desc:'75 richtige in Folge'},
+  c100:{name:'HUNDERT IN FOLGE!',desc:'100 richtige in Folge — legendär!'},
+  len15:{name:'Große Schlange',desc:'Erreiche Länge 15'},
+  len25:{name:'Riesenschlange!',desc:'Erreiche Länge 25'},
+  len35:{name:'Dinoschlange!',desc:'Erreiche Länge 35'},
+  len50:{name:'Weltrekord-Schlange!',desc:'Erreiche Länge 50 — fast unmöglich!'},
+  len75:{name:'Legendäre Schlange!',desc:'Erreiche Länge 75 — bist du überhaupt ein Mensch?!'},
+  mytisk:{name:'Mythische Schlange!',desc:'Erreiche Länge 100 — unglaublich!'},
+  osviklig:{name:'Fehlerfrei',desc:'10 richtige Antworten, ohne ein einziges Leben zu verlieren'},
+  genius:{name:'Mathegenie',desc:'1.000 Punkte in Kl. 6 mit allen 4 Rechenarten'},
+  snabbaskrillor:{name:'Schnelle Kufen',desc:'Erreiche 5.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
+  fartdemon:{name:'Geschwindigkeitsdämon',desc:'Erreiche 10.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
+  overhettad:{name:'Überhitzt',desc:'Erreiche 15.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
+  adrenalin:{name:'Adrenalinmeister',desc:'Erreiche 20.000 Punkte mit aktiviertem Geschwindigkeitsmodus'}
+};
+const SKIN_I18N_DE={
+  klassisk:{name:'Klassisch'},
+  isbla:{name:'Eisblau'},
+  rosa:{name:'Rosa'},
+  lila:{name:'Lila'},
+  regnbage:{name:'Regenbogen',desc:'Freischalten: 25er-Serie'},
+  guld:{name:'Gold',desc:'Freischalten: 2.000 Punkte erreichen'},
+  kunglig:{name:'Königlich',desc:'Freischalten: 5.000 Punkte erreichen'},
+  hv71:{name:'HV71',desc:'Freischalten: Medaille „Schnelle Kufen“'},
+  lava:{name:'Lava',desc:'Freischalten: Divisionsmeister-Medaille'},
+  eld:{name:'Feuer',desc:'Freischalten: 50er-Serie'},
+  obsidian:{name:'Obsidian',desc:'Freischalten: 10.000 Punkte erreichen'},
+  polkagris:{name:'Zuckerstange',desc:'Freischalten: 100er-Serie'},
+  galax:{name:'Galaxie',desc:'Freischalten: Mathegenie-Medaille'},
+  vattenmelon:{name:'Wassermelone',desc:'Freischalten: Medaille „Fehlerfrei“'},
+  aurora:{name:'Aurora',desc:'Freischalten: 7.500 Punkte erreichen'},
+  radioaktiv:{name:'Radioaktiv',desc:'Freischalten: Geschwindigkeitsdämon-Medaille'},
+  blackpink:{name:'Black Pink',desc:'Freischalten: 20.000 Punkte erreichen'},
+  plasma:{name:'Plasma',desc:'Freischalten: Medaille „Überhitzt“'},
+  inferno:{name:'Blitz',desc:'Freischalten: Adrenalinmeister-Medaille'},
+  smaragd:{name:'Smaragd',desc:'Freischalten: 500 Punkte erreichen'},
+  skog:{name:'Wald',desc:'Freischalten: Medaille „Große Schlange“ (Länge 15)'},
+  tiger:{name:'Tiger',desc:'Freischalten: 10er-Serie'},
+  hav:{name:'Ozean',desc:'Freischalten: Medaille „Dinoschlange“ (Länge 35)'},
+  drake:{name:'Drache',desc:'Freischalten: Weltrekord-Schlange (Länge 50)'},
+  stjarnhimmel:{name:'Sternenhimmel',desc:'Freischalten: 75er-Serie'}
+};
 
 
 /* ═══════════════════════════════════════
    TEMAN & ÅRSTIDER
    ═══════════════════════════════════════ */
 const SKIN_THEMES={
-  'klassisk': {bgA:'#060c08',bgB:'#030a05',gridColor:'rgba(0,255,100,.033)',particles:null,   headAcc:null},
+  'klassisk': {bgA:'#060c08',bgB:'#030a05',gridColor:'rgba(0,255,100,.033)',particles:'pollen',headAcc:null},
   'isbla':    {bgA:'#03070f',bgB:'#020510',gridColor:'rgba(80,160,255,.04)', particles:'snow',  headAcc:null},
-  'rosa':     {bgA:'#0f0308',bgB:'#0a0206',gridColor:'rgba(255,80,160,.04)', particles:null,   headAcc:null},
-  'lila':     {bgA:'#07030f',bgB:'#04020a',gridColor:'rgba(140,60,255,.04)', particles:null,   headAcc:null},
+  'rosa':     {bgA:'#0f0308',bgB:'#0a0206',gridColor:'rgba(255,80,160,.04)', particles:'hearts',headAcc:null},
+  'lila':     {bgA:'#07030f',bgB:'#04020a',gridColor:'rgba(140,60,255,.04)', particles:'stars', headAcc:null},
   'regnbage': {bgA:'#050508',bgB:'#030308',gridColor:'rgba(180,130,255,.04)',particles:'rainbow',headAcc:null},
-  'guld':     {bgA:'#0f0900',bgB:'#080500',gridColor:'rgba(255,190,0,.04)',  particles:null,   headAcc:null},
-  'kunglig':  {bgA:'#03050f',bgB:'#02030a',gridColor:'rgba(60,100,255,.05)', particles:'stars', headAcc:'crown'},
-  'hv71':     {bgA:'#071637',bgB:'#030b1d',gridColor:'rgba(243,208,63,.05)', particles:'stars', headAcc:null},
+  'guld':     {bgA:'#0f0900',bgB:'#080500',gridColor:'rgba(255,190,0,.04)',  particles:'embers',headAcc:null},
+  'kunglig':  {bgA:'#0a0314',bgB:'#05010a',gridColor:'rgba(180,130,255,.05)', particles:'stars', headAcc:'crown'},
+  'hv71':     {bgA:'#0a1630',bgB:'#050d1b',gridColor:'rgba(255,203,1,.035)', particles:'stars', headAcc:null},
   'lava':     {bgA:'#0f0200',bgB:'#080100',gridColor:'rgba(255,80,0,.05)',   particles:'sparks',headAcc:null},
   'eld':      {bgA:'#0f0400',bgB:'#0a0200',gridColor:'rgba(255,90,0,.04)',   particles:'sparks',headAcc:null},
   'obsidian': {bgA:'#020202',bgB:'#010101',gridColor:'rgba(180,180,200,.03)',particles:'stars', headAcc:null},
   'diamant':  {bgA:'#02070f',bgB:'#01040a',gridColor:'rgba(80,180,255,.05)', particles:'stars', headAcc:null},
   'galax':    {bgA:'#050915',bgB:'#02040d',gridColor:'rgba(210,190,120,.045)',particles:'stars', headAcc:null},
   'aurora':   {bgA:'#010a08',bgB:'#010705',gridColor:'rgba(0,255,180,.04)',  particles:'stars',headAcc:null},
-  'radioaktiv':{bgA:'#071004',bgB:'#040802',gridColor:'rgba(170,255,0,.05)', particles:null,   headAcc:null},
-  'blackpink':{bgA:'#090209',bgB:'#040104',gridColor:'rgba(255,90,190,.045)',particles:null,   headAcc:null},
+  'radioaktiv':{bgA:'#071004',bgB:'#040802',gridColor:'rgba(170,255,0,.05)', particles:'pollen',headAcc:null},
+  'blackpink':{bgA:'#090209',bgB:'#040104',gridColor:'rgba(255,90,190,.045)',particles:'hearts',headAcc:null},
   'plasma':   {bgA:'#07051a',bgB:'#030110',gridColor:'rgba(150,120,255,.05)', particles:'stars',headAcc:null},
   'inferno':  {bgA:'#030914',bgB:'#01050a',gridColor:'rgba(130,210,255,.05)', particles:'stars',headAcc:null},
-  'polkagris':{bgA:'#0f0003',bgB:'#090002',gridColor:'rgba(255,80,100,.05)', particles:null,   headAcc:null},
-  'vattenmelon':{bgA:'#010f02',bgB:'#010802',gridColor:'rgba(255,80,100,.04)',particles:null,   headAcc:null},
+  'polkagris':{bgA:'#0f0003',bgB:'#090002',gridColor:'rgba(255,80,100,.05)', particles:'hearts',headAcc:null},
+  'vattenmelon':{bgA:'#010f02',bgB:'#010802',gridColor:'rgba(255,80,100,.04)',particles:'pollen',headAcc:null},
+  'smaragd':  {bgA:'#02100a',bgB:'#010806',gridColor:'rgba(80,255,180,.04)', particles:'pollen',headAcc:null},
+  'skog':     {bgA:'#050a02',bgB:'#030601',gridColor:'rgba(140,200,100,.04)', particles:'leaves',headAcc:null},
+  'tiger':    {bgA:'#0a0502',bgB:'#050201',gridColor:'rgba(255,150,60,.04)',  particles:'embers',headAcc:null},
+  'hav':      {bgA:'#010814',bgB:'#01050a',gridColor:'rgba(80,200,220,.045)', particles:'bubbles',headAcc:null},
+  'drake':    {bgA:'#100200',bgB:'#080100',gridColor:'rgba(255,180,60,.04)',  particles:'dragonfire',headAcc:null},
+  'stjarnhimmel':{bgA:'#050315',bgB:'#02010a',gridColor:'rgba(180,160,255,.05)',particles:'shooting',headAcc:null},
 };
 const SEASONAL_THEMES={
   halloween:{bgA:'#0f0400',bgB:'#050100',gridColor:'rgba(255,110,0,.05)',particles:'bats',  headAcc:'pumpkin',label:'🎃'},
@@ -1053,14 +1311,34 @@ function getActiveTheme(){
   if(s)return{...SEASONAL_THEMES[s],isSeasonal:true,seasonKey:s};
   return SKIN_THEMES[loadActiveSkin()]||SKIN_THEMES['klassisk'];
 }
+// Lista av valbara huvudbonader. 'auto' = följ skinnet (krona på kunglig osv).
+// 'off' = inga bonader. Övriga = tvinga den specifika bonaden oavsett skinn.
+const HEAD_ACC_OPTIONS=[
+  {id:'auto',   emoji:'✨', label:'Auto (följ skinn)',  labelEn:'Auto (follow skin)', labelDe:'Automatisch'},
+  {id:'off',    emoji:'🚫', label:'Av',                 labelEn:'Off',                labelDe:'Aus'},
+  {id:'crown',  emoji:'👑', label:'Krona',              labelEn:'Crown',              labelDe:'Krone'},
+  {id:'tophat', emoji:'🎩', label:'Cylinder',           labelEn:'Top hat',            labelDe:'Zylinder'},
+  {id:'cowboy', emoji:'🤠', label:'Cowboyhatt',         labelEn:'Cowboy hat',         labelDe:'Cowboyhut'},
+  {id:'flower', emoji:'🌸', label:'Blomma',             labelEn:'Flower',             labelDe:'Blume'},
+  {id:'captain',emoji:'⚓', label:'Sjökaptenmössa',     labelEn:'Captain hat',        labelDe:'Kapitänsmütze'},
+  {id:'beanie', emoji:'🧢', label:'Mössa',              labelEn:'Cap',                labelDe:'Mütze'},
+  {id:'glasses',emoji:'🤓', label:'Glasögon',           labelEn:'Glasses',            labelDe:'Brille'},
+];
 function loadHeadAccessory(){
   const v=localStorage.getItem(ACTIVE_HEAD_KEY);
-  return v===null?true:v==='true';
+  if(v===null)return 'auto';
+  if(v==='true')return 'auto';
+  if(v==='false')return 'off';
+  return v;
 }
 function saveHeadAccessory(v){localStorage.setItem(ACTIVE_HEAD_KEY,String(v));}
-function toggleHeadAccessory(){
-  const cur=loadHeadAccessory();saveHeadAccessory(!cur);renderSkinsPage();
+function cycleHeadAccessory(){
+  const cur=loadHeadAccessory();
+  const idx=HEAD_ACC_OPTIONS.findIndex(o=>o.id===cur);
+  const next=HEAD_ACC_OPTIONS[(idx+1)%HEAD_ACC_OPTIONS.length];
+  saveHeadAccessory(next.id);renderSkinsPage();
 }
+function toggleHeadAccessory(){cycleHeadAccessory();}
 
 
 /* ═══════════════════════════════════════
@@ -1188,11 +1466,16 @@ function showSkinToast(def){
   const c=document.getElementById('medalToast');
   const el=document.createElement('div');el.className='medal-toast-item';
   el.style.borderColor='rgba(255,215,0,.55)';
-  const name=getLang()!=='sv'&&def.nameEn?def.nameEn:def.name;
+  el.style.animation='none';
+  const name=pickDefText(def,'name',SKIN_I18N_DE);
   el.innerHTML=`<div class="mt-emoji">${def.emoji}</div>
     <div class="mt-text"><div class="mt-label">🎨 ${t('skinUnlockedToast')}</div>
     <div class="mt-name">${name}</div></div>`;
-  c.appendChild(el);setTimeout(()=>el.remove(),3200);
+  c.appendChild(el);
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{ el.style.animation=''; });
+  });
+  setTimeout(()=>el.remove(),3200);
 }
 function updateSkinNavBtn(){
   const unlocked=SKINS_DEF.filter(s=>isSkinUnlocked(s.id)).length;
@@ -1200,21 +1483,145 @@ function updateSkinNavBtn(){
   if(document.getElementById('skinsBtnCount'))
     document.getElementById('skinsBtnCount').textContent=t('skinsCount',{n:unlocked,tot:total});
 }
+function drawSkinPreviewCanvas(canvas,skin){
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth||canvas.width||148;
+  const H=72;
+  canvas.width=Math.round(W*dpr);
+  canvas.height=Math.round(H*dpr);
+  canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  // Background
+  ctx.fillStyle='rgba(0,0,0,0.35)';
+  ctx.fillRect(0,0,W,H);
+
+  const segCount=8;
+  const s=Math.round(H*0.72); // segment size
+  const gap=Math.round(s*0.18);
+  const totalW=segCount*(s+gap)-gap;
+  const startX=Math.round((W-totalW)/2);
+  const y=Math.round((H-s)/2);
+
+  function rRect(cx,x,y,w,h,r){
+    cx.beginPath();
+    cx.moveTo(x+r,y);cx.lineTo(x+w-r,y);cx.arcTo(x+w,y,x+w,y+r,r);
+    cx.lineTo(x+w,y+h-r);cx.arcTo(x+w,y+h,x+w-r,y+h,r);
+    cx.lineTo(x+r,y+h);cx.arcTo(x,y+h,x,y+h-r,r);
+    cx.lineTo(x,y+r);cx.arcTo(x,y,x+r,y,r);
+    cx.closePath();
+  }
+
+  for(let i=0;i<segCount;i++){
+    const alpha=0.3+0.7*(i/(segCount-1));
+    const px=startX+i*(s+gap);
+    const isHead=(i===segCount-1);
+
+    ctx.save();
+    ctx.shadowColor=skin.shadow;
+    ctx.shadowBlur=isHead?14:8;
+
+    let fillColor;
+    if(skin.rainbow){
+      const hue=(performance.now()/18+i*22)%360;
+      fillColor=`hsla(${hue},90%,${35+alpha*20}%,${Math.min(1,alpha+.05)})`;
+    } else {
+      fillColor=skin.bodyFn(alpha,i);
+    }
+
+    if(isHead){
+      // Head: gradient from headA to headB
+      const grad=ctx.createLinearGradient(px,y,px+s,y+s);
+      grad.addColorStop(0,skin.headA);
+      grad.addColorStop(1,skin.headB);
+      ctx.fillStyle=grad;
+    } else {
+      ctx.fillStyle=fillColor;
+    }
+
+    rRect(ctx,px,y,s,s,Math.round(s*0.28));
+    ctx.fill();
+
+    // Scale texture on body segments
+    if(!isHead){
+      ctx.save();
+      rRect(ctx,px,y,s,s,Math.round(s*0.28));ctx.clip();
+      ctx.shadowBlur=0;
+      const scRows=2,scCols=2,sw=s/scCols,sh=s/scRows;
+      ctx.strokeStyle=`rgba(0,0,0,${0.18+alpha*0.1})`;ctx.lineWidth=0.9;
+      for(let sr=0;sr<=scRows;sr++)for(let sc2=0;sc2<=scCols;sc2++){
+        ctx.beginPath();ctx.arc(px+(sc2-0.5)*sw,y+sr*sh,sw*0.58,0,Math.PI);ctx.stroke();
+      }
+      ctx.strokeStyle=`rgba(255,255,255,${0.09+alpha*0.07})`;ctx.lineWidth=0.7;
+      for(let sr=0;sr<=scRows;sr++)for(let sc2=0;sc2<=scCols;sc2++){
+        ctx.beginPath();ctx.arc(px+(sc2-0.5)*sw,y+sr*sh-0.5,sw*0.55,0,Math.PI);ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // Overlay pattern
+    if(!isHead && skin.overlayFn){
+      ctx.shadowBlur=0;
+      ctx.save();
+      rRect(ctx,px,y,s,s,Math.round(s*0.28));ctx.clip();
+      skin.overlayFn(ctx,px,y,s,i,alpha);
+      ctx.restore();
+    }
+
+    // Strong specular highlight
+    ctx.shadowBlur=0;
+    const sg=ctx.createRadialGradient(px+s*0.26,y+s*0.2,0,px+s*0.36,y+s*0.32,s*0.48);
+    sg.addColorStop(0,`rgba(255,255,255,${isHead?0.52:0.30*alpha})`);
+    sg.addColorStop(0.35,`rgba(255,255,255,${isHead?0.18:0.09*alpha})`);
+    sg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=sg;rRect(ctx,px,y,s,s,Math.round(s*0.28));ctx.fill();
+    // Rim shadow
+    const rg=ctx.createRadialGradient(px+s*0.72,y+s*0.78,s*0.1,px+s*0.65,y+s*0.7,s*0.65);
+    rg.addColorStop(0,`rgba(0,0,0,${0.28*alpha})`);rg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rg;rRect(ctx,px,y,s,s,Math.round(s*0.28));ctx.fill();
+
+    // Head shine dot
+    if(isHead){
+      ctx.fillStyle='rgba(255,255,255,0.92)';
+      ctx.beginPath();ctx.arc(px+s*0.28,y+s*0.28,s*0.11,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,0.5)';
+      ctx.beginPath();ctx.arc(px+s*0.38,y+s*0.42,s*0.06,0,Math.PI*2);ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  // subtle gradient fade on left & right edges
+  const fadeW=22;
+  const fadeL=ctx.createLinearGradient(0,0,fadeW,0);
+  fadeL.addColorStop(0,'rgba(0,0,0,0.55)');fadeL.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=fadeL;ctx.fillRect(0,0,fadeW,H);
+  const fadeR=ctx.createLinearGradient(W-fadeW,0,W,0);
+  fadeR.addColorStop(0,'rgba(0,0,0,0)');fadeR.addColorStop(1,'rgba(0,0,0,0.55)');
+  ctx.fillStyle=fadeR;ctx.fillRect(W-fadeW,0,fadeW,H);
+}
+
 function renderSkinsPage(){
   const activeSkin=loadActiveSkin();
   const el=document.getElementById('skinsPageContent');el.innerHTML='';
   const unlocked=SKINS_DEF.filter(s=>isSkinUnlocked(s.id)).length;
   document.getElementById('skinsPageCount').textContent=t('skinsCount',{n:unlocked,tot:SKINS_DEF.length});
   document.getElementById('skinsTitleEl').textContent=t('skinsTitle');
-  // Head accessory toggle
-  const headOn=loadHeadAccessory();
+  // Head accessory cycle button
+  const headSel=loadHeadAccessory();
+  const headOpt=HEAD_ACC_OPTIONS.find(o=>o.id===headSel)||HEAD_ACC_OPTIONS[0];
+  const lang=getLang();
+  const headLabel=lang==='en'?headOpt.labelEn:lang==='de'?headOpt.labelDe:headOpt.label;
+  const headOn=(headSel!=='off');
   const toggleDiv=document.createElement('div');
-  toggleDiv.style.cssText='width:100%;margin-bottom:10px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;';
+  toggleDiv.style.cssText='width:100%;margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;';
   const toggleBtn=document.createElement('button');
   toggleBtn.className='export-btn';
   toggleBtn.style.cssText='border-color:'+(headOn?'var(--accent)':'var(--line)')+';color:'+(headOn?'var(--accent)':'var(--muted)')+';';
-  toggleBtn.textContent=t(headOn?'headAccOn':'headAccOff');
-  toggleBtn.addEventListener('click',toggleHeadAccessory);
+  toggleBtn.textContent='🎭 '+headOpt.emoji+' '+headLabel;
+  toggleBtn.title=lang==='en'?'Click to cycle':lang==='de'?'Klicken zum Wechseln':'Klicka för att byta';
+  toggleBtn.addEventListener('click',cycleHeadAccessory);
   toggleDiv.appendChild(toggleBtn);
   // Seasonal indicator
   const season=getSeasonalTheme();
@@ -1226,29 +1633,48 @@ function renderSkinsPage(){
     toggleDiv.appendChild(seasonSpan);
   }
   el.appendChild(toggleDiv);
+  const canvasesToDraw=[];
   SKINS_DEF.forEach(skin=>{
     const isUnlocked=isSkinUnlocked(skin.id);
     const isActive=skin.id===activeSkin;
-    const name=getLang()!=='sv'&&skin.nameEn?skin.nameEn:skin.name;
-    let unlockText=skin.free?t('skinFree'):(getLang()!=='sv'&&skin.descEn?skin.descEn:skin.descSv)||'';
+    const name=pickDefText(skin,'name',SKIN_I18N_DE);
+    let unlockText=skin.free?t('skinFree'):pickDefText(skin,'desc',SKIN_I18N_DE,'descSv');
     const card=document.createElement('div');
     card.className='skin-card'+(isActive?' active':'')+(isUnlocked?'':' locked');
-    card.innerHTML=`
-      <div class="skin-preview" style="background:${skin.previewCss}"></div>
-      <div class="skin-info">
-        <div class="skin-name">${skin.emoji} ${name}</div>
-        <div class="skin-unlock">${unlockText}</div>
-      </div>
-      ${isActive?`<span class="skin-badge">${t('skinActive')}</span>`:''}
-      ${!isUnlocked?'<span class="skin-lock-badge">🔒</span>':''}
-    `;
+
+    const wrap=document.createElement('div');
+    wrap.className='skin-canvas-wrap';
+    const canvas=document.createElement('canvas');
+    wrap.appendChild(canvas);
+    if(isActive){
+      const badge=document.createElement('div');
+      badge.className='skin-active-bar';
+      badge.textContent=t('skinActive');
+      wrap.appendChild(badge);
+    }
+    if(!isUnlocked){
+      const lockDiv=document.createElement('div');
+      lockDiv.className='skin-lock-overlay';
+      lockDiv.textContent='🔒';
+      wrap.appendChild(lockDiv);
+    }
+    card.appendChild(wrap);
+
+    const info=document.createElement('div');
+    info.className='skin-info';
+    info.innerHTML=`<div class="skin-name">${name}</div><div class="skin-unlock">${unlockText}</div>`;
+    card.appendChild(info);
+
     if(isUnlocked){
-      card.addEventListener('click',()=>{
-        saveActiveSkin(skin.id);
-        renderSkinsPage();
-      });
+      card.addEventListener('click',()=>{saveActiveSkin(skin.id);renderSkinsPage();});
     }
     el.appendChild(card);
+    canvasesToDraw.push({canvas,skin});
+  });
+
+  // Draw previews after layout so offsetWidth is available
+  requestAnimationFrame(()=>{
+    canvasesToDraw.forEach(({canvas,skin})=>drawSkinPreviewCanvas(canvas,skin));
   });
 }
 function goToSkins(){renderSkinsPage();showScreen('skinsScreen');}
@@ -1263,10 +1689,18 @@ function unlockMedal(id){
 function showMedalToast(def){
   const c=document.getElementById('medalToast');
   const el=document.createElement('div');el.className='medal-toast-item';
+  el.style.animation='none';
+  const name=pickDefText(def,'name',MEDAL_I18N_DE);
+  const desc=pickDefText(def,'desc',MEDAL_I18N_DE);
+  const label=pickLangText('🏅 Medalj upplåst!','🏅 Medal unlocked!','🏅 Medaille freigeschaltet!');
   el.innerHTML=`<div class="mt-emoji">${def.emoji}</div>
-    <div class="mt-text"><div class="mt-label">🏅 Medalj upplåst!</div>
-    <div class="mt-name">${def.name}</div><div class="mt-desc">${def.desc}</div></div>`;
-  c.appendChild(el);setTimeout(()=>el.remove(),3200);
+    <div class="mt-text"><div class="mt-label">${label}</div>
+    <div class="mt-name">${name}</div><div class="mt-desc">${desc}</div></div>`;
+  c.appendChild(el);
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{ el.style.animation=''; });
+  });
+  setTimeout(()=>el.remove(),3200);
 }
 function checkMedals(){
   if(score>=500)   unlockMedal('p500');
@@ -1325,7 +1759,7 @@ function renderMedalsPage(){
   const earned=loadMedals();
   document.getElementById('mpCount').textContent=t('medalsCount',{n:earned.size,tot:MEDALS_DEF.length});
   const cats={};
-  MEDALS_DEF.forEach(m=>{const c=getLang()!=='sv'&&m.catEn?m.catEn:m.cat;if(!cats[c])cats[c]=[];cats[c].push(m);});
+  MEDALS_DEF.forEach(m=>{const c=pickMedalCategory(m);if(!cats[c])cats[c]=[];cats[c].push(m);});
   const el=document.getElementById('medalsPageContent');el.innerHTML='';
   Object.entries(cats).forEach(([cat,medals])=>{
     const sec=document.createElement('div');sec.className='medals-cat';
@@ -1339,8 +1773,8 @@ function renderMedalsPage(){
       const pct=prog?Math.min(100,Math.round((prog.cur/prog.max)*100)):0;
       b.innerHTML=`<span class="m-emoji">${m.emoji}</span>
         <span class="m-info">
-          <span class="m-name">${getLang()!=='sv'&&m.nameEn?m.nameEn:m.name}</span>
-          <span class="m-desc">${getLang()!=='sv'&&m.descEn?m.descEn:m.desc}</span>
+          <span class="m-name">${pickDefText(m,'name',MEDAL_I18N_DE)}</span>
+          <span class="m-desc">${pickDefText(m,'desc',MEDAL_I18N_DE)}</span>
           ${(!isUnlocked&&prog)?`
             <div class="medal-prog"><div class="medal-prog-bar" style="width:${pct}%"></div></div>
             <span class="medal-prog-text">${Math.min(prog.cur,prog.max).toLocaleString('sv')} / ${prog.max.toLocaleString('sv')}</span>
@@ -1437,17 +1871,31 @@ function tryTitelMusic(){
 function stopTitelMusic(resetTime){
   titelMusic.pause();if(resetTime)titelMusic.currentTime=0;
 }
+let musicSwitchPending=false;
 function tryMusic(){
   if(!musicOn)return;
   stopTitelMusic(false);
-  if(shouldFast()){bgMusic.pause();fastMusic.play().then(()=>{audioUnlocked=true;isFastMusic=true;}).catch(()=>{});}
-  else{fastMusic.pause();bgMusic.play().then(()=>{audioUnlocked=true;isFastMusic=false;}).catch(()=>{});}
+  musicSwitchPending=true;
+  if(shouldFast()){
+    bgMusic.pause();
+    fastMusic.play().then(()=>{audioUnlocked=true;isFastMusic=true;musicSwitchPending=false;}).catch(()=>{musicSwitchPending=false;});
+  }else{
+    fastMusic.pause();
+    bgMusic.play().then(()=>{audioUnlocked=true;isFastMusic=false;musicSwitchPending=false;}).catch(()=>{musicSwitchPending=false;});
+  }
 }
 function updateMusicMode(){
-  if(!musicOn||!audioUnlocked)return;
+  if(!musicOn||!audioUnlocked||musicSwitchPending)return;
   const fast=shouldFast();
-  if(fast&&!isFastMusic){bgMusic.pause();fastMusic.play().catch(()=>{});isFastMusic=true;}
-  else if(!fast&&isFastMusic){fastMusic.pause();bgMusic.play().catch(()=>{});isFastMusic=false;}
+  if(fast===isFastMusic)return;
+  musicSwitchPending=true;
+  if(fast){
+    bgMusic.pause();
+    fastMusic.play().then(()=>{isFastMusic=true;musicSwitchPending=false;}).catch(()=>{musicSwitchPending=false;});
+  }else{
+    fastMusic.pause();
+    bgMusic.play().then(()=>{isFastMusic=false;musicSwitchPending=false;}).catch(()=>{musicSwitchPending=false;});
+  }
 }
 function updateMenuMusicBtn(){
   const icon=musicOn?'🔊 ':'🔇 ';
@@ -1854,15 +2302,15 @@ function drawLightningShimmer(){
 }
 function drawHv71Shimmer(){
   const T=performance.now(),W=canvas.width,H=canvas.height;
-  for(let i=0;i<18;i++){
+  for(let i=0;i<20;i++){
     const sx=(i*167.9+Math.sin(T/520+i*0.8)*18)%W;
     const sy=(i*111.4+Math.cos(T/640+i*0.6)*16)%H;
-    const a=0.12+0.12*Math.abs(Math.sin(T/700+i));
-    const size=1+(i%3)*0.7;
+    const a=0.12+0.13*Math.abs(Math.sin(T/700+i));
+    const size=1+(i%3)*0.75;
     const palette=[
-      `rgba(255,255,255,${a})`,
-      `rgba(243,208,63,${a*.9})`,
-      `rgba(150,190,255,${a*.75})`
+      `rgba(255,255,255,${a*.95})`,
+      `rgba(255,203,1,${a})`,
+      `rgba(10,34,64,${a*.55})`
     ];
     ctx.fillStyle=palette[i%palette.length];
     ctx.beginPath();ctx.arc(sx,sy,size,0,Math.PI*2);ctx.fill();
@@ -1870,13 +2318,16 @@ function drawHv71Shimmer(){
 }
 function drawParticles(type){
   const T=performance.now(),W=canvas.width,H=canvas.height;
-  const N=type==='bats'?8:type==='hearts'?12:32;
+  const N=type==='bats'?8:type==='hearts'?12:type==='waves'?6:32;
   for(let i=0;i<N;i++){
     const sx=(i*137.508*1.618)%W, sy=(i*137.508*2.414)%H;
     if(type==='stars'){
+      // Mjuk drift istället för stilla — stjärnorna "andas" lugnt över planen
+      const x=sx+Math.sin(T/2200+i*0.9)*14;
+      const y=sy+Math.cos(T/2600+i*1.1)*10;
       const a=0.15+0.2*Math.sin(T/900+i*1.3);
       ctx.fillStyle=`rgba(255,255,255,${a})`;
-      ctx.beginPath();ctx.arc(sx,sy,1+(i%3)*0.5,0,Math.PI*2);ctx.fill();
+      ctx.beginPath();ctx.arc(x,y,1+(i%3)*0.5,0,Math.PI*2);ctx.fill();
     }else if(type==='snow'){
       const y=(sy+T/55*(0.4+(i%5)*0.25))%H;
       const a=0.25+0.15*Math.sin(T/700+i);
@@ -1888,9 +2339,13 @@ function drawParticles(type){
       ctx.fillStyle=`rgba(255,${90+(i%5)*30},0,${a})`;
       ctx.beginPath();ctx.arc(sx,y,1.5,0,Math.PI*2);ctx.fill();
     }else if(type==='rainbow'){
-      const hue=(T/25+i*28)%360,a=0.06+0.04*Math.sin(T/800+i);
-      ctx.fillStyle=`hsla(${hue},90%,65%,${a})`;
-      ctx.beginPath();ctx.arc(sx,sy,2+(i%3),0,Math.PI*2);ctx.fill();
+      // Rörliga regnbågspartiklar: cirkulär drift + sinusoidal y-böj
+      const drift=T/45*(0.3+(i%5)*0.18);
+      const x=(sx+drift+Math.sin(T/1100+i*1.7)*22)%W;
+      const y=(sy+Math.cos(T/1300+i*1.3)*18+T/110*(0.2+(i%4)*0.1))%H;
+      const hue=(T/25+i*28)%360,a=0.15+0.12*Math.sin(T/600+i);
+      ctx.fillStyle=`hsla(${hue},92%,66%,${a})`;
+      ctx.beginPath();ctx.arc(x,y,2+(i%3),0,Math.PI*2);ctx.fill();
     }else if(type==='bats'){
       const bx=sx+Math.sin(T/1400+i*0.9)*50,by=(sy+T/75)%H;
       const a=0.2+0.1*Math.sin(T/600+i);
@@ -1909,6 +2364,88 @@ function drawParticles(type){
       const hue=(i*47+30)%360,a=0.12+0.06*Math.sin(T/900+i);
       ctx.fillStyle=`hsla(${hue},80%,70%,${a})`;
       ctx.beginPath();ctx.ellipse(sx,hy2,3,4,0,0,Math.PI*2);ctx.fill();
+    }else if(type==='pollen'){
+      // Lugna lysande prickar som cirklar i sakta mak — magisk skogskänsla
+      const x=sx+Math.cos(T/1800+i*0.7)*16;
+      const y=sy+Math.sin(T/1500+i*1.1)*14;
+      const a=0.25+0.2*Math.sin(T/700+i*1.4);
+      ctx.fillStyle=`rgba(180,255,180,${a})`;
+      ctx.beginPath();ctx.arc(x,y,1.2+(i%3)*0.5,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=`rgba(180,255,180,${a*0.25})`;
+      ctx.beginPath();ctx.arc(x,y,3+(i%3),0,Math.PI*2);ctx.fill();
+    }else if(type==='leaves'){
+      // Långsamt fallande löv med gentle sway
+      const y=(sy+T/95*(0.4+(i%5)*0.18))%H;
+      const x=sx+Math.sin(T/1400+i*0.8)*12;
+      const rot=Math.sin(T/1100+i)*0.5;
+      const hue=20+(i*37)%50;
+      const a=0.22+0.12*Math.sin(T/900+i);
+      ctx.save();ctx.translate(x,y);ctx.rotate(rot);
+      ctx.fillStyle=`hsla(${hue},65%,45%,${a})`;
+      ctx.beginPath();ctx.ellipse(0,0,3,1.5,0,0,Math.PI*2);ctx.fill();
+      ctx.restore();
+    }else if(type==='embers'){
+      // Mjuka glödfunkor som driver långsamt uppåt med horisontellt vaggande
+      const y=H-(sy+T/65*(0.3+(i%4)*0.25))%H;
+      const x=sx+Math.sin(T/900+i*1.3)*10;
+      const a=0.2+0.15*Math.sin(T/500+i*1.1);
+      const r=160+(i%5)*25;
+      ctx.fillStyle=`rgba(255,${r-100},${(i%3)*15},${a})`;
+      ctx.beginPath();ctx.arc(x,y,1.3+(i%3)*0.4,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=`rgba(255,${r-60},0,${a*0.18})`;
+      ctx.beginPath();ctx.arc(x,y,3.5+(i%3),0,Math.PI*2);ctx.fill();
+    }else if(type==='bubbles'){
+      // Stigande genomskinliga bubblor
+      const y=H-(sy+T/85*(0.3+(i%5)*0.2))%H;
+      const x=sx+Math.sin(T/700+i)*8;
+      const a=0.15+0.1*Math.sin(T/600+i);
+      const r=2+(i%4)*0.8;
+      ctx.strokeStyle=`rgba(180,230,255,${a*1.5})`;
+      ctx.lineWidth=0.8;
+      ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke();
+      ctx.fillStyle=`rgba(220,245,255,${a*0.6})`;
+      ctx.beginPath();ctx.arc(x-r*0.3,y-r*0.3,r*0.25,0,Math.PI*2);ctx.fill();
+    }else if(type==='shooting'){
+      // Stjärnor + sällsynta stjärnskott (kombination)
+      const x=sx+Math.sin(T/2200+i*0.9)*14;
+      const y=sy+Math.cos(T/2600+i*1.1)*10;
+      const a=0.15+0.2*Math.sin(T/900+i*1.3);
+      ctx.fillStyle=`rgba(255,255,255,${a})`;
+      ctx.beginPath();ctx.arc(x,y,1+(i%3)*0.5,0,Math.PI*2);ctx.fill();
+      if(i%8===0){
+        const phase=(T/3000+i*0.25)%1;
+        if(phase<0.15){
+          const trail=phase/0.15;
+          const tx=x+trail*60, ty=y+trail*40;
+          ctx.strokeStyle=`rgba(255,255,200,${(1-trail)*0.6})`;
+          ctx.lineWidth=1.4;
+          ctx.beginPath();ctx.moveTo(tx-trail*30,ty-trail*20);ctx.lineTo(tx,ty);ctx.stroke();
+          ctx.fillStyle=`rgba(255,255,255,${1-trail})`;
+          ctx.beginPath();ctx.arc(tx,ty,1.5,0,Math.PI*2);ctx.fill();
+        }
+      }
+    }else if(type==='waves'){
+      // Horisontella vågrörelser i bakgrunden — för havsskinnet
+      const baseY=(H/N)*i+H/(N*2);
+      const a=0.05+0.04*Math.sin(T/1500+i*0.8);
+      ctx.strokeStyle=`rgba(120,200,230,${a})`;
+      ctx.lineWidth=1.2;
+      ctx.beginPath();
+      for(let x=0;x<=W;x+=8){
+        const y=baseY+Math.sin(T/1100+x*0.018+i*0.6)*3;
+        if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }else if(type==='dragonfire'){
+      // Större röda/guldiga gnistor som drakeld
+      const y=H-(sy+T/55*(0.3+(i%4)*0.3))%H;
+      const x=sx+Math.sin(T/700+i*1.3)*12;
+      const a=0.2+0.2*Math.sin(T/450+i*0.9);
+      const isGold=i%4===0;
+      ctx.fillStyle=isGold?`rgba(255,200,80,${a})`:`rgba(255,${50+(i%5)*20},0,${a})`;
+      ctx.beginPath();ctx.arc(x,y,1.6+(i%3)*0.5,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=isGold?`rgba(255,200,80,${a*0.2})`:`rgba(255,90,0,${a*0.18})`;
+      ctx.beginPath();ctx.arc(x,y,4+(i%3),0,Math.PI*2);ctx.fill();
     }
   }
 }
@@ -1916,9 +2453,6 @@ function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   ctx.fillStyle=theme.bgA||'#060c08';
   ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.strokeStyle=theme.gridColor||'rgba(0,255,100,.033)';ctx.lineWidth=1;
-  for(let x=0;x<=COLS;x++){ctx.beginPath();ctx.moveTo(x*CELL,0);ctx.lineTo(x*CELL,canvas.height);ctx.stroke();}
-  for(let y=0;y<=ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*CELL);ctx.lineTo(canvas.width,y*CELL);ctx.stroke();}
   if(theme.particles)drawParticles(theme.particles);
   const _sid=loadActiveSkin();
   if(_sid==='obsidian')drawObsidianGlimmer();
@@ -2053,7 +2587,8 @@ function drawSeg(rx,ry,i,isHead){
     tpx+=Math.sign(ddx)*(s-ts)/2;
     tpy+=Math.sign(ddy)*(s-ts)/2;
   }
-  ctx.shadowColor=skin.shadow;ctx.shadowBlur=isHead?20:20;
+  ctx.shadowColor=skin.shadow;
+  ctx.shadowBlur=skin.hv71?(isHead?24:22):(isHead?28:Math.max(6,18-i*1.2));
   const _segIdx=i||0;
   if(isHead){
     const g=ctx.createLinearGradient(px,py,px+s,py+s);
@@ -2069,21 +2604,80 @@ function drawSeg(rx,ry,i,isHead){
       ctx.fillStyle=`hsla(${hue},90%,${35+alpha*20}%,${Math.min(1,alpha+.05)})`;
     }else{ctx.fillStyle=skin.bodyFn(alpha,_segIdx);}
   }
-  rRect(tpx,tpy,ts,ts,13);ctx.fill();
+  rRect(tpx,tpy,ts,ts,16);ctx.fill();
   if(skin.hv71){
     ctx.shadowBlur=0;
+    const stripe=ctx.createLinearGradient(tpx,tpy,tpx+ts,tpy+ts);
+    stripe.addColorStop(0,'rgba(255,203,1,0)');
+    stripe.addColorStop(0.34,`rgba(255,203,1,${Math.min(0.92,alpha+.18)})`);
+    stripe.addColorStop(0.52,`rgba(255,235,170,${Math.min(0.78,alpha+.1)})`);
+    stripe.addColorStop(0.7,'rgba(255,203,1,0)');
+    ctx.fillStyle=stripe;
+    rRect(tpx,tpy,ts,ts,16);ctx.fill();
+    const lowerBand=ctx.createLinearGradient(tpx,tpy+ts*0.54,tpx,tpy+ts);
+    lowerBand.addColorStop(0,`rgba(255,203,1,0)`);
+    lowerBand.addColorStop(1,`rgba(255,203,1,${Math.min(0.28,alpha*.45)})`);
+    ctx.fillStyle=lowerBand;
+    rRect(tpx,tpy,ts,ts,16);ctx.fill();
     ctx.strokeStyle=`rgba(255,255,255,${isHead?0.95:Math.min(0.88,alpha+.16)})`;
-    ctx.lineWidth=isHead?2.4:1.6;
-    rRect(tpx+1,tpy+1,ts-2,ts-2,12);ctx.stroke();
+    ctx.lineWidth=isHead?2.6:1.8;
+    rRect(tpx+1,tpy+1,ts-2,ts-2,15);ctx.stroke();
   }
-  // Fix 2: Inner highlight — subtil radial gradient för 3D-djup
+
+  // Mönster-overlay: ränder, fjäll, prickar etc. för skinn med egen overlayFn
+  // (tiger, drake, polkagris, kunglig, smaragd, skog, hav, stjärnhimmel)
+  if(skin.overlayFn&&!isTail){
+    ctx.save();
+    rRect(tpx,tpy,ts,ts,16);ctx.clip();
+    ctx.shadowBlur=0;
+    skin.overlayFn(ctx,tpx,tpy,ts,_segIdx,alpha,isHead);
+    ctx.restore();
+  }
+
+  // Universal snake-scale texture (subtle overlapping arcs on all body segs)
+  // Hoppas över på skinn med egen overlayFn (tiger/drake/polkagris/kunglig etc.)
+  // för att undvika visuell konkurrens. Hoppas också över på rainbow.
+  if(!isHead&&!isTail&&!skin.overlayFn&&!skin.rainbow){
+    ctx.save();
+    rRect(tpx,tpy,ts,ts,16);ctx.clip();
+    ctx.shadowBlur=0;
+    const scRows=2,scCols=2;
+    const sw=ts/scCols,sh=ts/scRows;
+    ctx.strokeStyle=`rgba(0,0,0,${0.18+alpha*0.1})`;
+    ctx.lineWidth=0.9;
+    for(let sr=0;sr<=scRows;sr++){
+      for(let sc2=0;sc2<=scCols;sc2++){
+        const scx=tpx+(sc2-0.5)*sw;
+        const scy=tpy+sr*sh;
+        ctx.beginPath();ctx.arc(scx,scy,sw*0.58,0,Math.PI);ctx.stroke();
+      }
+    }
+    ctx.strokeStyle=`rgba(255,255,255,${0.09+alpha*0.07})`;
+    ctx.lineWidth=0.7;
+    for(let sr=0;sr<=scRows;sr++){
+      for(let sc2=0;sc2<=scCols;sc2++){
+        const scx=tpx+(sc2-0.5)*sw;
+        const scy=tpy+sr*sh;
+        ctx.beginPath();ctx.arc(scx,scy-0.5,sw*0.55,0,Math.PI);ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  // Enhanced highlights & rim for 3D depth
   if(!isTail){
     ctx.shadowBlur=0;
-    const hg=ctx.createRadialGradient(tpx+ts*0.28,tpy+ts*0.22,1,tpx+ts*0.35,tpy+ts*0.3,ts*0.55);
-    hg.addColorStop(0,'rgba(255,255,255,0.15)');
-    hg.addColorStop(1,'rgba(255,255,255,0)');
-    ctx.fillStyle=hg;
-    rRect(tpx,tpy,ts,ts,13);ctx.fill();
+    const sg=ctx.createRadialGradient(tpx+ts*0.26,tpy+ts*0.2,0,tpx+ts*0.36,tpy+ts*0.32,ts*0.48);
+    sg.addColorStop(0,`rgba(255,255,255,${isHead?0.52:0.32*alpha})`);
+    sg.addColorStop(0.35,`rgba(255,255,255,${isHead?0.18:0.10*alpha})`);
+    sg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=sg;
+    rRect(tpx,tpy,ts,ts,16);ctx.fill();
+    const rg=ctx.createRadialGradient(tpx+ts*0.72,tpy+ts*0.78,ts*0.1,tpx+ts*0.65,tpy+ts*0.7,ts*0.65);
+    rg.addColorStop(0,`rgba(0,0,0,${0.28*alpha})`);
+    rg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=rg;
+    rRect(tpx,tpy,ts,ts,16);ctx.fill();
   }
   ctx.shadowBlur=0;
   if(isHead){
@@ -2097,9 +2691,16 @@ function drawSeg(rx,ry,i,isHead){
     ctx.beginPath();ctx.arc(e2x,e2y,3,0,Math.PI*2);ctx.fill();
     // Head accessory
     const _th=getActiveTheme();
-    const _acc=_th.headAcc||(SKIN_THEMES[loadActiveSkin()]||{}).headAcc;
-    const _showAcc=_th.isSeasonal||loadHeadAccessory();
-    if(_acc&&_showAcc)drawHeadAccessory(_acc,cx,cy);
+    // Huvudbonad-prioritet: säsongsbonad (alltid) > användarens val (om != auto/off)
+    // > skinnets default. Säsongsmotiv (jul/påsk) tvingar fram sin egen bonad.
+    const _userPick=loadHeadAccessory();
+    const _skinAcc=(SKIN_THEMES[loadActiveSkin()]||{}).headAcc;
+    let _acc=null;
+    if(_th.isSeasonal&&_th.headAcc) _acc=_th.headAcc;
+    else if(_userPick==='off')      _acc=null;
+    else if(_userPick==='auto')     _acc=_skinAcc;
+    else                            _acc=_userPick;
+    if(_acc)drawHeadAccessory(_acc,cx,cy);
   }
 }
 function drawHeadAccessory(acc,cx,cy){
@@ -2158,6 +2759,82 @@ function drawHeadAccessory(acc,cx,cy){
     ctx.fillStyle='#ff5599';
     ctx.beginPath();ctx.ellipse(-5,6,1.5,5,-0.15,0,Math.PI*2);ctx.fill();
     ctx.beginPath();ctx.ellipse(5,6,1.5,5,0.15,0,Math.PI*2);ctx.fill();
+  }else if(acc==='tophat'){
+    ctx.fillStyle='#1a1a1a';ctx.shadowColor='#000';ctx.shadowBlur=4;
+    ctx.beginPath();ctx.ellipse(0,-1,9,2,0,0,Math.PI*2);ctx.fill();
+    ctx.fillRect(-5,-1,10,9);
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#aa0033';ctx.fillRect(-5,5,10,2);
+    ctx.fillStyle='rgba(255,255,255,0.25)';ctx.fillRect(-4,0,1.5,4);
+  }else if(acc==='cowboy'){
+    ctx.fillStyle='#5a3a1a';ctx.shadowColor='#3a2510';ctx.shadowBlur=5;
+    ctx.beginPath();
+    ctx.moveTo(-11,0);
+    ctx.quadraticCurveTo(-9,-3,0,-2);
+    ctx.quadraticCurveTo(9,-3,11,0);
+    ctx.quadraticCurveTo(9,2,0,1);
+    ctx.quadraticCurveTo(-9,2,-11,0);
+    ctx.closePath();ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(-5,-1);
+    ctx.quadraticCurveTo(-5,7,0,7);
+    ctx.quadraticCurveTo(5,7,5,-1);
+    ctx.closePath();ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#3a2008';
+    ctx.fillRect(-4,0,8,1.5);
+  }else if(acc==='flower'){
+    ctx.shadowColor='#ff66aa';ctx.shadowBlur=5;
+    ctx.fillStyle='#ff99cc';
+    for(let k=0;k<5;k++){
+      const ang=k*(Math.PI*2/5)-Math.PI/2;
+      const px=Math.cos(ang)*4, py=Math.sin(ang)*4+3;
+      ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill();
+    }
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#ffdd44';
+    ctx.beginPath();ctx.arc(0,3,2,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#cc8800';
+    ctx.beginPath();ctx.arc(0,3,1,0,Math.PI*2);ctx.fill();
+  }else if(acc==='captain'){
+    ctx.fillStyle='#0a2854';ctx.shadowColor='#051a3a';ctx.shadowBlur=4;
+    ctx.beginPath();
+    ctx.moveTo(-8,1);
+    ctx.quadraticCurveTo(-8,7,0,7);
+    ctx.quadraticCurveTo(8,7,8,1);
+    ctx.closePath();ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#f0f0f0';
+    ctx.fillRect(-9,0,18,2);
+    ctx.fillStyle='#08183a';
+    ctx.beginPath();
+    ctx.moveTo(-9,0);ctx.quadraticCurveTo(0,-3,9,0);
+    ctx.lineTo(8,-1);ctx.quadraticCurveTo(0,-2,-8,-1);
+    ctx.closePath();ctx.fill();
+    ctx.fillStyle='#ffcc44';ctx.shadowColor='#cc9900';ctx.shadowBlur=3;
+    ctx.beginPath();ctx.arc(0,4,1.5,0,Math.PI*2);ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.strokeStyle='#ffcc44';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(0,4);ctx.lineTo(0,7);
+    ctx.moveTo(-2,5.5);ctx.lineTo(2,5.5);ctx.stroke();
+  }else if(acc==='beanie'){
+    ctx.fillStyle='#aa3344';ctx.shadowColor='#88223a';ctx.shadowBlur=3;
+    ctx.beginPath();
+    ctx.moveTo(-8,-1);
+    ctx.quadraticCurveTo(-7,7,0,7);
+    ctx.quadraticCurveTo(7,7,8,-1);
+    ctx.closePath();ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=0.7;
+    for(let k=0;k<3;k++){
+      ctx.beginPath();
+      ctx.moveTo(-7,1+k*2);ctx.lineTo(7,1+k*2);
+      ctx.stroke();
+    }
+    ctx.fillStyle='#882233';
+    ctx.fillRect(-8,-1,16,2);
+    ctx.fillStyle='#f5e8d8';ctx.shadowColor='#d8c8a0';ctx.shadowBlur=4;
+    ctx.beginPath();ctx.arc(0,8,2.5,0,Math.PI*2);ctx.fill();
   }else if(acc==='glasses'){
     ctx.restore();
     ctx.save();
@@ -2221,8 +2898,8 @@ function triggerGameOver(){
   showTouchControls(false);
   $('goScore').textContent=`${t('goScoreLabel')} ${score}`;
   const opsStr=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join(' ');
-  const tStr=tables.size>0?` | tabellerna ${[...tables].sort((a,b)=>a-b).join(',')}`:'';
-  $('goMeta').textContent=`${opsStr} · inom ${numRange}${tStr}`;
+  const tStr=tables.size>0?` · ${getTablesShortLabel()}: ${[...tables].sort((a,b)=>a-b).join(', ')}`:'';
+  $('goMeta').textContent=`${opsStr} · ${getRangeLabel(numRange)}${tStr}`;
 
   // Bygg statistik-chips
   const statsEl=$('goStats');statsEl.innerHTML='';
@@ -2250,10 +2927,24 @@ function triggerGameOver(){
    ═══════════════════════════════════════ */
 const loadHS=()=>{try{return JSON.parse(localStorage.getItem(HS_KEY))||[];}catch(e){return[];}};
 const saveHS=hs=>localStorage.setItem(HS_KEY,JSON.stringify(hs));
+function getHSDesc(h){
+  const opsMap={'+':'+','-':'−','*':'×','/':'÷'};
+  if(h&&Array.isArray(h.ops)&&Number.isFinite(parseInt(h.range,10))){
+    const ops=h.ops.map(o=>opsMap[o]||o).join('/');
+    return `${ops} · ${getRangeLabel(parseInt(h.range,10))}`;
+  }
+  const raw=String(h?.desc||'').trim();
+  const m=raw.match(/^([+\-−×÷/* ]+?)(?:\s*[·|]\s*)?(?:inom|within|up to|upp till|bis)\s+(\d{1,4})$/i);
+  if(m){
+    return `${m[1].trim()} · ${getRangeLabel(parseInt(m[2],10))}`;
+  }
+  return raw;
+}
 function addScore(name){
   const hs=loadHS();
-  const desc=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join('/')+' inom '+numRange;
-  hs.push({name:name.trim()||getPlayer(),score,desc});
+  const ops=[...activeOps];
+  const desc=ops.map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join('/')+' · '+getRangeLabel(numRange);
+  hs.push({name:name.trim()||getPlayer(),score,desc,ops,range:numRange});
   hs.sort((a,b)=>b.score-a.score);saveHS(hs.slice(0,10));
 }
 function renderHS(){
@@ -2262,7 +2953,7 @@ function renderHS(){
   if(!hs.length){el.innerHTML='<div class="hs-empty">'+t('hsEmpty')+'</div>';return;}
   el.innerHTML=hs.slice(0,5).map((h,i)=>`
     <div class="hs-row"><div class="hs-rank">${['🥇','🥈','🥉','4.','5.'][i]}</div>
-    <div class="hs-name">${esc(h.name)}</div><div class="hs-meta">${esc(h.desc||'')}</div>
+    <div class="hs-name">${esc(h.name)}</div><div class="hs-meta">${esc(getHSDesc(h))}</div>
     <div class="hs-score">${h.score}</div></div>`).join('');
 }
 
@@ -2314,7 +3005,7 @@ function renderHSPage(){
     row.className='hs-row';row.style.cssText='padding:8px 4px;font-size:13px;';
     row.innerHTML=`<div class="hs-rank" style="font-size:16px;width:28px">${medals[i]||`${i+1}.`}</div>
       <div class="hs-name" style="font-size:13px">${esc(h.name)}</div>
-      <div class="hs-meta" style="font-size:11px">${esc(h.desc||'')}</div>
+      <div class="hs-meta" style="font-size:11px">${esc(getHSDesc(h))}</div>
       <div class="hs-score" style="font-size:14px">${h.score}</div>`;
     el.appendChild(row);
   });
@@ -2506,31 +3197,16 @@ function applyMode(m){
 function goToSettings(){showScreen('settingsScreen');}
 
 function showAbout(){
-  const l=getLang();
-  if($('aboutTitleEl'))$('aboutTitleEl').textContent='SifferSnoken';
+  if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
   if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 2.8';
-  if($('aboutDevEl'))$('aboutDevEl').textContent=
-    l!=='sv'?'© 2026 42 Improbable Owls & Andreas Jonsson':'© 2026 42 Improbable Owls & Andreas Jonsson';
+  if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
-  if($('aboutThanksText'))$('aboutThanksText').textContent=
-    l!=='sv'
-      ? 'Alvin & Ludvig\n'+
-        'Cecilia Norlander – ideas and feedback\n'+
-        'Hugo Persson – who persistently fought to beat his personal best!\n'+
-        'Malin Vu – math teacher at Slättenskolan who tried SifferSnoken with her class\n'+
-        'Iris Kruslock – for the idea of clearer walls and extra lives\n'+
-        'Noelle Brusberg Aschan – amazing seller of May flowers\n'+
-        'All students at Slättenskolan in Norrahammar\n'+
-        'Anthropic / Claude AI – for invaluable help with the code'
-      : 'Alvin & Ludvig\n'+
-        'Cecilia Norlander – idéer och feedback\n'+
-        'Hugo Persson – som ihärdigt kämpade med att slå sitt personbästa!\n'+
-        'Malin Vu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass\n'+
-        'Iris Kruslock – för idén med tydligare väggar och extraliv\n'+
-        'Noelle Brusberg Aschan – grym försäljare av Majblommor\n'+
-        'Alla elever på Slättenskolan i Norrahammar\n'+
-        'Anthropic / Claude AI – för ovärderlig hjälp med koden';
-  if($('btnAboutClose'))$('btnAboutClose').textContent=l!=='sv'?'Close':'Stäng';
+  if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
+    'Alvin & Ludvig`nCecilia Norlander – idéer och feedback`nHugo Persson – som ihärdigt kämpade med att slå sitt personbästa!`nMalin Wu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass`nIris Kruslock – för idén med tydligare väggar och extraliv`nNoelle Brusberg Aschan – grym försäljare av Majblommor`nAlla elever på Slättenskolan i Norrahammar`nAnthropic / Claude AI – för ovärderlig hjälp med koden',
+    'Alvin & Ludvig`nCecilia Norlander – ideas and feedback`nHugo Persson – who persistently fought to beat his personal best!`nMalin Wu – math teacher at Slättenskolan who tried SifferSnoken with her class`nIris Kruslock – for the idea of clearer walls and extra lives`nNoelle Brusberg Aschan – amazing seller of May flowers`nAll students at Slättenskolan in Norrahammar`nAnthropic / Claude AI – for invaluable help with the code',
+    'Alvin & Ludvig`nCecilia Norlander – Ideen & Feedback`nHugo Persson – der hartnäckig versucht hat, seinen persönlichen Rekord zu schlagen`nMalin Wu – Mathematiklehrerin an der Slättenskolan, die SifferSnoken mit ihrer Klasse ausprobiert hat`nIris Kruslock – für die Idee mit klareren Wänden und Extraleben`nNoelle Brusberg Aschan – großartige Verkäuferin von Maiblumen`nAlle Schülerinnen und Schüler der Slättenskolan in Norrahammar`nAnthropic / Claude AI – für unschätzbare Hilfe beim Code'
+  ).replaceAll('`n','\n');
+  if($('btnAboutClose'))$('btnAboutClose').textContent=pickLangText('Stäng','Close','Schließen');
   $('aboutOverlay').classList.add('show');
 }
 
@@ -2538,8 +3214,8 @@ function updateMenuSettingsSummary(){
   const el=$('menuSettingsSummary');if(!el)return;
   const om={'+':'➕','-':'➖','*':'✖️','/':'➗'};
   const opsStr=[...activeOps].map(o=>om[o]||o).join(' ');
-  const tStr=(tables.size>0&&(activeOps.has('*')||activeOps.has('/')))?' · '+t('panelTables').replace('✖️ ','').split(' ')[0]+': '+[...tables].sort((a,b)=>a-b).join(', '):'';
-  el.textContent=opsStr+' · '+t('rangeW'+numRange)+tStr;
+  const tStr=(tables.size>0&&(activeOps.has('*')||activeOps.has('/')))?' · '+getTablesShortLabel()+': '+[...tables].sort((a,b)=>a-b).join(', '):'';
+  el.textContent=opsStr+' · '+getRangeLabel(numRange)+tStr;
 }
 
 /* ─── WebView2: exportera spelstatistik ─── */
@@ -2704,7 +3380,45 @@ function renderStatsTeacherPage(){
   }
 
   const l=getLang();
-  const txt=l!=='sv'
+  const txt=l==='de'
+    ? {
+        totalGames:'Spiele gesamt',
+        totalAnswered:'Beantwortete Aufgaben',
+        recentAcc:'Treffsicherheit letzte 10',
+        teacherTitle:'🧑‍🏫 Lehrkraft-Überblick',
+        strongTitle:'Stärkste Seite gerade',
+        weakTitle:'Braucht Übung',
+        nextTitle:'Empfohlener nächster Schritt',
+        opTitle:'📊 Treffsicherheit nach Rechenart',
+        opCount:(c,t)=>`${c}/${t} richtig`,
+        tableTitle:'🔎 Einmaleins zum Beobachten',
+        tableEmpty:'Noch kein klares Einmaleins-Muster.',
+        wrongTitle:'❌ Häufige Fehler im Moment',
+        wrongEmpty:'Noch keine Fehler registriert! 🎉',
+        historyTitle:'📅 Letzte 10 Sitzungen',
+        clearBtn:'🗑️ Alle Statistiken löschen',
+        clearConfirm:'Alle gespeicherten Statistiken löschen? Das kann nicht rückgängig gemacht werden.',
+        noData:'Noch keine Daten',
+        stable:'→ Stabiles Niveau',
+        recentUp:n=>`↑ +${n}% in den letzten 5 Spielen`,
+        recentDown:n=>`↓ ${n}% in den letzten 5 Spielen`,
+        strongSub:(pct,total)=>`${pct}% bei ${total} Antworten`,
+        weakSub:(pct,total)=>`${pct}% bei ${total} Antworten`,
+        nextFallbackMain:'Bleib erst einmal auf dem aktuellen Niveau',
+        nextFallbackSub:'Ein paar weitere Spiele helfen für eine genauere Empfehlung.',
+        narrowTablesMain:'Einmaleins-Auswahl eingrenzen',
+        narrowTablesSub:'Wähle ein oder zwei Reihen gleichzeitig, bis die Treffsicherheit stabil wird.',
+        tablePracticeMain:n=>`Konzentriere dich auf die ${n}er-Reihe`,
+        tablePracticeSub:'Wähle nur diese Reihe und spiele ein paar kurze Übungsrunden.',
+        opPracticeMain:n=>`${n} gezielt üben`,
+        opPracticeRange:r=>`Bleib für ein paar kurze Runden bei ${r}.`,
+        opPracticeSub:'Halte das Niveau für ein paar kurze Runden klar und begrenzt.',
+        sessionModePractice:'übung',
+        sessionModeStandard:'standard',
+        tableChip:(n,c)=>`${n}er · ${c}`,
+        tablesLabel:'Einmaleins'
+      }
+    : l!=='sv'
     ? {
         totalGames:'Games played',
         totalAnswered:'Questions answered',
@@ -2812,7 +3526,7 @@ function renderStatsTeacherPage(){
     const opsText=ops.map(o=>opSym[o]||o).join('');
     if(h.player)bits.push(h.player);
     if(opsText)bits.push(opsText);
-    if(h.numRange)bits.push(pickLangText('upp till ','up to ','bis ')+h.numRange);
+    if(h.numRange)bits.push(getRangeLabel(h.numRange));
     if(Array.isArray(h.tables)&&h.tables.length&&(ops.includes('*')||ops.includes('/'))){
       bits.push(`${txt.tablesLabel} ${h.tables.slice().sort((a,b)=>a-b).join(',')}`);
     }
@@ -3135,3 +3849,4 @@ setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
 </script>
 </body>
 </html>
+
