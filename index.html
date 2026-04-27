@@ -1105,10 +1105,11 @@ const SKINS_DEF=[
    descSv:'Lås upp: Combo 10 i rad', descEn:'Unlock: Combo 10 in a row',
    headA:'#ffd89a', headB:'#b34700', shadow:'#ff8833',
    bodyFn:(a)=>`rgba(${Math.floor(230+a*25)},${Math.floor(120+a*50)},${Math.floor(30+a*30)},${Math.min(1,a+.05)})`,
-   overlayFn:(cx,px,py,s,i,a)=>{
-     cx.strokeStyle=`rgba(15,8,3,${0.88+a*0.1})`;
-     cx.lineCap='round';
-     cx.lineWidth=s*0.11;
+  overlayFn:(cx,px,py,s,i,a,isHead)=>{
+    if(isHead)return;
+    cx.strokeStyle=`rgba(15,8,3,${0.88+a*0.1})`;
+    cx.lineCap='round';
+    cx.lineWidth=s*0.11;
      for(let k=0;k<3;k++){
        const baseY=py+s*(0.22+k*0.28);
        const jitter=Math.sin(i*0.8+k*1.3)*s*0.035;
@@ -1142,10 +1143,11 @@ const SKINS_DEF=[
    descSv:'Lås upp: Världsrekordsorm-medaljen (längd 50)', descEn:'Unlock: World Record Snake medal (length 50)',
    headA:'#ffe588', headB:'#5c0410', shadow:'#e6b34a',
    bodyFn:(a)=>`rgba(${Math.floor(130+a*50)},${Math.floor(15+a*25)},${Math.floor(20+a*20)},${Math.min(1,a+.05)})`,
-   overlayFn:(cx,px,py,s,i,a)=>{
-     const rows=[[0,0.15,0.5,0.85],[1,0.3,0.7],[2,0.15,0.5,0.85]];
-     rows.forEach(r=>{
-       const row=r[0], cy=py+s*(0.2+row*0.3);
+  overlayFn:(cx,px,py,s,i,a,isHead)=>{
+    if(isHead)return;
+    const rows=[[0,0.15,0.5,0.85],[1,0.3,0.7],[2,0.15,0.5,0.85]];
+    rows.forEach(r=>{
+      const row=r[0], cy=py+s*(0.2+row*0.3);
        for(let k=1;k<r.length;k++){
          const cxp=px+s*r[k];
          cx.fillStyle=`rgba(${Math.floor(200+a*30)},${Math.floor(150+a*40)},${Math.floor(50+a*30)},${0.8+a*0.15})`;
@@ -3976,4 +3978,3 @@ setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
 </script>
 </body>
 </html>
-
