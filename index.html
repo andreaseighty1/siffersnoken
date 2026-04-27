@@ -1051,7 +1051,7 @@ const SKINS_DEF=[
    bodyFn:(a,i)=>{const t=Math.floor(i||0)%3;return t===0?`rgba(${Math.floor(160+a*70)},255,80,${Math.min(1,a+.06)})`:`rgba(${Math.floor(70+a*45)},${Math.floor(155+a*90)},0,${Math.min(1,a+.06)})`;},
    previewCss:'linear-gradient(135deg,#efff66,#a6ff00,#3d7f00)',
    radioactive:true},
-  {id:'blackpink', emoji:'🩷', name:'Black Pink', nameEn:'Black Pink',
+  {id:'blackpink', emoji:'🩷', name:'Night Rose', nameEn:'Night Rose',
    free:false, unlockMedal:'p20000',
    descSv:'Lås upp: Nå 20 000 poäng', descEn:'Unlock: Reach 20,000 points',
    headA:'#ffb5e8', headB:'#220014', shadow:'#ff4db8',
@@ -1241,7 +1241,7 @@ const SKIN_I18N_DE={
   vattenmelon:{name:'Wassermelone',desc:'Freischalten: Medaille „Fehlerfrei“'},
   aurora:{name:'Aurora',desc:'Freischalten: 7.500 Punkte erreichen'},
   radioaktiv:{name:'Radioaktiv',desc:'Freischalten: Geschwindigkeitsdämon-Medaille'},
-  blackpink:{name:'Black Pink',desc:'Freischalten: 20.000 Punkte erreichen'},
+  blackpink:{name:'Nacht Rose',desc:'Freischalten: 20.000 Punkte erreichen'},
   plasma:{name:'Plasma',desc:'Freischalten: Medaille „Überhitzt“'},
   inferno:{name:'Blitz',desc:'Freischalten: Adrenalinmeister-Medaille'},
   smaragd:{name:'Smaragd',desc:'Freischalten: 500 Punkte erreichen'},
@@ -1390,8 +1390,8 @@ let sessionWrongMap={};
 const MAX_WRONG_POOL=6;
 let wrongPool=[];
 const BONUS_LIFE_MIN_SCORE=2000;
-const BONUS_LIFE_LIFETIME=5000;
-const BONUS_LIFE_SPAWN_CHANCE=0.28;
+const BONUS_LIFE_LIFETIME=3000;
+const BONUS_LIFE_SPAWN_CHANCE=0.16;
 
 /* ═══════════════════════════════════════
    SPELARPROFIL
@@ -1863,7 +1863,7 @@ function sfxRecord(){
 }
 function sfxBad(){beep(180,'sawtooth',.2,.2);}
 function sfxDie(){beep(220,'sawtooth',.38,.22);setTimeout(()=>beep(140,'sawtooth',.48,.17),190);}
-function shouldFast(){if(speedMode==='score')return score>=4500;if(speedMode==='length')return snake.length>=28;return false;}
+function shouldFast(){if(speedMode==='score')return score>=500;if(speedMode==='length')return snake.length>=15;return false;}
 function tryTitelMusic(){
   if(!musicOn)return;
   titelMusic.play().then(()=>{audioUnlocked=true;}).catch(()=>{});
@@ -1926,19 +1926,10 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
    HASTIGHET
    ═══════════════════════════════════════ */
 function getSpeed(){
-  // Kvadratisk ramp: mjuk start, brant mot slutet.
-  // Ormen behåller hanterbar fart tills poängen/längden är hög, sen accelererar
-  // snabbare så slutläget blir utmanande.
-  const base=255, min=130;
-  if(speedMode==='score'){
-    const p=Math.min(1, score/13000);      // max-fart vid 13000 poäng
-    return Math.round(Math.max(min, base-(p*p)*(base-min)));
-  }
-  if(speedMode==='length'){
-    const p=Math.min(1, Math.max(0,snake.length-4)/55); // max vid längd ~59
-    return Math.round(Math.max(min, base-(p*p)*(base-min)));
-  }
-  return base;
+  const base=255;
+  if(speedMode==='score')  return Math.max(120,base-Math.floor(score/50)*8);
+  if(speedMode==='length') return Math.max(120,base-(Math.max(0,snake.length-4))*4);
+  return Math.max(140,base);
 }
 
 /* ═══════════════════════════════════════
@@ -2327,9 +2318,7 @@ function drawHv71Shimmer(){
 }
 function drawParticles(type){
   const T=performance.now(),W=canvas.width,H=canvas.height;
-  let N=type==='bats'?8:type==='hearts'?12:type==='waves'?6:32;
-  // Auto-prestanda: halvera partiklar om datorn slöar
-  if(_perfMode==='reduced')N=Math.max(4,Math.floor(N*0.5));
+  const N=type==='bats'?8:type==='hearts'?12:type==='waves'?6:32;
   for(let i=0;i<N;i++){
     const sx=(i*137.508*1.618)%W, sy=(i*137.508*2.414)%H;
     if(type==='stars'){
@@ -2474,23 +2463,7 @@ function drawBackground(theme){
   if(_sid==='hv71')drawHv71Shimmer();
 }
 
-// Auto-prestanda: mäter FPS löpande. Om vi sjunker under 45 FPS i 90 frames
-// (~1.5 sek) skalar vi automatiskt ner partiklar och tunga shadows.
-// Helt osynligt för bra datorer; räddar gamla Chromebooks från lagg.
-let _perfFrames=0,_perfBadFrames=0,_perfLastT=0,_perfMode='normal';
-function _perfTick(t){
-  if(_perfLastT===0){_perfLastT=t;return;}
-  const dt=t-_perfLastT;_perfLastT=t;
-  if(dt>22)_perfBadFrames++;else if(_perfBadFrames>0)_perfBadFrames=Math.max(0,_perfBadFrames-0.3);
-  _perfFrames++;
-  if(_perfFrames>=90){
-    if(_perfBadFrames>=30&&_perfMode==='normal')_perfMode='reduced';
-    else if(_perfBadFrames<8&&_perfMode==='reduced')_perfMode='normal';
-    _perfFrames=0;_perfBadFrames=0;
-  }
-}
 function draw(t){
-  _perfTick(t);
   updateBonusLife();
   const _theme=getActiveTheme();
   drawBackground(_theme);
@@ -2538,31 +2511,14 @@ function draw(t){
       drawSeg(lerp(s.px,s.x,t),lerp(s.py,s.y,t),i,isHead);
     }
   }
-  // Tydlig kant runt spelplanen — visar var väggarna går
+  // Subtil indikator om runda väggar är på
   if(!wallWrap){
-    // Hårda väggar: röd varningsram (man dör vid kontakt)
     ctx.save();
     ctx.shadowBlur=14;
     ctx.shadowColor='rgba(255,64,64,.35)';
     ctx.strokeStyle='rgba(255,72,72,.78)';
     ctx.lineWidth=4;
     ctx.strokeRect(2,2,canvas.width-4,canvas.height-4);
-    ctx.restore();
-  }else{
-    // Runda väggar: tydligt grön ram så kanten syns även på ljusa skärmar
-    ctx.save();
-    ctx.shadowBlur=12;
-    ctx.shadowColor='rgba(0,255,120,.4)';
-    ctx.strokeStyle='rgba(60,230,140,.75)';
-    ctx.lineWidth=4;
-    ctx.strokeRect(2,2,canvas.width-4,canvas.height-4);
-    // Streckad inre kant för extra tydlighet
-    ctx.shadowBlur=0;
-    ctx.strokeStyle='rgba(120,255,170,.45)';
-    ctx.lineWidth=1.5;
-    ctx.setLineDash([6,4]);
-    ctx.strokeRect(5,5,canvas.width-10,canvas.height-10);
-    ctx.setLineDash([]);
     ctx.restore();
   }
 }
@@ -2574,80 +2530,15 @@ function drawTile(t){
   const fs=val.length<=2?Math.min(19,Math.floor(CELL*0.52)):val.length===3?Math.min(15,Math.floor(CELL*0.4)):Math.min(12,Math.floor(CELL*0.32));
   ctx.save();
   if(t.isGold){
-    const T=performance.now();
-    // Pulserande förstoring (skala 1.0 → 1.15 i takt)
-    const pulse=Math.sin(T/220);
-    const scale=1.0+0.14*pulse;
-    const breathing=0.5+0.5*Math.sin(T/350); // 0..1, fasförskjuten
-
-    // Lager 1: Stor mjuk yttre aura (bakom brickan, drar ögat)
-    const auraR=CELL*0.95*(0.85+0.25*Math.sin(T/280));
-    const auraGrad=ctx.createRadialGradient(cx,cy,4,cx,cy,auraR);
-    auraGrad.addColorStop(0,`rgba(255,220,80,${0.55*breathing+0.25})`);
-    auraGrad.addColorStop(0.55,`rgba(255,180,40,${0.25*breathing+0.1})`);
-    auraGrad.addColorStop(1,'rgba(255,180,40,0)');
-    ctx.fillStyle=auraGrad;
-    ctx.beginPath();ctx.arc(cx,cy,auraR,0,Math.PI*2);ctx.fill();
-
-    // Förbered transformerad ritning (skalad bricka från center)
-    ctx.save();
-    ctx.translate(cx,cy);
-    ctx.scale(scale,scale);
-    ctx.translate(-cx,-cy);
-
-    // Lager 2: Gradient-fyllning på själva brickan (varm guld)
-    const tileGrad=ctx.createLinearGradient(px,py,px+s,py+s);
-    tileGrad.addColorStop(0,'rgba(255,238,150,0.95)');
-    tileGrad.addColorStop(0.5,'rgba(255,210,60,0.95)');
-    tileGrad.addColorStop(1,'rgba(220,160,20,0.95)');
-    ctx.shadowColor='rgba(255,200,0,.95)';ctx.shadowBlur=22;
-    ctx.fillStyle=tileGrad;rRect(px,py,s,s,r);ctx.fill();
-
-    // Lager 3: Tjock skinande kant
+    ctx.shadowColor='rgba(255,200,0,.9)';ctx.shadowBlur=16;
+    ctx.fillStyle='rgba(255,200,0,.3)';rRect(px,py,s,s,r);ctx.fill();
+    ctx.strokeStyle='#ffd700';ctx.lineWidth=2;rRect(px,py,s,s,r);ctx.stroke();
     ctx.shadowBlur=0;
-    ctx.strokeStyle='#fff8c4';ctx.lineWidth=3;rRect(px,py,s,s,r);ctx.stroke();
-    ctx.strokeStyle='#ffaa00';ctx.lineWidth=1;rRect(px,py,s,s,r);ctx.stroke();
-
-    // Lager 4: Inre highlight-glans (uppe till vänster)
-    const hg=ctx.createRadialGradient(cx-s*0.25,cy-s*0.25,1,cx-s*0.15,cy-s*0.15,s*0.7);
-    hg.addColorStop(0,'rgba(255,255,255,0.6)');
-    hg.addColorStop(1,'rgba(255,255,255,0)');
-    ctx.fillStyle=hg;rRect(px,py,s,s,r);ctx.fill();
-
-    // Lager 5: Siffran — vit med stark guldglow så den verkligen står ut
     ctx.font=`900 ${fs}px Nunito,'Exo 2',sans-serif`;
     ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.shadowColor='rgba(180,90,0,1)';ctx.shadowBlur=4;
-    ctx.fillStyle='#3d2400';
-    ctx.fillText(val,cx,cy+1.5); // mörk skugga bakom
-    ctx.shadowColor='rgba(255,230,80,1)';ctx.shadowBlur=12;
-    ctx.fillStyle='#fffacc';
+    ctx.fillStyle='#fff176';
+    ctx.shadowColor='rgba(255,220,0,.9)';ctx.shadowBlur=8;
     ctx.fillText(val,cx,cy);
-
-    ctx.restore(); // klart skalat lager
-
-    // Lager 6: Glitter/gnistor som roterar runt brickan (utanför skalningen
-    // så de inte också pulserar)
-    const sparkCount=6;
-    for(let k=0;k<sparkCount;k++){
-      const ang=(T/600+k*(Math.PI*2/sparkCount))%(Math.PI*2);
-      const dist=s*0.55+Math.sin(T/300+k)*s*0.08;
-      const sx=cx+Math.cos(ang)*dist;
-      const sy=cy+Math.sin(ang)*dist;
-      const sparkAlpha=0.3+0.7*Math.abs(Math.sin(T/250+k*1.7));
-      // Liten ljus prick
-      ctx.fillStyle=`rgba(255,255,200,${sparkAlpha})`;
-      ctx.beginPath();ctx.arc(sx,sy,1.8,0,Math.PI*2);ctx.fill();
-      // Stjärnstrålar (kors)
-      if(sparkAlpha>0.55){
-        ctx.strokeStyle=`rgba(255,250,180,${sparkAlpha*0.9})`;
-        ctx.lineWidth=1.2;
-        ctx.beginPath();
-        ctx.moveTo(sx-3,sy);ctx.lineTo(sx+3,sy);
-        ctx.moveTo(sx,sy-3);ctx.lineTo(sx,sy+3);
-        ctx.stroke();
-      }
-    }
   }else{
     ctx.fillStyle='rgba(15,30,80,.88)';rRect(px,py,s,s,r);ctx.fill();
     ctx.strokeStyle='rgba(180,220,255,.95)';ctx.lineWidth=1.5;rRect(px,py,s,s,r);ctx.stroke();
@@ -2663,24 +2554,14 @@ function drawBonusLife(){
   if(!bonusLife)return;
   const remain=Math.max(1,Math.ceil((bonusLife.expiresAt-performance.now())/1000));
   const cx=bonusLife.x*CELL+CELL/2,cy=bonusLife.y*CELL+CELL/2;
-  const T=performance.now();
-  const pulse=0.7+0.3*Math.sin(T/180); // snabb puls för uppmärksamhet
   ctx.save();
-  // Pulserande glow-aura så hjärtat syns mot vilken bakgrund som helst
-  const auraR=CELL*0.7*pulse;
-  const auraGrad=ctx.createRadialGradient(cx,cy,2,cx,cy,auraR);
-  auraGrad.addColorStop(0,`rgba(255,80,120,${0.55*pulse})`);
-  auraGrad.addColorStop(0.5,`rgba(255,120,160,${0.25*pulse})`);
-  auraGrad.addColorStop(1,'rgba(255,80,120,0)');
-  ctx.fillStyle=auraGrad;
-  ctx.beginPath();ctx.arc(cx,cy,auraR,0,Math.PI*2);ctx.fill();
   ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.shadowColor='rgba(255,255,255,.85)';ctx.shadowBlur=18;
-  ctx.font=`900 ${Math.floor(CELL*0.85)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+  ctx.shadowColor='rgba(255,80,120,.55)';ctx.shadowBlur=14;
+  ctx.font=`900 ${Math.floor(CELL*0.8)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
   ctx.fillText('❤️',cx,cy+1);
   ctx.shadowBlur=0;
   ctx.lineWidth=3;
-  ctx.strokeStyle='rgba(0,0,0,.55)';
+  ctx.strokeStyle='rgba(0,0,0,.45)';
   ctx.fillStyle='#ffffff';
   ctx.font=`900 ${Math.min(13,Math.floor(CELL*0.34))}px Orbitron,monospace`;
   ctx.strokeText(String(remain),cx,cy+1);
@@ -2707,7 +2588,7 @@ function drawSeg(rx,ry,i,isHead){
     tpy+=Math.sign(ddy)*(s-ts)/2;
   }
   ctx.shadowColor=skin.shadow;
-  ctx.shadowBlur=_perfMode==='reduced'?(isHead?6:0):(skin.hv71?(isHead?24:22):(isHead?28:Math.max(6,18-i*1.2)));
+  ctx.shadowBlur=skin.hv71?(isHead?24:22):(isHead?28:Math.max(6,18-i*1.2));
   const _segIdx=i||0;
   if(isHead){
     const g=ctx.createLinearGradient(px,py,px+s,py+s);
@@ -2903,26 +2784,18 @@ function drawHeadAccessory(acc,cx,cy){
     ctx.fillStyle='#3a2008';
     ctx.fillRect(-4,0,8,1.5);
   }else if(acc==='flower'){
-    // Liten blomma vid sidan av huvudet för en gulligare look
-    ctx.save();
-    ctx.translate(-7,1); // förskjut åt vänster sida
-    ctx.shadowColor='#ff66aa';ctx.shadowBlur=4;
+    ctx.shadowColor='#ff66aa';ctx.shadowBlur=5;
     ctx.fillStyle='#ff99cc';
     for(let k=0;k<5;k++){
       const ang=k*(Math.PI*2/5)-Math.PI/2;
-      const px=Math.cos(ang)*3, py=Math.sin(ang)*3;
-      ctx.beginPath();ctx.arc(px,py,2.4,0,Math.PI*2);ctx.fill();
+      const px=Math.cos(ang)*4, py=Math.sin(ang)*4+3;
+      ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill();
     }
     ctx.shadowBlur=0;
     ctx.fillStyle='#ffdd44';
-    ctx.beginPath();ctx.arc(0,0,1.6,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(0,3,2,0,Math.PI*2);ctx.fill();
     ctx.fillStyle='#cc8800';
-    ctx.beginPath();ctx.arc(0,0,0.8,0,Math.PI*2);ctx.fill();
-    // Liten grön stjälk som binder blomman till huvudet
-    ctx.strokeStyle='#3a8a3a';
-    ctx.lineWidth=1.2;
-    ctx.beginPath();ctx.moveTo(0,2);ctx.quadraticCurveTo(4,4,6,5);ctx.stroke();
-    ctx.restore();
+    ctx.beginPath();ctx.arc(0,3,1,0,Math.PI*2);ctx.fill();
   }else if(acc==='captain'){
     ctx.fillStyle='#0a2854';ctx.shadowColor='#051a3a';ctx.shadowBlur=4;
     ctx.beginPath();
@@ -3329,9 +3202,9 @@ function showAbout(){
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
-    'Alvin & Ludvig`nCecilia Norlander – idéer och feedback`nHugo Persson – som ihärdigt kämpade med att slå sitt personbästa!`nMalin Wu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass`nIris Kruslock – för idén med tydligare väggar och extraliv`nNoelle Brusberg Aschan – grym försäljare av Majblommor`nAlla elever på Slättenskolan i Norrahammar`nAnthropic / Claude AI – för ovärderlig hjälp med koden',
-    'Alvin & Ludvig`nCecilia Norlander – ideas and feedback`nHugo Persson – who persistently fought to beat his personal best!`nMalin Wu – math teacher at Slättenskolan who tried SifferSnoken with her class`nIris Kruslock – for the idea of clearer walls and extra lives`nNoelle Brusberg Aschan – amazing seller of May flowers`nAll students at Slättenskolan in Norrahammar`nAnthropic / Claude AI – for invaluable help with the code',
-    'Alvin & Ludvig`nCecilia Norlander – Ideen & Feedback`nHugo Persson – der hartnäckig versucht hat, seinen persönlichen Rekord zu schlagen`nMalin Wu – Mathematiklehrerin an der Slättenskolan, die SifferSnoken mit ihrer Klasse ausprobiert hat`nIris Kruslock – für die Idee mit klareren Wänden und Extraleben`nNoelle Brusberg Aschan – großartige Verkäuferin von Maiblumen`nAlle Schülerinnen und Schüler der Slättenskolan in Norrahammar`nAnthropic / Claude AI – für unschätzbare Hilfe beim Code'
+    'Alvin & Ludvig`nCecilia Norlander – idéer och feedback`nHugo Persson – som ihärdigt kämpade med att slå sitt personbästa!`nMalin Vu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass`nIris Kruslock – för idén med tydligare väggar och extraliv`nNoelle Brusberg Aschan – grym försäljare av Majblommor`nAlla elever på Slättenskolan i Norrahammar`nAnthropic / Claude AI – för ovärderlig hjälp med koden',
+    'Alvin & Ludvig`nCecilia Norlander – ideas and feedback`nHugo Persson – who persistently fought to beat his personal best!`nMalin Vu – math teacher at Slättenskolan who tried SifferSnoken with her class`nIris Kruslock – for the idea of clearer walls and extra lives`nNoelle Brusberg Aschan – amazing seller of May flowers`nAll students at Slättenskolan in Norrahammar`nAnthropic / Claude AI – for invaluable help with the code',
+    'Alvin & Ludvig`nCecilia Norlander – Ideen & Feedback`nHugo Persson – der hartnäckig versucht hat, seinen persönlichen Rekord zu schlagen`nMalin Vu – Mathematiklehrerin an der Slättenskolan, die SifferSnoken mit ihrer Klasse ausprobiert hat`nIris Kruslock – für die Idee mit klareren Wänden und Extraleben`nNoelle Brusberg Aschan – großartige Verkäuferin von Maiblumen`nAlle Schülerinnen und Schüler der Slättenskolan in Norrahammar`nAnthropic / Claude AI – für unschätzbare Hilfe beim Code'
   ).replaceAll('`n','\n');
   if($('btnAboutClose'))$('btnAboutClose').textContent=pickLangText('Stäng','Close','Schließen');
   $('aboutOverlay').classList.add('show');
