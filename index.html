@@ -1051,7 +1051,7 @@ const SKINS_DEF=[
    bodyFn:(a,i)=>{const t=Math.floor(i||0)%3;return t===0?`rgba(${Math.floor(160+a*70)},255,80,${Math.min(1,a+.06)})`:`rgba(${Math.floor(70+a*45)},${Math.floor(155+a*90)},0,${Math.min(1,a+.06)})`;},
    previewCss:'linear-gradient(135deg,#efff66,#a6ff00,#3d7f00)',
    radioactive:true},
-  {id:'blackpink', emoji:'🩷', name:'Black Pink', nameEn:'Black Pink',
+  {id:'blackpink', emoji:'🩷', name:'Night Rose', nameEn:'Night Rose',
    free:false, unlockMedal:'p20000',
    descSv:'Lås upp: Nå 20 000 poäng', descEn:'Unlock: Reach 20,000 points',
    headA:'#ffb5e8', headB:'#220014', shadow:'#ff4db8',
@@ -1243,7 +1243,7 @@ const SKIN_I18N_DE={
   vattenmelon:{name:'Wassermelone',desc:'Freischalten: Medaille „Fehlerfrei“'},
   aurora:{name:'Aurora',desc:'Freischalten: 7.500 Punkte erreichen'},
   radioaktiv:{name:'Radioaktiv',desc:'Freischalten: Geschwindigkeitsdämon-Medaille'},
-  blackpink:{name:'Black Pink',desc:'Freischalten: 20.000 Punkte erreichen'},
+  blackpink:{name:'Nacht Rose',desc:'Freischalten: 20.000 Punkte erreichen'},
   plasma:{name:'Plasma',desc:'Freischalten: Medaille „Überhitzt“'},
   inferno:{name:'Blitz',desc:'Freischalten: Adrenalinmeister-Medaille'},
   smaragd:{name:'Smaragd',desc:'Freischalten: 500 Punkte erreichen'},
@@ -3331,9 +3331,9 @@ function showAbout(){
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
-    'Alvin & Ludvig`nCecilia Norlander – idéer och feedback`nHugo Persson – som ihärdigt kämpade med att slå sitt personbästa!`nMalin Wu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass`nIris Kruslock – för idén med tydligare väggar och extraliv`nNoelle Brusberg Aschan – grym försäljare av Majblommor`nAlla elever på Slättenskolan i Norrahammar`nAnthropic / Claude AI – för ovärderlig hjälp med koden',
-    'Alvin & Ludvig`nCecilia Norlander – ideas and feedback`nHugo Persson – who persistently fought to beat his personal best!`nMalin Wu – math teacher at Slättenskolan who tried SifferSnoken with her class`nIris Kruslock – for the idea of clearer walls and extra lives`nNoelle Brusberg Aschan – amazing seller of May flowers`nAll students at Slättenskolan in Norrahammar`nAnthropic / Claude AI – for invaluable help with the code',
-    'Alvin & Ludvig`nCecilia Norlander – Ideen & Feedback`nHugo Persson – der hartnäckig versucht hat, seinen persönlichen Rekord zu schlagen`nMalin Wu – Mathematiklehrerin an der Slättenskolan, die SifferSnoken mit ihrer Klasse ausprobiert hat`nIris Kruslock – für die Idee mit klareren Wänden und Extraleben`nNoelle Brusberg Aschan – großartige Verkäuferin von Maiblumen`nAlle Schülerinnen und Schüler der Slättenskolan in Norrahammar`nAnthropic / Claude AI – für unschätzbare Hilfe beim Code'
+    'Alvin & Ludvig`nCecilia Norlander – idéer och feedback`nHugo Persson – som ihärdigt kämpade med att slå sitt personbästa!`nMalin Vu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass`nIris Kruslock – för idén med tydligare väggar och extraliv`nNoelle Brusberg Aschan – grym försäljare av Majblommor`nAlla elever på Slättenskolan i Norrahammar`nAnthropic / Claude AI – för ovärderlig hjälp med koden',
+    'Alvin & Ludvig`nCecilia Norlander – ideas and feedback`nHugo Persson – who persistently fought to beat his personal best!`nMalin Vu – math teacher at Slättenskolan who tried SifferSnoken with her class`nIris Kruslock – for the idea of clearer walls and extra lives`nNoelle Brusberg Aschan – amazing seller of May flowers`nAll students at Slättenskolan in Norrahammar`nAnthropic / Claude AI – for invaluable help with the code',
+    'Alvin & Ludvig`nCecilia Norlander – Ideen & Feedback`nHugo Persson – der hartnäckig versucht hat, seinen persönlichen Rekord zu schlagen`nMalin Vu – Mathematiklehrerin an der Slättenskolan, die SifferSnoken mit ihrer Klasse ausprobiert hat`nIris Kruslock – für die Idee mit klareren Wänden und Extraleben`nNoelle Brusberg Aschan – großartige Verkäuferin von Maiblumen`nAlle Schülerinnen und Schüler der Slättenskolan in Norrahammar`nAnthropic / Claude AI – für unschätzbare Hilfe beim Code'
   ).replaceAll('`n','\n');
   if($('btnAboutClose'))$('btnAboutClose').textContent=pickLangText('Stäng','Close','Schließen');
   $('aboutOverlay').classList.add('show');
