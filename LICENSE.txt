@@ -1,0 +1,5 @@
+Copyright (c) 2026 Andreas Jonsson / 42 Improbable Owls
+
+All rights reserved.
+
+This software may not be copied, modified, distributed, or used commercially without explicit permission.
