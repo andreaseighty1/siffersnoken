@@ -2656,11 +2656,6 @@ function getNormalTileSprite(value){
   _tileSpriteCache.set(key,sprite);
   return sprite;
 }
-function smoothStep01(t){
-  const v=Math.max(0,Math.min(1,t));
-  return v*v*(3-2*v);
-}
-
 // Auto-prestanda: mäter FPS löpande. Om vi sjunker under 45 FPS i 90 frames
 // (~1.5 sek) skalar vi automatiskt ner partiklar och tunga shadows.
 // Helt osynligt för bra datorer; räddar gamla Chromebooks från lagg.
@@ -2678,7 +2673,6 @@ function _perfTick(t){
 }
 function draw(t){
   _perfTick(t);
-  const rt=smoothStep01(t);
   updateBonusLife();
   const _theme=getActiveTheme();
   drawBackground(_theme);
@@ -2689,8 +2683,8 @@ function draw(t){
     const prog=Math.min(1,(performance.now()-eatAnim.startTime)/260);
     if(prog>=1){eatAnim=null;}
     else{
-      const hx=lerp(snake[0].px,snake[0].x,rt);
-      const hy=lerp(snake[0].py,snake[0].y,rt);
+      const hx=lerp(snake[0].px,snake[0].x,t);
+      const hy=lerp(snake[0].py,snake[0].y,t);
       const ex=lerp(eatAnim.x,hx,prog);
       const ey=lerp(eatAnim.y,hy,prog);
       const sc=1-prog*0.92;
@@ -2714,16 +2708,16 @@ function draw(t){
     const dx=s.x-s.px,dy=s.y-s.py;
     if(Math.abs(dx)>1){
       // Svänger horisontellt
-      const ry=lerp(s.py,s.y,rt);
-      if(dx<-1){drawSeg(lerp(s.px,COLS,rt),ry,i,isHead);drawSeg(lerp(-1,s.x,rt),ry,i,isHead);}
-      else     {drawSeg(lerp(s.px,-1,rt),ry,i,isHead);  drawSeg(lerp(COLS,s.x,rt),ry,i,isHead);}
+      const ry=lerp(s.py,s.y,t);
+      if(dx<-1){drawSeg(lerp(s.px,COLS,t),ry,i,isHead);drawSeg(lerp(-1,s.x,t),ry,i,isHead);}
+      else     {drawSeg(lerp(s.px,-1,t),ry,i,isHead);  drawSeg(lerp(COLS,s.x,t),ry,i,isHead);}
     }else if(Math.abs(dy)>1){
       // Svänger vertikalt
-      const rx=lerp(s.px,s.x,rt);
-      if(dy<-1){drawSeg(rx,lerp(s.py,ROWS,rt),i,isHead);drawSeg(rx,lerp(-1,s.y,rt),i,isHead);}
-      else     {drawSeg(rx,lerp(s.py,-1,rt),i,isHead);  drawSeg(rx,lerp(ROWS,s.y,rt),i,isHead);}
+      const rx=lerp(s.px,s.x,t);
+      if(dy<-1){drawSeg(rx,lerp(s.py,ROWS,t),i,isHead);drawSeg(rx,lerp(-1,s.y,t),i,isHead);}
+      else     {drawSeg(rx,lerp(s.py,-1,t),i,isHead);  drawSeg(rx,lerp(ROWS,s.y,t),i,isHead);}
     }else{
-      drawSeg(lerp(s.px,s.x,rt),lerp(s.py,s.y,rt),i,isHead);
+      drawSeg(lerp(s.px,s.x,t),lerp(s.py,s.y,t),i,isHead);
     }
   }
   // Tydlig kant runt spelplanen — visar var väggarna går
