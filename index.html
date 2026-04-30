@@ -1488,6 +1488,7 @@ const BONUS_LIFE_FALLBACK_MAX_DIST=10;
 const loadPlayer=()=>localStorage.getItem(PLAYER_KEY)||'';
 const savePlayer=n=>localStorage.setItem(PLAYER_KEY,n);
 const getPlayer=()=>loadPlayer()||'Spelare';
+function isDevAndreasMode(){return loadPlayer().trim().toLowerCase()==='devandreas';}
 function updatePlayerBar(){
   const n=loadPlayer();
   document.getElementById('playerGreeting').textContent=n?t('greeting',{name:n}):'';
@@ -1514,7 +1515,10 @@ function updateStats(){
 /* ═══════════════════════════════════════
    MEDALJER
    ═══════════════════════════════════════ */
-function loadMedals(){try{return new Set(JSON.parse(localStorage.getItem(MEDALS_KEY))||[]);}catch(e){return new Set();}}
+function loadMedals(){
+  if(isDevAndreasMode())return new Set(MEDALS_DEF.map(m=>m.id));
+  try{return new Set(JSON.parse(localStorage.getItem(MEDALS_KEY))||[]);}catch(e){return new Set();}
+}
 function saveMedals(s){localStorage.setItem(MEDALS_KEY,JSON.stringify([...s]));}
 function loadOpScores(){try{return JSON.parse(localStorage.getItem(OP_SCORES_KEY))||{'+':0,'-':0,'*':0,'/':0};}catch(e){return{'+':0,'-':0,'*':0,'/':0};}}
 function saveOpScores(s){localStorage.setItem(OP_SCORES_KEY,JSON.stringify(s));}
@@ -1541,6 +1545,7 @@ function saveActiveSkin(id){
 function isSkinUnlocked(id){
   const def=SKINS_DEF.find(s=>s.id===id);
   if(!def)return false;
+  if(isDevAndreasMode())return true;
   if(def.free)return true;
   return loadUnlockedSkins().has(id);
 }
@@ -2301,7 +2306,7 @@ function tick(){
   else dir={...nextDir};
   nextDir=pendingDirs.length?{...pendingDirs[0]}:{...dir};
   updateBonusLife();
-  const old=snake.map(s=>({x:s.x,y:s.y}));
+  const old=snake.map(s=>({x:s.x,y:s.y,px:s.px,py:s.py}));
   let hx=snake[0].x+dir.x, hy=snake[0].y+dir.y;
 
   if(wallWrap){
@@ -2315,7 +2320,16 @@ function tick(){
 
   snake.unshift({x:hx,y:hy,px:old[0].x,py:old[0].y});
   if(growPending>0)growPending--;else snake.pop();
-  for(let i=1;i<snake.length;i++){snake[i].px=old[i]?old[i].x:snake[i].x;snake[i].py=old[i]?old[i].y:snake[i].y;}
+  for(let i=1;i<snake.length;i++){
+    if(old[i]){
+      snake[i].px=old[i].x;
+      snake[i].py=old[i].y;
+    }else{
+      const prevTail=old[old.length-1];
+      snake[i].px=prevTail?prevTail.px:snake[i].x;
+      snake[i].py=prevTail?prevTail.py:snake[i].y;
+    }
+  }
 
   if(bonusLife&&bonusLife.x===hx&&bonusLife.y===hy){
     bonusLife=null;
@@ -2642,6 +2656,10 @@ function getNormalTileSprite(value){
   _tileSpriteCache.set(key,sprite);
   return sprite;
 }
+function smoothStep01(t){
+  const v=Math.max(0,Math.min(1,t));
+  return v*v*(3-2*v);
+}
 
 // Auto-prestanda: mäter FPS löpande. Om vi sjunker under 45 FPS i 90 frames
 // (~1.5 sek) skalar vi automatiskt ner partiklar och tunga shadows.
@@ -2660,6 +2678,7 @@ function _perfTick(t){
 }
 function draw(t){
   _perfTick(t);
+  const rt=smoothStep01(t);
   updateBonusLife();
   const _theme=getActiveTheme();
   drawBackground(_theme);
@@ -2670,8 +2689,8 @@ function draw(t){
     const prog=Math.min(1,(performance.now()-eatAnim.startTime)/260);
     if(prog>=1){eatAnim=null;}
     else{
-      const hx=lerp(snake[0].px,snake[0].x,t);
-      const hy=lerp(snake[0].py,snake[0].y,t);
+      const hx=lerp(snake[0].px,snake[0].x,rt);
+      const hy=lerp(snake[0].py,snake[0].y,rt);
       const ex=lerp(eatAnim.x,hx,prog);
       const ey=lerp(eatAnim.y,hy,prog);
       const sc=1-prog*0.92;
@@ -2695,16 +2714,16 @@ function draw(t){
     const dx=s.x-s.px,dy=s.y-s.py;
     if(Math.abs(dx)>1){
       // Svänger horisontellt
-      const ry=lerp(s.py,s.y,t);
-      if(dx<-1){drawSeg(lerp(s.px,COLS,t),ry,i,isHead);drawSeg(lerp(-1,s.x,t),ry,i,isHead);}
-      else     {drawSeg(lerp(s.px,-1,t),ry,i,isHead);  drawSeg(lerp(COLS,s.x,t),ry,i,isHead);}
+      const ry=lerp(s.py,s.y,rt);
+      if(dx<-1){drawSeg(lerp(s.px,COLS,rt),ry,i,isHead);drawSeg(lerp(-1,s.x,rt),ry,i,isHead);}
+      else     {drawSeg(lerp(s.px,-1,rt),ry,i,isHead);  drawSeg(lerp(COLS,s.x,rt),ry,i,isHead);}
     }else if(Math.abs(dy)>1){
       // Svänger vertikalt
-      const rx=lerp(s.px,s.x,t);
-      if(dy<-1){drawSeg(rx,lerp(s.py,ROWS,t),i,isHead);drawSeg(rx,lerp(-1,s.y,t),i,isHead);}
-      else     {drawSeg(rx,lerp(s.py,-1,t),i,isHead);  drawSeg(rx,lerp(ROWS,s.y,t),i,isHead);}
+      const rx=lerp(s.px,s.x,rt);
+      if(dy<-1){drawSeg(rx,lerp(s.py,ROWS,rt),i,isHead);drawSeg(rx,lerp(-1,s.y,rt),i,isHead);}
+      else     {drawSeg(rx,lerp(s.py,-1,rt),i,isHead);  drawSeg(rx,lerp(ROWS,s.y,rt),i,isHead);}
     }else{
-      drawSeg(lerp(s.px,s.x,t),lerp(s.py,s.y,t),i,isHead);
+      drawSeg(lerp(s.px,s.x,rt),lerp(s.py,s.y,rt),i,isHead);
     }
   }
   // Tydlig kant runt spelplanen — visar var väggarna går
