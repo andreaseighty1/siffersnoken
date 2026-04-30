@@ -2656,6 +2656,19 @@ function getNormalTileSprite(value){
   _tileSpriteCache.set(key,sprite);
   return sprite;
 }
+function getUpcomingTurnDir(){
+  const nd=pendingDirs.length?pendingDirs[0]:null;
+  if(!nd||sameDir(nd,dir)||oppositeDir(nd,dir))return null;
+  return nd;
+}
+function getHeadPreview(progress){
+  const turn=getUpcomingTurnDir();
+  if(!turn)return{dx:0,dy:0,dir,blend:0};
+  const blend=Math.max(0,Math.min(1,(progress-0.58)/0.42));
+  if(blend<=0)return{dx:0,dy:0,dir,blend:0};
+  const dist=0.18*blend;
+  return{dx:turn.x*dist,dy:turn.y*dist,dir:blend>0.28?turn:dir,blend};
+}
 // Auto-prestanda: mäter FPS löpande. Om vi sjunker under 45 FPS i 90 frames
 // (~1.5 sek) skalar vi automatiskt ner partiklar och tunga shadows.
 // Helt osynligt för bra datorer; räddar gamla Chromebooks från lagg.
@@ -2870,8 +2883,12 @@ function drawBonusLife(){
 function drawSeg(rx,ry,i,isHead){
   const skin=getActiveSkinDef();
   const isTail=!isHead&&i===snake.length-1;
+  const headPreview=isHead?getHeadPreview(moveProgress):null;
+  const headShiftX=isHead?headPreview.dx*CELL:0;
+  const headShiftY=isHead?headPreview.dy*CELL:0;
+  const renderDir=isHead?headPreview.dir:dir;
   // Fix 1: Ta bort 1px gap — segment ritas flush mot varandra
-  const px=rx*CELL,py=ry*CELL,s=CELL;
+  const px=rx*CELL+headShiftX,py=ry*CELL+headShiftY,s=CELL;
   const alpha=isHead?1:Math.max(0.15,1-i*.04);
   // Fix 3: Svansspets — sista segmentet skalas ner till 60%
   const ts=isTail?s*0.6:s;
@@ -2982,10 +2999,11 @@ function drawSeg(rx,ry,i,isHead){
   if(isHead){
     const cx=rx*CELL+CELL/2,cy=ry*CELL+CELL/2;ctx.fillStyle='#060c08';
     let e1x,e1y,e2x,e2y;
-    if(dir.x===1){e1x=cx+6;e1y=cy-5;e2x=cx+6;e2y=cy+5;}
-    else if(dir.x===-1){e1x=cx-6;e1y=cy-5;e2x=cx-6;e2y=cy+5;}
-    else if(dir.y===1){e1x=cx-5;e1y=cy+6;e2x=cx+5;e2y=cy+6;}
-    else{e1x=cx-5;e1y=cy-6;e2x=cx+5;e2y=cy-6;}
+    const rcx=cx+headShiftX,rcy=cy+headShiftY;
+    if(renderDir.x===1){e1x=rcx+6;e1y=rcy-5;e2x=rcx+6;e2y=rcy+5;}
+    else if(renderDir.x===-1){e1x=rcx-6;e1y=rcy-5;e2x=rcx-6;e2y=rcy+5;}
+    else if(renderDir.y===1){e1x=rcx-5;e1y=rcy+6;e2x=rcx+5;e2y=rcy+6;}
+    else{e1x=rcx-5;e1y=rcy-6;e2x=rcx+5;e2y=rcy-6;}
     ctx.beginPath();ctx.arc(e1x,e1y,3,0,Math.PI*2);ctx.fill();
     ctx.beginPath();ctx.arc(e2x,e2y,3,0,Math.PI*2);ctx.fill();
     // Head accessory
@@ -2999,7 +3017,7 @@ function drawSeg(rx,ry,i,isHead){
     else if(_userPick==='off')      _acc=null;
     else if(_userPick==='auto')     _acc=_skinAcc;
     else                            _acc=_userPick;
-    if(_acc)drawHeadAccessory(_acc,cx,cy);
+    if(_acc)drawHeadAccessory(_acc,rcx,rcy,renderDir);
   }
 }
 function getDirKey(dirState=dir){
@@ -3157,8 +3175,8 @@ function getHeadAccessorySprite(acc,dirKey){
   _headAccessoryCache.set(key,sprite);
   return sprite;
 }
-function drawHeadAccessory(acc,cx,cy){
-  const sprite=getHeadAccessorySprite(acc,getDirKey(dir));
+function drawHeadAccessory(acc,cx,cy,dirState=dir){
+  const sprite=getHeadAccessorySprite(acc,getDirKey(dirState));
   ctx.drawImage(sprite,Math.round(cx-sprite.width/2),Math.round(cy-sprite.height/2));
 }
 function rRect(x,y,w,h,r){
