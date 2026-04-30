@@ -1443,6 +1443,17 @@ let speedMode='none',wallWrap=false,multiTableSelect=false;
    ═══════════════════════════════════════ */
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 canvas.width=COLS*CELL;canvas.height=ROWS*CELL;
+const _tileSpriteCache=new Map();
+const _headAccessoryCache=new Map();
+function createSpriteCanvas(size){
+  const sprite=document.createElement('canvas');
+  sprite.width=size;
+  sprite.height=size;
+  return sprite;
+}
+if(document.fonts&&document.fonts.ready){
+  document.fonts.ready.then(()=>{_tileSpriteCache.clear();_headAccessoryCache.clear();}).catch(()=>{});
+}
 let snake=[],dir={x:1,y:0},nextDir={x:1,y:0},pendingDirs=[];
 let tiles=[],problem=null;
 let score=0,lives=3,combo=0,growPending=0,correctStreak=0;
@@ -2604,6 +2615,33 @@ function drawBackground(theme){
   if(_sid==='inferno')drawLightningShimmer();
   if(_sid==='hv71')drawHv71Shimmer();
 }
+function rRectOn(drawCtx,x,y,w,h,r){
+  drawCtx.beginPath();drawCtx.moveTo(x+r,y);drawCtx.lineTo(x+w-r,y);drawCtx.quadraticCurveTo(x+w,y,x+w,y+r);
+  drawCtx.lineTo(x+w,y+h-r);drawCtx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  drawCtx.lineTo(x+r,y+h);drawCtx.quadraticCurveTo(x,y+h,x,y+h-r);
+  drawCtx.lineTo(x,y+r);drawCtx.quadraticCurveTo(x,y,x+r,y);drawCtx.closePath();
+}
+function getNormalTileSprite(value){
+  const val=String(value);
+  const key=`${CELL}|${val}`;
+  if(_tileSpriteCache.has(key))return _tileSpriteCache.get(key);
+  const sprite=createSpriteCanvas(CELL);
+  const sctx=sprite.getContext('2d');
+  const r=Math.floor(CELL*0.18);
+  const px=2,py=2,s=CELL-4;
+  const cx=CELL/2,cy=CELL/2;
+  const fs=val.length<=2?Math.min(19,Math.floor(CELL*0.52)):val.length===3?Math.min(15,Math.floor(CELL*0.4)):Math.min(12,Math.floor(CELL*0.32));
+  sctx.fillStyle='rgba(15,30,80,.88)';rRectOn(sctx,px,py,s,s,r);sctx.fill();
+  sctx.strokeStyle='rgba(180,220,255,.95)';sctx.lineWidth=1.5;rRectOn(sctx,px,py,s,s,r);sctx.stroke();
+  sctx.font=`900 ${fs}px Nunito,'Exo 2',sans-serif`;
+  sctx.textAlign='center';sctx.textBaseline='middle';
+  sctx.fillStyle='#ffffff';
+  sctx.shadowColor='rgba(150,210,255,.9)';sctx.shadowBlur=6;
+  sctx.fillText(val,cx,cy);
+  sctx.shadowBlur=0;
+  _tileSpriteCache.set(key,sprite);
+  return sprite;
+}
 
 // Auto-prestanda: mäter FPS löpande. Om vi sjunker under 45 FPS i 90 frames
 // (~1.5 sek) skalar vi automatiskt ner partiklar och tunga shadows.
@@ -2780,13 +2818,8 @@ function drawTile(t){
       }
     }
   }else{
-    ctx.fillStyle='rgba(15,30,80,.88)';rRect(px,py,s,s,r);ctx.fill();
-    ctx.strokeStyle='rgba(180,220,255,.95)';ctx.lineWidth=1.5;rRect(px,py,s,s,r);ctx.stroke();
-    ctx.font=`900 ${fs}px Nunito,'Exo 2',sans-serif`;
-    ctx.textAlign='center';ctx.textBaseline='middle';
-    ctx.fillStyle='#ffffff';
-    ctx.shadowColor='rgba(150,210,255,.9)';ctx.shadowBlur=6;
-    ctx.fillText(val,cx,cy);
+    const sprite=getNormalTileSprite(val);
+    ctx.drawImage(sprite,t.x*CELL,t.y*CELL);
   }
   ctx.restore();
 }
@@ -2956,238 +2989,164 @@ function drawSeg(rx,ry,i,isHead){
     if(_acc)drawHeadAccessory(_acc,cx,cy);
   }
 }
-function drawHeadAccessory(acc,cx,cy){
-  // Kronan sitter mellan ögonen och kroppen
-  // Ögonen sitter på pannans sida (rörelseriktningen)
-  // Kronan sitter BAKOM ögonen = mot kroppen = MOTSATT rörelseriktning
-  // Taggarna pekar BORT från ögonen = mot kroppen = MOTSATT rörelseriktning
+function getDirKey(dirState=dir){
+  if(dirState.y===1)return'down';
+  if(dirState.y===-1)return'up';
+  if(dirState.x===1)return'right';
+  return'left';
+}
+function paintHeadAccessory(drawCtx,acc,cx,cy,dirKey){
+  if(acc==='glasses'){
+    drawCtx.save();
+    drawCtx.strokeStyle='rgba(60,60,60,0.9)';drawCtx.lineWidth=1.5;
+    drawCtx.fillStyle='rgba(40,40,80,0.45)';
+    let g1x=cx,g1y=cy,g2x=cx,g2y=cy;
+    if(dirKey==='right'){g1x=cx+5;g1y=cy-5;g2x=cx+5;g2y=cy+5;}
+    else if(dirKey==='left'){g1x=cx-5;g1y=cy-5;g2x=cx-5;g2y=cy+5;}
+    else if(dirKey==='down'){g1x=cx-5;g1y=cy+5;g2x=cx+5;g2y=cy+5;}
+    else{g1x=cx-5;g1y=cy-5;g2x=cx+5;g2y=cy-5;}
+    drawCtx.beginPath();drawCtx.arc(g1x,g1y,3.5,0,Math.PI*2);drawCtx.fill();drawCtx.stroke();
+    drawCtx.beginPath();drawCtx.arc(g2x,g2y,3.5,0,Math.PI*2);drawCtx.fill();drawCtx.stroke();
+    drawCtx.beginPath();drawCtx.moveTo(g1x+(g2x-g1x)*0.35,g1y+(g2y-g1y)*0.35);
+    drawCtx.lineTo(g1x+(g2x-g1x)*0.65,g1y+(g2y-g1y)*0.65);drawCtx.stroke();
+    drawCtx.restore();
+    return;
+  }
   const off=Math.floor(CELL*0.42);
   let ox=0,oy=0,angle=0;
-  if(dir.y===1) {oy=-off;angle=Math.PI;}    // nedåt: ögon nertill, krona ovanför, taggar upp
-  else if(dir.y===-1){oy=off;angle=0;}       // uppåt: ögon upptill, krona nedanför, taggar ner
-  else if(dir.x===1) {ox=-off;angle=Math.PI/2;}  // höger: ögon till höger, krona till vänster, taggar vänster
-  else               {ox=off; angle=-Math.PI/2;}  // vänster: ögon till vänster, krona till höger, taggar höger
-  const tx=cx+ox, ty=cy+oy;
-  ctx.save();
-  ctx.translate(tx,ty);
-  ctx.rotate(angle);
+  if(dirKey==='down'){oy=-off;angle=Math.PI;}
+  else if(dirKey==='up'){oy=off;angle=0;}
+  else if(dirKey==='right'){ox=-off;angle=Math.PI/2;}
+  else{ox=off;angle=-Math.PI/2;}
+  drawCtx.save();
+  drawCtx.translate(cx+ox,cy+oy);
+  drawCtx.rotate(angle);
   if(acc==='crown'){
-    // 3 spetsar, taggar pekar nedåt i lokalt koordinatsystem (roteras av ctx.rotate)
-    ctx.fillStyle='#ffd700';ctx.shadowColor='#ffcc00';ctx.shadowBlur=7;
-    ctx.beginPath();
-    ctx.moveTo(-7,-4);         // vänster bas (mot ögonen)
-    ctx.lineTo(-6,3);          // vänster spets (bort från ögonen)
-    ctx.lineTo(-2,-1);         // vänster dal
-    ctx.lineTo(0,4);           // mitten spets
-    ctx.lineTo(2,-1);          // höger dal
-    ctx.lineTo(6,3);           // höger spets
-    ctx.lineTo(7,-4);          // höger bas
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
+    drawCtx.fillStyle='#ffd700';drawCtx.shadowColor='#ffcc00';drawCtx.shadowBlur=7;
+    drawCtx.beginPath();
+    drawCtx.moveTo(-7,-4);drawCtx.lineTo(-6,3);drawCtx.lineTo(-2,-1);drawCtx.lineTo(0,4);
+    drawCtx.lineTo(2,-1);drawCtx.lineTo(6,3);drawCtx.lineTo(7,-4);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;
   }else if(acc==='tiara'){
-    ctx.fillStyle='#ffd6f4';ctx.shadowColor='#ff99dd';ctx.shadowBlur=6;
-    ctx.beginPath();
-    ctx.moveTo(-8,-2);ctx.lineTo(-5,2);ctx.lineTo(-1,0);
-    ctx.lineTo(0,4);ctx.lineTo(1,0);ctx.lineTo(5,2);ctx.lineTo(8,-2);
-    ctx.lineTo(8,-4);ctx.lineTo(-8,-4);
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#9fe7ff';
-    ctx.beginPath();ctx.arc(0,1,1.8,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#ffffff';
-    ctx.beginPath();ctx.arc(-4,-0.2,1.1,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(4,-0.2,1.1,0,Math.PI*2);ctx.fill();
+    drawCtx.fillStyle='#ffd6f4';drawCtx.shadowColor='#ff99dd';drawCtx.shadowBlur=6;
+    drawCtx.beginPath();
+    drawCtx.moveTo(-8,-2);drawCtx.lineTo(-5,2);drawCtx.lineTo(-1,0);drawCtx.lineTo(0,4);
+    drawCtx.lineTo(1,0);drawCtx.lineTo(5,2);drawCtx.lineTo(8,-2);drawCtx.lineTo(8,-4);drawCtx.lineTo(-8,-4);
+    drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;
+    drawCtx.fillStyle='#9fe7ff';drawCtx.beginPath();drawCtx.arc(0,1,1.8,0,Math.PI*2);drawCtx.fill();
+    drawCtx.fillStyle='#ffffff';drawCtx.beginPath();drawCtx.arc(-4,-0.2,1.1,0,Math.PI*2);drawCtx.fill();
+    drawCtx.beginPath();drawCtx.arc(4,-0.2,1.1,0,Math.PI*2);drawCtx.fill();
   }else if(acc==='santa'){
-    ctx.fillStyle='#cc1111';ctx.shadowColor='#ff2222';ctx.shadowBlur=6;
-    ctx.beginPath();
-    ctx.moveTo(-9,-5);ctx.lineTo(9,-5);
-    ctx.lineTo(3,7);ctx.lineTo(-3,7);ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='rgba(255,255,255,0.95)';
-    ctx.fillRect(-9,-1,18,5);
-    ctx.beginPath();ctx.arc(0,8,4,0,Math.PI*2);ctx.fill();
+    drawCtx.fillStyle='#cc1111';drawCtx.shadowColor='#ff2222';drawCtx.shadowBlur=6;
+    drawCtx.beginPath();drawCtx.moveTo(-9,-5);drawCtx.lineTo(9,-5);drawCtx.lineTo(3,7);drawCtx.lineTo(-3,7);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='rgba(255,255,255,0.95)';drawCtx.fillRect(-9,-1,18,5);
+    drawCtx.beginPath();drawCtx.arc(0,8,4,0,Math.PI*2);drawCtx.fill();
   }else if(acc==='pumpkin'){
-    ctx.fillStyle='#ff6a00';ctx.shadowColor='#ff4400';ctx.shadowBlur=9;
-    ctx.beginPath();ctx.arc(0,2,7,0,Math.PI*2);ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#000';
-    ctx.beginPath();ctx.arc(-3,3,1.5,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.arc(3,3,1.5,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#000';ctx.lineWidth=1.2;
-    ctx.beginPath();ctx.arc(0,0,2.5,0.1,Math.PI-0.1);ctx.stroke();
-    ctx.strokeStyle='#2d8a00';ctx.lineWidth=2;
-    ctx.beginPath();ctx.moveTo(0,9);ctx.lineTo(3,12);ctx.stroke();
+    drawCtx.fillStyle='#ff6a00';drawCtx.shadowColor='#ff4400';drawCtx.shadowBlur=9;
+    drawCtx.beginPath();drawCtx.arc(0,2,7,0,Math.PI*2);drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#000';
+    drawCtx.beginPath();drawCtx.arc(-3,3,1.5,0,Math.PI*2);drawCtx.fill();
+    drawCtx.beginPath();drawCtx.arc(3,3,1.5,0,Math.PI*2);drawCtx.fill();
+    drawCtx.strokeStyle='#000';drawCtx.lineWidth=1.2;drawCtx.beginPath();drawCtx.arc(0,0,2.5,0.1,Math.PI-0.1);drawCtx.stroke();
+    drawCtx.strokeStyle='#2d8a00';drawCtx.lineWidth=2;drawCtx.beginPath();drawCtx.moveTo(0,9);drawCtx.lineTo(3,12);drawCtx.stroke();
   }else if(acc==='bunny'){
-    ctx.fillStyle='#ffaacc';ctx.shadowColor='#ff88bb';ctx.shadowBlur=5;
-    ctx.beginPath();ctx.ellipse(-5,6,3,8,-0.15,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.ellipse(5,6,3,8,0.15,0,Math.PI*2);ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#ff5599';
-    ctx.beginPath();ctx.ellipse(-5,6,1.5,5,-0.15,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.ellipse(5,6,1.5,5,0.15,0,Math.PI*2);ctx.fill();
+    drawCtx.fillStyle='#ffaacc';drawCtx.shadowColor='#ff88bb';drawCtx.shadowBlur=5;
+    drawCtx.beginPath();drawCtx.ellipse(-5,6,3,8,-0.15,0,Math.PI*2);drawCtx.fill();
+    drawCtx.beginPath();drawCtx.ellipse(5,6,3,8,0.15,0,Math.PI*2);drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#ff5599';
+    drawCtx.beginPath();drawCtx.ellipse(-5,6,1.5,5,-0.15,0,Math.PI*2);drawCtx.fill();
+    drawCtx.beginPath();drawCtx.ellipse(5,6,1.5,5,0.15,0,Math.PI*2);drawCtx.fill();
   }else if(acc==='tophat'){
-    ctx.fillStyle='#1a1a1a';ctx.shadowColor='#000';ctx.shadowBlur=4;
-    ctx.beginPath();ctx.ellipse(0,-1,9,2,0,0,Math.PI*2);ctx.fill();
-    ctx.fillRect(-5,-1,10,9);
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#aa0033';ctx.fillRect(-5,5,10,2);
-    ctx.fillStyle='rgba(255,255,255,0.25)';ctx.fillRect(-4,0,1.5,4);
+    drawCtx.fillStyle='#1a1a1a';drawCtx.shadowColor='#000';drawCtx.shadowBlur=4;
+    drawCtx.beginPath();drawCtx.ellipse(0,-1,9,2,0,0,Math.PI*2);drawCtx.fill();
+    drawCtx.fillRect(-5,-1,10,9);
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#aa0033';drawCtx.fillRect(-5,5,10,2);
+    drawCtx.fillStyle='rgba(255,255,255,0.25)';drawCtx.fillRect(-4,0,1.5,4);
   }else if(acc==='pirate'){
-    ctx.fillStyle='#111';ctx.shadowColor='#000';ctx.shadowBlur=5;
-    ctx.beginPath();
-    ctx.moveTo(-11,-1);
-    ctx.quadraticCurveTo(-8,7,0,7);
-    ctx.quadraticCurveTo(8,7,11,-1);
-    ctx.quadraticCurveTo(6,1,0,1);
-    ctx.quadraticCurveTo(-6,1,-11,-1);
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#f3f3f3';
-    ctx.beginPath();ctx.arc(0,3,2.4,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#f3f3f3';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(-3.3,0.2);ctx.lineTo(3.3,5.8);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(3.3,0.2);ctx.lineTo(-3.3,5.8);ctx.stroke();
+    drawCtx.fillStyle='#111';drawCtx.shadowColor='#000';drawCtx.shadowBlur=5;
+    drawCtx.beginPath();
+    drawCtx.moveTo(-11,-1);drawCtx.quadraticCurveTo(-8,7,0,7);drawCtx.quadraticCurveTo(8,7,11,-1);
+    drawCtx.quadraticCurveTo(6,1,0,1);drawCtx.quadraticCurveTo(-6,1,-11,-1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#f3f3f3';drawCtx.beginPath();drawCtx.arc(0,3,2.4,0,Math.PI*2);drawCtx.fill();
+    drawCtx.strokeStyle='#f3f3f3';drawCtx.lineWidth=1;drawCtx.beginPath();drawCtx.moveTo(-3.3,0.2);drawCtx.lineTo(3.3,5.8);drawCtx.stroke();
+    drawCtx.beginPath();drawCtx.moveTo(3.3,0.2);drawCtx.lineTo(-3.3,5.8);drawCtx.stroke();
   }else if(acc==='cowboy'){
-    ctx.fillStyle='#5a3a1a';ctx.shadowColor='#3a2510';ctx.shadowBlur=5;
-    ctx.beginPath();
-    ctx.moveTo(-11,0);
-    ctx.quadraticCurveTo(-9,-3,0,-2);
-    ctx.quadraticCurveTo(9,-3,11,0);
-    ctx.quadraticCurveTo(9,2,0,1);
-    ctx.quadraticCurveTo(-9,2,-11,0);
-    ctx.closePath();ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(-5,-1);
-    ctx.quadraticCurveTo(-5,7,0,7);
-    ctx.quadraticCurveTo(5,7,5,-1);
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#3a2008';
-    ctx.fillRect(-4,0,8,1.5);
+    drawCtx.fillStyle='#5a3a1a';drawCtx.shadowColor='#3a2510';drawCtx.shadowBlur=5;
+    drawCtx.beginPath();
+    drawCtx.moveTo(-11,0);drawCtx.quadraticCurveTo(-9,-3,0,-2);drawCtx.quadraticCurveTo(9,-3,11,0);
+    drawCtx.quadraticCurveTo(9,2,0,1);drawCtx.quadraticCurveTo(-9,2,-11,0);drawCtx.closePath();drawCtx.fill();
+    drawCtx.beginPath();drawCtx.moveTo(-5,-1);drawCtx.quadraticCurveTo(-5,7,0,7);drawCtx.quadraticCurveTo(5,7,5,-1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#3a2008';drawCtx.fillRect(-4,0,8,1.5);
   }else if(acc==='flower'){
-    // Liten blomma vid sidan av huvudet för en gulligare look
-    ctx.save();
-    ctx.translate(-7,1); // förskjut åt vänster sida
-    ctx.shadowColor='#ff66aa';ctx.shadowBlur=4;
-    ctx.fillStyle='#ff99cc';
+    drawCtx.save();drawCtx.translate(-7,1);drawCtx.shadowColor='#ff66aa';drawCtx.shadowBlur=4;drawCtx.fillStyle='#ff99cc';
     for(let k=0;k<5;k++){
       const ang=k*(Math.PI*2/5)-Math.PI/2;
-      const px=Math.cos(ang)*3, py=Math.sin(ang)*3;
-      ctx.beginPath();ctx.arc(px,py,2.4,0,Math.PI*2);ctx.fill();
+      const px=Math.cos(ang)*3,py=Math.sin(ang)*3;
+      drawCtx.beginPath();drawCtx.arc(px,py,2.4,0,Math.PI*2);drawCtx.fill();
     }
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#ffdd44';
-    ctx.beginPath();ctx.arc(0,0,1.6,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#cc8800';
-    ctx.beginPath();ctx.arc(0,0,0.8,0,Math.PI*2);ctx.fill();
-    // Liten grön stjälk som binder blomman till huvudet
-    ctx.strokeStyle='#3a8a3a';
-    ctx.lineWidth=1.2;
-    ctx.beginPath();ctx.moveTo(0,2);ctx.quadraticCurveTo(4,4,6,5);ctx.stroke();
-    ctx.restore();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#ffdd44';drawCtx.beginPath();drawCtx.arc(0,0,1.6,0,Math.PI*2);drawCtx.fill();
+    drawCtx.fillStyle='#cc8800';drawCtx.beginPath();drawCtx.arc(0,0,0.8,0,Math.PI*2);drawCtx.fill();
+    drawCtx.strokeStyle='#3a8a3a';drawCtx.lineWidth=1.2;drawCtx.beginPath();drawCtx.moveTo(0,2);drawCtx.quadraticCurveTo(4,4,6,5);drawCtx.stroke();
+    drawCtx.restore();
   }else if(acc==='partyhat'){
-    ctx.fillStyle='#ff5f7a';ctx.shadowColor='#ff8899';ctx.shadowBlur=5;
-    ctx.beginPath();ctx.moveTo(0,8);ctx.lineTo(-7,-3);ctx.lineTo(7,-3);ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.strokeStyle='#ffd54f';ctx.lineWidth=1.1;
-    ctx.beginPath();ctx.moveTo(-4,0);ctx.lineTo(4,3);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(-2,-2);ctx.lineTo(2,0);ctx.stroke();
-    ctx.fillStyle='#7cf3ff';
-    ctx.beginPath();ctx.arc(0,9.2,2.2,0,Math.PI*2);ctx.fill();
+    drawCtx.fillStyle='#ff5f7a';drawCtx.shadowColor='#ff8899';drawCtx.shadowBlur=5;
+    drawCtx.beginPath();drawCtx.moveTo(0,8);drawCtx.lineTo(-7,-3);drawCtx.lineTo(7,-3);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.strokeStyle='#ffd54f';drawCtx.lineWidth=1.1;
+    drawCtx.beginPath();drawCtx.moveTo(-4,0);drawCtx.lineTo(4,3);drawCtx.stroke();
+    drawCtx.beginPath();drawCtx.moveTo(-2,-2);drawCtx.lineTo(2,0);drawCtx.stroke();
+    drawCtx.fillStyle='#7cf3ff';drawCtx.beginPath();drawCtx.arc(0,9.2,2.2,0,Math.PI*2);drawCtx.fill();
   }else if(acc==='schoolcap'){
-    ctx.fillStyle='#15233f';ctx.shadowColor='#091120';ctx.shadowBlur=4;
-    ctx.beginPath();
-    ctx.moveTo(0,8);ctx.lineTo(-10,2);ctx.lineTo(0,-4);ctx.lineTo(10,2);
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#22345e';
-    ctx.fillRect(-4,-1,8,8);
-    ctx.strokeStyle='#ffd24a';ctx.lineWidth=1.1;
-    ctx.beginPath();ctx.moveTo(4,1);ctx.lineTo(8,7);ctx.stroke();
-    ctx.fillStyle='#ffd24a';
-    ctx.beginPath();ctx.arc(8,7,1.4,0,Math.PI*2);ctx.fill();
+    drawCtx.fillStyle='#15233f';drawCtx.shadowColor='#091120';drawCtx.shadowBlur=4;
+    drawCtx.beginPath();drawCtx.moveTo(0,8);drawCtx.lineTo(-10,2);drawCtx.lineTo(0,-4);drawCtx.lineTo(10,2);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#22345e';drawCtx.fillRect(-4,-1,8,8);
+    drawCtx.strokeStyle='#ffd24a';drawCtx.lineWidth=1.1;drawCtx.beginPath();drawCtx.moveTo(4,1);drawCtx.lineTo(8,7);drawCtx.stroke();
+    drawCtx.fillStyle='#ffd24a';drawCtx.beginPath();drawCtx.arc(8,7,1.4,0,Math.PI*2);drawCtx.fill();
   }else if(acc==='captain'){
-    ctx.fillStyle='#0a2854';ctx.shadowColor='#051a3a';ctx.shadowBlur=4;
-    ctx.beginPath();
-    ctx.moveTo(-8,1);
-    ctx.quadraticCurveTo(-8,7,0,7);
-    ctx.quadraticCurveTo(8,7,8,1);
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#f0f0f0';
-    ctx.fillRect(-9,0,18,2);
-    ctx.fillStyle='#08183a';
-    ctx.beginPath();
-    ctx.moveTo(-9,0);ctx.quadraticCurveTo(0,-3,9,0);
-    ctx.lineTo(8,-1);ctx.quadraticCurveTo(0,-2,-8,-1);
-    ctx.closePath();ctx.fill();
-    ctx.fillStyle='#ffcc44';ctx.shadowColor='#cc9900';ctx.shadowBlur=3;
-    ctx.beginPath();ctx.arc(0,4,1.5,0,Math.PI*2);ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.strokeStyle='#ffcc44';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(0,4);ctx.lineTo(0,7);
-    ctx.moveTo(-2,5.5);ctx.lineTo(2,5.5);ctx.stroke();
+    drawCtx.fillStyle='#0a2854';drawCtx.shadowColor='#051a3a';drawCtx.shadowBlur=4;
+    drawCtx.beginPath();drawCtx.moveTo(-8,1);drawCtx.quadraticCurveTo(-8,7,0,7);drawCtx.quadraticCurveTo(8,7,8,1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#f0f0f0';drawCtx.fillRect(-9,0,18,2);
+    drawCtx.fillStyle='#08183a';drawCtx.beginPath();drawCtx.moveTo(-9,0);drawCtx.quadraticCurveTo(0,-3,9,0);
+    drawCtx.lineTo(8,-1);drawCtx.quadraticCurveTo(0,-2,-8,-1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.fillStyle='#ffcc44';drawCtx.shadowColor='#cc9900';drawCtx.shadowBlur=3;drawCtx.beginPath();drawCtx.arc(0,4,1.5,0,Math.PI*2);drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.strokeStyle='#ffcc44';drawCtx.lineWidth=1;drawCtx.beginPath();drawCtx.moveTo(0,4);drawCtx.lineTo(0,7);drawCtx.moveTo(-2,5.5);drawCtx.lineTo(2,5.5);drawCtx.stroke();
   }else if(acc==='beanie'){
-    ctx.fillStyle='#aa3344';ctx.shadowColor='#88223a';ctx.shadowBlur=3;
-    ctx.beginPath();
-    ctx.moveTo(-8,-1);
-    ctx.quadraticCurveTo(-7,7,0,7);
-    ctx.quadraticCurveTo(7,7,8,-1);
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=0.7;
-    for(let k=0;k<3;k++){
-      ctx.beginPath();
-      ctx.moveTo(-7,1+k*2);ctx.lineTo(7,1+k*2);
-      ctx.stroke();
-    }
-    ctx.fillStyle='#882233';
-    ctx.fillRect(-8,-1,16,2);
-    ctx.fillStyle='#f5e8d8';ctx.shadowColor='#d8c8a0';ctx.shadowBlur=4;
-    ctx.beginPath();ctx.arc(0,8,2.5,0,Math.PI*2);ctx.fill();
+    drawCtx.fillStyle='#aa3344';drawCtx.shadowColor='#88223a';drawCtx.shadowBlur=3;
+    drawCtx.beginPath();drawCtx.moveTo(-8,-1);drawCtx.quadraticCurveTo(-7,7,0,7);drawCtx.quadraticCurveTo(7,7,8,-1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.strokeStyle='rgba(0,0,0,0.18)';drawCtx.lineWidth=0.7;
+    for(let k=0;k<3;k++){drawCtx.beginPath();drawCtx.moveTo(-7,1+k*2);drawCtx.lineTo(7,1+k*2);drawCtx.stroke();}
+    drawCtx.fillStyle='#882233';drawCtx.fillRect(-8,-1,16,2);
+    drawCtx.fillStyle='#f5e8d8';drawCtx.shadowColor='#d8c8a0';drawCtx.shadowBlur=4;drawCtx.beginPath();drawCtx.arc(0,8,2.5,0,Math.PI*2);drawCtx.fill();
   }else if(acc==='viking'){
-    ctx.fillStyle='#aab2c2';ctx.shadowColor='#6b7280';ctx.shadowBlur=4;
-    ctx.beginPath();
-    ctx.moveTo(-8,-2);
-    ctx.quadraticCurveTo(-8,7,0,8);
-    ctx.quadraticCurveTo(8,7,8,-2);
-    ctx.quadraticCurveTo(0,-5,-8,-2);
-    ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#f6efe2';
-    ctx.beginPath();ctx.moveTo(-7,1);ctx.quadraticCurveTo(-11,5,-12,0);ctx.quadraticCurveTo(-11,-3,-7,-1);ctx.closePath();ctx.fill();
-    ctx.beginPath();ctx.moveTo(7,1);ctx.quadraticCurveTo(11,5,12,0);ctx.quadraticCurveTo(11,-3,7,-1);ctx.closePath();ctx.fill();
-    ctx.fillStyle='#d5a43a';
-    ctx.fillRect(-1.2,-5,2.4,3.4);
+    drawCtx.fillStyle='#aab2c2';drawCtx.shadowColor='#6b7280';drawCtx.shadowBlur=4;
+    drawCtx.beginPath();drawCtx.moveTo(-8,-2);drawCtx.quadraticCurveTo(-8,7,0,8);drawCtx.quadraticCurveTo(8,7,8,-2);drawCtx.quadraticCurveTo(0,-5,-8,-2);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#f6efe2';
+    drawCtx.beginPath();drawCtx.moveTo(-7,1);drawCtx.quadraticCurveTo(-11,5,-12,0);drawCtx.quadraticCurveTo(-11,-3,-7,-1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.beginPath();drawCtx.moveTo(7,1);drawCtx.quadraticCurveTo(11,5,12,0);drawCtx.quadraticCurveTo(11,-3,7,-1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.fillStyle='#d5a43a';drawCtx.fillRect(-1.2,-5,2.4,3.4);
   }else if(acc==='bow'){
-    ctx.save();
-    ctx.translate(-7,1);
-    ctx.shadowColor='#ff76b0';ctx.shadowBlur=5;
-    ctx.fillStyle='#ff5fa2';
-    ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(-4,-4,-7,-1);ctx.quadraticCurveTo(-5,2,0,2);ctx.closePath();ctx.fill();
-    ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(4,-4,7,-1);ctx.quadraticCurveTo(5,2,0,2);ctx.closePath();ctx.fill();
-    ctx.shadowBlur=0;
-    ctx.fillStyle='#ffd3e6';
-    ctx.beginPath();ctx.arc(0,0.8,1.8,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#ff9fc7';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(-1,2);ctx.lineTo(-2.5,6);ctx.moveTo(1,2);ctx.lineTo(2.5,6);ctx.stroke();
-    ctx.restore();
-  }else if(acc==='glasses'){
-    ctx.restore();
-    ctx.save();
-    ctx.strokeStyle='rgba(60,60,60,0.9)';ctx.lineWidth=1.5;
-    ctx.fillStyle='rgba(40,40,80,0.45)';
-    let g1x=cx,g1y=cy,g2x=cx,g2y=cy;
-    if(dir.x===1) {g1x=cx+5;g1y=cy-5;g2x=cx+5;g2y=cy+5;}
-    else if(dir.x===-1){g1x=cx-5;g1y=cy-5;g2x=cx-5;g2y=cy+5;}
-    else if(dir.y===1) {g1x=cx-5;g1y=cy+5;g2x=cx+5;g2y=cy+5;}
-    else               {g1x=cx-5;g1y=cy-5;g2x=cx+5;g2y=cy-5;}
-    ctx.beginPath();ctx.arc(g1x,g1y,3.5,0,Math.PI*2);ctx.fill();ctx.stroke();
-    ctx.beginPath();ctx.arc(g2x,g2y,3.5,0,Math.PI*2);ctx.fill();ctx.stroke();
-    ctx.beginPath();ctx.moveTo(g1x+(g2x-g1x)*0.35,g1y+(g2y-g1y)*0.35);
-    ctx.lineTo(g1x+(g2x-g1x)*0.65,g1y+(g2y-g1y)*0.65);ctx.stroke();
+    drawCtx.save();drawCtx.translate(-7,1);drawCtx.shadowColor='#ff76b0';drawCtx.shadowBlur=5;drawCtx.fillStyle='#ff5fa2';
+    drawCtx.beginPath();drawCtx.moveTo(0,0);drawCtx.quadraticCurveTo(-4,-4,-7,-1);drawCtx.quadraticCurveTo(-5,2,0,2);drawCtx.closePath();drawCtx.fill();
+    drawCtx.beginPath();drawCtx.moveTo(0,0);drawCtx.quadraticCurveTo(4,-4,7,-1);drawCtx.quadraticCurveTo(5,2,0,2);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#ffd3e6';drawCtx.beginPath();drawCtx.arc(0,0.8,1.8,0,Math.PI*2);drawCtx.fill();
+    drawCtx.strokeStyle='#ff9fc7';drawCtx.lineWidth=1;drawCtx.beginPath();drawCtx.moveTo(-1,2);drawCtx.lineTo(-2.5,6);drawCtx.moveTo(1,2);drawCtx.lineTo(2.5,6);drawCtx.stroke();
+    drawCtx.restore();
   }
-  ctx.restore();
+  drawCtx.restore();
+}
+function getHeadAccessorySprite(acc,dirKey){
+  const key=`${CELL}|${acc}|${dirKey}`;
+  if(_headAccessoryCache.has(key))return _headAccessoryCache.get(key);
+  const size=Math.ceil(CELL*2);
+  const sprite=createSpriteCanvas(size);
+  const sctx=sprite.getContext('2d');
+  paintHeadAccessory(sctx,acc,size/2,size/2,dirKey);
+  _headAccessoryCache.set(key,sprite);
+  return sprite;
+}
+function drawHeadAccessory(acc,cx,cy){
+  const sprite=getHeadAccessorySprite(acc,getDirKey(dir));
+  ctx.drawImage(sprite,Math.round(cx-sprite.width/2),Math.round(cy-sprite.height/2));
 }
 function rRect(x,y,w,h,r){
   ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);
