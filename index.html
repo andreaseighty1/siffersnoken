@@ -336,6 +336,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .skin-card:hover:not(.locked){border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4);}
 .skin-card.active{border-color:var(--accent);box-shadow:0 0 18px rgba(0,255,136,.28);}
 .skin-card.locked{opacity:.38;cursor:default;}
+.head-acc-card{align-self:start}
 .skin-canvas-wrap{position:relative;width:100%;overflow:hidden;background:rgba(0,0,0,.35);}
 .skin-canvas-wrap canvas{display:block;width:100%;height:72px;}
 .skin-active-bar{position:absolute;top:6px;left:6px;
@@ -487,8 +488,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.0! <strong>4 musikstilar</strong> • <strong>fotbollsskinn</strong> • fler överraskningar på väg</span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.0! <strong>4 musikstilar</strong> • <strong>fotbollsskinn</strong> • fler överraskningar på väg</span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.0! Välj bland <strong>4 musikstilar</strong> • nya skin: <strong>Miami Sunset</strong> och <strong>fotboll</strong></span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.0! Välj bland <strong>4 musikstilar</strong> • nya skin: <strong>Miami Sunset</strong> och <strong>fotboll</strong></span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -842,9 +843,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i version <strong>3.0</strong>! <strong>4 musikstilar</strong> • <strong>fotbollsskinn</strong> • fler överraskningar på väg',
-    'New in version <strong>3.0</strong>! <strong>4 music styles</strong> • <strong>football skin</strong> • more surprises on the way',
-    'Neu in Version <strong>3.0</strong>! <strong>4 Musikstile</strong> • <strong>Football-Skin</strong> • mehr Überraschungen folgen'
+    'Nytt i version <strong>3.0</strong>! Välj bland <strong>4 musikstilar</strong> • nya skin: <strong>Miami Sunset</strong> och <strong>fotboll</strong>',
+    'New in version <strong>3.0</strong>! Choose from <strong>4 music styles</strong> • new skins: <strong>Miami Sunset</strong> and <strong>football</strong>',
+    'Neu in Version <strong>3.0</strong>! Wähle aus <strong>4 Musikstilen</strong> • neue Skins: <strong>Miami Sunset</strong> und <strong>Football</strong>'
   );
 }
 function getRangeLabel(range){
@@ -1053,6 +1054,7 @@ const MEDALS_DEF=[
   {id:'fartdemon', emoji:'☢️',name:'Fartdemon',            desc:'Nå 10 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Speed Demon', descEn:'Reach 10,000 points with a speed mode active'},
   {id:'overhettad', emoji:'🌡️',name:'Överhettad',          desc:'Nå 15 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Overheated', descEn:'Reach 15,000 points with a speed mode active'},
   {id:'adrenalin', emoji:'⚠️',name:'Adrenalinmästare',     desc:'Nå 20 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Adrenaline Master', descEn:'Reach 20,000 points with a speed mode active'},
+  {id:'games50',  emoji:'🌴',name:'Femti kvällsrundor',    desc:'Spela 50 spel',                                 cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Fifty Night Runs', descEn:'Play 50 games'},
   {id:'games100', emoji:'⚽',name:'Hundra matcher',        desc:'Spela 100 spel',                                cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Hundred Matches', descEn:'Play 100 games'},
 ];
 
@@ -1070,6 +1072,40 @@ const SKINS_DEF=[
    headA:'#c0e8ff', headB:'#0077cc', shadow:'#44aaff',
    bodyFn:(a)=>`rgba(${Math.floor(30+a*60)},${Math.floor(100+a*100)},${Math.floor(180+a*60)},${Math.min(1,a+.05)})`,
    previewCss:'linear-gradient(135deg,#c0e8ff,#0077cc)'},
+  {id:'miamisunset', emoji:'🌴', name:'Miami Sunset', nameEn:'Miami Sunset',
+   free:false, unlockMedal:'games50',
+   descSv:'Lås upp: Spela 50 spel', descEn:'Unlock: Play 50 games',
+   headA:'#23edff', headB:'#ff45c6', shadow:'#ff73d8',
+   bodyFn:(a,i)=>{
+     const pulse=0.08*Math.sin((i||0)*0.65);
+     return `rgba(${Math.floor(42+a*42)},${Math.floor(8+a*28)},${Math.floor(78+a*95+pulse*45)},${Math.min(1,a+.06)})`;
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     const bandGrad=cx.createLinearGradient(px,py,px,py+s);
+     bandGrad.addColorStop(0,`rgba(255,150,82,${0.34+a*0.16})`);
+     bandGrad.addColorStop(0.38,`rgba(255,72,198,${0.26+a*0.14})`);
+     bandGrad.addColorStop(0.72,`rgba(132,44,255,${0.18+a*0.1})`);
+     bandGrad.addColorStop(1,'rgba(0,0,0,0)');
+     cx.fillStyle=bandGrad;
+     cx.fillRect(px,py,s,s);
+     cx.strokeStyle=`rgba(255,176,96,${0.4+a*0.2})`;
+     cx.lineWidth=1.2;
+     [0.22,0.4,0.58,0.76].forEach((yy,idx)=>{
+       const inset=(idx%2===0?0.14:0.22)*s;
+       cx.beginPath();
+       cx.moveTo(px+inset,py+s*yy);
+       cx.lineTo(px+s-inset,py+s*yy);
+       cx.stroke();
+     });
+     cx.strokeStyle=`rgba(50,240,255,${0.34+a*0.18})`;
+     cx.lineWidth=1;
+     cx.beginPath();
+     cx.moveTo(px+s*0.2,py+s*0.78);
+     cx.quadraticCurveTo(px+s*0.48,py+s*(0.64+Math.sin(i*0.55)*0.03),px+s*0.8,py+s*0.78);
+     cx.stroke();
+   },
+   previewCss:'linear-gradient(135deg,#23edff 0%,#ff45c6 38%,#ff9b4f 62%,#842cff 100%)'},
   {id:'fotboll', emoji:'⚽', name:'Fotboll', nameEn:'Football',
    free:false, unlockMedal:'games100',
    descSv:'Lås upp: Spela 100 spel', descEn:'Unlock: Play 100 games',
@@ -1577,11 +1613,13 @@ const MEDAL_I18N_DE={
   fartdemon:{name:'Geschwindigkeitsdämon',desc:'Erreiche 10.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
   overhettad:{name:'Überhitzt',desc:'Erreiche 15.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
   adrenalin:{name:'Adrenalinmeister',desc:'Erreiche 20.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
+  games50:{name:'Fünfzig Spiele',desc:'Spiele 50 Partien'},
   games100:{name:'Hundert Spiele',desc:'Spiele 100 Partien'}
 };
 const SKIN_I18N_DE={
   klassisk:{name:'Klassisch'},
   isbla:{name:'Eisblau'},
+  miamisunset:{name:'Miami Sunset',desc:'Freischalten: 50 Spiele spielen'},
   rosa:{name:'Rosa'},
   lila:{name:'Lila'},
   regnbage:{name:'Regenbogen',desc:'Freischalten: 25er-Serie'},
@@ -1616,6 +1654,7 @@ const SKIN_I18N_DE={
 const SKIN_THEMES={
   'klassisk': {bgA:'#060c08',bgB:'#030a05',gridColor:'rgba(0,255,100,.033)',particles:'pollen',headAcc:null},
   'isbla':    {bgA:'#03070f',bgB:'#020510',gridColor:'rgba(80,160,255,.04)', particles:'snow',  headAcc:null},
+  'miamisunset': {bgA:'#13021e',bgB:'#050714',gridColor:'rgba(255,110,190,.05)',particles:'stars', headAcc:null},
   'fotboll':  {bgA:'#0a1014',bgB:'#04080b',gridColor:'rgba(255,255,255,.035)',particles:'stars', headAcc:null},
   'rosa':     {bgA:'#0f0308',bgB:'#0a0206',gridColor:'rgba(255,80,160,.04)', particles:'hearts',headAcc:null},
   'lila':     {bgA:'#07030f',bgB:'#04020a',gridColor:'rgba(140,60,255,.04)', particles:'stars', headAcc:null},
@@ -2052,6 +2091,81 @@ function drawSkinPreviewCanvas(canvas,skin){
   fadeR.addColorStop(0,'rgba(0,0,0,0)');fadeR.addColorStop(1,'rgba(0,0,0,0.55)');
   ctx.fillStyle=fadeR;ctx.fillRect(W-fadeW,0,fadeW,H);
 }
+function drawHeadAccessoryPreviewCanvas(canvas,headSel){
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.offsetWidth||canvas.width||148;
+  const H=72;
+  canvas.width=Math.round(W*dpr);
+  canvas.height=Math.round(H*dpr);
+  canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  const previewSkin=getActiveSkinDef();
+  const s=Math.round(H*0.72);
+  const px=Math.round((W-s)/2);
+  const py=Math.round((H-s)/2);
+  const cx=px+s/2;
+  const cy=py+s/2;
+  const rr=Math.round(s*0.28);
+
+  function rRect(cx0,x,y,w,h,r){
+    cx0.beginPath();
+    cx0.moveTo(x+r,y);cx0.lineTo(x+w-r,y);cx0.arcTo(x+w,y,x+w,y+r,r);
+    cx0.lineTo(x+w,y+h-r);cx0.arcTo(x+w,y+h,x+w-r,y+h,r);
+    cx0.lineTo(x+r,y+h);cx0.arcTo(x,y+h,x,y+h-r,r);
+    cx0.lineTo(x,y+r);cx0.arcTo(x,y,x+r,y,r);
+    cx0.closePath();
+  }
+
+  ctx.fillStyle='rgba(0,0,0,0.35)';
+  ctx.fillRect(0,0,W,H);
+  const bgGlow=ctx.createRadialGradient(cx,cy,0,cx,cy,s*0.95);
+  bgGlow.addColorStop(0,'rgba(0,255,136,0.12)');
+  bgGlow.addColorStop(1,'rgba(0,255,136,0)');
+  ctx.fillStyle=bgGlow;
+  ctx.beginPath();ctx.arc(cx,cy,s*0.9,0,Math.PI*2);ctx.fill();
+
+  const grad=ctx.createLinearGradient(px,py,px+s,py+s);
+  grad.addColorStop(0,previewSkin.headA||'#ccffe0');
+  grad.addColorStop(1,previewSkin.headB||'#00cc55');
+  ctx.shadowColor=previewSkin.shadow||'#00ff88';
+  ctx.shadowBlur=14;
+  ctx.fillStyle=grad;
+  rRect(ctx,px,py,s,s,rr);
+  ctx.fill();
+  ctx.shadowBlur=0;
+
+  const shine=ctx.createRadialGradient(px+s*0.26,py+s*0.22,0,px+s*0.36,py+s*0.32,s*0.46);
+  shine.addColorStop(0,'rgba(255,255,255,0.52)');
+  shine.addColorStop(0.38,'rgba(255,255,255,0.16)');
+  shine.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=shine;
+  rRect(ctx,px,py,s,s,rr);
+  ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,0.92)';
+  ctx.beginPath();ctx.arc(px+s*0.28,py+s*0.28,s*0.11,0,Math.PI*2);ctx.fill();
+
+  let previewAcc=headSel;
+  if(previewAcc==='auto'){
+    const th=getActiveTheme();
+    previewAcc=th.headAcc||null;
+  }
+  if(previewAcc&&previewAcc!=='off'){
+    paintHeadAccessory(ctx,previewAcc,cx,cy,'right');
+  }else if(headSel==='auto'){
+    ctx.fillStyle='rgba(255,255,255,0.92)';
+    ctx.font=`900 ${Math.floor(s*0.34)}px 'Exo 2',sans-serif`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText('✨',cx,cy-s*0.04);
+  }else if(headSel==='off'){
+    ctx.strokeStyle='rgba(255,255,255,0.38)';
+    ctx.lineWidth=2.2;
+    ctx.beginPath();ctx.arc(cx,cy,s*0.22,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-s*0.16,cy+s*0.16);ctx.lineTo(cx+s*0.16,cy-s*0.16);ctx.stroke();
+  }
+}
 
 function renderSkinsPage(){
   const activeSkin=loadActiveSkin();
@@ -2065,26 +2179,29 @@ function renderSkinsPage(){
   const lang=getLang();
   const headLabel=lang==='en'?headOpt.labelEn:lang==='de'?headOpt.labelDe:headOpt.label;
   const headOn=(headSel!=='off');
-  const toggleDiv=document.createElement('div');
-  toggleDiv.style.cssText='width:100%;margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;';
-  const toggleBtn=document.createElement('button');
-  toggleBtn.className='export-btn';
-  toggleBtn.style.cssText='border-color:'+(headOn?'var(--accent)':'var(--line)')+';color:'+(headOn?'var(--accent)':'var(--muted)')+';';
-  toggleBtn.textContent='🎭 '+headOpt.emoji+' '+headLabel;
-  toggleBtn.title=lang==='en'?'Click to cycle':lang==='de'?'Klicken zum Wechseln':'Klicka för att byta';
-  toggleBtn.addEventListener('click',cycleHeadAccessory);
-  toggleDiv.appendChild(toggleBtn);
-  // Seasonal indicator
   const season=getSeasonalTheme();
-  if(season){
-    const st=SEASONAL_THEMES[season];
-    const seasonSpan=document.createElement('span');
-    seasonSpan.style.cssText='font-size:11px;color:var(--accent);font-weight:700;';
-    seasonSpan.textContent=t('seasonalActive')+' '+st.label;
-    toggleDiv.appendChild(seasonSpan);
-  }
-  el.appendChild(toggleDiv);
-  const canvasesToDraw=[];
+  const headCard=document.createElement('div');
+  headCard.className='skin-card head-acc-card'+(headOn?' active':'');
+  headCard.title=lang==='en'?'Click to cycle':lang==='de'?'Klicken zum Wechseln':'Klicka för att byta';
+  const headWrap=document.createElement('div');
+  headWrap.className='skin-canvas-wrap';
+  const headCanvas=document.createElement('canvas');
+  headWrap.appendChild(headCanvas);
+  const headBadge=document.createElement('div');
+  headBadge.className='skin-active-bar';
+  headBadge.textContent=pickLangText('HUVUDBONAD','HEADWEAR','KOPFSCHMUCK');
+  headWrap.appendChild(headBadge);
+  headCard.appendChild(headWrap);
+  const headInfo=document.createElement('div');
+  headInfo.className='skin-info';
+  const headHint=pickLangText('Klicka för att byta','Click to cycle','Klicken zum Wechseln');
+  const seasonText=season?` · ${t('seasonalActive')} ${SEASONAL_THEMES[season].label}`:'';
+  headInfo.innerHTML=`<div class="skin-name">🎭 ${pickLangText('Huvudbonad','Headwear','Kopfschmuck')}</div><div class="skin-unlock">${headOpt.emoji} ${headLabel} · ${headHint}${seasonText}</div>`;
+  headCard.appendChild(headInfo);
+  headCard.addEventListener('click',cycleHeadAccessory);
+  el.appendChild(headCard);
+
+  const drawJobs=[()=>drawHeadAccessoryPreviewCanvas(headCanvas,headSel)];
   SKINS_DEF.forEach(skin=>{
     const isUnlocked=isSkinUnlocked(skin.id);
     const isActive=skin.id===activeSkin;
@@ -2120,12 +2237,12 @@ function renderSkinsPage(){
       card.addEventListener('click',()=>{saveActiveSkin(skin.id);renderSkinsPage();});
     }
     el.appendChild(card);
-    canvasesToDraw.push({canvas,skin});
+    drawJobs.push(()=>drawSkinPreviewCanvas(canvas,skin));
   });
 
   // Draw previews after layout so offsetWidth is available
   requestAnimationFrame(()=>{
-    canvasesToDraw.forEach(({canvas,skin})=>drawSkinPreviewCanvas(canvas,skin));
+    drawJobs.forEach(job=>job());
   });
 }
 function goToSkins(){renderSkinsPage();showScreen('skinsScreen');}
@@ -2194,6 +2311,7 @@ function getMedalProgress(id){
     c100:{cur:stats.bestCombo,max:100},
     len15:{cur:stats.bestLength,max:15},len25:{cur:stats.bestLength,max:25},len35:{cur:stats.bestLength,max:35},len50:{cur:stats.bestLength,max:50},len75:{cur:stats.bestLength,max:75},mytisk:{cur:stats.bestLength,max:100},
     osviklig:{cur:stats.bestStreak,max:10},
+    games50:{cur:loadHistory().length,max:50},
     games100:{cur:loadHistory().length,max:100},
     genius:null,snabbaskrillor:null,
     fartdemon:null,overhettad:null,adrenalin:null,
@@ -3036,6 +3154,13 @@ function rRectOn(drawCtx,x,y,w,h,r){
   drawCtx.lineTo(x+r,y+h);drawCtx.quadraticCurveTo(x,y+h,x,y+h-r);
   drawCtx.lineTo(x,y+r);drawCtx.quadraticCurveTo(x,y,x+r,y);drawCtx.closePath();
 }
+function getVisualTextBaseline(drawCtx,text,centerY){
+  const metrics=drawCtx.measureText(text);
+  if(Number.isFinite(metrics.actualBoundingBoxAscent)&&Number.isFinite(metrics.actualBoundingBoxDescent)){
+    return centerY+(metrics.actualBoundingBoxAscent-metrics.actualBoundingBoxDescent)/2;
+  }
+  return centerY+0.5;
+}
 function getNormalTileSprite(value){
   const val=String(value);
   const key=`${CELL}|${val}`;
@@ -3049,10 +3174,10 @@ function getNormalTileSprite(value){
   sctx.fillStyle='rgba(15,30,80,.88)';rRectOn(sctx,px,py,s,s,r);sctx.fill();
   sctx.strokeStyle='rgba(180,220,255,.95)';sctx.lineWidth=1.5;rRectOn(sctx,px,py,s,s,r);sctx.stroke();
   sctx.font=`900 ${fs}px Nunito,'Exo 2',sans-serif`;
-  sctx.textAlign='center';sctx.textBaseline='middle';
+  sctx.textAlign='center';sctx.textBaseline='alphabetic';
   sctx.fillStyle='#ffffff';
   sctx.shadowColor='rgba(150,210,255,.9)';sctx.shadowBlur=6;
-  sctx.fillText(val,cx,cy);
+  sctx.fillText(val,cx,getVisualTextBaseline(sctx,val,cy));
   sctx.shadowBlur=0;
   _tileSpriteCache.set(key,sprite);
   return sprite;
@@ -3197,13 +3322,14 @@ function drawTile(t){
 
     // Lager 5: Siffran — vit med stark guldglow så den verkligen står ut
     ctx.font=`900 ${fs}px Nunito,'Exo 2',sans-serif`;
-    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.textAlign='center';ctx.textBaseline='alphabetic';
+    const textY=getVisualTextBaseline(ctx,val,cy);
     ctx.shadowColor='rgba(180,90,0,1)';ctx.shadowBlur=4;
     ctx.fillStyle='#3d2400';
-    ctx.fillText(val,cx,cy+1.5); // mörk skugga bakom
+    ctx.fillText(val,cx,textY+1.5); // mörk skugga bakom
     ctx.shadowColor='rgba(255,230,80,1)';ctx.shadowBlur=12;
     ctx.fillStyle='#fffacc';
-    ctx.fillText(val,cx,cy);
+    ctx.fillText(val,cx,textY);
 
     ctx.restore(); // klart skalat lager
 
@@ -3983,6 +4109,7 @@ function recordSession(){
   // Rulla bort äldsta om vi når 100
   if(hist.length>100)hist.splice(0,hist.length-100);
   saveHistory(hist);
+  if(hist.length>=50)unlockMedal('games50');
   if(hist.length>=100)unlockMedal('games100');
 }
 
@@ -4557,6 +4684,9 @@ updateMenuMusicBtn();
 const _us=loadUnlockedSkins();let _usc=false;
 SKINS_DEF.filter(s=>s.free).forEach(s=>{if(!_us.has(s.id)){_us.add(s.id);_usc=true;}});
 if(_usc)saveUnlockedSkins(_us);
+const _histCount=loadHistory().length;
+if(_histCount>=50)unlockMedal('games50');
+if(_histCount>=100)unlockMedal('games100');
 // Synka skinn från redan upplåsta medaljer
 syncSkinsFromMedals();
 renderHS();updateMedalNavBtn();updateSkinNavBtn();updatePlayerBar();setupDpad();
