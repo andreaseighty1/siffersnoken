@@ -338,6 +338,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .skin-card.locked{opacity:.38;cursor:default;}
 .skin-canvas-wrap{position:relative;width:100%;overflow:hidden;background:rgba(0,0,0,.35);}
 .skin-canvas-wrap canvas{display:block;width:100%;height:72px;}
+.head-acc-card .skin-canvas-wrap canvas{height:84px;}
 .skin-active-bar{position:absolute;top:6px;left:6px;
   font-family:'Orbitron',monospace;font-size:8px;font-weight:900;letter-spacing:.1em;
   color:#060c08;background:var(--accent);border-radius:5px;padding:2px 7px;line-height:1.6;}
@@ -2093,14 +2094,14 @@ function drawSkinPreviewCanvas(canvas,skin){
 function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   const dpr=window.devicePixelRatio||1;
   const W=canvas.offsetWidth||canvas.width||148;
-  const H=72;
+  const H=84;
   canvas.width=Math.round(W*dpr);
   canvas.height=Math.round(H*dpr);
   canvas.style.height=H+'px';
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
   const cx=W/2;
-  const cy=H/2+2;
+  const cy=H/2+10;
 
   const bg=ctx.createLinearGradient(0,0,0,H);
   bg.addColorStop(0,'rgba(210,236,255,0.18)');
@@ -2131,12 +2132,12 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   if(previewAcc&&previewAcc!=='off'){
     ctx.save();
     ctx.translate(cx,cy);
-    ctx.scale(1.58,1.58);
+    ctx.scale(1.74,1.74);
     paintHeadAccessory(ctx,previewAcc,0,0,'down');
     ctx.restore();
   }else if(headSel==='auto'){
     ctx.fillStyle='rgba(255,255,255,0.92)';
-    ctx.font=`900 ${Math.floor(H*0.36)}px 'Exo 2',sans-serif`;
+    ctx.font=`900 ${Math.floor(H*0.4)}px 'Exo 2',sans-serif`;
     ctx.textAlign='center';
     ctx.textBaseline='middle';
     ctx.fillText('✨',cx,cy);
