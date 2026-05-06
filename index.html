@@ -2101,7 +2101,8 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
   const cx=W/2;
-  const cy=H/2+10;
+  const centerY=H/2;
+  const cy=centerY+16;
 
   const bg=ctx.createLinearGradient(0,0,0,H);
   bg.addColorStop(0,'rgba(210,236,255,0.18)');
