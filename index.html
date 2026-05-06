@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SifferSnoken V2.8 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
+<title>SifferSnoken V3.0 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Nunito:wght@700;900&display=swap');
 :root{
@@ -105,6 +105,35 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .lang-btn:hover{border-color:var(--accent);color:var(--text)}
 .lang-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.1);color:var(--accent)}
 .menu-sub{font-size:11px;color:var(--muted);margin-bottom:10px;letter-spacing:.1em;text-transform:uppercase}
+.menu-news-wrap{
+  width:min(520px,92vw);
+  margin:0 0 10px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:linear-gradient(90deg,rgba(255,255,255,.025),rgba(255,255,255,.055),rgba(255,255,255,.025));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.015),0 0 16px rgba(0,0,0,.08);
+  overflow:hidden;
+}
+.menu-news-track{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  width:max-content;
+  padding:7px 16px;
+  animation:menuNewsScroll 24s linear infinite;
+}
+.menu-news-item{
+  font-size:11px;
+  font-weight:800;
+  color:var(--text);
+  letter-spacing:.05em;
+  white-space:nowrap;
+}
+.menu-news-item strong{color:var(--accent)}
+@keyframes menuNewsScroll{
+  from{transform:translateX(0)}
+  to{transform:translateX(calc(-50% - 10px))}
+}
 .menu-cols{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;
            justify-content:center;margin-bottom:10px;width:100%;max-width:940px}
 .menu-panel{border:1px solid var(--line);border-radius:13px;background:var(--panel);
@@ -456,6 +485,12 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
        style="width:min(380px,70vw);margin-bottom:8px;filter:drop-shadow(0 0 22px rgba(0,200,80,.5))"
        alt="SifferSnoken">
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
+  <div class="menu-news-wrap" id="menuNewsWrap">
+    <div class="menu-news-track" id="menuNewsTrack">
+      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.0! <strong>4 musikstilar</strong> • <strong>fotbollsskinn</strong> • fler överraskningar på väg</span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.0! <strong>4 musikstilar</strong> • <strong>fotbollsskinn</strong> • fler överraskningar på väg</span>
+    </div>
+  </div>
   <!-- Snabbval -->
   <div class="menu-panel" style="width:100%;max-width:520px;min-width:0;margin-bottom:6px;flex:none;">
     <div class="panel-title" id="panelPresetLabel">⚡ Snabbval (sätter standardvärden)</div>
@@ -511,7 +546,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <span style="color:var(--text);font-weight:600"><span style="color:var(--accent)">42</span> Improbable Owls</span>
     </span>
   </a>
-  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v2.8</div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.0</div>
   <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
 </div>
 
@@ -805,6 +840,13 @@ function pickLangText(sv,en,de=en){
   if(lang==='de')return de ?? en ?? sv;
   return en ?? sv;
 }
+function getVersionNewsHtml(){
+  return pickLangText(
+    'Nytt i version <strong>3.0</strong>! <strong>4 musikstilar</strong> • <strong>fotbollsskinn</strong> • fler överraskningar på väg',
+    'New in version <strong>3.0</strong>! <strong>4 music styles</strong> • <strong>football skin</strong> • more surprises on the way',
+    'Neu in Version <strong>3.0</strong>! <strong>4 Musikstile</strong> • <strong>Football-Skin</strong> • mehr Überraschungen folgen'
+  );
+}
 function getRangeLabel(range){
   const key='rangeW'+range;
   const label=t(key);
@@ -846,6 +888,9 @@ function applyLang(){
   $('nameModalInp').placeholder=t('nameModalInpPlaceholder');
   // Menyknappar
   $('menuSub').textContent=t('menuSub');
+  const newsHtml=getVersionNewsHtml();
+  if($('menuNewsA'))$('menuNewsA').innerHTML=newsHtml;
+  if($('menuNewsB'))$('menuNewsB').innerHTML=newsHtml;
   $('btnPlay').textContent=t('btnPlay');
   $('btnChangeName').textContent=t('changeName');
   updateMenuMusicBtn();
@@ -1031,24 +1076,45 @@ const SKINS_DEF=[
    headA:'#ffffff', headB:'#d8dde2', shadow:'#dfe7ef',
    bodyFn:(a)=>`rgba(${Math.floor(242+a*10)},${Math.floor(245+a*8)},${Math.floor(248+a*6)},${Math.min(1,a+.06)})`,
    overlayFn:(cx,px,py,s,i,a,isHead)=>{
-     const spots=[
-       [0.5,0.26,0.11],
-       [0.28,0.47,0.095],
-       [0.72,0.47,0.095],
-       [0.38,0.73,0.09],
-       [0.62,0.73,0.09]
-     ];
-     cx.fillStyle=`rgba(18,22,28,${0.78+a*0.14})`;
-     spots.forEach(([sx,sy,r])=>{
+     const pent=(cx0,cy0,r,rot=0)=>{
        cx.beginPath();
-       cx.arc(px+s*sx,py+s*sy,s*r,0,Math.PI*2);
-       cx.fill();
-     });
-     cx.strokeStyle=`rgba(120,128,136,${0.18+a*0.08})`;
-     cx.lineWidth=1;
+       for(let p=0;p<5;p++){
+         const ang=rot-Math.PI/2+p*(Math.PI*2/5);
+         const x=px+s*(cx0+Math.cos(ang)*r);
+         const y=py+s*(cy0+Math.sin(ang)*r);
+         if(p===0)cx.moveTo(x,y); else cx.lineTo(x,y);
+       }
+       cx.closePath();
+     };
+     cx.save();
      cx.beginPath();
-     cx.arc(px+s*0.5,py+s*0.5,s*0.38,0,Math.PI*2);
-     cx.stroke();
+     cx.rect(px,py,s,s);
+     cx.clip();
+     cx.fillStyle=`rgba(16,20,24,${0.86+a*0.12})`;
+     [
+       [0.5,0.5,0.17,0],
+       [0.5,0.05,0.16,Math.PI],
+       [0.12,0.33,0.15,-Math.PI/2.6],
+       [0.88,0.33,0.15,Math.PI/2.6],
+       [0.28,0.88,0.16,-Math.PI/7],
+       [0.72,0.88,0.16,Math.PI/7]
+     ].forEach(([cx0,cy0,r,rot])=>{pent(cx0,cy0,r,rot);cx.fill();});
+     cx.strokeStyle=`rgba(95,104,112,${0.26+a*0.08})`;
+     cx.lineWidth=1;
+     [
+       [[0.5,0.35],[0.32,0.24]],
+       [[0.5,0.35],[0.68,0.24]],
+       [[0.37,0.6],[0.24,0.42]],
+       [[0.63,0.6],[0.76,0.42]],
+       [[0.44,0.66],[0.33,0.82]],
+       [[0.56,0.66],[0.67,0.82]]
+     ].forEach(([[x1,y1],[x2,y2]])=>{
+       cx.beginPath();
+       cx.moveTo(px+s*x1,py+s*y1);
+       cx.lineTo(px+s*x2,py+s*y2);
+       cx.stroke();
+     });
+     cx.restore();
    },
    previewCss:'radial-gradient(circle at 35% 30%,#ffffff 0%,#eef2f5 48%,#cfd6dc 100%)'},
   {id:'rosa', emoji:'🩷', name:'Rosa', nameEn:'Pink',
@@ -3868,7 +3934,7 @@ function goToSettings(){showScreen('settingsScreen');}
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
-  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 2.8';
+  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.0';
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
