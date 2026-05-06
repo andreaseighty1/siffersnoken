@@ -597,6 +597,16 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
             <button class="toggle-btn theme-btn" data-theme="klar">👀 Klar</button>
           </div>
         </div>
+        <div class="menu-panel">
+          <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
+          <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
+            <button class="toggle-btn music-style-btn sel" data-genre="original">🐍 Original</button>
+            <button class="toggle-btn music-style-btn" data-genre="progrock">🎸 Prog Rock</button>
+            <button class="toggle-btn music-style-btn" data-genre="synth80">✨ 80's Synth</button>
+            <button class="toggle-btn music-style-btn" data-genre="house">💿 House</button>
+          </div>
+          <div class="panel-desc" id="musicStyleDesc">Välj soundtrack för meny och spel.</div>
+        </div>
       </div>
     </div>
   </div>
@@ -920,7 +930,7 @@ function applyLang(){
   if($('modeDesc'))$('modeDesc').textContent=t(typeof practiceMode!=='undefined'&&practiceMode?'modeDescPractice':'modeDescStandard');
   // Inställningar: panel-titlar (Spelläge, Utseende osv)
   document.querySelectorAll('#settingsScreen .panel-title').forEach((el,i)=>{
-    const keys=['panelOps','panelRange','panelTables','panelSpeed','panelWalls','panelMode','panelAppearance'];
+    const keys=['panelOps','panelRange','panelTables','panelSpeed','panelWalls','panelMode','panelAppearance','panelMusicStyle'];
     if(keys[i])el.textContent=t(keys[i]);
   });
   document.querySelectorAll('.theme-btn').forEach(b=>{
@@ -935,6 +945,17 @@ function applyLang(){
     };
     if(tmap[b.dataset.theme])b.textContent=tmap[b.dataset.theme];
   });
+  document.querySelectorAll('.music-style-btn').forEach(b=>{
+    const gmap={
+      original:pickLangText('🐍 Original','🐍 Original','🐍 Original'),
+      progrock:pickLangText('🎸 Prog Rock','🎸 Prog Rock','🎸 Prog Rock'),
+      synth80:pickLangText("✨ 80's Synth","✨ 80's Synth","✨ 80's Synth"),
+      house:pickLangText('💿 House','💿 House','💿 House')
+    };
+    if(gmap[b.dataset.genre])b.textContent=gmap[b.dataset.genre];
+  });
+  if($('musicStyleTitle'))$('musicStyleTitle').textContent=pickLangText('🎵 Musikstil','🎵 Music style','🎵 Musikstil');
+  if($('musicStyleDesc'))$('musicStyleDesc').textContent=pickLangText('Välj soundtrack för meny och spel.','Choose the soundtrack for menu and gameplay.','Wähle den Soundtrack für Menü und Spiel.');
   buildGradeRow();
   // Speed description (uppdatera med nuvarande speedMode)
   const _sdMap={none:t('speedDescNone'),score:t('speedDescScore'),length:t('speedDescLength')};
@@ -987,6 +1008,7 @@ const MEDALS_DEF=[
   {id:'fartdemon', emoji:'☢️',name:'Fartdemon',            desc:'Nå 10 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Speed Demon', descEn:'Reach 10,000 points with a speed mode active'},
   {id:'overhettad', emoji:'🌡️',name:'Överhettad',          desc:'Nå 15 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Overheated', descEn:'Reach 15,000 points with a speed mode active'},
   {id:'adrenalin', emoji:'⚠️',name:'Adrenalinmästare',     desc:'Nå 20 000p med ett hastighetsläge aktiverat',  cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Adrenaline Master', descEn:'Reach 20,000 points with a speed mode active'},
+  {id:'games100', emoji:'⚽',name:'Hundra matcher',        desc:'Spela 100 spel',                                cat:'⭐ Special', catEn:'⭐ Special', nameEn:'Hundred Matches', descEn:'Play 100 games'},
 ];
 
 /* ═══════════════════════════════════════
@@ -1003,6 +1025,32 @@ const SKINS_DEF=[
    headA:'#c0e8ff', headB:'#0077cc', shadow:'#44aaff',
    bodyFn:(a)=>`rgba(${Math.floor(30+a*60)},${Math.floor(100+a*100)},${Math.floor(180+a*60)},${Math.min(1,a+.05)})`,
    previewCss:'linear-gradient(135deg,#c0e8ff,#0077cc)'},
+  {id:'fotboll', emoji:'⚽', name:'Fotboll', nameEn:'Football',
+   free:false, unlockMedal:'games100',
+   descSv:'Lås upp: Spela 100 spel', descEn:'Unlock: Play 100 games',
+   headA:'#ffffff', headB:'#d8dde2', shadow:'#dfe7ef',
+   bodyFn:(a)=>`rgba(${Math.floor(242+a*10)},${Math.floor(245+a*8)},${Math.floor(248+a*6)},${Math.min(1,a+.06)})`,
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     const spots=[
+       [0.5,0.26,0.11],
+       [0.28,0.47,0.095],
+       [0.72,0.47,0.095],
+       [0.38,0.73,0.09],
+       [0.62,0.73,0.09]
+     ];
+     cx.fillStyle=`rgba(18,22,28,${0.78+a*0.14})`;
+     spots.forEach(([sx,sy,r])=>{
+       cx.beginPath();
+       cx.arc(px+s*sx,py+s*sy,s*r,0,Math.PI*2);
+       cx.fill();
+     });
+     cx.strokeStyle=`rgba(120,128,136,${0.18+a*0.08})`;
+     cx.lineWidth=1;
+     cx.beginPath();
+     cx.arc(px+s*0.5,py+s*0.5,s*0.38,0,Math.PI*2);
+     cx.stroke();
+   },
+   previewCss:'radial-gradient(circle at 35% 30%,#ffffff 0%,#eef2f5 48%,#cfd6dc 100%)'},
   {id:'rosa', emoji:'🩷', name:'Rosa', nameEn:'Pink',
    free:true, unlockMedal:null,
    headA:'#ffd6e8', headB:'#ff3399', shadow:'#ff88bb',
@@ -1462,7 +1510,8 @@ const MEDAL_I18N_DE={
   snabbaskrillor:{name:'Schnelle Kufen',desc:'Erreiche 5.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
   fartdemon:{name:'Geschwindigkeitsdämon',desc:'Erreiche 10.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
   overhettad:{name:'Überhitzt',desc:'Erreiche 15.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
-  adrenalin:{name:'Adrenalinmeister',desc:'Erreiche 20.000 Punkte mit aktiviertem Geschwindigkeitsmodus'}
+  adrenalin:{name:'Adrenalinmeister',desc:'Erreiche 20.000 Punkte mit aktiviertem Geschwindigkeitsmodus'},
+  games100:{name:'Hundert Spiele',desc:'Spiele 100 Partien'}
 };
 const SKIN_I18N_DE={
   klassisk:{name:'Klassisch'},
@@ -1490,7 +1539,8 @@ const SKIN_I18N_DE={
   hav:{name:'Ozean',desc:'Freischalten: Medaille „Dinoschlange“ (Länge 35)'},
   drake:{name:'Drache',desc:'Freischalten: Weltrekord-Schlange (Länge 50)'},
   stjarnhimmel:{name:'Sternenhimmel',desc:'Freischalten: 75er-Serie'},
-  ghost:{name:'Geist',desc:'Freischalten: Medaille „Mythische Schlange“ (Länge 100)'}
+  ghost:{name:'Geist',desc:'Freischalten: Medaille „Mythische Schlange“ (Länge 100)'},
+  fotboll:{name:'Fussball',desc:'Freischalten: 100 Spiele spielen'}
 };
 
 
@@ -1500,6 +1550,7 @@ const SKIN_I18N_DE={
 const SKIN_THEMES={
   'klassisk': {bgA:'#060c08',bgB:'#030a05',gridColor:'rgba(0,255,100,.033)',particles:'pollen',headAcc:null},
   'isbla':    {bgA:'#03070f',bgB:'#020510',gridColor:'rgba(80,160,255,.04)', particles:'snow',  headAcc:null},
+  'fotboll':  {bgA:'#0a1014',bgB:'#04080b',gridColor:'rgba(255,255,255,.035)',particles:'stars', headAcc:null},
   'rosa':     {bgA:'#0f0308',bgB:'#0a0206',gridColor:'rgba(255,80,160,.04)', particles:'hearts',headAcc:null},
   'lila':     {bgA:'#07030f',bgB:'#04020a',gridColor:'rgba(140,60,255,.04)', particles:'stars', headAcc:null},
   'regnbage': {bgA:'#050508',bgB:'#030308',gridColor:'rgba(180,130,255,.04)',particles:'rainbow',headAcc:null},
@@ -1600,7 +1651,7 @@ function toggleHeadAccessory(){cycleHeadAccessory();}
    ═══════════════════════════════════════ */
 function saveSettings(){
   localStorage.setItem(SETTINGS_KEY,JSON.stringify({
-    ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap,multiTableSelect
+    ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap,multiTableSelect,musicGenre
   }));
 }
 function loadSettings(){
@@ -1613,10 +1664,11 @@ function loadSettings(){
     if(s.speedMode)speedMode=s.speedMode;
     if(typeof s.wallWrap==='boolean')wallWrap=s.wallWrap;
     if(typeof s.multiTableSelect==='boolean')multiTableSelect=s.multiTableSelect;
+    if(typeof s.musicGenre==='string'&&['original','progrock','synth80','house'].includes(s.musicGenre))musicGenre=s.musicGenre;
   }catch(e){}
 }
 let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
-let speedMode='none',wallWrap=false,multiTableSelect=false;
+let speedMode='none',wallWrap=false,multiTableSelect=false,musicGenre='original';
 
 /* ═══════════════════════════════════════
    SPELVARIABLER
@@ -2076,6 +2128,7 @@ function getMedalProgress(id){
     c100:{cur:stats.bestCombo,max:100},
     len15:{cur:stats.bestLength,max:15},len25:{cur:stats.bestLength,max:25},len35:{cur:stats.bestLength,max:35},len50:{cur:stats.bestLength,max:50},len75:{cur:stats.bestLength,max:75},mytisk:{cur:stats.bestLength,max:100},
     osviklig:{cur:stats.bestStreak,max:10},
+    games100:{cur:loadHistory().length,max:100},
     genius:null,snabbaskrillor:null,
     fartdemon:null,overhettad:null,adrenalin:null,
   };
@@ -2161,6 +2214,12 @@ function importData(file){
    ═══════════════════════════════════════ */
 const bgMusic=document.getElementById('bgMusic'),fastMusic=document.getElementById('fastMusic');
 const titelMusic=document.getElementById('titelMusic');
+const MUSIC_PACKS={
+  original:{title:'siffersnoken_titel.mp3',normal:'siffersnoken_musik.mp3',fast:'siffersnoken_snabb.mp3'},
+  progrock:{title:'progrock_titel.mp3',normal:'progrock_normal.mp3',fast:'progrock_snabb.mp3'},
+  synth80:{title:'synth80_titel.mp3',normal:'synth80_normal.mp3',fast:'synth80_snabb.mp3'},
+  house:{title:'house_titel.mp3',normal:'house_normal.mp3',fast:'house_snabb.mp3'}
+};
 let audioCtx=null;
 function getAC(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
 function beep(freq,type,dur,vol=0.27){
@@ -2191,6 +2250,29 @@ function sfxRecord(){
 function sfxBad(){beep(180,'sawtooth',.2,.2);}
 function sfxDie(){beep(220,'sawtooth',.38,.22);setTimeout(()=>beep(140,'sawtooth',.48,.17),190);}
 function shouldFast(){if(speedMode==='score')return score>=6000;if(speedMode==='length')return snake.length>=34;return false;}
+function setMusicSources(genre){
+  const pack=MUSIC_PACKS[genre]||MUSIC_PACKS.original;
+  titelMusic.src=pack.title;
+  bgMusic.src=pack.normal;
+  fastMusic.src=pack.fast;
+  titelMusic.load();
+  bgMusic.load();
+  fastMusic.load();
+}
+function applyMusicGenre(genre,{persist=true,restart=true}={}){
+  musicGenre=MUSIC_PACKS[genre]?genre:'original';
+  document.querySelectorAll('.music-style-btn').forEach(btn=>btn.classList.toggle('sel',btn.dataset.genre===musicGenre));
+  const wasMenuPlaying=!titelMusic.paused&&!titelMusic.ended;
+  const wasGamePlaying=(!bgMusic.paused&&!bgMusic.ended)||(!fastMusic.paused&&!fastMusic.ended);
+  titelMusic.pause();bgMusic.pause();fastMusic.pause();
+  titelMusic.currentTime=0;bgMusic.currentTime=0;fastMusic.currentTime=0;
+  isFastMusic=false;
+  setMusicSources(musicGenre);
+  if(persist)saveSettings();
+  if(!restart||!musicOn)return;
+  if(state==='menu'||wasMenuPlaying)tryTitelMusic();
+  else if(state==='playing'||state==='paused'||wasGamePlaying)tryMusic();
+}
 function tryTitelMusic(){
   if(!musicOn)return;
   titelMusic.play().then(()=>{audioUnlocked=true;}).catch(()=>{});
@@ -2741,10 +2823,25 @@ function drawParticles(type){
       ctx.fillStyle=`rgba(255,255,255,${a})`;
       ctx.beginPath();ctx.arc(x,y,1+(i%3)*0.5,0,Math.PI*2);ctx.fill();
     }else if(type==='snow'){
-      const y=(sy+T/55*(0.4+(i%5)*0.25))%H;
-      const a=0.25+0.15*Math.sin(T/700+i);
-      ctx.fillStyle=`rgba(200,230,255,${a})`;
-      ctx.beginPath();ctx.arc(sx+Math.sin(T/1200+i)*6,y,1+(i%3),0,Math.PI*2);ctx.fill();
+      const fall=(sy+T/82*(0.3+(i%5)*0.16))%(H+18)-9;
+      const drift=Math.sin(T/1500+i*1.4)*8+Math.cos(T/2600+i*0.8)*3;
+      const x=(sx+drift+W)%W;
+      const a=0.2+0.14*(0.5+0.5*Math.sin(T/820+i*1.2));
+      const r=1.2+(i%3)*0.65;
+      ctx.fillStyle=`rgba(170,215,255,${a*0.16})`;
+      ctx.beginPath();ctx.arc(x,fall,r*2.3,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle=`rgba(220,242,255,${a})`;
+      ctx.beginPath();ctx.arc(x,fall,r,0,Math.PI*2);ctx.fill();
+      if(i%4===0){
+        ctx.strokeStyle=`rgba(235,248,255,${a*0.45})`;
+        ctx.lineWidth=0.8;
+        ctx.beginPath();
+        ctx.moveTo(x-r*1.6,fall);
+        ctx.lineTo(x+r*1.6,fall);
+        ctx.moveTo(x,fall-r*1.6);
+        ctx.lineTo(x,fall+r*1.6);
+        ctx.stroke();
+      }
     }else if(type==='sparks'){
       const y=H-(sy+T/45*(0.4+(i%4)*0.35))%H;
       const a=0.15+0.25*Math.sin(T/450+i*0.9);
@@ -3828,6 +3925,7 @@ function recordSession(){
   // Rulla bort äldsta om vi når 100
   if(hist.length>100)hist.splice(0,hist.length-100);
   saveHistory(hist);
+  if(hist.length>=100)unlockMedal('games100');
 }
 
 function goToStats(){renderStatsTeacherPage();showScreen('statsScreen');}
@@ -4349,6 +4447,7 @@ if($('btnAbout')){
 }
 document.querySelectorAll('.theme-btn').forEach(btn=>btn.addEventListener('click',()=>applyUITheme(btn.dataset.theme)));
 document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>applyMode(btn.dataset.mode)));
+document.querySelectorAll('.music-style-btn').forEach(btn=>btn.addEventListener('click',()=>applyMusicGenre(btn.dataset.genre)));
 $('btnGoMedals').addEventListener('click',goToMedals);
 $('btnGoHS').addEventListener('click',goToHS);
 $('btnGoSettings').addEventListener('click',goToSettings);
@@ -4406,6 +4505,7 @@ renderHS();updateMedalNavBtn();updateSkinNavBtn();updatePlayerBar();setupDpad();
 applyUITheme(loadUITheme());
 applyMode(localStorage.getItem('mattormen_mode')||'standard');
 loadSettings();
+applyMusicGenre(musicGenre,{persist:false,restart:false});
 setTables([...tables]);
 syncTableMultiToggle();
 document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
