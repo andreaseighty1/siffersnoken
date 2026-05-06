@@ -336,7 +336,6 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .skin-card:hover:not(.locked){border-color:var(--accent);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.4);}
 .skin-card.active{border-color:var(--accent);box-shadow:0 0 18px rgba(0,255,136,.28);}
 .skin-card.locked{opacity:.38;cursor:default;}
-.head-acc-card{align-self:start}
 .skin-canvas-wrap{position:relative;width:100%;overflow:hidden;background:rgba(0,0,0,.35);}
 .skin-canvas-wrap canvas{display:block;width:100%;height:72px;}
 .skin-active-bar{position:absolute;top:6px;left:6px;
@@ -2100,51 +2099,29 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   canvas.style.height=H+'px';
   const ctx=canvas.getContext('2d');
   ctx.scale(dpr,dpr);
+  const cx=W/2;
+  const cy=H/2+2;
 
-  const previewSkin=getActiveSkinDef();
-  const s=Math.round(H*0.72);
-  const px=Math.round((W-s)/2);
-  const py=Math.round((H-s)/2);
-  const cx=px+s/2;
-  const cy=py+s/2;
-  const rr=Math.round(s*0.28);
-
-  function rRect(cx0,x,y,w,h,r){
-    cx0.beginPath();
-    cx0.moveTo(x+r,y);cx0.lineTo(x+w-r,y);cx0.arcTo(x+w,y,x+w,y+r,r);
-    cx0.lineTo(x+w,y+h-r);cx0.arcTo(x+w,y+h,x+w-r,y+h,r);
-    cx0.lineTo(x+r,y+h);cx0.arcTo(x,y+h,x,y+h-r,r);
-    cx0.lineTo(x,y+r);cx0.arcTo(x,y,x+r,y,r);
-    cx0.closePath();
-  }
-
-  ctx.fillStyle='rgba(0,0,0,0.35)';
+  const bg=ctx.createLinearGradient(0,0,0,H);
+  bg.addColorStop(0,'rgba(210,236,255,0.18)');
+  bg.addColorStop(0.55,'rgba(165,205,235,0.10)');
+  bg.addColorStop(1,'rgba(20,34,56,0.10)');
+  ctx.fillStyle=bg;
   ctx.fillRect(0,0,W,H);
-  const bgGlow=ctx.createRadialGradient(cx,cy,0,cx,cy,s*0.95);
-  bgGlow.addColorStop(0,'rgba(0,255,136,0.12)');
-  bgGlow.addColorStop(1,'rgba(0,255,136,0)');
-  ctx.fillStyle=bgGlow;
-  ctx.beginPath();ctx.arc(cx,cy,s*0.9,0,Math.PI*2);ctx.fill();
 
-  const grad=ctx.createLinearGradient(px,py,px+s,py+s);
-  grad.addColorStop(0,previewSkin.headA||'#ccffe0');
-  grad.addColorStop(1,previewSkin.headB||'#00cc55');
-  ctx.shadowColor=previewSkin.shadow||'#00ff88';
-  ctx.shadowBlur=14;
-  ctx.fillStyle=grad;
-  rRect(ctx,px,py,s,s,rr);
-  ctx.fill();
-  ctx.shadowBlur=0;
+  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,H*0.56);
+  glow.addColorStop(0,'rgba(255,255,255,0.36)');
+  glow.addColorStop(0.45,'rgba(140,220,255,0.16)');
+  glow.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=glow;
+  ctx.beginPath();ctx.arc(cx,cy,H*0.5,0,Math.PI*2);ctx.fill();
 
-  const shine=ctx.createRadialGradient(px+s*0.26,py+s*0.22,0,px+s*0.36,py+s*0.32,s*0.46);
-  shine.addColorStop(0,'rgba(255,255,255,0.52)');
-  shine.addColorStop(0.38,'rgba(255,255,255,0.16)');
-  shine.addColorStop(1,'rgba(255,255,255,0)');
-  ctx.fillStyle=shine;
-  rRect(ctx,px,py,s,s,rr);
-  ctx.fill();
-  ctx.fillStyle='rgba(255,255,255,0.92)';
-  ctx.beginPath();ctx.arc(px+s*0.28,py+s*0.28,s*0.11,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,0.16)';
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(12,12);ctx.lineTo(W-12,12);
+  ctx.moveTo(12,H-12);ctx.lineTo(W-12,H-12);
+  ctx.stroke();
 
   let previewAcc=headSel;
   if(previewAcc==='auto'){
@@ -2152,18 +2129,22 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
     previewAcc=th.headAcc||null;
   }
   if(previewAcc&&previewAcc!=='off'){
-    paintHeadAccessory(ctx,previewAcc,cx,cy,'right');
+    ctx.save();
+    ctx.translate(cx,cy);
+    ctx.scale(1.58,1.58);
+    paintHeadAccessory(ctx,previewAcc,0,0,'right');
+    ctx.restore();
   }else if(headSel==='auto'){
     ctx.fillStyle='rgba(255,255,255,0.92)';
-    ctx.font=`900 ${Math.floor(s*0.34)}px 'Exo 2',sans-serif`;
+    ctx.font=`900 ${Math.floor(H*0.36)}px 'Exo 2',sans-serif`;
     ctx.textAlign='center';
     ctx.textBaseline='middle';
-    ctx.fillText('✨',cx,cy-s*0.04);
+    ctx.fillText('✨',cx,cy);
   }else if(headSel==='off'){
-    ctx.strokeStyle='rgba(255,255,255,0.38)';
-    ctx.lineWidth=2.2;
-    ctx.beginPath();ctx.arc(cx,cy,s*0.22,0,Math.PI*2);ctx.stroke();
-    ctx.beginPath();ctx.moveTo(cx-s*0.16,cy+s*0.16);ctx.lineTo(cx+s*0.16,cy-s*0.16);ctx.stroke();
+    ctx.strokeStyle='rgba(255,255,255,0.48)';
+    ctx.lineWidth=2.6;
+    ctx.beginPath();ctx.arc(cx,cy,H*0.18,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx-H*0.13,cy+H*0.13);ctx.lineTo(cx+H*0.13,cy-H*0.13);ctx.stroke();
   }
 }
 
@@ -2179,7 +2160,6 @@ function renderSkinsPage(){
   const lang=getLang();
   const headLabel=lang==='en'?headOpt.labelEn:lang==='de'?headOpt.labelDe:headOpt.label;
   const headOn=(headSel!=='off');
-  const season=getSeasonalTheme();
   const headCard=document.createElement('div');
   headCard.className='skin-card head-acc-card'+(headOn?' active':'');
   headCard.title=lang==='en'?'Click to cycle':lang==='de'?'Klicken zum Wechseln':'Klicka för att byta';
@@ -2194,9 +2174,7 @@ function renderSkinsPage(){
   headCard.appendChild(headWrap);
   const headInfo=document.createElement('div');
   headInfo.className='skin-info';
-  const headHint=pickLangText('Klicka för att byta','Click to cycle','Klicken zum Wechseln');
-  const seasonText=season?` · ${t('seasonalActive')} ${SEASONAL_THEMES[season].label}`:'';
-  headInfo.innerHTML=`<div class="skin-name">🎭 ${pickLangText('Huvudbonad','Headwear','Kopfschmuck')}</div><div class="skin-unlock">${headOpt.emoji} ${headLabel} · ${headHint}${seasonText}</div>`;
+  headInfo.innerHTML=`<div class="skin-name">🎭 ${pickLangText('Huvudbonad','Headwear','Kopfschmuck')}</div><div class="skin-unlock">${headOpt.emoji} ${headLabel}</div>`;
   headCard.appendChild(headInfo);
   headCard.addEventListener('click',cycleHeadAccessory);
   el.appendChild(headCard);
