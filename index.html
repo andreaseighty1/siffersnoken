@@ -3029,14 +3029,6 @@ function drawBackground(theme){
   ctx.fillStyle=theme.bgA||'#060c08';
   ctx.fillRect(0,0,canvas.width,canvas.height);
   if(theme.particles)drawParticles(theme.particles);
-  const _sid=loadActiveSkin();
-  if(_sid==='obsidian')drawObsidianGlimmer();
-  if(_sid==='eld')drawBloodMoonShimmer();
-  if(_sid==='galax')drawGalaxyShimmer();
-  if(_sid==='aurora')drawAuroraShimmer();
-  if(_sid==='plasma')drawPlasmaShimmer();
-  if(_sid==='inferno')drawLightningShimmer();
-  if(_sid==='hv71')drawHv71Shimmer();
 }
 function rRectOn(drawCtx,x,y,w,h,r){
   drawCtx.beginPath();drawCtx.moveTo(x+r,y);drawCtx.lineTo(x+w-r,y);drawCtx.quadraticCurveTo(x+w,y,x+w,y+r);
