@@ -2102,7 +2102,7 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   ctx.scale(dpr,dpr);
   const cx=W/2;
   const centerY=H/2;
-  const cy=centerY+16;
+  const glowCy=centerY+8;
 
   const bg=ctx.createLinearGradient(0,0,0,H);
   bg.addColorStop(0,'rgba(210,236,255,0.18)');
@@ -2111,12 +2111,12 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   ctx.fillStyle=bg;
   ctx.fillRect(0,0,W,H);
 
-  const glow=ctx.createRadialGradient(cx,cy,0,cx,cy,H*0.56);
+  const glow=ctx.createRadialGradient(cx,glowCy,0,cx,glowCy,H*0.56);
   glow.addColorStop(0,'rgba(255,255,255,0.36)');
   glow.addColorStop(0.45,'rgba(140,220,255,0.16)');
   glow.addColorStop(1,'rgba(255,255,255,0)');
   ctx.fillStyle=glow;
-  ctx.beginPath();ctx.arc(cx,cy,H*0.5,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(cx,glowCy,H*0.5,0,Math.PI*2);ctx.fill();
 
   ctx.strokeStyle='rgba(255,255,255,0.16)';
   ctx.lineWidth=1;
@@ -2131,18 +2131,22 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
     previewAcc=th.headAcc||null;
   }
   if(previewAcc&&previewAcc!=='off'){
+    const previewScale=previewAcc==='glasses'?1.62:1.74;
+    const previewY=centerY+(previewAcc==='glasses'?12:30);
     ctx.save();
-    ctx.translate(cx,cy);
-    ctx.scale(1.74,1.74);
+    ctx.translate(cx,previewY);
+    ctx.scale(previewScale,previewScale);
     paintHeadAccessory(ctx,previewAcc,0,0,'down');
     ctx.restore();
   }else if(headSel==='auto'){
+    const cy=centerY+8;
     ctx.fillStyle='rgba(255,255,255,0.92)';
     ctx.font=`900 ${Math.floor(H*0.4)}px 'Exo 2',sans-serif`;
     ctx.textAlign='center';
     ctx.textBaseline='middle';
     ctx.fillText('✨',cx,cy);
   }else if(headSel==='off'){
+    const cy=centerY+8;
     ctx.strokeStyle='rgba(255,255,255,0.48)';
     ctx.lineWidth=2.6;
     ctx.beginPath();ctx.arc(cx,cy,H*0.18,0,Math.PI*2);ctx.stroke();
@@ -2222,7 +2226,9 @@ function renderSkinsPage(){
 
   // Draw previews after layout so offsetWidth is available
   requestAnimationFrame(()=>{
-    drawJobs.forEach(job=>job());
+    drawJobs.forEach(job=>{
+      try{job();}catch(err){console.warn('Preview draw failed',err);}
+    });
   });
 }
 function goToSkins(){renderSkinsPage();showScreen('skinsScreen');}
