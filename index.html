@@ -1076,34 +1076,41 @@ const SKINS_DEF=[
    free:false, unlockMedal:'games50',
    descSv:'Lås upp: Spela 50 spel', descEn:'Unlock: Play 50 games',
    headA:'#23edff', headB:'#ff45c6', shadow:'#ff73d8',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.08,py+s*0.1,px+s*0.92,py+s*0.9);
+     g.addColorStop(0,`rgba(${isHead?244:228},${isHead?250:242},255,${Math.min(1,a+.08)})`);
+     g.addColorStop(0.22,`rgba(${Math.floor(24+a*18)},${Math.floor(236+a*12)},255,${Math.min(1,a+.06)})`);
+     g.addColorStop(0.5,`rgba(${Math.floor(255-a*2)},${Math.floor(74+a*18)},${Math.floor(198+a*26)},${Math.min(1,a+.06)})`);
+     g.addColorStop(0.76,`rgba(${Math.floor(255-a*2)},${Math.floor(150+a*18)},${Math.floor(92+a*14)},${Math.min(1,a+.06)})`);
+     g.addColorStop(1,`rgba(${Math.floor(136+a*14)},${Math.floor(44+a*14)},${Math.floor(255-a*4)},${Math.min(1,a+.05)})`);
+     return g;
+   },
    bodyFn:(a,i)=>{
-     const pulse=0.08*Math.sin((i||0)*0.65);
-     return `rgba(${Math.floor(42+a*42)},${Math.floor(8+a*28)},${Math.floor(78+a*95+pulse*45)},${Math.min(1,a+.06)})`;
+     const t=Math.floor(i||0)%4;
+     return [
+       `rgba(${Math.floor(24+a*18)},${Math.floor(236+a*12)},255,${Math.min(1,a+.06)})`,
+       `rgba(${Math.floor(255-a*2)},${Math.floor(72+a*22)},${Math.floor(198+a*24)},${Math.min(1,a+.06)})`,
+       `rgba(${Math.floor(255-a*2)},${Math.floor(146+a*18)},${Math.floor(88+a*16)},${Math.min(1,a+.06)})`,
+       `rgba(${Math.floor(126+a*18)},${Math.floor(38+a*12)},${Math.floor(246+a*10)},${Math.min(1,a+.06)})`
+     ][t];
    },
    overlayFn:(cx,px,py,s,i,a,isHead)=>{
      if(isHead)return;
-     const bandGrad=cx.createLinearGradient(px,py,px,py+s);
-     bandGrad.addColorStop(0,`rgba(255,150,82,${0.34+a*0.16})`);
-     bandGrad.addColorStop(0.38,`rgba(255,72,198,${0.26+a*0.14})`);
-     bandGrad.addColorStop(0.72,`rgba(132,44,255,${0.18+a*0.1})`);
-     bandGrad.addColorStop(1,'rgba(0,0,0,0)');
-     cx.fillStyle=bandGrad;
+     const band=cx.createLinearGradient(px,py+s*0.18,px+s,py+s*0.82);
+     band.addColorStop(0,'rgba(255,255,255,0)');
+     band.addColorStop(0.22,`rgba(35,237,255,${0.12+a*0.08})`);
+     band.addColorStop(0.54,`rgba(255,69,198,${0.18+a*0.1})`);
+     band.addColorStop(0.8,`rgba(255,155,79,${0.14+a*0.08})`);
+     band.addColorStop(1,'rgba(255,255,255,0)');
+     cx.fillStyle=band;
      cx.fillRect(px,py,s,s);
-     cx.strokeStyle=`rgba(255,176,96,${0.4+a*0.2})`;
-     cx.lineWidth=1.2;
-     [0.22,0.4,0.58,0.76].forEach((yy,idx)=>{
-       const inset=(idx%2===0?0.14:0.22)*s;
-       cx.beginPath();
-       cx.moveTo(px+inset,py+s*yy);
-       cx.lineTo(px+s-inset,py+s*yy);
-       cx.stroke();
-     });
-     cx.strokeStyle=`rgba(50,240,255,${0.34+a*0.18})`;
-     cx.lineWidth=1;
-     cx.beginPath();
-     cx.moveTo(px+s*0.2,py+s*0.78);
-     cx.quadraticCurveTo(px+s*0.48,py+s*(0.64+Math.sin(i*0.55)*0.03),px+s*0.8,py+s*0.78);
-     cx.stroke();
+     const glow=cx.createRadialGradient(px+s*0.34,py+s*0.28,0,px+s*0.4,py+s*0.34,s*0.58);
+     glow.addColorStop(0,`rgba(255,255,255,${isHead?0.3:0.16+a*0.1})`);
+     glow.addColorStop(0.34,`rgba(35,237,255,${0.14+a*0.08})`);
+     glow.addColorStop(0.72,`rgba(255,110,190,${0.12+a*0.08})`);
+     glow.addColorStop(1,'rgba(255,255,255,0)');
+     cx.fillStyle=glow;
+     cx.fillRect(px,py,s,s);
    },
    previewCss:'linear-gradient(135deg,#23edff 0%,#ff45c6 38%,#ff9b4f 62%,#842cff 100%)'},
   {id:'fotboll', emoji:'⚽', name:'Fotboll', nameEn:'Football',
@@ -1112,6 +1119,7 @@ const SKINS_DEF=[
    headA:'#ffffff', headB:'#d8dde2', shadow:'#dfe7ef',
    bodyFn:(a)=>`rgba(${Math.floor(242+a*10)},${Math.floor(245+a*8)},${Math.floor(248+a*6)},${Math.min(1,a+.06)})`,
    overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
      const pent=(cx0,cy0,r,rot=0)=>{
        cx.beginPath();
        for(let p=0;p<5;p++){
