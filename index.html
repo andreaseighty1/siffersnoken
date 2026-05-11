@@ -2036,19 +2036,6 @@ function flushBufferedProgress(){
 let _activeSkinCache=null,_activeSkinDefCache=null,_activeThemeCache=null,_activeThemeCacheKey='';
 function loadUnlockedSkins(){try{return new Set(JSON.parse(localStorage.getItem(SKINS_KEY))||[]);}catch(e){return new Set();}}
 function saveUnlockedSkins(s){localStorage.setItem(SKINS_KEY,JSON.stringify([...s]));}
-function applyDevUnlockAllSkins(playerName=loadPlayer()){
-  if(playerName!=='devAndreas')return false;
-  const skins=loadUnlockedSkins();
-  let changed=false;
-  SKINS_DEF.forEach(skin=>{
-    if(!skins.has(skin.id)){
-      skins.add(skin.id);
-      changed=true;
-    }
-  });
-  if(changed)saveUnlockedSkins(skins);
-  return changed;
-}
 function invalidateSkinCaches(){_activeSkinDefCache=null;_activeThemeCache=null;_activeThemeCacheKey='';}
 function loadActiveSkin(){
   if(_activeSkinCache!==null)return _activeSkinCache;
@@ -4433,7 +4420,6 @@ function showNameModal(){$('nameModalInp').value='';$('nameModal').classList.add
 function confirmName(){
   const n=$('nameModalInp').value.trim();if(!n){$('nameModalInp').focus();return;}
   savePlayer(n);
-  if(applyDevUnlockAllSkins(n))updateSkinNavBtn();
   $('nameModal').classList.remove('show');updatePlayerBar();
 }
 $('btnNameOk').addEventListener('click',confirmName);
@@ -5161,7 +5147,6 @@ updateMenuMusicBtn();
 const _us=loadUnlockedSkins();let _usc=false;
 SKINS_DEF.filter(s=>s.free).forEach(s=>{if(!_us.has(s.id)){_us.add(s.id);_usc=true;}});
 if(_usc)saveUnlockedSkins(_us);
-if(applyDevUnlockAllSkins())updateSkinNavBtn();
 ensureTotalGamesStat();
 checkGameCountMedals();
 checkOpMedals();
