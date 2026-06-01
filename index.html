@@ -500,8 +500,24 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .mystery-choice-btn.good{border-color:rgba(0,255,136,.45);background:rgba(0,255,136,.08);color:var(--accent);}
 .mystery-choice-btn.bad{border-color:rgba(255,70,70,.4);background:rgba(255,70,70,.08);color:#ff7a86;}
 .mystery-result{min-height:34px;line-height:1.5;}
+.countdown-overlay{background:transparent;backdrop-filter:none;pointer-events:none;z-index:105;gap:8px;}
 .countdown-title{font-size:clamp(42px,10vw,88px);margin-bottom:0;}
 .countdown-sub{font-size:14px;max-width:280px;text-align:center;line-height:1.55;}
+.countdown-overlay .countdown-title{
+  padding:10px 26px;
+  border-radius:999px;
+  background:rgba(4,12,10,.42);
+  border:1px solid rgba(0,255,136,.22);
+  box-shadow:0 0 22px rgba(0,255,136,.14);
+}
+.countdown-overlay .countdown-sub{
+  padding:8px 16px;
+  border-radius:999px;
+  background:rgba(4,12,10,.26);
+  border:1px solid rgba(255,255,255,.08);
+  color:rgba(240,255,246,.92);
+  text-shadow:0 0 12px rgba(0,0,0,.45);
+}
 
 /* ── COPYRIGHT ── */
 .copyright{margin-top:12px;width:100%;text-align:center;font-size:13px;line-height:1.5;
@@ -900,7 +916,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
     </div>
   </div>
 </div>
-<div class="overlay" id="countdownOverlay">
+<div class="overlay countdown-overlay" id="countdownOverlay">
   <div class="ov-title countdown-title" id="countdownTitleEl">3</div>
   <div class="ov-meta countdown-sub" id="countdownDescEl">Gör dig redo...</div>
 </div>
