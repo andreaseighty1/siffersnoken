@@ -421,6 +421,76 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .mt-name{font-size:13px;font-weight:800;color:var(--accent)}
 .mt-desc{font-size:10px;color:var(--text);opacity:.8}
 
+/* ── MYSTERY & MUSEUM ── */
+.menu-nav-btn.wide{grid-column:1 / -1;}
+.museum-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:14px;}
+.museum-summary-card{border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.22);padding:10px 12px;}
+.museum-summary-card .kicker{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.museum-summary-card .value{font-family:'Orbitron',monospace;font-size:18px;color:var(--accent);font-weight:900;}
+.museum-summary-card .sub{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.35;}
+.museum-set{margin-bottom:18px;}
+.museum-set-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:6px;}
+.museum-set-title{font-size:12px;font-weight:900;color:var(--text);}
+.museum-set-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+.museum-set-count{font-size:10px;color:var(--accent);font-weight:800;letter-spacing:.08em;}
+.museum-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:8px;}
+.museum-item{border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.22);padding:11px 10px;min-height:132px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;}
+.museum-item.unlocked{border-color:rgba(0,255,136,.24);}
+.museum-item.locked{opacity:.82;filter:saturate(.65);}
+.museum-item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.museum-item-emoji{font-size:28px;line-height:1;}
+.museum-item-name{font-size:12px;font-weight:900;color:var(--text);}
+.museum-item-desc{font-size:10px;color:var(--muted);line-height:1.45;flex:1;}
+.museum-item.locked .museum-item-name,.museum-item.locked .museum-item-desc{color:rgba(255,255,255,.58);}
+.rarity-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.rarity-chip.common{color:#EDEFF3;border-color:rgba(237,239,243,.28);background:rgba(237,239,243,.08);}
+.rarity-chip.uncommon{color:#59D090;border-color:rgba(89,208,144,.3);background:rgba(89,208,144,.09);}
+.rarity-chip.rare{color:#4EA3FF;border-color:rgba(78,163,255,.3);background:rgba(78,163,255,.09);}
+.rarity-chip.epic{color:#B26BFF;border-color:rgba(178,107,255,.3);background:rgba(178,107,255,.1);}
+.rarity-chip.legendary{color:#FF9F1C;border-color:rgba(255,159,28,.32);background:rgba(255,159,28,.11);}
+.museum-locked-hint{font-size:9px;color:rgba(255,255,255,.38);letter-spacing:.05em;text-transform:uppercase;}
+.museum-reward-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:8px;}
+.museum-reward-card{border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.22);padding:10px;display:flex;flex-direction:column;gap:7px;min-height:144px;}
+.museum-reward-card.unlocked{border-color:rgba(255,215,120,.24);}
+.museum-reward-preview{height:58px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);}
+.museum-reward-name{font-size:12px;font-weight:900;color:var(--text);}
+.museum-reward-desc{font-size:10px;color:var(--muted);line-height:1.4;flex:1;}
+.museum-reward-meta{font-size:9px;color:var(--muted);line-height:1.4;}
+.museum-reward-status{font-size:9px;color:rgba(255,255,255,.56);text-transform:uppercase;letter-spacing:.05em;}
+.museum-reward-bonus{color:#ffd27d;}
+.museum-shop{margin-bottom:20px;}
+.museum-shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+.museum-shop-card{border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.24);padding:12px;display:flex;flex-direction:column;gap:9px;min-height:210px;box-shadow:0 14px 30px rgba(0,0,0,.18);}
+.museum-shop-card.afford{border-color:rgba(255,215,120,.22);}
+.museum-shop-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+.museum-shop-title{font-size:12px;font-weight:900;color:var(--text);}
+.museum-shop-desc{font-size:10px;color:var(--muted);line-height:1.45;min-height:42px;}
+.museum-shop-cost{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;background:rgba(255,190,70,.12);border:1px solid rgba(255,190,70,.18);color:#ffd27d;font-size:10px;font-weight:900;white-space:nowrap;}
+.museum-shop-meta,.museum-shop-stock{font-size:9px;color:var(--muted);line-height:1.4;}
+.museum-shop-odds{display:flex;flex-wrap:wrap;gap:5px;}
+.museum-op-row,.museum-shop-actions,.museum-craft-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.museum-op-btn,.museum-shop-btn,.museum-craft-btn{appearance:none;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--text);border-radius:10px;padding:8px 10px;font:inherit;font-size:10px;font-weight:800;cursor:pointer;transition:transform .12s ease,background .12s ease,border-color .12s ease,opacity .12s ease;}
+.museum-op-btn:hover,.museum-shop-btn:hover,.museum-craft-btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.1);border-color:rgba(255,215,120,.22);}
+.museum-op-btn:disabled,.museum-shop-btn:disabled,.museum-craft-btn:disabled{cursor:not-allowed;opacity:.5;transform:none;}
+.museum-op-btn{min-width:44px;justify-content:center;text-align:center;}
+.museum-shop-btn.primary{background:rgba(255,190,70,.14);border-color:rgba(255,190,70,.24);color:#ffe0a0;}
+.museum-craft-btn{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:132px;}
+.museum-craft-main{display:flex;align-items:center;gap:7px;min-width:0;}
+.museum-craft-name{font-size:10px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;}
+.museum-note{font-size:9px;color:var(--muted);line-height:1.4;}
+.museum-reward-tip{font-size:9px;color:rgba(255,255,255,.64);line-height:1.4;}
+.mystery-card{max-width:430px;}
+.mystery-kicker{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
+.mystery-desc{line-height:1.6;max-width:340px;margin:0 auto 12px;}
+.mystery-eq{margin:8px auto 14px;font-size:clamp(26px,4vw,38px);}
+.mystery-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.mystery-choice-btn{padding:11px 10px;border:2px solid var(--line);border-radius:12px;background:rgba(0,0,0,.26);color:var(--text);font-family:'Orbitron',monospace;font-size:18px;font-weight:900;cursor:pointer;transition:.12s;}
+.mystery-choice-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);transform:translateY(-1px);}
+.mystery-choice-btn:disabled{cursor:default;opacity:.7;}
+.mystery-choice-btn.good{border-color:rgba(0,255,136,.45);background:rgba(0,255,136,.08);color:var(--accent);}
+.mystery-choice-btn.bad{border-color:rgba(255,70,70,.4);background:rgba(255,70,70,.08);color:#ff7a86;}
+.mystery-result{min-height:34px;line-height:1.5;}
+
 /* ── COPYRIGHT ── */
 .copyright{margin-top:12px;width:100%;text-align:center;font-size:13px;line-height:1.5;
   color:var(--text);pointer-events:none;letter-spacing:.06em;opacity:.7;
@@ -518,6 +588,11 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <span class="nav-emoji">🎨</span>
       <span class="nav-label" id="skinsBtnLabel">ORMSKINN</span>
       <span class="nav-count" id="skinsBtnCount">0 / 0</span>
+    </button>
+    <button class="menu-nav-btn wide" id="btnGoMuseum">
+      <span class="nav-emoji">🎁</span>
+      <span class="nav-label" id="museumBtnLabel">MYSTERIEMUSEUM</span>
+      <span class="nav-count" id="museumBtnCount">0 / 0</span>
     </button>
   </div>
   <!-- 42 Improbable Owls studio logo -->
@@ -687,6 +762,19 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   </div>
 </div>
 
+<!-- ══ MUSEUM-SIDA ══ -->
+<div class="screen" id="museumScreen">
+  <div class="medals-page">
+    <div class="medals-page-top">
+      <button class="back-btn" id="btnBackFromMuseum">← Tillbaka</button>
+      <div class="mp-title" id="museumTitleEl">🎁 MUSEUM</div>
+      <div class="mp-count" id="museumPageCount"></div>
+    </div>
+    <div id="museumSummary" class="museum-summary"></div>
+    <div id="museumPageContent"></div>
+  </div>
+</div>
+
 <!-- ══ STATISTIKSIDA ══ -->
 <div class="screen" id="statsScreen">
   <div class="stats-page">
@@ -785,6 +873,19 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
     </div>
   </div>
 </div>
+<div class="overlay" id="mysteryOverlay">
+  <div class="ov-card mystery-card">
+    <div class="mystery-kicker" id="mysteryKicker">🎁</div>
+    <div class="ov-title" id="mysteryTitleEl" style="font-size:24px;margin-bottom:6px;">MYSTERY BOX</div>
+    <div class="ov-meta mystery-desc" id="mysteryDescEl"></div>
+    <div class="eq-text mystery-eq" id="mysteryEqText">2 + 2 = ?</div>
+    <div class="mystery-choice-grid" id="mysteryChoices"></div>
+    <div class="ov-meta mystery-result" id="mysteryResultEl"></div>
+    <div class="ov-btns">
+      <button class="ov-btn primary" id="btnMysteryContinue" style="display:none;">Fortsätt</button>
+    </div>
+  </div>
+</div>
 <div class="flash-good" id="flashGood"></div>
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
@@ -802,10 +903,129 @@ const HS_KEY='mattormen_v3_hs', PLAYER_KEY='mattormen_player',
       ACTIVE_HEAD_KEY='mattormen_head_acc',
       SETTINGS_KEY='mattormen_settings',
       DEVICE_KEY='siffersnoken_device_id',
-      HIST_KEY='siffersnoken_hist';
+      HIST_KEY='siffersnoken_hist',
+      MUSEUM_KEY='siffersnoken_museum_v1';
 
 // RANGE_HINTS är nu i STRINGS — se t('rangeHint10') etc.
 // SPEED_DESCS är nu i STRINGS — se t('speedDescNone') etc.
+
+const MUSEUM_RARITY_ORDER=['common','uncommon','rare','epic','legendary'];
+const MYSTERY_RARITIES={
+  common:{
+    id:'common',emoji:'📦',ring:'#EDEFF3',glow:'rgba(237,239,243,.55)',dust:1,failDust:1,
+    labelSv:'Vanlig',labelEn:'Common',labelDe:'Gewöhnlich',
+    blurbSv:'En trygg liten box med ett enkelt fynd.',
+    blurbEn:'A small, safe box with a simple find.',
+    blurbDe:'Eine kleine, sichere Box mit einem einfachen Fund.'
+  },
+  uncommon:{
+    id:'uncommon',emoji:'🍀',ring:'#59D090',glow:'rgba(89,208,144,.58)',dust:3,failDust:1,
+    labelSv:'Ovanlig',labelEn:'Uncommon',labelDe:'Ungewöhnlich',
+    blurbSv:'Lite grönare tur och ett tydligt steg upp i värde.',
+    blurbEn:'A greener stroke of luck and a clear step up in value.',
+    blurbDe:'Ein grüner Glückstreffer und ein klarer Schritt nach oben.'
+  },
+  rare:{
+    id:'rare',emoji:'💎',ring:'#4EA3FF',glow:'rgba(78,163,255,.6)',dust:8,failDust:2,
+    labelSv:'Sällsynt',labelEn:'Rare',labelDe:'Selten',
+    blurbSv:'Roligare fynd som känns värda att jaga.',
+    blurbEn:'More exciting finds that feel worth chasing.',
+    blurbDe:'Spannendere Funde, die die Jagd wert sind.'
+  },
+  epic:{
+    id:'epic',emoji:'🌌',ring:'#B26BFF',glow:'rgba(178,107,255,.64)',dust:20,failDust:5,
+    labelSv:'Episk',labelEn:'Epic',labelDe:'Episch',
+    blurbSv:'Ett glittrande fynd från museets djupare salar.',
+    blurbEn:'A glittering find from the deeper museum halls.',
+    blurbDe:'Ein funkelnder Fund aus den tieferen Museumshallen.'
+  },
+  legendary:{
+    id:'legendary',emoji:'👑',ring:'#FF9F1C',glow:'rgba(255,159,28,.72)',dust:50,failDust:12,
+    labelSv:'Legendarisk',labelEn:'Legendary',labelDe:'Legendär',
+    blurbSv:'Nästan mytisk. Alla tittar när den dyker upp.',
+    blurbEn:'Nearly mythical. Everyone notices when it appears.',
+    blurbDe:'Fast mythisch. Alle schauen hin, wenn sie erscheint.'
+  }
+};
+const MYSTERY_BASE_ODDS={common:48,uncommon:29,rare:15,epic:6,legendary:2};
+const MYSTERY_SCORE_BONUS={common:15,uncommon:20,rare:28,epic:44,legendary:72};
+const MYSTERY_RANGE_BOOST={common:0.8,uncommon:0.92,rare:1.04,epic:1.14,legendary:1.24};
+const MYSTERY_TABLE_MAX={common:10,uncommon:10,rare:11,epic:12,legendary:12};
+const MUSEUM_SETS={
+  '+':{emoji:'🍎',nameSv:'Additionsateljén',nameEn:'Addition Atelier',nameDe:'Additionsatelier',
+       descSv:'Söta och glittriga fynd från plusvärlden.',descEn:'Sweet and shiny finds from the world of addition.',descDe:'Süße und glänzende Funde aus der Welt der Addition.'},
+  '-':{emoji:'🕵️',nameSv:'Subtraktionsarkivet',nameEn:'Subtraction Archive',nameDe:'Subtraktionsarchiv',
+       descSv:'Ledtrådar, nycklar och hemliga minusmysterier.',descEn:'Clues, keys, and secret subtraction mysteries.',descDe:'Hinweise, Schlüssel und geheime Subtraktionsrätsel.'},
+  '*':{emoji:'🤖',nameSv:'Multiplikationsverkstan',nameEn:'Multiplication Workshop',nameDe:'Multiplikationswerkstatt',
+       descSv:'Robotdelar och kraftkärnor från tabellverkstan.',descEn:'Robot parts and power cores from the times-table workshop.',descDe:'Roboterteile und Energiekernen aus der Einmaleins-Werkstatt.'},
+  '/':{emoji:'🌊',nameSv:'Divisionskammaren',nameEn:'Division Chamber',nameDe:'Divisionskammer',
+       descSv:'Marina reliker som bara hittar fram i jämna delar.',descEn:'Marine relics that only surface through equal sharing.',descDe:'Meeresreliquien, die nur durch gleichmäßiges Teilen auftauchen.'}
+};
+const MUSEUM_ITEMS=[
+  {id:'plus_common',op:'+',rarity:'common',emoji:'🍎',nameSv:'Äppelglans',nameEn:'Apple Gleam',nameDe:'Apfelglanz',descSv:'Ett blankt äpplefynd som lyser upp additionshyllan.',descEn:'A shiny apple relic for the addition shelf.',descDe:'Ein glänzender Apfelfund für das Additionsregal.'},
+  {id:'plus_uncommon',op:'+',rarity:'uncommon',emoji:'🍬',nameSv:'Karamellkopp',nameEn:'Candy Cup',nameDe:'Karamellbecher',descSv:'Ett sött plusfynd i glasyr och godis.',descEn:'A sweet addition relic in frosting and candy.',descDe:'Ein süßer Additionsfund aus Glasur und Bonbons.'},
+  {id:'plus_rare',op:'+',rarity:'rare',emoji:'🧁',nameSv:'Plusbakelse',nameEn:'Plus Pastry',nameDe:'Plus-Gebäck',descSv:'En sällsynt bakelse dekorerad med små plustecken.',descEn:'A rare pastry decorated with tiny plus signs.',descDe:'Ein seltenes Gebäck mit kleinen Pluszeichen.'},
+  {id:'plus_epic',op:'+',rarity:'epic',emoji:'💰',nameSv:'Myntregn',nameEn:'Coin Cascade',nameDe:'Münzregen',descSv:'En skimrande skattburk där summorna bara växer.',descEn:'A shimmering stash where totals keep growing.',descDe:'Ein schimmernder Schatz, in dem Summen weiterwachsen.'},
+  {id:'plus_legendary',op:'+',rarity:'legendary',emoji:'🧮',nameSv:'Stjärnabakus',nameEn:'Star Abacus',nameDe:'Sternabakus',descSv:'Museets glittrande mästerverk för den som älskar plus.',descEn:'The museum’s sparkling masterpiece for addition lovers.',descDe:'Das funkelnde Meisterwerk des Museums für Plus-Fans.'},
+  {id:'minus_common',op:'-',rarity:'common',emoji:'🔎',nameSv:'Mini-lupp',nameEn:'Mini Magnifier',nameDe:'Mini-Lupe',descSv:'Perfekt för att hitta det som försvann i subtraktionen.',descEn:'Perfect for finding what disappeared in subtraction.',descDe:'Perfekt, um zu finden, was bei der Subtraktion verschwand.'},
+  {id:'minus_uncommon',op:'-',rarity:'uncommon',emoji:'🗒️',nameSv:'Hemlig lapp',nameEn:'Secret Note',nameDe:'Geheime Notiz',descSv:'En ledtråd med borttappade minusspår.',descEn:'A clue full of missing subtraction trails.',descDe:'Ein Hinweis voller verlorener Subtraktionsspuren.'},
+  {id:'minus_rare',op:'-',rarity:'rare',emoji:'🗝️',nameSv:'Arkivnyckel',nameEn:'Archive Key',nameDe:'Archivschlüssel',descSv:'En nyckel till en låda full av minushemligheter.',descEn:'A key to a drawer full of subtraction secrets.',descDe:'Ein Schlüssel zu einer Schublade voller Subtraktionsgeheimnisse.'},
+  {id:'minus_epic',op:'-',rarity:'epic',emoji:'🗺️',nameSv:'Försvinnarkarta',nameEn:'Vanishing Map',nameDe:'Verschwundene Karte',descSv:'En karta där spåren blir färre ju närmare skatten du kommer.',descEn:'A map whose trails shrink as you approach the treasure.',descDe:'Eine Karte, deren Spuren weniger werden, je näher du dem Schatz kommst.'},
+  {id:'minus_legendary',op:'-',rarity:'legendary',emoji:'🏮',nameSv:'Skugglykta',nameEn:'Shadow Lantern',nameDe:'Schattenlaterne',descSv:'En legendarisk lykta som visar vad som saknas.',descEn:'A legendary lantern that reveals what is missing.',descDe:'Eine legendäre Laterne, die zeigt, was fehlt.'},
+  {id:'times_common',op:'*',rarity:'common',emoji:'🔩',nameSv:'Tabellskruv',nameEn:'Table Bolt',nameDe:'Tabellen-Schraube',descSv:'En stadig liten skruv från verkstan för gånger.',descEn:'A sturdy little bolt from the multiplication workshop.',descDe:'Eine kleine stabile Schraube aus der Multiplikationswerkstatt.'},
+  {id:'times_uncommon',op:'*',rarity:'uncommon',emoji:'🪛',nameSv:'Verkstadsmutter',nameEn:'Workshop Nut',nameDe:'Werkstattmutter',descSv:'Liten men viktig detalj i tabellmaskinen.',descEn:'A small but vital part of the times-table machine.',descDe:'Ein kleines, aber wichtiges Teil der Einmaleins-Maschine.'},
+  {id:'times_rare',op:'*',rarity:'rare',emoji:'⚙️',nameSv:'Kugghjulsring',nameEn:'Gear Loop',nameDe:'Zahnrad-Ring',descSv:'Kugghjul som snurrar i perfekt tabelltakt.',descEn:'A gear that spins in perfect times-table rhythm.',descDe:'Ein Zahnrad, das im perfekten Einmaleins-Takt dreht.'},
+  {id:'times_epic',op:'*',rarity:'epic',emoji:'🔋',nameSv:'Produktbatteri',nameEn:'Product Battery',nameDe:'Produkt-Batterie',descSv:'Laddad av hundratals rätta multiplikationer.',descEn:'Charged by hundreds of correct multiplications.',descDe:'Aufgeladen von hunderten richtigen Multiplikationen.'},
+  {id:'times_legendary',op:'*',rarity:'legendary',emoji:'🤖',nameSv:'Robotkärna',nameEn:'Robot Core',nameDe:'Roboterkern',descSv:'En legendarisk kärna som brummar av tabellkraft.',descEn:'A legendary core humming with multiplication power.',descDe:'Ein legendärer Kern voller Einmaleins-Energie.'},
+  {id:'div_common',op:'/',rarity:'common',emoji:'🐚',nameSv:'Strandsnäcka',nameEn:'Beach Shell',nameDe:'Strandmuschel',descSv:'En liten snäcka från divisionskammarens strand.',descEn:'A small shell from the shore of the division chamber.',descDe:'Eine kleine Muschel vom Ufer der Divisionskammer.'},
+  {id:'div_uncommon',op:'/',rarity:'uncommon',emoji:'🪸',nameSv:'Korallbit',nameEn:'Coral Piece',nameDe:'Korallenstück',descSv:'En korallbit som delat sig i fina mönster.',descEn:'A coral piece split into neat little patterns.',descDe:'Ein Korallenstück, das sich in feine Muster geteilt hat.'},
+  {id:'div_rare',op:'/',rarity:'rare',emoji:'🫧',nameSv:'Delpärla',nameEn:'Share Pearl',nameDe:'Teilperle',descSv:'En pärla som bara syns när allt kan delas jämnt.',descEn:'A pearl that appears only when everything divides evenly.',descDe:'Eine Perle, die nur erscheint, wenn alles glatt teilbar ist.'},
+  {id:'div_epic',op:'/',rarity:'epic',emoji:'🧭',nameSv:'Kvotkompass',nameEn:'Quotient Compass',nameDe:'Quotienten-Kompass',descSv:'En kompass som pekar mot rätt kvot i dimman.',descEn:'A compass pointing to the right quotient through the mist.',descDe:'Ein Kompass, der im Nebel zum richtigen Quotienten zeigt.'},
+  {id:'div_legendary',op:'/',rarity:'legendary',emoji:'🌐',nameSv:'Tidvattenklot',nameEn:'Tidal Globe',nameDe:'Gezeitenkugel',descSv:'Ett legendariskt klot där havet delar sig i perfekta mönster.',descEn:'A legendary globe where the sea divides into perfect patterns.',descDe:'Eine legendäre Kugel, in der sich das Meer in perfekte Muster teilt.'}
+];
+const MUSEUM_SHOP_OFFERS=[
+  {id:'curator_box',kind:'museum_box',cost:12,targeted:true,odds:{common:38,uncommon:34,rare:20,epic:7,legendary:1},
+   labelSv:'Kurator-box',labelEn:'Curator Box',labelDe:'Kurator-Box',
+   descSv:'Välj räknesätt och öppna en riktad box med hela rarity-trappan.',descEn:'Pick an operation and open a targeted box with the full rarity ladder.',descDe:'Wähle eine Rechenart und öffne eine gezielte Box mit der vollen Seltenheitsleiter.'},
+  {id:'fine_box',kind:'museum_box',cost:34,targeted:true,odds:{uncommon:30,rare:40,epic:23,legendary:7},
+   labelSv:'Finbox',labelEn:'Fine Box',labelDe:'Feinbox',
+   descSv:'En dyrare box utan vanliga fynd, perfekt när museet växer.',descEn:'A pricier box without common finds, perfect once the museum grows.',descDe:'Eine teurere Box ohne gewöhnliche Funde, perfekt wenn das Museum wächst.'},
+  {id:'hat_crate',kind:'headwear_box',cost:60,targeted:false,odds:{rare:48,epic:40,legendary:12},
+   labelSv:'Hattask',labelEn:'Hat Crate',labelDe:'Hutkiste',
+   descSv:'Ger en ny huvudbonad när det finns någon kvar i poolen.',descEn:'Grants a new headwear item while any remain in the pool.',descDe:'Gewährt einen neuen Kopfschmuck, solange noch einer im Pool übrig ist.'},
+  {id:'relic_workshop',kind:'craft_relic',cost:120,targeted:true,allowedRarities:['common','uncommon','rare','epic'],
+   labelSv:'Relikverkstad',labelEn:'Relic Workshop',labelDe:'Reliktwerkstatt',
+   descSv:'Crafta en valfri saknad relik upp till episk nivå.',descEn:'Craft any missing relic up to epic rarity.',descDe:'Stelle ein beliebiges fehlendes Relikt bis zur epischen Seltenheit her.'},
+  {id:'legendary_restore',kind:'craft_relic',cost:240,targeted:true,allowedRarities:['legendary'],
+   labelSv:'Legendarisk restaurering',labelEn:'Legendary Restoration',labelDe:'Legendäre Restaurierung',
+   descSv:'Återställ en valfri saknad legendarisk relik.',descEn:'Restore any missing legendary relic.',descDe:'Stelle ein beliebiges fehlendes legendäres Relikt wieder her.'}
+];
+const MUSEUM_HEADWEAR_DEF=[
+  {id:'apple_bow',rarity:'uncommon',source:'set_milestone',op:'+',needed:3,emoji:'🍎',nameSv:'Appelrosett',nameEn:'Apple Bow',nameDe:'Apfelschleife'},
+  {id:'detective_cap',rarity:'uncommon',source:'set_milestone',op:'-',needed:3,emoji:'🕵️',nameSv:'Detektivkeps',nameEn:'Detective Cap',nameDe:'Detektivmütze'},
+  {id:'weld_glasses',rarity:'uncommon',source:'set_milestone',op:'*',needed:3,emoji:'🥽',nameSv:'Svetsglasögon',nameEn:'Weld Goggles',nameDe:'Schweißbrille'},
+  {id:'sailor_cap',rarity:'uncommon',source:'set_milestone',op:'/',needed:3,emoji:'⚓',nameSv:'Sjömansmössa',nameEn:'Sailor Cap',nameDe:'Seemannsmütze'},
+  {id:'sugar_crown',rarity:'rare',source:'hat_crate',emoji:'🍭',nameSv:'Sockerkrona',nameEn:'Sugar Crown',nameDe:'Zuckerkrone'},
+  {id:'key_halo',rarity:'rare',source:'hat_crate',emoji:'🗝️',nameSv:'Nyckelhalo',nameEn:'Key Halo',nameDe:'Schlüsselhalo'},
+  {id:'gear_antenna',rarity:'rare',source:'hat_crate',emoji:'⚙️',nameSv:'Kugghjulsantenn',nameEn:'Gear Antenna',nameDe:'Zahnradantenne'},
+  {id:'pearl_tiara',rarity:'rare',source:'hat_crate',emoji:'🫧',nameSv:'Pärltiara',nameEn:'Pearl Tiara',nameDe:'Perlentiara'},
+  {id:'prism_diadem',rarity:'epic',source:'hat_crate',emoji:'🔷',nameSv:'Prismadiadem',nameEn:'Prism Diadem',nameDe:'Prismendiadem'},
+  {id:'shadow_monocle',rarity:'epic',source:'hat_crate',emoji:'🕶️',nameSv:'Skuggmonokel',nameEn:'Shadow Monocle',nameDe:'Schattenmonokel'},
+  {id:'robot_diadem',rarity:'epic',source:'hat_crate',emoji:'🤖',nameSv:'Robotdiadem',nameEn:'Robot Diadem',nameDe:'Robotikdiadem'},
+  {id:'compass_halo',rarity:'epic',source:'hat_crate',emoji:'🧭',nameSv:'Kompasshalo',nameEn:'Compass Halo',nameDe:'Kompasshalo'},
+  {id:'museum_crown',rarity:'legendary',source:'mastery_all_sets',emoji:'🏛️',nameSv:'Museikrona',nameEn:'Museum Crown',nameDe:'Museumskrone'},
+  {id:'relic_halo',rarity:'legendary',source:'mastery_legendary',emoji:'✨',nameSv:'Relikgloria',nameEn:'Relic Halo',nameDe:'Reliktgloriole'},
+];
+const MUSEUM_MILESTONES=[
+  {id:'set_plus_bonus',type:'set_complete',op:'+',dust:30,emoji:'🍎',labelSv:'Additionsset komplett',labelEn:'Addition set complete',labelDe:'Additionsset komplett'},
+  {id:'set_minus_bonus',type:'set_complete',op:'-',dust:30,emoji:'🕵️',labelSv:'Subtraktionsset komplett',labelEn:'Subtraction set complete',labelDe:'Subtraktionsset komplett'},
+  {id:'set_times_bonus',type:'set_complete',op:'*',dust:30,emoji:'🤖',labelSv:'Multiplikationsset komplett',labelEn:'Multiplication set complete',labelDe:'Multiplikationsset komplett'},
+  {id:'set_div_bonus',type:'set_complete',op:'/',dust:30,emoji:'🌊',labelSv:'Divisionsset komplett',labelEn:'Division set complete',labelDe:'Divisionsset komplett'},
+  {id:'all_sets_bonus',type:'all_sets',dust:80,emoji:'🏛️',labelSv:'Alla relikset kompletta',labelEn:'All relic sets complete',labelDe:'Alle Reliktsets komplett'},
+  {id:'rare_mastery_bonus',type:'rarity_complete',rarity:'rare',dust:55,emoji:'💎',labelSv:'Alla sällsynta reliker',labelEn:'All rare relics',labelDe:'Alle seltenen Relikte'},
+  {id:'epic_mastery_bonus',type:'rarity_complete',rarity:'epic',dust:100,emoji:'🌌',labelSv:'Alla episka reliker',labelEn:'All epic relics',labelDe:'Alle epischen Relikte'},
+  {id:'legendary_mastery_bonus',type:'rarity_complete',rarity:'legendary',dust:160,emoji:'👑',labelSv:'Alla legendariska reliker',labelEn:'All legendary relics',labelDe:'Alle legendären Relikte'},
+];
 
 /* ═══════════════════════════════════════
    SPRÅK / LANGUAGE
@@ -944,11 +1164,14 @@ function applyLang(){
   if($('btnBackFromMedals'))$('btnBackFromMedals').textContent=t('btnBack');
   if($('btnBackFromHS'))$('btnBackFromHS').textContent=t('btnBack');
   if($('btnBackFromSkins'))$('btnBackFromSkins').textContent=t('btnBack');
+  if($('btnBackFromMuseum'))$('btnBackFromMuseum').textContent=t('btnBack');
   if($('btnClearHS'))$('btnClearHS').textContent=t('btnClearHS');
   if($('skinsBtnLabel'))$('skinsBtnLabel').textContent=t('skinsBtnLabel');
+  if($('museumBtnLabel'))$('museumBtnLabel').textContent=pickLangText('MYSTERIEMUSEUM','MYSTERY MUSEUM','MYSTERIENMUSEUM');
   if($('medalsLabel'))$('medalsLabel').textContent=t('medalsLabel');
   if($('medalsBtnLabel'))$('medalsBtnLabel').textContent=t('medalsLabel');
   updateSkinNavBtn();
+  updateMuseumNavBtn();
   // HS panel show-all text
   const hsShowAll=document.querySelector('#btnGoHS .hs-title');
   if(hsShowAll)hsShowAll.innerHTML=t('hsTitle')+' <span style="font-size:9px;color:var(--muted);letter-spacing:.05em">'+t('hsShowAll')+'</span>';
@@ -962,8 +1185,10 @@ function applyLang(){
   if($('statsBtnLabel'))$('statsBtnLabel').textContent=t('statsBtn');
   if($('statsTitleEl'))$('statsTitleEl').textContent=t('statsTitle');
   if($('statsBackText'))$('statsBackText').textContent=t('statsBack');
+  if($('museumTitleEl'))$('museumTitleEl').textContent=pickLangText('🎁 MYSTERIEMUSEUM','🎁 MYSTERY MUSEUM','🎁 MYSTERIENMUSEUM');
   if($('btnPracticeList'))$('btnPracticeList').textContent='📚 '+pickLangText('Öva på dessa','Practice these','Übe diese');
   if($('btnPracticeClose'))$('btnPracticeClose').textContent=pickLangText('Stäng','Close','Schließen');
+  if($('btnMysteryContinue'))$('btnMysteryContinue').textContent=pickLangText('Fortsätt','Continue','Weiter');
   // Inställningssidan
   if($('settingsTitleEl'))$('settingsTitleEl').textContent=t('settingsTitle');
   if($('settingsBtnLabel'))$('settingsBtnLabel').textContent=pickLangText('Inställningar','Settings','Einstellungen');
@@ -1277,6 +1502,298 @@ const SKINS_DEF=[
      });
    },
    previewCss:'linear-gradient(135deg,#fafaf8 0%,#f0efea 32%,#1f1f1c 58%,#fff8f0 100%)'},
+  {id:'prismagodis', emoji:'🍬', name:'Prismagodis', nameEn:'Prism Candy',
+   free:false, unlockMedal:null, unlockMuseum:{type:'set_complete',op:'+'},
+   descSv:'Lås upp: 5/5 reliker i Addition', descEn:'Unlock: 5/5 relics in Addition',
+   headA:'#fff7ff', headB:'#ff74cc', shadow:'#8ff2ff',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.08,py+s*0.08,px+s*0.94,py+s*0.92);
+     g.addColorStop(0,`rgba(${isHead?255:246},${isHead?248:240},255,${Math.min(1,a+.08)})`);
+     g.addColorStop(0.22,`rgba(${Math.floor(112+a*18)},${Math.floor(240+a*10)},255,${Math.min(1,a+.08)})`);
+     g.addColorStop(0.48,`rgba(${Math.floor(255-a*2)},${Math.floor(110+a*18)},${Math.floor(206+a*18)},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.76,`rgba(${Math.floor(255-a*2)},${Math.floor(206+a*12)},${Math.floor(110+a*16)},${Math.min(1,a+.08)})`);
+     g.addColorStop(1,`rgba(${Math.floor(152+a*14)},${Math.floor(88+a*20)},${Math.floor(255-a*2)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%4;
+     return [
+       `rgba(${Math.floor(118+a*20)},${Math.floor(236+a*14)},255,${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(255-a*2)},${Math.floor(110+a*18)},${Math.floor(204+a*18)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(255-a*2)},${Math.floor(208+a*12)},${Math.floor(114+a*16)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(162+a*16)},${Math.floor(94+a*20)},${Math.floor(255-a*2)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     const gloss=cx.createLinearGradient(px,py+s*0.14,px+s,py+s*0.86);
+     gloss.addColorStop(0,'rgba(255,255,255,0)');
+     gloss.addColorStop(0.32,`rgba(255,255,255,${0.18+a*0.08})`);
+     gloss.addColorStop(0.54,`rgba(255,226,248,${0.18+a*0.08})`);
+     gloss.addColorStop(1,'rgba(255,255,255,0)');
+     cx.fillStyle=gloss;
+     cx.fillRect(px,py,s,s);
+     [[0.26,0.28,0.08],[0.72,0.24,0.06],[0.58,0.64,0.07],[0.3,0.76,0.05]].forEach((st,k)=>{
+       const sparkle=0.55+0.45*Math.sin(performance.now()/520+i*0.8+k*1.4);
+       cx.fillStyle=`rgba(255,255,255,${(0.28+a*0.16)*sparkle})`;
+       cx.beginPath();cx.arc(px+s*st[0],py+s*st[1],s*st[2],0,Math.PI*2);cx.fill();
+     });
+   },
+   previewCss:'linear-gradient(135deg,#ffffff 0%,#7cefff 22%,#ff6bcf 48%,#ffd06c 72%,#9d65ff 100%)'},
+  {id:'skuggmysterium', emoji:'🕵️', name:'Skuggmysterium', nameEn:'Shadow Mystery',
+   free:false, unlockMedal:null, unlockMuseum:{type:'set_complete',op:'-'},
+   descSv:'Lås upp: 5/5 reliker i Subtraktion', descEn:'Unlock: 5/5 relics in Subtraction',
+   headA:'#eef1f6', headB:'#23242f', shadow:'#7f86a8',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.08,py+s*0.12,px+s*0.9,py+s*0.88);
+     g.addColorStop(0,`rgba(${isHead?240:214},${isHead?242:220},${isHead?246:228},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.34,`rgba(${Math.floor(98+a*10)},${Math.floor(102+a*10)},${Math.floor(128+a*18)},${Math.min(1,a+.07)})`);
+     g.addColorStop(0.72,`rgba(${Math.floor(38+a*8)},${Math.floor(42+a*8)},${Math.floor(58+a*10)},${Math.min(1,a+.07)})`);
+     g.addColorStop(1,`rgba(${Math.floor(16+a*6)},${Math.floor(16+a*6)},${Math.floor(22+a*8)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%3;
+     return [
+       `rgba(${Math.floor(28+a*10)},${Math.floor(30+a*10)},${Math.floor(40+a*14)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(64+a*10)},${Math.floor(68+a*10)},${Math.floor(88+a*14)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(18+a*8)},${Math.floor(18+a*8)},${Math.floor(28+a*10)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     const beam=cx.createLinearGradient(px+s*0.08,py+s*0.12,px+s*0.88,py+s*0.88);
+     beam.addColorStop(0,'rgba(255,255,255,0)');
+     beam.addColorStop(0.38,`rgba(236,240,255,${0.16+a*0.08})`);
+     beam.addColorStop(0.58,`rgba(120,130,170,${0.16+a*0.08})`);
+     beam.addColorStop(1,'rgba(255,255,255,0)');
+     cx.fillStyle=beam;
+     cx.fillRect(px,py,s,s);
+     cx.strokeStyle=`rgba(210,218,255,${0.18+a*0.08})`;
+     cx.lineWidth=1;
+     cx.beginPath();
+     cx.moveTo(px+s*0.24,py+s*0.7);
+     cx.lineTo(px+s*0.76,py+s*0.24);
+     cx.stroke();
+     cx.fillStyle=`rgba(246,248,255,${0.34+a*0.1})`;
+     cx.beginPath();cx.arc(px+s*0.28,py+s*0.7,s*0.05,0,Math.PI*2);cx.fill();
+   },
+   previewCss:'linear-gradient(135deg,#eff2f8 0%,#7f86a8 26%,#292a37 62%,#101014 100%)'},
+  {id:'clockwork', emoji:'⚙️', name:'Clockwork', nameEn:'Clockwork',
+   free:false, unlockMedal:null, unlockMuseum:{type:'set_complete',op:'*'},
+   descSv:'Lås upp: 5/5 reliker i Multiplikation', descEn:'Unlock: 5/5 relics in Multiplication',
+   headA:'#f2e3be', headB:'#7f5026', shadow:'#d4a464',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.1,py+s*0.08,px+s*0.9,py+s*0.9);
+     g.addColorStop(0,`rgba(${isHead?248:232},${isHead?236:218},${isHead?206:168},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.28,`rgba(${Math.floor(196+a*16)},${Math.floor(148+a*18)},${Math.floor(90+a*16)},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.62,`rgba(${Math.floor(118+a*12)},${Math.floor(88+a*12)},${Math.floor(58+a*10)},${Math.min(1,a+.08)})`);
+     g.addColorStop(1,`rgba(${Math.floor(70+a*10)},${Math.floor(48+a*10)},${Math.floor(34+a*8)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%4;
+     return [
+       `rgba(${Math.floor(214+a*18)},${Math.floor(170+a*16)},${Math.floor(102+a*16)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(120+a*12)},${Math.floor(92+a*12)},${Math.floor(62+a*10)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(178+a*16)},${Math.floor(134+a*16)},${Math.floor(84+a*14)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(92+a*12)},${Math.floor(70+a*12)},${Math.floor(52+a*10)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     cx.strokeStyle=`rgba(88,56,28,${0.52+a*0.12})`;
+     cx.lineWidth=1;
+     cx.beginPath();cx.arc(px+s*0.38,py+s*0.48,s*0.14,0,Math.PI*2);cx.stroke();
+     for(let k=0;k<8;k++){
+       const ang=k*Math.PI/4;
+       cx.beginPath();
+       cx.moveTo(px+s*0.38+Math.cos(ang)*s*0.11,py+s*0.48+Math.sin(ang)*s*0.11);
+       cx.lineTo(px+s*0.38+Math.cos(ang)*s*0.18,py+s*0.48+Math.sin(ang)*s*0.18);
+       cx.stroke();
+     }
+     cx.fillStyle=`rgba(236,214,164,${0.36+a*0.12})`;
+     [[0.7,0.3],[0.74,0.7],[0.22,0.26]].forEach(([sx,sy])=>{
+       cx.beginPath();cx.arc(px+s*sx,py+s*sy,s*0.045,0,Math.PI*2);cx.fill();
+     });
+   },
+   previewCss:'linear-gradient(135deg,#f2e3be 0%,#cc9650 34%,#7f5026 64%,#433126 100%)'},
+  {id:'tidvatten', emoji:'🌊', name:'Tidvatten', nameEn:'Tideglass',
+   free:false, unlockMedal:null, unlockMuseum:{type:'set_complete',op:'/'},
+   descSv:'Lås upp: 5/5 reliker i Division', descEn:'Unlock: 5/5 relics in Division',
+   headA:'#e4fff8', headB:'#1f6f88', shadow:'#75e2d7',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.08,py+s*0.1,px+s*0.9,py+s*0.92);
+     g.addColorStop(0,`rgba(${isHead?242:220},${isHead?255:246},${isHead?252:244},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.26,`rgba(${Math.floor(120+a*16)},${Math.floor(236+a*12)},${Math.floor(226+a*12)},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.58,`rgba(${Math.floor(72+a*14)},${Math.floor(164+a*18)},${Math.floor(180+a*18)},${Math.min(1,a+.08)})`);
+     g.addColorStop(1,`rgba(${Math.floor(30+a*10)},${Math.floor(92+a*16)},${Math.floor(114+a*18)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%4;
+     return [
+       `rgba(${Math.floor(132+a*16)},${Math.floor(234+a*12)},${Math.floor(224+a*12)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(76+a*14)},${Math.floor(172+a*18)},${Math.floor(190+a*18)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(60+a*12)},${Math.floor(126+a*16)},${Math.floor(144+a*16)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(180+a*14)},${Math.floor(236+a*10)},${Math.floor(226+a*12)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     cx.strokeStyle=`rgba(220,255,250,${0.22+a*0.08})`;
+     cx.lineWidth=1.1;
+     for(let k=0;k<2;k++){
+       const y=py+s*(0.34+k*0.24)+Math.sin(i*0.65+k)*s*0.04;
+       cx.beginPath();
+       cx.moveTo(px+s*0.12,y);
+       cx.quadraticCurveTo(px+s*0.5,y-s*0.08,px+s*0.88,y);
+       cx.stroke();
+     }
+     cx.fillStyle=`rgba(255,255,255,${0.18+a*0.08})`;
+     [[0.28,0.26,0.04],[0.72,0.62,0.05]].forEach(st=>{
+       cx.beginPath();cx.arc(px+s*st[0],py+s*st[1],s*st[2],0,Math.PI*2);cx.fill();
+     });
+   },
+   previewCss:'linear-gradient(135deg,#effff9 0%,#84efe3 32%,#3ea4b2 62%,#1f6f88 100%)'},
+  {id:'museumvaktaren', emoji:'🏛️', name:'Museiväktaren', nameEn:'Museum Keeper',
+   free:false, unlockMedal:null, unlockMuseum:{type:'all_sets'},
+   descSv:'Lås upp: Alla 4 relikset kompletta', descEn:'Unlock: Complete all 4 relic sets',
+   headA:'#fff7e6', headB:'#1f2955', shadow:'#f4c56c',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.08,py+s*0.12,px+s*0.92,py+s*0.9);
+     g.addColorStop(0,`rgba(${isHead?255:244},${isHead?246:234},${isHead?226:208},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.36,`rgba(${Math.floor(56+a*16)},${Math.floor(78+a*18)},${Math.floor(144+a*24)},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.74,`rgba(${Math.floor(20+a*10)},${Math.floor(28+a*12)},${Math.floor(58+a*18)},${Math.min(1,a+.08)})`);
+     g.addColorStop(1,`rgba(${Math.floor(250-a*2)},${Math.floor(202+a*10)},${Math.floor(112+a*14)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%3;
+     return [
+       `rgba(${Math.floor(30+a*16)},${Math.floor(46+a*18)},${Math.floor(102+a*20)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(240+a*6)},${Math.floor(228+a*8)},${Math.floor(206+a*8)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(86+a*14)},${Math.floor(68+a*12)},${Math.floor(34+a*10)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     cx.strokeStyle=`rgba(248,210,120,${0.34+a*0.12})`;
+     cx.lineWidth=1.2;
+     cx.beginPath();
+     cx.moveTo(px+s*0.18,py+s*0.82);cx.lineTo(px+s*0.82,py+s*0.18);
+     cx.moveTo(px+s*0.24,py+s*0.9);cx.lineTo(px+s*0.9,py+s*0.24);
+     cx.stroke();
+     cx.fillStyle=`rgba(255,236,190,${0.5+a*0.12})`;
+     cx.beginPath();cx.arc(px+s*0.48,py+s*0.5,s*0.06,0,Math.PI*2);cx.fill();
+   },
+   previewCss:'linear-gradient(135deg,#fff8e7 0%,#f2c567 20%,#32498e 48%,#151d40 78%,#f7d18c 100%)'},
+  {id:'stjarnarkiv', emoji:'🌠', name:'Stjärnarkiv', nameEn:'Star Archive',
+   free:false, unlockMedal:null, unlockMuseum:{type:'rarity_complete',rarity:'rare'},
+   descSv:'Lås upp: Alla 4 sällsynta reliker', descEn:'Unlock: All 4 rare relics',
+   headA:'#eef4ff', headB:'#16224a', shadow:'#a8d5ff',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px,py,px+s,py+s);
+     g.addColorStop(0,`rgba(${isHead?244:218},${isHead?248:228},255,${Math.min(1,a+.08)})`);
+     g.addColorStop(0.28,`rgba(${Math.floor(90+a*16)},${Math.floor(130+a*20)},${Math.floor(210+a*18)},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.64,`rgba(${Math.floor(28+a*10)},${Math.floor(42+a*14)},${Math.floor(98+a*22)},${Math.min(1,a+.08)})`);
+     g.addColorStop(1,`rgba(${Math.floor(12+a*6)},${Math.floor(18+a*8)},${Math.floor(52+a*14)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%4;
+     return [
+       `rgba(${Math.floor(70+a*16)},${Math.floor(118+a*18)},${Math.floor(198+a*18)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(28+a*12)},${Math.floor(44+a*14)},${Math.floor(96+a*18)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(198+a*10)},${Math.floor(214+a*10)},${Math.floor(240+a*8)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(18+a*8)},${Math.floor(24+a*10)},${Math.floor(62+a*14)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     const tw=performance.now()/460+i*0.6;
+     [[0.22,0.3,1],[0.68,0.22,0.8],[0.52,0.7,1.05]].forEach((st,k)=>{
+       const pulse=0.55+0.45*Math.sin(tw+k*1.5);
+       const x=px+s*st[0],y=py+s*st[1],r=s*0.04*st[2];
+       cx.fillStyle=`rgba(255,245,210,${(0.45+a*0.16)*pulse})`;
+       cx.beginPath();cx.arc(x,y,r,0,Math.PI*2);cx.fill();
+       cx.strokeStyle=`rgba(205,225,255,${(0.22+a*0.08)*pulse})`;
+       cx.lineWidth=0.9;
+       cx.beginPath();cx.moveTo(x-r*2.2,y);cx.lineTo(x+r*2.2,y);cx.moveTo(x,y-r*2.2);cx.lineTo(x,y+r*2.2);cx.stroke();
+     });
+     cx.strokeStyle=`rgba(196,210,255,${0.18+a*0.08})`;
+     cx.lineWidth=0.8;
+     cx.beginPath();cx.moveTo(px+s*0.18,py+s*0.78);cx.lineTo(px+s*0.82,py+s*0.22);cx.stroke();
+   },
+   previewCss:'linear-gradient(135deg,#eef4ff 0%,#94b9ff 24%,#203166 56%,#0b1230 100%)'},
+  {id:'runorm', emoji:'ᚱ', name:'Runorm', nameEn:'Runewyrm',
+   free:false, unlockMedal:null, unlockMuseum:{type:'rarity_complete',rarity:'epic'},
+   descSv:'Lås upp: Alla 4 episka reliker', descEn:'Unlock: All 4 epic relics',
+   headA:'#efe5cf', headB:'#514331', shadow:'#9d8a62',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.1,py+s*0.08,px+s*0.88,py+s*0.9);
+     g.addColorStop(0,`rgba(${isHead?230:202},${isHead?222:194},${isHead?198:168},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.42,`rgba(${Math.floor(116+a*10)},${Math.floor(96+a*10)},${Math.floor(70+a*10)},${Math.min(1,a+.08)})`);
+     g.addColorStop(1,`rgba(${Math.floor(58+a*8)},${Math.floor(44+a*8)},${Math.floor(30+a*8)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%3;
+     return [
+       `rgba(${Math.floor(112+a*12)},${Math.floor(90+a*12)},${Math.floor(66+a*12)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(74+a*10)},${Math.floor(58+a*10)},${Math.floor(42+a*10)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(146+a*10)},${Math.floor(122+a*10)},${Math.floor(92+a*10)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     cx.strokeStyle=`rgba(228,206,150,${0.34+a*0.12})`;
+     cx.lineWidth=1.15;
+     const glyphs=[
+       ()=>{cx.beginPath();cx.moveTo(px+s*0.34,py+s*0.2);cx.lineTo(px+s*0.34,py+s*0.8);cx.moveTo(px+s*0.34,py+s*0.2);cx.lineTo(px+s*0.62,py+s*0.42);cx.moveTo(px+s*0.34,py+s*0.5);cx.lineTo(px+s*0.62,py+s*0.78);cx.stroke();},
+       ()=>{cx.beginPath();cx.moveTo(px+s*0.28,py+s*0.22);cx.lineTo(px+s*0.54,py+s*0.78);cx.lineTo(px+s*0.72,py+s*0.34);cx.stroke();},
+       ()=>{cx.beginPath();cx.moveTo(px+s*0.24,py+s*0.28);cx.lineTo(px+s*0.52,py+s*0.28);cx.lineTo(px+s*0.68,py+s*0.5);cx.lineTo(px+s*0.52,py+s*0.72);cx.lineTo(px+s*0.24,py+s*0.72);cx.stroke();}
+     ];
+     glyphs[Math.abs(i)%glyphs.length]();
+   },
+   previewCss:'linear-gradient(135deg,#efe5cf 0%,#9d8a62 32%,#5e4b36 68%,#2a2118 100%)'},
+  {id:'solregent', emoji:'☀️', name:'Solregent', nameEn:'Sun Regent',
+   free:false, unlockMedal:null, unlockMuseum:{type:'rarity_complete',rarity:'legendary'},
+   descSv:'Lås upp: Alla 4 legendariska reliker', descEn:'Unlock: All 4 legendary relics',
+   headA:'#fff7cf', headB:'#b96e09', shadow:'#ffd76c',
+   segmentFillFn:(drawCtx,px,py,s,i,a,isHead)=>{
+     const g=drawCtx.createLinearGradient(px+s*0.08,py+s*0.08,px+s*0.92,py+s*0.92);
+     g.addColorStop(0,`rgba(${isHead?255:252},${isHead?246:230},${isHead?198:126},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.26,`rgba(${Math.floor(255-a*2)},${Math.floor(216+a*10)},${Math.floor(96+a*14)},${Math.min(1,a+.08)})`);
+     g.addColorStop(0.6,`rgba(${Math.floor(255-a*2)},${Math.floor(148+a*14)},${Math.floor(40+a*12)},${Math.min(1,a+.08)})`);
+     g.addColorStop(1,`rgba(${Math.floor(190+a*14)},${Math.floor(92+a*12)},${Math.floor(8+a*8)},${Math.min(1,a+.07)})`);
+     return g;
+   },
+   bodyFn:(a,i)=>{
+     const t=Math.floor(i||0)%4;
+     return [
+       `rgba(${Math.floor(255-a*2)},${Math.floor(220+a*10)},${Math.floor(108+a*12)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(255-a*2)},${Math.floor(168+a*14)},${Math.floor(42+a*12)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(206+a*14)},${Math.floor(96+a*12)},${Math.floor(12+a*8)},${Math.min(1,a+.07)})`,
+       `rgba(${Math.floor(255-a*2)},${Math.floor(194+a*12)},${Math.floor(76+a*12)},${Math.min(1,a+.07)})`
+     ][t];
+   },
+   overlayFn:(cx,px,py,s,i,a,isHead)=>{
+     if(isHead)return;
+     cx.strokeStyle=`rgba(255,238,180,${0.28+a*0.1})`;
+     cx.lineWidth=1;
+     const cX=px+s*0.5,cY=py+s*0.5;
+     for(let k=0;k<8;k++){
+       const ang=k*Math.PI/4;
+       cx.beginPath();
+       cx.moveTo(cX+Math.cos(ang)*s*0.12,cY+Math.sin(ang)*s*0.12);
+       cx.lineTo(cX+Math.cos(ang)*s*0.34,cY+Math.sin(ang)*s*0.34);
+       cx.stroke();
+     }
+     cx.fillStyle=`rgba(255,250,220,${0.36+a*0.12})`;
+     cx.beginPath();cx.arc(cX,cY,s*0.085,0,Math.PI*2);cx.fill();
+   },
+   previewCss:'linear-gradient(135deg,#fff8d1 0%,#ffd65e 24%,#ff9a1d 58%,#b85806 100%)'},
   {id:'rosa', emoji:'🩷', name:'Rosa', nameEn:'Pink',
    free:true, unlockMedal:null,
    headA:'#ffd6e8', headB:'#ff3399', shadow:'#ff88bb',
@@ -1776,7 +2293,15 @@ const SKIN_I18N_DE={
   hund:{name:'Hund',desc:'Freischalten: Medaille „Tabellenmeister“'},
   katt:{name:'Katze',desc:'Freischalten: Medaille „Additionsmeister“'},
   jordgubbe:{name:'Erdbeere',desc:'Freischalten: Medaille „Subtraktionsmeister“'},
-  bi:{name:'Kuh',desc:'Freischalten: Medaille „Divisionslegende“'}
+  bi:{name:'Kuh',desc:'Freischalten: Medaille „Divisionslegende“'},
+  prismagodis:{name:'Prismabonbon',desc:'Freischalten: 5/5 Relikte in Addition'},
+  skuggmysterium:{name:'Schattenmysterium',desc:'Freischalten: 5/5 Relikte in Subtraktion'},
+  clockwork:{name:'Clockwork',desc:'Freischalten: 5/5 Relikte in Multiplikation'},
+  tidvatten:{name:'Gezeitenlicht',desc:'Freischalten: 5/5 Relikte in Division'},
+  museumvaktaren:{name:'Museumswächter',desc:'Freischalten: Alle 4 Reliktsets komplett'},
+  stjarnarkiv:{name:'Sternenarchiv',desc:'Freischalten: Alle 4 seltenen Relikte'},
+  runorm:{name:'Runenschlange',desc:'Freischalten: Alle 4 epischen Relikte'},
+  solregent:{name:'Sonnenregent',desc:'Freischalten: Alle 4 legendären Relikte'}
 };
 
 
@@ -1817,6 +2342,14 @@ const SKIN_THEMES={
   'katt':     {bgA:'#120c08',bgB:'#050302',gridColor:'rgba(212,162,116,.045)',particles:'stars',headAcc:null},
   'jordgubbe':{bgA:'#150205',bgB:'#070102',gridColor:'rgba(255,88,118,.05)',particles:'hearts',headAcc:null},
   'bi':       {bgA:'#141006',bgB:'#050402',gridColor:'rgba(255,206,74,.055)',particles:'embers',headAcc:null},
+  'prismagodis':{bgA:'#16041d',bgB:'#050313',gridColor:'rgba(255,166,214,.05)',particles:'hearts',headAcc:null},
+  'skuggmysterium':{bgA:'#07080f',bgB:'#020207',gridColor:'rgba(146,154,186,.04)',particles:'stars',headAcc:null},
+  'clockwork':{bgA:'#140d06',bgB:'#080402',gridColor:'rgba(226,168,84,.04)',particles:'sparks',headAcc:null},
+  'tidvatten':{bgA:'#031017',bgB:'#01070b',gridColor:'rgba(122,234,220,.045)',particles:'bubbles',headAcc:null},
+  'museumvaktaren':{bgA:'#0b0d16',bgB:'#05060d',gridColor:'rgba(244,197,108,.05)',particles:'stars',headAcc:null},
+  'stjarnarkiv':{bgA:'#06081a',bgB:'#02040d',gridColor:'rgba(168,213,255,.045)',particles:'shooting',headAcc:null},
+  'runorm':   {bgA:'#120d09',bgB:'#060402',gridColor:'rgba(188,166,128,.04)',particles:'embers',headAcc:null},
+  'solregent':{bgA:'#160e02',bgB:'#080300',gridColor:'rgba(255,214,108,.05)',particles:'embers',headAcc:null},
 };
 const SEASONAL_THEMES={
   halloween:{bgA:'#0f0400',bgB:'#050100',gridColor:'rgba(255,110,0,.05)',particles:'bats',  headAcc:'pumpkin',label:'🎃'},
@@ -1868,20 +2401,38 @@ const HEAD_ACC_OPTIONS=[
   {id:'viking', emoji:'🪓', label:'Vikingahjälm',       labelEn:'Viking helmet',      labelDe:'Wikingerhelm'},
   {id:'bow', emoji:'🎀', label:'Rosett',                labelEn:'Bow',                labelDe:'Schleife'},
   {id:'glasses',emoji:'🤓', label:'Glasögon',           labelEn:'Glasses',            labelDe:'Brille'},
+  {id:'apple_bow',emoji:'🍎',label:'Appelrosett',       labelEn:'Apple Bow',          labelDe:'Apfelschleife', museumOnly:true},
+  {id:'detective_cap',emoji:'🕵️',label:'Detektivkeps',  labelEn:'Detective Cap',      labelDe:'Detektivmütze', museumOnly:true},
+  {id:'weld_glasses',emoji:'🥽',label:'Svetsglasögon',   labelEn:'Weld Goggles',       labelDe:'Schweißbrille', museumOnly:true},
+  {id:'sailor_cap',emoji:'⚓',label:'Sjömansmössa',      labelEn:'Sailor Cap',         labelDe:'Seemannsmütze', museumOnly:true},
+  {id:'sugar_crown',emoji:'🍭',label:'Sockerkrona',      labelEn:'Sugar Crown',        labelDe:'Zuckerkrone', museumOnly:true},
+  {id:'key_halo',emoji:'🗝️',label:'Nyckelhalo',         labelEn:'Key Halo',           labelDe:'Schlüsselhalo', museumOnly:true},
+  {id:'gear_antenna',emoji:'⚙️',label:'Kugghjulsantenn', labelEn:'Gear Antenna',       labelDe:'Zahnradantenne', museumOnly:true},
+  {id:'pearl_tiara',emoji:'🫧',label:'Pärltiara',        labelEn:'Pearl Tiara',        labelDe:'Perlentiara', museumOnly:true},
+  {id:'prism_diadem',emoji:'🔷',label:'Prismadiadem',    labelEn:'Prism Diadem',       labelDe:'Prismendiadem', museumOnly:true},
+  {id:'shadow_monocle',emoji:'🕶️',label:'Skuggmonokel', labelEn:'Shadow Monocle',     labelDe:'Schattenmonokel', museumOnly:true},
+  {id:'robot_diadem',emoji:'🤖',label:'Robotdiadem',     labelEn:'Robot Diadem',       labelDe:'Robotikdiadem', museumOnly:true},
+  {id:'compass_halo',emoji:'🧭',label:'Kompasshalo',     labelEn:'Compass Halo',       labelDe:'Kompasshalo', museumOnly:true},
+  {id:'museum_crown',emoji:'🏛️',label:'Museikrona',     labelEn:'Museum Crown',       labelDe:'Museumskrone', museumOnly:true},
+  {id:'relic_halo',emoji:'✨',label:'Relikgloria',       labelEn:'Relic Halo',         labelDe:'Reliktgloriole', museumOnly:true},
 ];
 function loadHeadAccessory(){
   const v=localStorage.getItem(ACTIVE_HEAD_KEY);
-  if(v===null)return 'auto';
-  if(v==='true')return 'auto';
-  if(v==='false')return 'off';
-  if(v==='helmet'||v==='earmuffs')return 'auto';
-  return v;
+  let choice='auto';
+  if(v===null)choice='auto';
+  else if(v==='true')choice='auto';
+  else if(v==='false')choice='off';
+  else if(v==='helmet'||v==='earmuffs')choice='auto';
+  else choice=v;
+  if(choice==='auto'||choice==='off')return choice;
+  return isHeadAccessoryUnlocked(choice)?choice:'auto';
 }
 function saveHeadAccessory(v){localStorage.setItem(ACTIVE_HEAD_KEY,String(v));}
 function cycleHeadAccessory(){
   const cur=loadHeadAccessory();
-  const idx=HEAD_ACC_OPTIONS.findIndex(o=>o.id===cur);
-  const next=HEAD_ACC_OPTIONS[(idx+1)%HEAD_ACC_OPTIONS.length];
+  const options=getAvailableHeadAccessoryOptions();
+  const idx=options.findIndex(o=>o.id===cur);
+  const next=options[(idx+1+options.length)%options.length]||options[0]||HEAD_ACC_OPTIONS[0];
   saveHeadAccessory(next.id);renderSkinsPage();
 }
 function toggleHeadAccessory(){cycleHeadAccessory();}
@@ -1934,6 +2485,7 @@ let state='menu',lastTickTime=0,moveProgress=0;
 let musicOn=true,audioUnlocked=false,isFastMusic=false;
 let goldPhase=false,goldTimeout=null;
 let bonusLife=null,bonusLifeUsedThisRound=false;
+let mysteryBox=null,mysteryPrompt=null;
 let personalBestAtStart=0,recordSoundPlayed=false;
 let eatAnim=null; // {x,y,value,startTime}
 
@@ -1954,6 +2506,10 @@ const BONUS_LIFE_MIN_DIST=4;
 const BONUS_LIFE_PREF_MIN_DIST=6;
 const BONUS_LIFE_PREF_MAX_DIST=9;
 const BONUS_LIFE_FALLBACK_MAX_DIST=10;
+const MYSTERY_MIN_SCORE=120;
+const MYSTERY_MIN_QUESTIONS=4;
+const MYSTERY_MIN_DIST=5;
+const MYSTERY_BOX_CHANCES={correct:0.18,recover:0.08,gold:0.12};
 
 /* ═══════════════════════════════════════
    SPELARPROFIL
@@ -2004,6 +2560,226 @@ function updateStats(){
   if(snake.length>s.bestLength){s.bestLength=snake.length;changed=true;}
   if(correctStreak>s.bestStreak){s.bestStreak=correctStreak;changed=true;}
   if(changed)_statsDirty=true;
+}
+
+/* ═══════════════════════════════════════
+   MYSTERY MUSEUM
+   ═══════════════════════════════════════ */
+const DEFAULT_MUSEUM={items:{},dust:0,boxesOpened:0,boxesWon:0,boxesLost:0,headwear:{},milestones:{},shop:{purchased:{},crafted:{}}};
+let _museumCache=null;
+function normalizeMuseumState(raw){
+  const museum=raw||{};
+  return {
+    ...DEFAULT_MUSEUM,
+    ...museum,
+    items:{...(museum.items||{})},
+    headwear:{...(museum.headwear||{})},
+    milestones:{...(museum.milestones||{})},
+    shop:{
+      purchased:{...((museum.shop&&museum.shop.purchased)||{})},
+      crafted:{...((museum.shop&&museum.shop.crafted)||{})}
+    }
+  };
+}
+function loadMuseum(){
+  if(_museumCache)return _museumCache;
+  try{
+    const raw=JSON.parse(localStorage.getItem(MUSEUM_KEY))||{};
+    _museumCache=normalizeMuseumState(raw);
+  }catch(e){
+    _museumCache=normalizeMuseumState();
+  }
+  return _museumCache;
+}
+function saveMuseum(m){
+  const raw=m||DEFAULT_MUSEUM;
+  _museumCache=normalizeMuseumState(raw);
+  localStorage.setItem(MUSEUM_KEY,JSON.stringify(_museumCache));
+  return _museumCache;
+}
+function pickMuseumField(def,key){
+  const lang=getLang();
+  if(lang==='de'&&def[key+'De'])return def[key+'De'];
+  if(lang!=='sv'&&def[key+'En'])return def[key+'En'];
+  return def[key+'Sv']||def[key+'En']||'';
+}
+function pickHeadwearField(def,key){
+  const lang=getLang();
+  if(lang==='de'&&def[key+'De'])return def[key+'De'];
+  if(lang!=='sv'&&def[key+'En'])return def[key+'En'];
+  return def[key+'Sv']||def[key+'En']||'';
+}
+function getRarityIndex(rarityId){return MUSEUM_RARITY_ORDER.indexOf(rarityId);}
+function getMuseumItem(id){return MUSEUM_ITEMS.find(item=>item.id===id)||null;}
+function getMuseumShopOffer(id){return MUSEUM_SHOP_OFFERS.find(offer=>offer.id===id)||null;}
+function getMuseumHeadwearDef(id){return MUSEUM_HEADWEAR_DEF.find(def=>def.id===id)||null;}
+function getMuseumSetItems(op){return MUSEUM_ITEMS.filter(item=>item.op===op);}
+function getMuseumCounts(museum=loadMuseum()){
+  const found=Object.keys(museum.items||{}).length;
+  return {found,total:MUSEUM_ITEMS.length};
+}
+function getMuseumHeadwearCounts(museum=loadMuseum()){
+  const found=Object.keys(museum.headwear||{}).length;
+  return {found,total:MUSEUM_HEADWEAR_DEF.length};
+}
+function getMuseumMilestoneCounts(museum=loadMuseum()){
+  const found=Object.keys(museum.milestones||{}).length;
+  return {found,total:MUSEUM_MILESTONES.length};
+}
+function countUnlockedMuseumSetItems(op,museum=loadMuseum()){
+  return getMuseumSetItems(op).filter(item=>museum.items&&museum.items[item.id]).length;
+}
+function getCompletedMuseumSets(museum=loadMuseum()){
+  return Object.keys(MUSEUM_SETS).filter(op=>getMuseumSetItems(op).every(item=>museum.items&&museum.items[item.id]));
+}
+function getMuseumRarityCounts(rarityId,museum=loadMuseum()){
+  const items=MUSEUM_ITEMS.filter(item=>item.rarity===rarityId);
+  const found=items.filter(item=>museum.items&&museum.items[item.id]).length;
+  return {found,total:items.length};
+}
+function getRarityLabel(rarityId){
+  const r=MYSTERY_RARITIES[rarityId]||MYSTERY_RARITIES.common;
+  return pickLangText(r.labelSv,r.labelEn,r.labelDe||r.labelEn);
+}
+function isHeadAccessoryUnlocked(id,museum=loadMuseum()){
+  const opt=HEAD_ACC_OPTIONS.find(option=>option.id===id);
+  if(!opt)return false;
+  if(!opt.museumOnly)return true;
+  return !!(museum.headwear&&museum.headwear[id]);
+}
+function getAvailableHeadAccessoryOptions(museum=loadMuseum()){
+  return HEAD_ACC_OPTIONS.filter(option=>isHeadAccessoryUnlocked(option.id,museum));
+}
+function addMuseumDust(amount){
+  const museum=loadMuseum();
+  museum.dust=Math.max(0,(museum.dust||0)+amount);
+  saveMuseum(museum);
+  return museum.dust;
+}
+function hasAllLegendaryMuseumRelics(museum=loadMuseum()){
+  return MUSEUM_ITEMS.filter(item=>item.rarity==='legendary').every(item=>museum.items&&museum.items[item.id]);
+}
+function unlockMuseumHeadwear(defOrId){
+  const def=typeof defOrId==='string'?getMuseumHeadwearDef(defOrId):defOrId;
+  if(!def)return null;
+  const museum=loadMuseum();
+  if(museum.headwear&&museum.headwear[def.id])return null;
+  museum.headwear[def.id]=Date.now();
+  saveMuseum(museum);
+  return def;
+}
+function checkMuseumHeadwearUnlocks(){
+  const museum=loadMuseum();
+  const newlyUnlocked=[];
+  MUSEUM_HEADWEAR_DEF.forEach(def=>{
+    if(museum.headwear&&museum.headwear[def.id])return;
+    let shouldUnlock=false;
+    if(def.source==='set_milestone'&&def.op){
+      shouldUnlock=countUnlockedMuseumSetItems(def.op,museum)>=def.needed;
+    }else if(def.source==='mastery_all_sets'){
+      shouldUnlock=getCompletedMuseumSets(museum).length===Object.keys(MUSEUM_SETS).length;
+    }else if(def.source==='mastery_legendary'){
+      shouldUnlock=hasAllLegendaryMuseumRelics(museum);
+    }
+    if(!shouldUnlock)return;
+    museum.headwear[def.id]=Date.now();
+    newlyUnlocked.push(def);
+  });
+  if(newlyUnlocked.length)saveMuseum(museum);
+  return newlyUnlocked;
+}
+function hasAllMuseumRarityRelics(rarityId,museum=loadMuseum()){
+  return MUSEUM_ITEMS.filter(item=>item.rarity===rarityId).every(item=>museum.items&&museum.items[item.id]);
+}
+function isMuseumSkinRequirementMet(skin,museum=loadMuseum()){
+  const rule=skin&&skin.unlockMuseum;
+  if(!rule)return false;
+  if(rule.type==='set_complete'&&rule.op)return getCompletedMuseumSets(museum).includes(rule.op);
+  if(rule.type==='all_sets')return getCompletedMuseumSets(museum).length===Object.keys(MUSEUM_SETS).length;
+  if(rule.type==='rarity_complete'&&rule.rarity)return hasAllMuseumRarityRelics(rule.rarity,museum);
+  return false;
+}
+function syncMuseumSkins(){
+  const museum=loadMuseum();
+  SKINS_DEF.forEach(skin=>{
+    if(!skin.unlockMuseum)return;
+    if(isMuseumSkinRequirementMet(skin,museum))unlockSkin(skin.id);
+  });
+}
+function getMuseumMilestoneProgress(def,museum=loadMuseum()){
+  if(def.type==='set_complete'&&def.op)return {cur:countUnlockedMuseumSetItems(def.op,museum),max:getMuseumSetItems(def.op).length,met:getCompletedMuseumSets(museum).includes(def.op)};
+  if(def.type==='all_sets'){
+    const cur=getCompletedMuseumSets(museum).length;
+    return {cur,max:Object.keys(MUSEUM_SETS).length,met:cur===Object.keys(MUSEUM_SETS).length};
+  }
+  if(def.type==='rarity_complete'&&def.rarity){
+    const counts=getMuseumRarityCounts(def.rarity,museum);
+    return {cur:counts.found,max:counts.total,met:counts.found===counts.total};
+  }
+  return {cur:0,max:1,met:false};
+}
+function claimMuseumMilestones(){
+  const museum=loadMuseum();
+  const newlyClaimed=[];
+  MUSEUM_MILESTONES.forEach(def=>{
+    if(museum.milestones&&museum.milestones[def.id])return;
+    const progress=getMuseumMilestoneProgress(def,museum);
+    if(!progress.met)return;
+    museum.milestones[def.id]=Date.now();
+    museum.dust=(museum.dust||0)+(def.dust||0);
+    newlyClaimed.push({...def,progress});
+  });
+  if(newlyClaimed.length)saveMuseum(museum);
+  return newlyClaimed;
+}
+function getMuseumSkinProgressInfo(skin,museum=loadMuseum()){
+  const rule=skin&&skin.unlockMuseum;
+  if(!rule)return {cur:0,max:1,label:''};
+  if(rule.type==='set_complete'&&rule.op){
+    return {cur:countUnlockedMuseumSetItems(rule.op,museum),max:getMuseumSetItems(rule.op).length,label:pickLangText('Reliker i setet','Relics in the set','Relikte im Set')};
+  }
+  if(rule.type==='all_sets'){
+    return {cur:getCompletedMuseumSets(museum).length,max:Object.keys(MUSEUM_SETS).length,label:pickLangText('Kompletta set','Completed sets','Komplette Sets')};
+  }
+  if(rule.type==='rarity_complete'&&rule.rarity){
+    const counts=getMuseumRarityCounts(rule.rarity,museum);
+    return {cur:counts.found,max:counts.total,label:getRarityLabel(rule.rarity)};
+  }
+  return {cur:0,max:1,label:''};
+}
+function getOverallSkinCounts(){
+  const total=SKINS_DEF.length;
+  const unlocked=SKINS_DEF.filter(skin=>isSkinUnlocked(skin.id)).length;
+  const museumTotal=SKINS_DEF.filter(skin=>skin.unlockMuseum).length;
+  const museumUnlocked=SKINS_DEF.filter(skin=>skin.unlockMuseum&&isSkinUnlocked(skin.id)).length;
+  return {total,unlocked,museumTotal,museumUnlocked};
+}
+function getNextMuseumSkinTargets(museum=loadMuseum(),limit=3){
+  return SKINS_DEF.filter(skin=>skin.unlockMuseum&&!isSkinUnlocked(skin.id))
+    .map(skin=>{
+      const prog=getMuseumSkinProgressInfo(skin,museum);
+      const remaining=Math.max(0,prog.max-prog.cur);
+      const ratio=prog.max?prog.cur/prog.max:0;
+      return {skin,prog,remaining,ratio};
+    })
+    .sort((a,b)=>{
+      if(b.ratio!==a.ratio)return b.ratio-a.ratio;
+      if(a.remaining!==b.remaining)return a.remaining-b.remaining;
+      return a.skin.name.localeCompare(b.skin.name,'sv');
+    })
+    .slice(0,limit);
+}
+function unlockMuseumItem(item){
+  const museum=loadMuseum();
+  const beforeSets=new Set(getCompletedMuseumSets(museum));
+  const duplicate=!!museum.items[item.id];
+  if(!duplicate){
+    museum.items[item.id]=Date.now();
+    saveMuseum(museum);
+  }
+  const afterSets=new Set(getCompletedMuseumSets(loadMuseum()));
+  const completedSet=!duplicate&&!beforeSets.has(item.op)&&afterSets.has(item.op);
+  return {duplicate,completedSet,museum:loadMuseum()};
 }
 
 /* ═══════════════════════════════════════
@@ -2109,11 +2885,85 @@ function showSkinToast(def){
     <div class="mt-name">${name}</div></div>`
   });
 }
+function showMuseumItemToast(item,rarityId,duplicate=false,dust=0){
+  const rarity=MYSTERY_RARITIES[rarityId]||MYSTERY_RARITIES.common;
+  const title=duplicate
+    ? pickLangText('🎁 Dubblett omvandlad','🎁 Duplicate converted','🎁 Doppelstück umgewandelt')
+    : pickLangText('🎁 Ny museirelik','🎁 New museum relic','🎁 Neue Museumsreliquie');
+  const desc=duplicate
+    ? pickLangText(`+${dust} museidamm`,`+${dust} museum dust`,`+${dust} Museumsstaub`)
+    : `${pickMuseumField(item,'name')} · ${getRarityLabel(rarityId)}`;
+  enqueueToast({
+    borderColor:rarity.ring,
+    html:`<div class="mt-emoji">${item.emoji}</div>
+    <div class="mt-text"><div class="mt-label">${title}</div>
+    <div class="mt-name">${pickMuseumField(item,'name')}</div>
+    <div class="mt-desc">${desc}</div></div>`
+  });
+}
+function showMuseumSetToast(op){
+  const set=MUSEUM_SETS[op];
+  if(!set)return;
+  enqueueToast({
+    borderColor:'rgba(255,215,120,.6)',
+    html:`<div class="mt-emoji">${set.emoji}</div>
+    <div class="mt-text"><div class="mt-label">${pickLangText('🏛️ Samling komplett','🏛️ Collection complete','🏛️ Sammlung komplett')}</div>
+    <div class="mt-name">${pickLangText(set.nameSv,set.nameEn,set.nameDe||set.nameEn)}</div>
+    <div class="mt-desc">${pickLangText('Hela setet är nu i ditt museum.','The whole set is now in your museum.','Das gesamte Set ist jetzt in deinem Museum.')}</div></div>`
+  });
+}
+function showHeadwearToast(def){
+  const rarity=MYSTERY_RARITIES[def.rarity]||MYSTERY_RARITIES.uncommon||MYSTERY_RARITIES.common;
+  enqueueToast({
+    borderColor:rarity.ring,
+    html:`<div class="mt-emoji">${def.emoji}</div>
+    <div class="mt-text"><div class="mt-label">${pickLangText('🎩 Ny huvudbonad','🎩 New headwear','🎩 Neuer Kopfschmuck')}</div>
+    <div class="mt-name">${pickHeadwearField(def,'name')}</div>
+    <div class="mt-desc">${getRarityLabel(def.rarity)}</div></div>`
+  });
+}
+function showMuseumMilestoneToast(def){
+  enqueueToast({
+    borderColor:'rgba(255,215,120,.6)',
+    html:`<div class="mt-emoji">${def.emoji}</div>
+    <div class="mt-text"><div class="mt-label">${pickLangText('✨ Museibonus låst upp','✨ Museum bonus unlocked','✨ Museumsbonus freigeschaltet')}</div>
+    <div class="mt-name">${pickLangText(def.labelSv,def.labelEn,def.labelDe||def.labelEn)}</div>
+    <div class="mt-desc">${pickLangText(`+${def.dust} museidamm`,`+${def.dust} museum dust`,`+${def.dust} Museumsstaub`)}</div></div>`
+  });
+}
+function awardMuseumItem(item,{scoreBonus=0,duplicateDust=true}={}){
+  const rarityId=item.rarity;
+  const rarity=MYSTERY_RARITIES[rarityId]||MYSTERY_RARITIES.common;
+  const unlock=unlockMuseumItem(item);
+  let dust=0;
+  if(unlock.duplicate&&duplicateDust){
+    dust=rarity.dust||1;
+    addMuseumDust(dust);
+  }
+  if(scoreBonus){
+    score+=scoreBonus;
+    updateHUD();
+  }
+  updateMuseumNavBtn();
+  showMuseumItemToast(item,rarityId,unlock.duplicate,dust);
+  if(unlock.completedSet)showMuseumSetToast(item.op);
+  const newHeadwear=checkMuseumHeadwearUnlocks();
+  newHeadwear.forEach(showHeadwearToast);
+  syncMuseumSkins();
+  const newMilestones=claimMuseumMilestones();
+  newMilestones.forEach(showMuseumMilestoneToast);
+  return {item,duplicate:unlock.duplicate,dust,scoreBonus,completedSet:unlock.completedSet,newHeadwear,newMilestones};
+}
 function updateSkinNavBtn(){
   const unlocked=SKINS_DEF.filter(s=>isSkinUnlocked(s.id)).length;
   const total=SKINS_DEF.length;
   if(document.getElementById('skinsBtnCount'))
     document.getElementById('skinsBtnCount').textContent=t('skinsCount',{n:unlocked,tot:total});
+}
+function updateMuseumNavBtn(){
+  const {found,total}=getMuseumCounts();
+  if(document.getElementById('museumBtnCount'))
+    document.getElementById('museumBtnCount').textContent=`${found} / ${total}`;
 }
 function drawSkinPreviewCanvas(canvas,skin){
   const dpr=window.devicePixelRatio||1;
@@ -2280,8 +3130,9 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
     previewAcc=th.headAcc||null;
   }
   if(previewAcc&&previewAcc!=='off'){
-    const previewScale=previewAcc==='glasses'?1.62:1.74;
-    const previewY=centerY+(previewAcc==='glasses'?12:30);
+    const faceAcc=(previewAcc==='glasses'||previewAcc==='weld_glasses'||previewAcc==='shadow_monocle');
+    const previewScale=faceAcc?1.62:1.74;
+    const previewY=centerY+(faceAcc?12:30);
     ctx.save();
     ctx.translate(cx,previewY);
     ctx.scale(previewScale,previewScale);
@@ -2304,14 +3155,17 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
 }
 
 function renderSkinsPage(){
+  const syncedHeadwear=checkMuseumHeadwearUnlocks();
+  syncedHeadwear.forEach(showHeadwearToast);
   const activeSkin=loadActiveSkin();
   const el=document.getElementById('skinsPageContent');el.innerHTML='';
   const unlocked=SKINS_DEF.filter(s=>isSkinUnlocked(s.id)).length;
   document.getElementById('skinsPageCount').textContent=t('skinsCount',{n:unlocked,tot:SKINS_DEF.length});
   document.getElementById('skinsTitleEl').textContent=t('skinsTitle');
   // Head accessory cycle button
+  const availableHeadwear=getAvailableHeadAccessoryOptions();
   const headSel=loadHeadAccessory();
-  const headOpt=HEAD_ACC_OPTIONS.find(o=>o.id===headSel)||HEAD_ACC_OPTIONS[0];
+  const headOpt=availableHeadwear.find(o=>o.id===headSel)||availableHeadwear[0]||HEAD_ACC_OPTIONS[0];
   const lang=getLang();
   const headLabel=lang==='en'?headOpt.labelEn:lang==='de'?headOpt.labelDe:headOpt.label;
   const headOn=(headSel!=='off');
@@ -2328,8 +3182,9 @@ function renderSkinsPage(){
   headWrap.appendChild(headBadge);
   headCard.appendChild(headWrap);
   const headInfo=document.createElement('div');
+  const museumHeadwear=getMuseumHeadwearCounts();
   headInfo.className='skin-info';
-  headInfo.innerHTML=`<div class="skin-name">🎭 ${pickLangText('Huvudbonad','Headwear','Kopfschmuck')}</div><div class="skin-unlock">${headOpt.emoji} ${headLabel}</div>`;
+  headInfo.innerHTML=`<div class="skin-name">🎭 ${pickLangText('Huvudbonad','Headwear','Kopfschmuck')}</div><div class="skin-unlock">${headOpt.emoji} ${headLabel}</div><div class="skin-unlock">${pickLangText('Museihattar','Museum hats','Museumshüte')}: ${museumHeadwear.found} / ${museumHeadwear.total}</div>`;
   headCard.appendChild(headInfo);
   headCard.addEventListener('click',cycleHeadAccessory);
   el.appendChild(headCard);
@@ -2494,6 +3349,339 @@ function renderMedalsPage(){
     sec.appendChild(g);el.appendChild(sec);
   });
 }
+function getMuseumOfferRarityWeights(offer,pool){
+  const weights={};
+  MUSEUM_RARITY_ORDER.forEach(rarityId=>{
+    if((offer.odds&&offer.odds[rarityId]>0)&&pool.some(entry=>entry.rarity===rarityId))weights[rarityId]=offer.odds[rarityId];
+  });
+  return weights;
+}
+function getClosestMissingMuseumItem(pool,preferredRarity,museum=loadMuseum()){
+  const missing=pool.filter(item=>!(museum.items&&museum.items[item.id]));
+  if(!missing.length)return null;
+  const preferredIndex=getRarityIndex(preferredRarity);
+  return missing.sort((a,b)=>{
+    const diffA=Math.abs(getRarityIndex(a.rarity)-preferredIndex);
+    const diffB=Math.abs(getRarityIndex(b.rarity)-preferredIndex);
+    if(diffA!==diffB)return diffA-diffB;
+    return getRarityIndex(a.rarity)-getRarityIndex(b.rarity);
+  })[0];
+}
+function getMuseumBoxRewardItem(op,offer,museum=loadMuseum()){
+  const setItems=getMuseumSetItems(op);
+  const allowedRarities=Object.keys(offer.odds||{}).filter(rarityId=>offer.odds[rarityId]>0);
+  const pool=setItems.filter(item=>allowedRarities.includes(item.rarity));
+  if(!pool.length)return setItems[0]||MUSEUM_ITEMS[0];
+  const rolledRarity=rollWeightedRarity(getMuseumOfferRarityWeights(offer,pool));
+  const exactMissing=pool.find(item=>item.rarity===rolledRarity&&!(museum.items&&museum.items[item.id]));
+  if(exactMissing)return exactMissing;
+  const nearbyMissing=getClosestMissingMuseumItem(pool,rolledRarity,museum);
+  if(nearbyMissing)return nearbyMissing;
+  return pool.find(item=>item.rarity===rolledRarity)||pool[0];
+}
+function getCraftableMuseumItems(offer,museum=loadMuseum()){
+  const allowed=new Set(offer.allowedRarities||[]);
+  return MUSEUM_ITEMS.filter(item=>allowed.has(item.rarity)&&!(museum.items&&museum.items[item.id]))
+    .sort((a,b)=>{
+      const opIndex=Object.keys(MUSEUM_SETS).indexOf(a.op)-Object.keys(MUSEUM_SETS).indexOf(b.op);
+      if(opIndex!==0)return opIndex;
+      return getRarityIndex(a.rarity)-getRarityIndex(b.rarity);
+    });
+}
+function getMuseumHeadwearPool(offer,museum=loadMuseum()){
+  return MUSEUM_HEADWEAR_DEF.filter(def=>def.source===offer.id&&!(museum.headwear&&museum.headwear[def.id]));
+}
+function recordMuseumShopAction(museum,offerId,bucket='purchased'){
+  museum.shop=museum.shop||{purchased:{},crafted:{}};
+  museum.shop[bucket]=museum.shop[bucket]||{};
+  museum.shop[bucket][offerId]=(museum.shop[bucket][offerId]||0)+1;
+}
+function spendMuseumDustFromState(museum,cost){
+  if((museum.dust||0)<cost)return false;
+  museum.dust=Math.max(0,(museum.dust||0)-cost);
+  return true;
+}
+function getNearestPoolEntries(pool,preferredRarity){
+  const preferredIndex=getRarityIndex(preferredRarity);
+  return [...pool].sort((a,b)=>{
+    const diffA=Math.abs(getRarityIndex(a.rarity)-preferredIndex);
+    const diffB=Math.abs(getRarityIndex(b.rarity)-preferredIndex);
+    if(diffA!==diffB)return diffA-diffB;
+    return getRarityIndex(a.rarity)-getRarityIndex(b.rarity);
+  });
+}
+function refreshMuseumRelatedViews(){
+  updateMuseumNavBtn();
+  if($('museumScreen')&&$('museumScreen').classList.contains('show'))renderMuseumPage();
+  if($('skinsScreen')&&$('skinsScreen').classList.contains('show'))renderSkinsPage();
+}
+function purchaseMuseumBox(offerId,op){
+  const offer=getMuseumShopOffer(offerId);
+  const museum=loadMuseum();
+  if(!offer||offer.kind!=='museum_box'||!MUSEUM_SETS[op])return null;
+  if(!spendMuseumDustFromState(museum,offer.cost))return null;
+  recordMuseumShopAction(museum,offerId,'purchased');
+  saveMuseum(museum);
+  const reward=awardMuseumItem(getMuseumBoxRewardItem(op,offer,museum),{scoreBonus:0,duplicateDust:true});
+  refreshMuseumRelatedViews();
+  return reward;
+}
+function purchaseMuseumHeadwearBox(offerId){
+  const offer=getMuseumShopOffer(offerId);
+  const museum=loadMuseum();
+  const pool=offer?getMuseumHeadwearPool(offer,museum):[];
+  if(!offer||offer.kind!=='headwear_box'||!pool.length)return null;
+  if(!spendMuseumDustFromState(museum,offer.cost))return null;
+  const weights=getMuseumOfferRarityWeights(offer,pool);
+  const rolledRarity=rollWeightedRarity(weights);
+  const orderedPool=getNearestPoolEntries(pool,rolledRarity);
+  const chosen=orderedPool.find(def=>def.rarity===rolledRarity)||orderedPool[0];
+  recordMuseumShopAction(museum,offerId,'purchased');
+  saveMuseum(museum);
+  const unlocked=unlockMuseumHeadwear(chosen);
+  if(unlocked)showHeadwearToast(unlocked);
+  refreshMuseumRelatedViews();
+  return unlocked;
+}
+function craftMuseumItemFromOffer(offerId,itemId){
+  const offer=getMuseumShopOffer(offerId);
+  const museum=loadMuseum();
+  if(!offer||offer.kind!=='craft_relic')return null;
+  const item=getCraftableMuseumItems(offer,museum).find(entry=>entry.id===itemId);
+  if(!item)return null;
+  if(!spendMuseumDustFromState(museum,offer.cost))return null;
+  recordMuseumShopAction(museum,offerId,'crafted');
+  saveMuseum(museum);
+  const reward=awardMuseumItem(item,{scoreBonus:0,duplicateDust:false});
+  refreshMuseumRelatedViews();
+  return reward;
+}
+function renderMuseumOddsChips(odds){
+  return MUSEUM_RARITY_ORDER.filter(rarityId=>odds&&odds[rarityId]>0).map(rarityId=>
+    `<span class="rarity-chip ${rarityId}">${getRarityLabel(rarityId)} ${odds[rarityId]}%</span>`
+  ).join('');
+}
+function renderMuseumPage(){
+  const startupHeadwear=checkMuseumHeadwearUnlocks();
+  startupHeadwear.forEach(showHeadwearToast);
+  const startupMilestones=claimMuseumMilestones();
+  startupMilestones.forEach(showMuseumMilestoneToast);
+  const museum=loadMuseum();
+  const {found,total}=getMuseumCounts(museum);
+  const headwearCounts=getMuseumHeadwearCounts(museum);
+  const milestoneCounts=getMuseumMilestoneCounts(museum);
+  const completedSets=getCompletedMuseumSets(museum);
+  const skinCounts=getOverallSkinCounts();
+  const pageCount=pickLangText(`${found} / ${total} fynd`,`${found} / ${total} finds`,`${found} / ${total} Funde`);
+  if($('museumPageCount'))$('museumPageCount').textContent=pageCount;
+  const summary=$('museumSummary');
+  if(summary){
+    summary.innerHTML=`
+      <div class="museum-summary-card">
+        <div class="kicker">${pickLangText('Reliker funna','Relics found','Relikte gefunden')}</div>
+        <div class="value">${found} / ${total}</div>
+        <div class="sub">${pickLangText('Varje räknesätt har ett eget samlarset.','Each operation has its own collection set.','Jede Rechenart hat ihr eigenes Sammelset.')}</div>
+      </div>
+      <div class="museum-summary-card">
+        <div class="kicker">${pickLangText('Museidamm','Museum dust','Museumsstaub')}</div>
+        <div class="value">${museum.dust||0}</div>
+        <div class="sub">${pickLangText('Dubbletter och spruckna boxar blir damm.','Duplicates and cracked boxes become dust.','Doppelstücke und kaputte Boxen werden zu Staub.')}</div>
+      </div>
+      <div class="museum-summary-card">
+        <div class="kicker">${pickLangText('Öppnade boxar','Boxes opened','Geöffnete Boxen')}</div>
+        <div class="value">${(museum.boxesOpened||0).toLocaleString('sv')}</div>
+        <div class="sub">${pickLangText(`${museum.boxesWon||0} lyckade · ${museum.boxesLost||0} spruckna`,`${museum.boxesWon||0} solved · ${museum.boxesLost||0} cracked`,`${museum.boxesWon||0} geschafft · ${museum.boxesLost||0} zerbrochen`)}</div>
+      </div>
+      <div class="museum-summary-card">
+        <div class="kicker">${pickLangText('Kompletta set','Completed sets','Komplette Sets')}</div>
+        <div class="value">${completedSets.length} / ${Object.keys(MUSEUM_SETS).length}</div>
+        <div class="sub">${pickLangText('Spela olika räknesätt för att fylla hela museet.','Play different operations to fill the whole museum.','Spiele verschiedene Rechenarten, um das ganze Museum zu füllen.')}</div>
+      </div>
+      <div class="museum-summary-card">
+        <div class="kicker">${pickLangText('Museumshattar','Museum hats','Museumshüte')}</div>
+        <div class="value">${headwearCounts.found} / ${headwearCounts.total}</div>
+        <div class="sub">${pickLangText('Setmilstolpar, hattaskar och mastery låser upp nya bonader.','Set milestones, hat crates, and mastery unlock new headwear.','Set-Meilensteine, Hutkisten und Mastery schalten neuen Kopfschmuck frei.')}</div>
+      </div>
+      <div class="museum-summary-card">
+        <div class="kicker">${pickLangText('Skins totalt','Total skins','Skins gesamt')}</div>
+        <div class="value">${skinCounts.unlocked} / ${skinCounts.total}</div>
+        <div class="sub">${pickLangText(`${skinCounts.museumTotal} av skinnen hör till museet och prestigejakten.`,`${skinCounts.museumTotal} of the skins belong to the museum prestige track.`,`${skinCounts.museumTotal} der Skins gehören zur Museums-Prestigeschiene.`)}</div>
+      </div>
+      <div class="museum-summary-card">
+        <div class="kicker">${pickLangText('Bonusdamm','Bonus dust','Bonusstaub')}</div>
+        <div class="value">${milestoneCounts.found} / ${milestoneCounts.total}</div>
+        <div class="sub">${pickLangText('Kompletta set och rarity-mastery ger extra museidamm.','Complete sets and rarity mastery grant extra museum dust.','Komplette Sets und Seltenheits-Mastery geben extra Museumsstaub.')}</div>
+      </div>`;
+  }
+  const el=$('museumPageContent');
+  if(!el)return;
+  el.innerHTML='';
+  const shopSec=document.createElement('div');
+  shopSec.className='museum-set museum-shop';
+  shopSec.innerHTML=`<div class="museum-set-head">
+    <div>
+      <div class="museum-set-title">🧰 ${pickLangText('Museiverkstad','Museum Workshop','Museumswerkstatt')}</div>
+      <div class="museum-set-sub">${pickLangText('Använd museidamm för riktade boxar, hattar och restaurering.','Spend museum dust on targeted boxes, hats, and restoration.','Nutze Museumsstaub für gezielte Boxen, Hüte und Restaurierung.')}</div>
+    </div>
+    <div class="museum-set-count">${pickLangText('Dammbutik','Dust shop','Staubladen')}</div>
+  </div>`;
+  const shopGrid=document.createElement('div');
+  shopGrid.className='museum-shop-grid';
+  MUSEUM_SHOP_OFFERS.forEach(offer=>{
+    const cost=offer.cost||0;
+    const canAfford=(museum.dust||0)>=cost;
+    const card=document.createElement('div');
+    card.className='museum-shop-card'+(canAfford?' afford':'');
+    const title=pickLangText(offer.labelSv,offer.labelEn,offer.labelDe||offer.labelEn);
+    const desc=pickLangText(offer.descSv,offer.descEn,offer.descDe||offer.descEn);
+    let stockText='';
+    let oddsHtml='';
+    let noteHtml='';
+    const actions=document.createElement('div');
+    actions.className=offer.kind==='craft_relic'?'museum-craft-grid':'museum-shop-actions';
+    if(offer.kind==='museum_box'){
+      stockText=pickLangText('Välj vilket räknesätt boxen ska leta i.','Choose which operation the box should search in.','Wähle, in welcher Rechenart die Box suchen soll.');
+      oddsHtml=renderMuseumOddsChips(offer.odds||{});
+      const opRow=document.createElement('div');
+      opRow.className='museum-op-row';
+      Object.keys(MUSEUM_SETS).forEach(op=>{
+        const btn=document.createElement('button');
+        btn.className='museum-op-btn';
+        btn.disabled=!canAfford;
+        btn.textContent=`${MUSEUM_SETS[op].emoji} ${op}`;
+        btn.title=pickLangText(MUSEUM_SETS[op].nameSv,MUSEUM_SETS[op].nameEn,MUSEUM_SETS[op].nameDe||MUSEUM_SETS[op].nameEn);
+        btn.addEventListener('click',()=>purchaseMuseumBox(offer.id,op));
+        opRow.appendChild(btn);
+      });
+      actions.appendChild(opRow);
+      noteHtml=`<div class="museum-reward-tip">${pickLangText('Missing-first inom vald samling: boxen försöker alltid ge något du saknar innan den ger dubbletter.','Missing-first inside the chosen collection: the box tries to give you something new before any duplicate.','Missing-first innerhalb der gewählten Sammlung: Die Box versucht zuerst etwas Neues zu geben, bevor sie Doppelstücke gibt.')}</div>`;
+    }else if(offer.kind==='headwear_box'){
+      const pool=getMuseumHeadwearPool(offer,museum);
+      const weights=getMuseumOfferRarityWeights(offer,pool);
+      stockText=pool.length
+        ? pickLangText(`${pool.length} museumshattar kvar i poolen.`,`${pool.length} museum hats still in the pool.`,`${pool.length} Museumshüte sind noch im Pool.`)
+        : pickLangText('Alla hattar från hattasken är redan upplåsta.','All hats from the hat crate are already unlocked.','Alle Hüte aus der Hutkiste sind bereits freigeschaltet.');
+      oddsHtml=pool.length?renderMuseumOddsChips(weights):'';
+      const btn=document.createElement('button');
+      btn.className='museum-shop-btn primary';
+      btn.disabled=!canAfford||!pool.length;
+      btn.textContent=pickLangText('Öppna hattask','Open hat crate','Hutkiste öffnen');
+      btn.addEventListener('click',()=>purchaseMuseumHeadwearBox(offer.id));
+      actions.appendChild(btn);
+      noteHtml=`<div class="museum-note">${pickLangText('Hattasken ger bara museumshuvudbonader som du inte redan äger.','The hat crate only grants museum headwear you do not already own.','Die Hutkiste gibt nur Museumskopfschmuck, den du noch nicht besitzt.')}</div>`;
+    }else if(offer.kind==='craft_relic'){
+      const craftable=getCraftableMuseumItems(offer,museum);
+      stockText=craftable.length
+        ? pickLangText(`${craftable.length} reliker kan restaureras just nu.`,`${craftable.length} relics can be restored right now.`,`${craftable.length} Relikte können gerade restauriert werden.`)
+        : pickLangText('Inga saknade reliker matchar den här verkstaden just nu.','No missing relics match this workshop right now.','Aktuell passen keine fehlenden Relikte zu dieser Werkstatt.');
+      craftable.forEach(item=>{
+        const btn=document.createElement('button');
+        btn.className='museum-craft-btn';
+        btn.disabled=!canAfford;
+        btn.innerHTML=`<span class="museum-craft-main"><span>${item.emoji}</span><span class="museum-craft-name">${pickMuseumField(item,'name')}</span></span><span class="rarity-chip ${item.rarity}">${getRarityLabel(item.rarity)}</span>`;
+        btn.addEventListener('click',()=>craftMuseumItemFromOffer(offer.id,item.id));
+        actions.appendChild(btn);
+      });
+      if(!craftable.length)noteHtml=`<div class="museum-note">${pickLangText('Spela eller öppna boxar först för att skapa nya luckor att restaurera mot.','Play or open boxes first if you want new missing relic targets to restore.','Spiele oder öffne zuerst Boxen, wenn du neue fehlende Relikte zum Restaurieren möchtest.')}</div>`;
+    }
+    card.innerHTML=`<div class="museum-shop-top">
+      <div class="museum-shop-title">${title}</div>
+      <div class="museum-shop-cost">✨ ${cost}</div>
+    </div>
+    <div class="museum-shop-desc">${desc}</div>
+    ${oddsHtml?`<div class="museum-shop-odds">${oddsHtml}</div>`:''}
+    <div class="museum-shop-stock">${stockText}</div>
+    ${noteHtml}`;
+    card.appendChild(actions);
+    shopGrid.appendChild(card);
+  });
+  shopSec.appendChild(shopGrid);
+  el.appendChild(shopSec);
+  const rewardSec=document.createElement('div');
+  rewardSec.className='museum-set';
+  rewardSec.innerHTML=`<div class="museum-set-head">
+    <div>
+      <div class="museum-set-title">🎨 ${pickLangText('Museumskins','Museum skins','Museumsskins')}</div>
+      <div class="museum-set-sub">${pickLangText('Relikset och rarity-milstolpar låser upp nya prestigeormar.','Relic sets and rarity milestones unlock new prestige snakes.','Reliktsets und Seltenheits-Meilensteine schalten neue Prestigeschlangen frei.')}</div>
+    </div>
+    <div class="museum-set-count">${SKINS_DEF.filter(skin=>skin.unlockMuseum).filter(skin=>isSkinUnlocked(skin.id)).length} / ${SKINS_DEF.filter(skin=>skin.unlockMuseum).length}</div>
+  </div>`;
+  const rewardGrid=document.createElement('div');
+  rewardGrid.className='museum-reward-grid';
+  SKINS_DEF.filter(skin=>skin.unlockMuseum).forEach(skin=>{
+    const unlockedSkin=isSkinUnlocked(skin.id);
+    const prog=getMuseumSkinProgressInfo(skin,museum);
+    const card=document.createElement('div');
+    card.className='museum-reward-card'+(unlockedSkin?' unlocked':'');
+    card.innerHTML=`<div class="museum-reward-preview" style="background:${skin.previewCss}">${skin.emoji}</div>
+      <div class="museum-reward-name">${pickDefText(skin,'name',SKIN_I18N_DE)}</div>
+      <div class="museum-reward-desc">${pickDefText(skin,'desc',SKIN_I18N_DE,'descSv')}</div>
+      <div class="museum-reward-meta">${prog.label?`${prog.label}: ${Math.min(prog.cur,prog.max)} / ${prog.max}`:''}</div>
+      <div class="museum-reward-meta museum-reward-bonus">${pickLangText('Bonusdamm via milstolpar hjälper dig vidare i butiken.','Milestone bonus dust helps fund the workshop.','Bonusstaub aus Meilensteinen hilft dir weiter in der Werkstatt.')}</div>
+      <div class="museum-reward-status">${unlockedSkin?pickLangText('Upplåst','Unlocked','Freigeschaltet'):pickLangText('Prestigebelöning','Prestige reward','Prestigebelohnung')}</div>`;
+    rewardGrid.appendChild(card);
+  });
+  rewardSec.appendChild(rewardGrid);
+  el.appendChild(rewardSec);
+  const nextTargets=getNextMuseumSkinTargets(museum,3);
+  if(nextTargets.length){
+    const nextSec=document.createElement('div');
+    nextSec.className='museum-set';
+    nextSec.innerHTML=`<div class="museum-set-head">
+      <div>
+        <div class="museum-set-title">🎯 ${pickLangText('Närmast att låsa upp','Closest to unlock','Am nächsten zum Freischalten')}</div>
+        <div class="museum-set-sub">${pickLangText('Här är de museumsskins som ligger närmast just nu.','These museum skins are currently the closest targets.','Diese Museumsskins sind aktuell am nächsten.')}</div>
+      </div>
+      <div class="museum-set-count">${nextTargets.length}</div>
+    </div>`;
+    const nextGrid=document.createElement('div');
+    nextGrid.className='museum-reward-grid';
+    nextTargets.forEach(entry=>{
+      const {skin,prog,remaining}=entry;
+      const card=document.createElement('div');
+      card.className='museum-reward-card';
+      card.innerHTML=`<div class="museum-reward-preview" style="background:${skin.previewCss}">${skin.emoji}</div>
+        <div class="museum-reward-name">${pickDefText(skin,'name',SKIN_I18N_DE)}</div>
+        <div class="museum-reward-desc">${pickDefText(skin,'desc',SKIN_I18N_DE,'descSv')}</div>
+        <div class="museum-reward-meta">${prog.label}: ${Math.min(prog.cur,prog.max)} / ${prog.max}</div>
+        <div class="museum-reward-status">${remaining<=0?pickLangText('Redo att låsas upp','Ready to unlock','Bereit zum Freischalten'):pickLangText(`${remaining} kvar`,`${remaining} left`,`${remaining} übrig`)}</div>`;
+      nextGrid.appendChild(card);
+    });
+    nextSec.appendChild(nextGrid);
+    el.appendChild(nextSec);
+  }
+  Object.entries(MUSEUM_SETS).forEach(([op,set])=>{
+    const items=getMuseumSetItems(op);
+    const unlocked=items.filter(item=>museum.items&&museum.items[item.id]).length;
+    const sec=document.createElement('div');
+    sec.className='museum-set';
+    sec.innerHTML=`<div class="museum-set-head">
+      <div>
+        <div class="museum-set-title">${set.emoji} ${pickLangText(set.nameSv,set.nameEn,set.nameDe||set.nameEn)}</div>
+        <div class="museum-set-sub">${pickLangText(set.descSv,set.descEn,set.descDe||set.descEn)}</div>
+      </div>
+      <div class="museum-set-count">${unlocked} / ${items.length}</div>
+    </div>`;
+    const grid=document.createElement('div');
+    grid.className='museum-grid';
+    items.forEach(item=>{
+      const unlockedItem=!!(museum.items&&museum.items[item.id]);
+      const rarity=item.rarity;
+      const card=document.createElement('div');
+      card.className='museum-item '+(unlockedItem?'unlocked':'locked');
+      card.innerHTML=`<div class="museum-item-top">
+        <div class="museum-item-emoji">${unlockedItem?item.emoji:'❔'}</div>
+        <span class="rarity-chip ${rarity}">${getRarityLabel(rarity)}</span>
+      </div>
+      <div class="museum-item-name">${unlockedItem?pickMuseumField(item,'name'):pickLangText('Okänd relik','Unknown relic','Unbekannte Reliquie')}</div>
+      <div class="museum-item-desc">${unlockedItem?pickMuseumField(item,'desc'):pickLangText('Öppna fler mysteryboxar i rätt räknesätt för att hitta den här.','Open more mystery boxes in the matching operation to find this.','Öffne mehr Mysteryboxen in der passenden Rechenart, um diese zu finden.')}</div>
+      ${unlockedItem?'':`<div class="museum-locked-hint">${pickLangText('Föremålet är fortfarande gömt.','Still hidden in the museum.','Noch im Museum verborgen.')}</div>`}`;
+      grid.appendChild(card);
+    });
+    sec.appendChild(grid);
+    el.appendChild(sec);
+  });
+}
 
 /* ═══════════════════════════════════════
    EXPORT / IMPORT
@@ -2503,7 +3691,8 @@ async function exportData(){
   const data={player:loadPlayer(),medals:[...loadMedals()],opScores:loadOpScores(),
     stats:loadStats(),highscores:loadHS(),
     unlockedSkins:[...loadUnlockedSkins()],activeSkin:loadActiveSkin(),
-    exportedAt,version:4};
+    museum:loadMuseum(),
+    exportedAt,version:5};
   const json=JSON.stringify(data,null,2);
   const blob=new Blob([json],{type:'application/json'});
   const fname=`matteormen_${(loadPlayer()||'spelare').replace(/\s+/g,'_')}_${exportedAt}.json`;
@@ -2532,7 +3721,10 @@ function importData(file){
       if(Array.isArray(d.highscores))localStorage.setItem(HS_KEY,JSON.stringify(d.highscores.slice(0,10)));
       if(Array.isArray(d.unlockedSkins))saveUnlockedSkins(new Set(d.unlockedSkins));
       if(d.activeSkin)saveActiveSkin(d.activeSkin);
-      updatePlayerBar();updateMedalNavBtn();renderHS();updateSkinNavBtn();
+      if(d.museum)saveMuseum(d.museum);
+      syncSkinsFromMedals();
+      syncMuseumSkins();
+      updatePlayerBar();updateMedalNavBtn();renderHS();updateSkinNavBtn();updateMuseumNavBtn();
       alert('✅ Sparfil laddad! Välkommen tillbaka, '+loadPlayer()+'!');
     }catch(err){alert('❌ Kunde inte läsa filen. Är det en giltig sparfil?');}
   };reader.readAsText(file);
@@ -2753,7 +3945,8 @@ function boardDistance(ax,ay,bx,by){
 function findBonusLifeSpot(){
   const occ=new Set([
     ...snake.map(s=>`${s.x},${s.y}`),
-    ...tiles.map(t=>`${t.x},${t.y}`)
+    ...tiles.map(t=>`${t.x},${t.y}`),
+    ...(mysteryBox?[`${mysteryBox.x},${mysteryBox.y}`]:[])
   ]);
   const head=snake[0];
   const preferred=[],fallback=[],anyValid=[];
@@ -2779,13 +3972,195 @@ function maybeSpawnBonusLife(){
   bonusLifeUsedThisRound=true;
   return true;
 }
+function canSpawnMysteryBox(){
+  return !mysteryBox&&!mysteryPrompt&&!goldPhase&&score>=MYSTERY_MIN_SCORE&&sessionTotal>=MYSTERY_MIN_QUESTIONS;
+}
+function rollWeightedRarity(weights){
+  const entries=MUSEUM_RARITY_ORDER.filter(rarityId=>weights&&weights[rarityId]>0);
+  if(!entries.length)return'common';
+  const total=entries.reduce((sum,rarityId)=>sum+weights[rarityId],0);
+  let roll=Math.random()*total;
+  for(const rarityId of entries){
+    roll-=weights[rarityId];
+    if(roll<=0)return rarityId;
+  }
+  return entries[entries.length-1];
+}
+function rollMysteryRarity(){
+  return rollWeightedRarity(MYSTERY_BASE_ODDS);
+}
+function findMysteryBoxSpot(){
+  const occ=new Set([
+    ...snake.map(s=>`${s.x},${s.y}`),
+    ...tiles.map(t=>`${t.x},${t.y}`),
+    ...(bonusLife?[`${bonusLife.x},${bonusLife.y}`]:[])
+  ]);
+  const head=snake[0];
+  const pool=[];
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      if(occ.has(`${x},${y}`))continue;
+      const dist=boardDistance(x,y,head.x,head.y);
+      if(dist<MYSTERY_MIN_DIST)continue;
+      pool.push({x,y});
+    }
+  }
+  return pool.length?pool[R(0,pool.length-1)]:null;
+}
+function maybeSpawnMysteryBox(source='correct'){
+  if(!canSpawnMysteryBox())return false;
+  const chance=(MYSTERY_BOX_CHANCES[source]??MYSTERY_BOX_CHANCES.correct);
+  if(Math.random()>chance)return false;
+  const p=findMysteryBoxSpot();
+  if(!p)return false;
+  mysteryBox={x:p.x,y:p.y,rarity:rollMysteryRarity(),spawnedAt:performance.now()};
+  return true;
+}
+function maybeSpawnRoundBonuses(source='correct'){
+  maybeSpawnBonusLife();
+  maybeSpawnMysteryBox(source);
+}
+function genMysteryProblemForOp(op,rarityId){
+  const rarityBoost=MYSTERY_RANGE_BOOST[rarityId]||1;
+  for(let att=0;att<140;att++){
+    if(op==='+'){
+      const max=Math.max(10,Math.min(2000,Math.round(numRange*rarityBoost)));
+      const a=R(1,Math.max(2,Math.floor(max*0.9)));
+      const b=R(1,Math.max(2,Math.min(Math.floor(max*0.9),max-a)));
+      const ans=a+b;
+      if(ans>max)continue;
+      return{expr:`${a} + ${b}`,answer:ans,op};
+    }
+    if(op==='-'){
+      const max=Math.max(10,Math.min(2000,Math.round(numRange*rarityBoost)));
+      const a=R(Math.max(2,Math.floor(max*0.15)),max);
+      const b=R(1,a);
+      return{expr:`${a} − ${b}`,answer:a-b,op};
+    }
+    if(op==='*'){
+      if(!tables.size)break;
+      const tArr=[...tables],t=tArr[Math.floor(Math.random()*tArr.length)];
+      const oMax=MYSTERY_TABLE_MAX[rarityId]||10;
+      const o=R(1,oMax);
+      let a=t,b=o;
+      if(Math.random()>.5)[a,b]=[b,a];
+      return{expr:`${a} × ${b}`,answer:a*b,op};
+    }
+    if(op==='/'){
+      if(!tables.size)break;
+      const tArr=[...tables],d=tArr[Math.floor(Math.random()*tArr.length)];
+      const qMax=MYSTERY_TABLE_MAX[rarityId]||10;
+      const q=R(1,qMax);
+      return{expr:`${q*d} ÷ ${d}`,answer:q,op};
+    }
+  }
+  return genFreshProblem();
+}
+function createMysteryPrompt(box){
+  const ops=[...activeOps];
+  const op=ops.length?ops[R(0,ops.length-1)]:'+';
+  const puzzle=genMysteryProblemForOp(op,box.rarity);
+  return {
+    box,
+    op:puzzle.op,
+    problem:puzzle,
+    choices:shuffle([puzzle.answer,...genWrongs(puzzle.answer)]),
+    answered:false,
+    selected:null,
+    resultText:''
+  };
+}
+function openMysteryChallenge(box){
+  mysteryPrompt=createMysteryPrompt(box);
+  mysteryBox=null;
+  state='mystery';
+  bgMusic.pause();fastMusic.pause();
+  renderMysteryOverlay();
+  $('mysteryOverlay').classList.add('show');
+}
+function getMysteryReward(op,rarityId){
+  const item=MUSEUM_ITEMS.find(entry=>entry.op===op&&entry.rarity===rarityId)||MUSEUM_ITEMS.find(entry=>entry.op===op)||MUSEUM_ITEMS[0];
+  const scoreBonus=MYSTERY_SCORE_BONUS[rarityId]||12;
+  return awardMuseumItem(item,{scoreBonus,duplicateDust:true});
+}
+function answerMysteryQuestion(value){
+  if(!mysteryPrompt||mysteryPrompt.answered)return;
+  const prompt=mysteryPrompt;
+  const choice=Number(value);
+  const correct=choice===prompt.problem.answer;
+  const museum=loadMuseum();
+  museum.boxesOpened=(museum.boxesOpened||0)+1;
+  let reward=null;
+  if(correct){
+    museum.boxesWon=(museum.boxesWon||0)+1;
+    saveMuseum(museum);
+    reward=getMysteryReward(prompt.op,prompt.box.rarity);
+    prompt.resultText=reward.duplicate
+      ? pickLangText(`Dubblett! ${pickMuseumField(reward.item,'name')} blev ${reward.dust} museidamm och +${reward.scoreBonus} poäng.`,`Duplicate! ${pickMuseumField(reward.item,'name')} turned into ${reward.dust} museum dust and +${reward.scoreBonus} points.`,`Doppelstück! ${pickMuseumField(reward.item,'name')} wurde zu ${reward.dust} Museumsstaub und +${reward.scoreBonus} Punkten.`)
+      : pickLangText(`Du öppnade boxen och hittade ${pickMuseumField(reward.item,'name')}! +${reward.scoreBonus} poäng.`,`You opened the box and found ${pickMuseumField(reward.item,'name')}! +${reward.scoreBonus} points.`,`Du hast die Box geöffnet und ${pickMuseumField(reward.item,'name')} gefunden! +${reward.scoreBonus} Punkte.`);
+    if(reward.completedSet)prompt.resultText+=' '+pickLangText('Hela samlingen för det här räknesättet är nu komplett!','That operation collection is now complete!','Diese Rechenarten-Sammlung ist jetzt komplett!');
+  }else{
+    museum.boxesLost=(museum.boxesLost||0)+1;
+    const failDust=(MYSTERY_RARITIES[prompt.box.rarity]||MYSTERY_RARITIES.common).failDust||1;
+    museum.dust=(museum.dust||0)+failDust;
+    saveMuseum(museum);
+    updateMuseumNavBtn();
+    prompt.resultText=pickLangText(`Boxen sprack, men du räddade ${failDust} museidamm.`,`The box cracked, but you saved ${failDust} museum dust.`,`Die Box zerbrach, aber du hast ${failDust} Museumsstaub gerettet.`);
+  }
+  prompt.answered=true;
+  prompt.selected=choice;
+  renderMysteryOverlay();
+}
+function resumeFromMystery(){
+  if(!mysteryPrompt||!mysteryPrompt.answered)return;
+  mysteryPrompt=null;
+  $('mysteryOverlay').classList.remove('show');
+  state='playing';
+  tryMusic();
+  lastTickTime=performance.now();
+  requestAnimationFrame(gameLoop);
+}
+function renderMysteryOverlay(){
+  if(!mysteryPrompt)return;
+  const prompt=mysteryPrompt;
+  const rarity=MYSTERY_RARITIES[prompt.box.rarity]||MYSTERY_RARITIES.common;
+  $('mysteryKicker').textContent=`${rarity.emoji} ${pickLangText('Mystery box','Mystery box','Mysterybox')} · ${getRarityLabel(prompt.box.rarity)}`;
+  $('mysteryTitleEl').textContent=pickLangText('Bonusfråga','Bonus question','Bonusfrage');
+  $('mysteryDescEl').textContent=prompt.answered
+    ? prompt.resultText
+    : pickLangText(`${rarity.blurbSv} Svara rätt för att öppna den och få ett fynd i ${pickLangText(MUSEUM_SETS[prompt.op].nameSv,MUSEUM_SETS[prompt.op].nameEn,MUSEUM_SETS[prompt.op].nameDe||MUSEUM_SETS[prompt.op].nameEn)}.`,`${rarity.blurbEn} Answer correctly to open it and claim a relic from the ${pickLangText(MUSEUM_SETS[prompt.op].nameSv,MUSEUM_SETS[prompt.op].nameEn,MUSEUM_SETS[prompt.op].nameDe||MUSEUM_SETS[prompt.op].nameEn)}.`,`${rarity.blurbDe} Antworte richtig, um sie zu öffnen und eine Reliquie aus ${pickLangText(MUSEUM_SETS[prompt.op].nameSv,MUSEUM_SETS[prompt.op].nameEn,MUSEUM_SETS[prompt.op].nameDe||MUSEUM_SETS[prompt.op].nameEn)} zu erhalten.`);
+  $('mysteryEqText').textContent=`${prompt.problem.expr} = ?`;
+  const choicesEl=$('mysteryChoices');
+  choicesEl.innerHTML='';
+  prompt.choices.forEach(choice=>{
+    const btn=document.createElement('button');
+    btn.className='mystery-choice-btn';
+    btn.textContent=choice;
+    if(prompt.answered){
+      btn.disabled=true;
+      if(choice===prompt.problem.answer)btn.classList.add('good');
+      else if(choice===prompt.selected)btn.classList.add('bad');
+    }else{
+      btn.addEventListener('click',()=>answerMysteryQuestion(choice));
+    }
+    choicesEl.appendChild(btn);
+  });
+  $('mysteryResultEl').textContent=prompt.answered
+    ? prompt.resultText
+    : pickLangText('Rätt svar öppnar boxen. Fel svar ger bara lite museidamm.','A correct answer opens the box. A wrong answer only gives a little museum dust.','Eine richtige Antwort öffnet die Box. Eine falsche Antwort gibt nur etwas Museumsstaub.');
+  $('btnMysteryContinue').style.display=prompt.answered?'':'none';
+}
 
 /* ═══════════════════════════════════════
    BRICKOR
    ═══════════════════════════════════════ */
 function placeTiles(){
   tiles=[];
-  const occ=new Set(snake.map(s=>`${s.x},${s.y}`));
+  const occ=new Set([
+    ...snake.map(s=>`${s.x},${s.y}`),
+    ...(mysteryBox?[`${mysteryBox.x},${mysteryBox.y}`]:[]),
+    ...(bonusLife?[`${bonusLife.x},${bonusLife.y}`]:[])
+  ]);
   const head=snake[0];
   const MIN_DIST=3;      // generellt minsta avstånd
   const CONE_LEN=7;      // antal steg framåt som är förbjudna
@@ -2833,6 +4208,7 @@ function startGame(){
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}
   goldPhase=false;isFastMusic=false;
   bonusLife=null;bonusLifeUsedThisRound=false;
+  mysteryBox=null;mysteryPrompt=null;
   wrongPool=[];
   sessionCorrect=0;sessionTotal=0;sessionOpStats={};sessionWrongMap={};
   const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
@@ -2953,10 +4329,15 @@ function tick(){
     lives=Math.min(3,lives+1);
     sfxLife();
   }
+  if(mysteryBox&&mysteryBox.x===hx&&mysteryBox.y===hy){
+    openMysteryChallenge(mysteryBox);
+    updateHUD();
+    return;
+  }
 
   if(goldPhase){
     const gt=tiles.find(t=>t.isGold);
-    if(gt&&gt.x===hx&&gt.y===hy){clearTimeout(goldTimeout);goldTimeout=null;goldPhase=false;problem=genProblem();placeTiles();maybeSpawnBonusLife();}
+    if(gt&&gt.x===hx&&gt.y===hy){clearTimeout(goldTimeout);goldTimeout=null;goldPhase=false;problem=genProblem();placeTiles();maybeSpawnRoundBonuses('gold');}
     updateHUD();updateMusicMode();return;
   }
 
@@ -2987,7 +4368,7 @@ function tick(){
       if(!recordSoundPlayed&&score>personalBestAtStart&&personalBestAtStart>0){recordSoundPlayed=true;sfxRecord();}
       if(correctStreak>=10)unlockMedal('osviklig');
       updateStats();checkMedals();
-      problem=genProblem();placeTiles();maybeSpawnBonusLife();
+      problem=genProblem();placeTiles();maybeSpawnRoundBonuses('correct');
     }else{
       combo=0;correctStreak=0;
       sessionWrongMap[problem.expr]=(sessionWrongMap[problem.expr]||0)+1;
@@ -3008,8 +4389,8 @@ function tick(){
         ct.isGold=true;goldPhase=true;sfxGold();
         if(goldTimeout)clearTimeout(goldTimeout);
         goldTimeout=setTimeout(()=>{goldPhase=false;goldTimeout=null;tiles.forEach(t=>t.isGold=false);
-          if(state==='playing'||state==='paused'){problem=genProblem();placeTiles();maybeSpawnBonusLife();}},1500);
-      }else{problem=genProblem();placeTiles();maybeSpawnBonusLife();}
+          if(state==='playing'||state==='paused'){problem=genProblem();placeTiles();maybeSpawnRoundBonuses('recover');}},1500);
+      }else{problem=genProblem();placeTiles();maybeSpawnRoundBonuses('recover');}
     }
   }
   updateMusicMode();updateHUD();
@@ -3377,6 +4758,7 @@ function draw(t){
   const _theme=getActiveTheme();
   drawBackground(_theme);
   tiles.forEach(tile=>drawTile(tile));
+  if(mysteryBox)drawMysteryBox();
   if(bonusLife)drawBonusLife();
   // Tugga-animation: rätt svar krymper mot huvudet
   if(eatAnim){
@@ -3564,6 +4946,42 @@ function drawBonusLife(){
   ctx.font=`900 ${Math.min(13,Math.floor(CELL*0.34))}px Orbitron,monospace`;
   ctx.strokeText(String(remain),cx,cy-CELL*0.22);
   ctx.fillText(String(remain),cx,cy-CELL*0.22);
+  ctx.restore();
+}
+function drawMysteryBox(){
+  if(!mysteryBox)return;
+  const rarity=MYSTERY_RARITIES[mysteryBox.rarity]||MYSTERY_RARITIES.common;
+  const cx=mysteryBox.x*CELL+CELL/2,cy=mysteryBox.y*CELL+CELL/2;
+  const px=mysteryBox.x*CELL+4,py=mysteryBox.y*CELL+4,s=CELL-8;
+  const T=performance.now();
+  const pulse=0.88+0.12*Math.sin(T/220);
+  const aura=ctx.createRadialGradient(cx,cy,2,cx,cy,CELL*0.78);
+  aura.addColorStop(0,rarity.glow.replace(/0?\.\d+\)/,'.34)'));
+  aura.addColorStop(0.55,rarity.glow.replace(/0?\.\d+\)/,'.16)'));
+  aura.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.save();
+  ctx.fillStyle=aura;
+  ctx.beginPath();ctx.arc(cx,cy,CELL*0.78*pulse,0,Math.PI*2);ctx.fill();
+  ctx.shadowColor=rarity.glow;ctx.shadowBlur=18;
+  const grad=ctx.createLinearGradient(px,py,px+s,py+s);
+  grad.addColorStop(0,'rgba(255,255,255,0.96)');
+  grad.addColorStop(0.52,'rgba(245,245,255,0.9)');
+  grad.addColorStop(1,'rgba(210,222,255,0.9)');
+  ctx.fillStyle=grad;
+  rRect(px,py,s,s,10);ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.lineWidth=2.4;
+  ctx.strokeStyle=rarity.ring;
+  rRect(px,py,s,s,10);ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(px,py+s*0.42);ctx.lineTo(px+s,py+s*0.42);
+  ctx.moveTo(px+s*0.48,py);ctx.lineTo(px+s*0.48,py+s);
+  ctx.stroke();
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.shadowColor='rgba(255,255,255,.75)';ctx.shadowBlur=10;
+  ctx.font=`900 ${Math.floor(CELL*0.54)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+  ctx.fillText(rarity.emoji,cx,cy+1);
+  ctx.shadowBlur=0;
   ctx.restore();
 }
 function drawSeg(rx,ry,i,isHead){
@@ -4019,6 +5437,39 @@ function paintHeadAccessory(drawCtx,acc,cx,cy,dirKey){
     drawCtx.lineTo(g1x+(g2x-g1x)*0.65,g1y+(g2y-g1y)*0.65);drawCtx.stroke();
     drawCtx.restore();
     return;
+  }else if(acc==='weld_glasses'){
+    drawCtx.save();
+    drawCtx.strokeStyle='rgba(72,52,18,0.95)';drawCtx.lineWidth=1.5;
+    drawCtx.fillStyle='rgba(255,180,52,0.46)';
+    let g1x=cx,g1y=cy,g2x=cx,g2y=cy;
+    if(dirKey==='right'){g1x=cx+5;g1y=cy-5;g2x=cx+5;g2y=cy+5;}
+    else if(dirKey==='left'){g1x=cx-5;g1y=cy-5;g2x=cx-5;g2y=cy+5;}
+    else if(dirKey==='down'){g1x=cx-5;g1y=cy+5;g2x=cx+5;g2y=cy+5;}
+    else{g1x=cx-5;g1y=cy-5;g2x=cx+5;g2y=cy-5;}
+    [-1,1].forEach(sign=>{
+      const gx=sign<0?g1x:g2x,gy=sign<0?g1y:g2y;
+      drawCtx.beginPath();
+      drawCtx.rect(gx-4.1,gy-3.2,8.2,6.4);
+      drawCtx.fill();drawCtx.stroke();
+    });
+    drawCtx.strokeStyle='rgba(88,62,24,0.95)';
+    drawCtx.beginPath();drawCtx.moveTo(g1x+2,g1y);drawCtx.lineTo(g2x-2,g2y);drawCtx.stroke();
+    drawCtx.restore();
+    return;
+  }else if(acc==='shadow_monocle'){
+    drawCtx.save();
+    drawCtx.strokeStyle='rgba(18,18,24,0.98)';drawCtx.lineWidth=1.6;
+    drawCtx.fillStyle='rgba(18,18,26,0.38)';
+    let mx=cx,my=cy,chainX=cx,chainY=cy;
+    if(dirKey==='right'){mx=cx+5;my=cy-5;chainX=mx+3.5;chainY=my+3.5;}
+    else if(dirKey==='left'){mx=cx-5;my=cy-5;chainX=mx-3.5;chainY=my+3.5;}
+    else if(dirKey==='down'){mx=cx-4.5;my=cy+5;chainX=mx-1.5;chainY=my+4;}
+    else{mx=cx+4.5;my=cy-5;chainX=mx+1.5;chainY=my-4;}
+    drawCtx.beginPath();drawCtx.arc(mx,my,4.2,0,Math.PI*2);drawCtx.fill();drawCtx.stroke();
+    drawCtx.strokeStyle='rgba(180,180,200,0.72)';
+    drawCtx.beginPath();drawCtx.moveTo(chainX,chainY);drawCtx.lineTo(chainX+(dirKey==='left'?-3:3),chainY+5);drawCtx.stroke();
+    drawCtx.restore();
+    return;
   }
   const {ox,oy,angle}=getHeadDecorPose(dirKey);
   drawCtx.save();
@@ -4134,6 +5585,87 @@ function paintHeadAccessory(drawCtx,acc,cx,cy,dirKey){
     drawCtx.shadowBlur=0;drawCtx.fillStyle='#ffd3e6';drawCtx.beginPath();drawCtx.arc(0,0.8,1.8,0,Math.PI*2);drawCtx.fill();
     drawCtx.strokeStyle='#ff9fc7';drawCtx.lineWidth=1;drawCtx.beginPath();drawCtx.moveTo(-1,2);drawCtx.lineTo(-2.5,6);drawCtx.moveTo(1,2);drawCtx.lineTo(2.5,6);drawCtx.stroke();
     drawCtx.restore();
+  }else if(acc==='apple_bow'){
+    drawCtx.save();drawCtx.translate(-7,1);drawCtx.shadowColor='rgba(255,84,98,0.55)';drawCtx.shadowBlur=5;drawCtx.fillStyle='#ff6477';
+    drawCtx.beginPath();drawCtx.moveTo(0,0);drawCtx.quadraticCurveTo(-4.5,-4.3,-7.4,-1.2);drawCtx.quadraticCurveTo(-5.4,2.3,0,2.4);drawCtx.closePath();drawCtx.fill();
+    drawCtx.beginPath();drawCtx.moveTo(0,0);drawCtx.quadraticCurveTo(4.5,-4.3,7.4,-1.2);drawCtx.quadraticCurveTo(5.4,2.3,0,2.4);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#fff4d8';drawCtx.beginPath();drawCtx.arc(0,0.8,1.9,0,Math.PI*2);drawCtx.fill();
+    drawCtx.fillStyle='#e33444';drawCtx.beginPath();drawCtx.arc(0,-2.4,2.6,0,Math.PI*2);drawCtx.fill();
+    drawCtx.fillStyle='#7dd067';drawCtx.beginPath();drawCtx.ellipse(2.2,-4.4,1.4,2.2,0.55,0,Math.PI*2);drawCtx.fill();
+    drawCtx.restore();
+  }else if(acc==='detective_cap'){
+    drawCtx.fillStyle='#6c5138';drawCtx.shadowColor='rgba(48,32,18,0.45)';drawCtx.shadowBlur=4;
+    drawCtx.beginPath();drawCtx.moveTo(-9,-1);drawCtx.quadraticCurveTo(-7,6,0,7);drawCtx.quadraticCurveTo(7,6,9,-1);drawCtx.quadraticCurveTo(4,-4,0,-2);drawCtx.quadraticCurveTo(-4,-4,-9,-1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.beginPath();drawCtx.moveTo(-8,1);drawCtx.quadraticCurveTo(-5,-2,0,-1);drawCtx.quadraticCurveTo(5,-2,8,1);drawCtx.lineTo(6,2.6);drawCtx.quadraticCurveTo(0,0,-6,2.6);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='rgba(255,225,185,0.3)';drawCtx.beginPath();drawCtx.moveTo(-4,-1);drawCtx.lineTo(0,4);drawCtx.lineTo(4,-1);drawCtx.closePath();drawCtx.fill();
+  }else if(acc==='sailor_cap'){
+    drawCtx.fillStyle='#f5f6fa';drawCtx.shadowColor='rgba(255,255,255,0.35)';drawCtx.shadowBlur=4;
+    drawCtx.beginPath();drawCtx.moveTo(-8,1);drawCtx.quadraticCurveTo(-7,6,0,6.5);drawCtx.quadraticCurveTo(7,6,8,1);drawCtx.quadraticCurveTo(4,-3,0,-2);drawCtx.quadraticCurveTo(-4,-3,-8,1);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#112d66';drawCtx.fillRect(-8,0.4,16,2.2);
+    drawCtx.strokeStyle='#112d66';drawCtx.lineWidth=1.05;drawCtx.beginPath();drawCtx.moveTo(-4,-0.8);drawCtx.lineTo(4,-0.8);drawCtx.stroke();
+    drawCtx.fillStyle='#ffcd46';drawCtx.beginPath();drawCtx.arc(0,3.8,1.6,0,Math.PI*2);drawCtx.fill();
+  }else if(acc==='sugar_crown'){
+    drawCtx.fillStyle='#ff8ec6';drawCtx.shadowColor='rgba(255,112,188,0.55)';drawCtx.shadowBlur=6;
+    drawCtx.beginPath();
+    drawCtx.moveTo(-8,-4);drawCtx.lineTo(-6,2);drawCtx.lineTo(-2,-1);drawCtx.lineTo(0,4);
+    drawCtx.lineTo(2,-1);drawCtx.lineTo(6,2);drawCtx.lineTo(8,-4);drawCtx.lineTo(8,-5.2);drawCtx.lineTo(-8,-5.2);
+    drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#fff2a6';
+    [-5,0,5].forEach((px,idx)=>{drawCtx.beginPath();drawCtx.arc(px,idx===1?0.5:-1,idx===1?2.1:1.6,0,Math.PI*2);drawCtx.fill();});
+  }else if(acc==='key_halo'){
+    drawCtx.strokeStyle='#f6d36d';drawCtx.lineWidth=1.7;drawCtx.shadowColor='rgba(255,210,90,0.5)';drawCtx.shadowBlur=6;
+    drawCtx.beginPath();drawCtx.arc(0,1.5,8.2,0,Math.PI*2);drawCtx.stroke();
+    drawCtx.shadowBlur=0;drawCtx.strokeStyle='#f6d36d';drawCtx.lineWidth=1.3;
+    drawCtx.beginPath();drawCtx.arc(5.8,-3.5,1.6,0,Math.PI*2);drawCtx.stroke();
+    drawCtx.beginPath();drawCtx.moveTo(5.8,-1.9);drawCtx.lineTo(5.8,4);drawCtx.lineTo(8.2,5.2);drawCtx.moveTo(5.8,1.8);drawCtx.lineTo(7.8,2.8);drawCtx.stroke();
+  }else if(acc==='gear_antenna'){
+    drawCtx.strokeStyle='#8aa1bf';drawCtx.lineWidth=1.5;drawCtx.beginPath();drawCtx.moveTo(0,-4);drawCtx.lineTo(0,6);drawCtx.stroke();
+    drawCtx.fillStyle='#cfd8ea';drawCtx.shadowColor='rgba(170,200,255,0.4)';drawCtx.shadowBlur=4;
+    drawCtx.beginPath();drawCtx.arc(0,-6,3.6,0,Math.PI*2);drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.strokeStyle='#8191ac';drawCtx.lineWidth=1.1;
+    for(let k=0;k<8;k++){
+      const ang=k*Math.PI/4;
+      drawCtx.beginPath();
+      drawCtx.moveTo(Math.cos(ang)*3.8,Math.sin(ang)*3.8-6);
+      drawCtx.lineTo(Math.cos(ang)*5.3,Math.sin(ang)*5.3-6);
+      drawCtx.stroke();
+    }
+    drawCtx.fillStyle='#60718d';drawCtx.beginPath();drawCtx.arc(0,-6,1.2,0,Math.PI*2);drawCtx.fill();
+  }else if(acc==='pearl_tiara'){
+    drawCtx.fillStyle='#faf7ff';drawCtx.shadowColor='rgba(255,255,255,0.45)';drawCtx.shadowBlur=5;
+    drawCtx.beginPath();drawCtx.moveTo(-8,-3.5);drawCtx.quadraticCurveTo(0,5.2,8,-3.5);drawCtx.lineTo(8,-5);drawCtx.quadraticCurveTo(0,2.8,-8,-5);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;[-6,-3,0,3,6].forEach((px,idx)=>{drawCtx.fillStyle=idx===2?'#dbe8ff':'#ffffff';drawCtx.beginPath();drawCtx.arc(px,idx===2?1.7:0.3,idx===2?1.9:1.4,0,Math.PI*2);drawCtx.fill();});
+  }else if(acc==='prism_diadem'){
+    drawCtx.fillStyle='#dfe9ff';drawCtx.shadowColor='rgba(140,220,255,0.38)';drawCtx.shadowBlur=5;
+    drawCtx.beginPath();drawCtx.moveTo(-9,-4);drawCtx.quadraticCurveTo(0,2.5,9,-4);drawCtx.lineTo(9,-5.2);drawCtx.quadraticCurveTo(0,0.7,-9,-5.2);drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#75dcff';drawCtx.beginPath();drawCtx.moveTo(0,4.8);drawCtx.lineTo(-3,0);drawCtx.lineTo(0,-3.8);drawCtx.lineTo(3,0);drawCtx.closePath();drawCtx.fill();
+    drawCtx.fillStyle='rgba(255,255,255,0.85)';drawCtx.beginPath();drawCtx.arc(-0.7,-1,0.85,0,Math.PI*2);drawCtx.fill();
+  }else if(acc==='robot_diadem'){
+    drawCtx.fillStyle='#95a8c1';drawCtx.shadowColor='rgba(130,170,220,0.35)';drawCtx.shadowBlur=4;
+    drawCtx.fillRect(-8,-4.6,16,5.5);
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#c7d6ea';drawCtx.fillRect(-5.5,1,11,2.6);
+    drawCtx.strokeStyle='#5d708b';drawCtx.lineWidth=1.15;drawCtx.beginPath();drawCtx.moveTo(-2.5,0.7);drawCtx.lineTo(-2.5,5.8);drawCtx.moveTo(2.5,0.7);drawCtx.lineTo(2.5,5.8);drawCtx.stroke();
+    drawCtx.fillStyle='#ff6b6b';drawCtx.beginPath();drawCtx.arc(0,-1.8,1.6,0,Math.PI*2);drawCtx.fill();
+  }else if(acc==='compass_halo'){
+    drawCtx.strokeStyle='#84d8ff';drawCtx.lineWidth=1.6;drawCtx.shadowColor='rgba(132,216,255,0.45)';drawCtx.shadowBlur=6;
+    drawCtx.beginPath();drawCtx.arc(0,1,8.2,0,Math.PI*2);drawCtx.stroke();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#ff785f';drawCtx.beginPath();drawCtx.moveTo(0,8.4);drawCtx.lineTo(-1.6,2.4);drawCtx.lineTo(1.6,2.4);drawCtx.closePath();drawCtx.fill();
+    drawCtx.fillStyle='#d8f6ff';drawCtx.beginPath();drawCtx.moveTo(0,-6.5);drawCtx.lineTo(-1.2,-1.2);drawCtx.lineTo(1.2,-1.2);drawCtx.closePath();drawCtx.fill();
+  }else if(acc==='museum_crown'){
+    drawCtx.fillStyle='#f5c24b';drawCtx.shadowColor='rgba(255,194,75,0.58)';drawCtx.shadowBlur=6;
+    drawCtx.beginPath();
+    drawCtx.moveTo(-8,-5);drawCtx.lineTo(-6,2);drawCtx.lineTo(-2,-1);drawCtx.lineTo(0,5);
+    drawCtx.lineTo(2,-1);drawCtx.lineTo(6,2);drawCtx.lineTo(8,-5);drawCtx.lineTo(8,-6.2);drawCtx.lineTo(-8,-6.2);
+    drawCtx.closePath();drawCtx.fill();
+    drawCtx.shadowBlur=0;drawCtx.fillStyle='#72d6ff';drawCtx.beginPath();drawCtx.arc(0,0.8,2,0,Math.PI*2);drawCtx.fill();
+    drawCtx.fillStyle='#fff4cb';drawCtx.beginPath();drawCtx.arc(-5,-1,1.3,0,Math.PI*2);drawCtx.fill();drawCtx.beginPath();drawCtx.arc(5,-1,1.3,0,Math.PI*2);drawCtx.fill();
+  }else if(acc==='relic_halo'){
+    drawCtx.strokeStyle='rgba(186,245,255,0.95)';drawCtx.lineWidth=1.7;drawCtx.shadowColor='rgba(186,245,255,0.55)';drawCtx.shadowBlur=7;
+    drawCtx.beginPath();drawCtx.arc(0,1.2,8.4,0,Math.PI*2);drawCtx.stroke();
+    drawCtx.shadowBlur=0;
+    [{x:-6.3,y:1.2,c:'#ffd16a'},{x:0,y:-7.2,c:'#85d6ff'},{x:6.3,y:1.2,c:'#c887ff'}].forEach(dot=>{
+      drawCtx.fillStyle=dot.c;drawCtx.beginPath();drawCtx.arc(dot.x,dot.y,1.5,0,Math.PI*2);drawCtx.fill();
+    });
   }
   drawCtx.restore();
 }
@@ -4199,6 +5731,7 @@ function flashFx(type){
 function triggerGameOver(){
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
   bonusLife=null;
+  mysteryBox=null;mysteryPrompt=null;
   state='gameover';sfxDie();bgMusic.pause();fastMusic.pause();isFastMusic=false;
   flushBufferedProgress();
   stopTitelMusic(true); // börja om från början när spelaren går till menyn
@@ -4296,12 +5829,14 @@ if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>req
 function goToMenu(){
   state='menu';bgMusic.pause();bgMusic.currentTime=0;fastMusic.pause();fastMusic.currentTime=0;isFastMusic=false;
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
+  mysteryBox=null;mysteryPrompt=null;
   flushBufferedProgress();
   showTouchControls(false);
-  hideOverlays();showScreen('menuScreen');renderHS();updateMedalNavBtn();updatePlayerBar();updateMenuSettingsSummary();
+  hideOverlays();showScreen('menuScreen');renderHS();updateMedalNavBtn();updateMuseumNavBtn();updatePlayerBar();updateMenuSettingsSummary();
   tryTitelMusic();
 }
 function goToMedals(){renderMedalsPage();showScreen('medalsScreen');}
+function goToMuseum(){renderMuseumPage();showScreen('museumScreen');}
 function goToHS(){renderHSPage();showScreen('hsScreen');}
 function renderHSPage(){
   const hs=loadHS();
@@ -5102,7 +6637,9 @@ $('btnGoSettings').addEventListener('click',goToSettings);
 $('btnBackFromSettings').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnBackFromMedals').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnBackFromSkins').addEventListener('click',()=>showScreen('menuScreen'));
+$('btnBackFromMuseum').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnGoSkins').addEventListener('click',goToSkins);
+$('btnGoMuseum').addEventListener('click',goToMuseum);
 $('btnBackFromHS').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnClearHS').addEventListener('click',()=>{if(confirm(pickLangText('Rensa hela highscorelistan?','Clear the entire highscore list?','Die gesamte Highscore-Liste löschen?'))){localStorage.removeItem(HS_KEY);renderHS();renderHSPage();}});
 $('btnMenuMusic').addEventListener('click',toggleMusic);
@@ -5110,6 +6647,7 @@ $('btnGoStats').addEventListener('click',goToStats);
 $('btnBackFromStats').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnResume').addEventListener('click',()=>{state='playing';$('pauseOverlay').classList.remove('show');tryMusic();lastTickTime=performance.now();requestAnimationFrame(gameLoop);});
 $('btnPauseMenu').addEventListener('click',goToMenu);
+$('btnMysteryContinue').addEventListener('click',resumeFromMystery);
 $('btnSaveScore').addEventListener('click',()=>{addScore($('hsNameInp').value);goToMenu();});
 $('btnGoMenu').addEventListener('click',goToMenu);
 $('hsNameInp').addEventListener('keydown',e=>{if(e.key==='Enter')$('btnSaveScore').click();});
@@ -5131,6 +6669,15 @@ document.addEventListener('keydown',e=>{
     if(e.key==='Escape')goToMenu();if(e.key==='m'||e.key==='M')toggleMusic();
   }else if(state==='paused'){
     if(['p','P','Escape'].includes(e.key)){state='playing';$('pauseOverlay').classList.remove('show');tryMusic();lastTickTime=performance.now();requestAnimationFrame(gameLoop);}
+  }else if(state==='mystery'){
+    if(!mysteryPrompt)return;
+    if(!mysteryPrompt.answered&&['1','2','3','4'].includes(e.key)){
+      const idx=parseInt(e.key,10)-1;
+      const choice=mysteryPrompt.choices[idx];
+      if(choice!==undefined)answerMysteryQuestion(choice);
+    }else if(mysteryPrompt.answered&&['Enter','Escape',' '].includes(e.key)){
+      resumeFromMystery();
+    }
   }
 });
 
@@ -5152,7 +6699,8 @@ checkGameCountMedals();
 checkOpMedals();
 // Synka skinn från redan upplåsta medaljer
 syncSkinsFromMedals();
-renderHS();updateMedalNavBtn();updateSkinNavBtn();updatePlayerBar();setupDpad();
+syncMuseumSkins();
+renderHS();updateMedalNavBtn();updateSkinNavBtn();updateMuseumNavBtn();updatePlayerBar();setupDpad();
 applyUITheme(loadUITheme());
 applyMode(localStorage.getItem('mattormen_mode')||'standard');
 loadSettings();
