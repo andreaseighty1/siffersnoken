@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SifferSnoken V3.1 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
+<title>SifferSnoken V3.5 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Nunito:wght@700;900&display=swap');
 :root{
@@ -325,7 +325,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 
 /* ── MEDALJER-SIDA ── */
 .medals-page{width:100%;max-width:640px;padding:8px 0 40px;}
-#medalsScreen,#hsScreen,#skinsScreen,#statsScreen{justify-content:flex-start;padding-top:12px;overflow-y:auto;}
+#medalsScreen,#hsScreen,#skinsScreen,#statsScreen,#museumScreen{justify-content:flex-start;padding-top:12px;overflow-y:auto;}
 
 /* ── ORMSKINN-SIDA ── */
 .skins-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:10px;width:100%;max-width:700px;padding-bottom:28px;}
@@ -430,6 +430,13 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .museum-summary-card .sub{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.35;}
 .museum-set{margin-bottom:18px;}
 .museum-set-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:8px;border-bottom:1px solid var(--line);padding-bottom:6px;}
+.museum-set.toggleable .museum-set-head{align-items:center;margin-bottom:0;padding:10px 12px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(255,255,255,.025);cursor:pointer;user-select:none;transition:background .12s ease,border-color .12s ease,transform .12s ease;}
+.museum-set.toggleable .museum-set-head:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);}
+.museum-set.toggleable .museum-set-head:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+.museum-set-head-side{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.museum-set-arrow{font-size:14px;line-height:1;color:var(--accent);font-weight:900;min-width:10px;text-align:center;}
+.museum-set-body{margin-top:10px;}
+.museum-set.collapsed .museum-set-body{display:none;}
 .museum-set-title{font-size:12px;font-weight:900;color:var(--text);}
 .museum-set-sub{font-size:10px;color:var(--muted);margin-top:2px;}
 .museum-set-count{font-size:10px;color:var(--accent);font-weight:800;letter-spacing:.08em;}
@@ -441,6 +448,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .museum-item-emoji{font-size:28px;line-height:1;}
 .museum-item-name{font-size:12px;font-weight:900;color:var(--text);}
 .museum-item-desc{font-size:10px;color:var(--muted);line-height:1.45;flex:1;}
+.museum-item-foot{font-size:9px;color:rgba(255,255,255,.56);letter-spacing:.05em;text-transform:uppercase;}
 .museum-item.locked .museum-item-name,.museum-item.locked .museum-item-desc{color:rgba(255,255,255,.58);}
 .rarity-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
 .rarity-chip.common{color:#EDEFF3;border-color:rgba(237,239,243,.28);background:rgba(237,239,243,.08);}
@@ -482,6 +490,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .mystery-card{max-width:430px;}
 .mystery-kicker{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
 .mystery-desc{line-height:1.6;max-width:340px;margin:0 auto 12px;}
+.mystery-timer{display:inline-flex;align-items:center;justify-content:center;min-width:92px;margin:0 auto 12px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);font-family:'Orbitron',monospace;font-size:11px;color:var(--text);letter-spacing:.06em;}
+.mystery-timer.danger{border-color:rgba(255,120,120,.35);background:rgba(255,80,80,.12);color:#ffb8b8;}
 .mystery-eq{margin:8px auto 14px;font-size:clamp(26px,4vw,38px);}
 .mystery-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
 .mystery-choice-btn{padding:11px 10px;border:2px solid var(--line);border-radius:12px;background:rgba(0,0,0,.26);color:var(--text);font-family:'Orbitron',monospace;font-size:18px;font-weight:900;cursor:pointer;transition:.12s;}
@@ -490,6 +500,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .mystery-choice-btn.good{border-color:rgba(0,255,136,.45);background:rgba(0,255,136,.08);color:var(--accent);}
 .mystery-choice-btn.bad{border-color:rgba(255,70,70,.4);background:rgba(255,70,70,.08);color:#ff7a86;}
 .mystery-result{min-height:34px;line-height:1.5;}
+.countdown-title{font-size:clamp(42px,10vw,88px);margin-bottom:0;}
+.countdown-sub{font-size:14px;max-width:280px;text-align:center;line-height:1.55;}
 
 /* ── COPYRIGHT ── */
 .copyright{margin-top:12px;width:100%;text-align:center;font-size:13px;line-height:1.5;
@@ -527,6 +539,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 <audio id="titelMusic" src="siffersnoken_titel.mp3"  loop preload="auto"></audio>
 <audio id="bgMusic"   src="siffersnoken_musik.mp3"  loop preload="auto"></audio>
 <audio id="fastMusic" src="siffersnoken_snabb.mp3"  loop preload="auto"></audio>
+<audio id="mysteryMusic" src="siffersnoken_mystery.mp3" loop preload="auto"></audio>
 
 
 <!-- NAMNMODAL -->
@@ -558,8 +571,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.1! <strong>4 nya skins</strong>: <strong>Hund</strong>, <strong>Katt</strong>, <strong>Jordgubbe</strong> och <strong>Ko</strong></span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.1! <strong>4 nya skins</strong>: <strong>Hund</strong>, <strong>Katt</strong>, <strong>Jordgubbe</strong> och <strong>Ko</strong></span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.5! <strong>Mysteryboxar</strong>, <strong>bonusfrågor</strong> och <strong>Mysteriemuseum</strong></span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.5! <strong>Mysteryboxar</strong>, <strong>bonusfrågor</strong> och <strong>Mysteriemuseum</strong></span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -622,7 +635,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <span style="color:var(--text);font-weight:600"><span style="color:var(--accent)">42</span> Improbable Owls</span>
     </span>
   </a>
-  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.1</div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.5</div>
   <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
 </div>
 
@@ -878,6 +891,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
     <div class="mystery-kicker" id="mysteryKicker">🎁</div>
     <div class="ov-title" id="mysteryTitleEl" style="font-size:24px;margin-bottom:6px;">MYSTERY BOX</div>
     <div class="ov-meta mystery-desc" id="mysteryDescEl"></div>
+    <div class="ov-meta mystery-timer" id="mysteryTimerEl">Tid: 12s</div>
     <div class="eq-text mystery-eq" id="mysteryEqText">2 + 2 = ?</div>
     <div class="mystery-choice-grid" id="mysteryChoices"></div>
     <div class="ov-meta mystery-result" id="mysteryResultEl"></div>
@@ -885,6 +899,10 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <button class="ov-btn primary" id="btnMysteryContinue" style="display:none;">Fortsätt</button>
     </div>
   </div>
+</div>
+<div class="overlay" id="countdownOverlay">
+  <div class="ov-title countdown-title" id="countdownTitleEl">3</div>
+  <div class="ov-meta countdown-sub" id="countdownDescEl">Gör dig redo...</div>
 </div>
 <div class="flash-good" id="flashGood"></div>
 <div class="flash-bad"  id="flashBad"></div>
@@ -951,6 +969,8 @@ const MYSTERY_BASE_ODDS={common:48,uncommon:29,rare:15,epic:6,legendary:2};
 const MYSTERY_SCORE_BONUS={common:15,uncommon:20,rare:28,epic:44,legendary:72};
 const MYSTERY_RANGE_BOOST={common:0.8,uncommon:0.92,rare:1.04,epic:1.14,legendary:1.24};
 const MYSTERY_TABLE_MAX={common:10,uncommon:10,rare:11,epic:12,legendary:12};
+const MYSTERY_QUESTION_TIME_MS=12000;
+const MYSTERY_COUNTDOWN_START=3;
 const MUSEUM_SETS={
   '+':{emoji:'🍎',nameSv:'Additionsateljén',nameEn:'Addition Atelier',nameDe:'Additionsatelier',
        descSv:'Söta och glittriga fynd från plusvärlden.',descEn:'Sweet and shiny finds from the world of addition.',descDe:'Süße und glänzende Funde aus der Welt der Addition.'},
@@ -1063,9 +1083,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i version <strong>3.1</strong>! <strong>4 nya skins</strong>: <strong>Hund</strong>, <strong>Katt</strong>, <strong>Jordgubbe</strong> och <strong>Ko</strong>',
-    'New in version <strong>3.1</strong>! <strong>4 new skins</strong>: <strong>Dog</strong>, <strong>Cat</strong>, <strong>Strawberry</strong>, and <strong>Cow</strong>',
-    'Neu in Version <strong>3.1</strong>! <strong>4 neue Skins</strong>: <strong>Hund</strong>, <strong>Katze</strong>, <strong>Erdbeere</strong> und <strong>Kuh</strong>'
+    'Nytt i version <strong>3.5</strong>! <strong>Mysteryboxar</strong>, <strong>bonusfrågor</strong> och <strong>Mysteriemuseum</strong>',
+    'New in version <strong>3.5</strong>! <strong>Mystery boxes</strong>, <strong>bonus questions</strong>, and the <strong>Mystery Museum</strong>',
+    'Neu in Version <strong>3.5</strong>! <strong>Mysteryboxen</strong>, <strong>Bonusfragen</strong> und das <strong>Mysterienmuseum</strong>'
   );
 }
 function getRangeLabel(range){
@@ -2486,6 +2506,7 @@ let musicOn=true,audioUnlocked=false,isFastMusic=false;
 let goldPhase=false,goldTimeout=null;
 let bonusLife=null,bonusLifeUsedThisRound=false;
 let mysteryBox=null,mysteryPrompt=null;
+let mysteryTimerTick=null,mysteryTimerTimeout=null,resumeCountdownTimeout=null;
 let personalBestAtStart=0,recordSoundPlayed=false;
 let eatAnim=null; // {x,y,value,startTime}
 
@@ -3412,8 +3433,8 @@ function getNearestPoolEntries(pool,preferredRarity){
 }
 function refreshMuseumRelatedViews(){
   updateMuseumNavBtn();
-  if($('museumScreen')&&$('museumScreen').classList.contains('show'))renderMuseumPage();
-  if($('skinsScreen')&&$('skinsScreen').classList.contains('show'))renderSkinsPage();
+  if($('museumScreen')&&$('museumScreen').classList.contains('active'))renderMuseumPage();
+  if($('skinsScreen')&&$('skinsScreen').classList.contains('active'))renderSkinsPage();
 }
 function purchaseMuseumBox(offerId,op){
   const offer=getMuseumShopOffer(offerId);
@@ -3461,6 +3482,49 @@ function renderMuseumOddsChips(odds){
     `<span class="rarity-chip ${rarityId}">${getRarityLabel(rarityId)} ${odds[rarityId]}%</span>`
   ).join('');
 }
+function getLatestMuseumFinds(limit=6,museum=loadMuseum()){
+  return MUSEUM_ITEMS
+    .filter(item=>museum.items&&museum.items[item.id])
+    .sort((a,b)=>(museum.items[b.id]||0)-(museum.items[a.id]||0))
+    .slice(0,limit);
+}
+function createMuseumSection({title,sub,count,emoji='',open=true,className=''}){
+  const sec=document.createElement('div');
+  sec.className=`museum-set toggleable${className?` ${className}`:''}${open?'':' collapsed'}`;
+  sec.innerHTML=`<div class="museum-set-head" role="button" tabindex="0" aria-expanded="${open?'true':'false'}">
+    <div>
+      <div class="museum-set-title">${emoji?`${emoji} `:''}${title}</div>
+      <div class="museum-set-sub">${sub}</div>
+    </div>
+    <div class="museum-set-head-side">
+      <div class="museum-set-count">${count}</div>
+      <div class="museum-set-arrow">${open?'▾':'▸'}</div>
+    </div>
+  </div>`;
+  const body=document.createElement('div');
+  body.className='museum-set-body';
+  sec.appendChild(body);
+  const head=sec.querySelector('.museum-set-head');
+  const arrow=sec.querySelector('.museum-set-arrow');
+  const syncState=()=>{
+    const collapsed=sec.classList.contains('collapsed');
+    head.setAttribute('aria-expanded',collapsed?'false':'true');
+    arrow.textContent=collapsed?'▸':'▾';
+  };
+  const toggle=()=>{
+    sec.classList.toggle('collapsed');
+    syncState();
+  };
+  head.addEventListener('click',toggle);
+  head.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      toggle();
+    }
+  });
+  syncState();
+  return {sec,body};
+}
 function renderMuseumPage(){
   const startupHeadwear=checkMuseumHeadwearUnlocks();
   startupHeadwear.forEach(showHeadwearToast);
@@ -3472,6 +3536,9 @@ function renderMuseumPage(){
   const milestoneCounts=getMuseumMilestoneCounts(museum);
   const completedSets=getCompletedMuseumSets(museum);
   const skinCounts=getOverallSkinCounts();
+  const museumSkins=SKINS_DEF.filter(skin=>skin.unlockMuseum);
+  const unlockedMuseumSkins=museumSkins.filter(skin=>isSkinUnlocked(skin.id)).length;
+  const recentFinds=getLatestMuseumFinds(6,museum);
   const pageCount=pickLangText(`${found} / ${total} fynd`,`${found} / ${total} finds`,`${found} / ${total} Funde`);
   if($('museumPageCount'))$('museumPageCount').textContent=pageCount;
   const summary=$('museumSummary');
@@ -3516,15 +3583,40 @@ function renderMuseumPage(){
   const el=$('museumPageContent');
   if(!el)return;
   el.innerHTML='';
-  const shopSec=document.createElement('div');
-  shopSec.className='museum-set museum-shop';
-  shopSec.innerHTML=`<div class="museum-set-head">
-    <div>
-      <div class="museum-set-title">🧰 ${pickLangText('Museiverkstad','Museum Workshop','Museumswerkstatt')}</div>
-      <div class="museum-set-sub">${pickLangText('Använd museidamm för riktade boxar, hattar och restaurering.','Spend museum dust on targeted boxes, hats, and restoration.','Nutze Museumsstaub für gezielte Boxen, Hüte und Restaurierung.')}</div>
-    </div>
-    <div class="museum-set-count">${pickLangText('Dammbutik','Dust shop','Staubladen')}</div>
-  </div>`;
+  if(recentFinds.length){
+    const recentSec=createMuseumSection({
+      title:pickLangText('Senast funna reliker','Latest relics found','Zuletzt gefundene Relikte'),
+      sub:pickLangText('Här syns dina senaste museumsfynd direkt, utan att du behöver leta längre ner på sidan.','Your latest museum finds appear here right away, without hunting farther down the page.','Hier siehst du deine neuesten Museumsfunde direkt, ohne weiter unten auf der Seite suchen zu müssen.'),
+      count:`${recentFinds.length} / ${found}`,
+      emoji:'✨',
+      open:true
+    });
+    const recentGrid=document.createElement('div');
+    recentGrid.className='museum-grid';
+    recentFinds.forEach(item=>{
+      const set=MUSEUM_SETS[item.op];
+      const card=document.createElement('div');
+      card.className='museum-item unlocked';
+      card.innerHTML=`<div class="museum-item-top">
+        <div class="museum-item-emoji">${item.emoji}</div>
+        <span class="rarity-chip ${item.rarity}">${getRarityLabel(item.rarity)}</span>
+      </div>
+      <div class="museum-item-name">${pickMuseumField(item,'name')}</div>
+      <div class="museum-item-desc">${pickMuseumField(item,'desc')}</div>
+      <div class="museum-item-foot">${set.emoji} ${pickLangText(set.nameSv,set.nameEn,set.nameDe||set.nameEn)}</div>`;
+      recentGrid.appendChild(card);
+    });
+    recentSec.body.appendChild(recentGrid);
+    el.appendChild(recentSec.sec);
+  }
+  const shopSec=createMuseumSection({
+    title:pickLangText('Museiverkstad','Museum Workshop','Museumswerkstatt'),
+    sub:pickLangText('Använd museidamm för riktade boxar, hattar och restaurering.','Spend museum dust on targeted boxes, hats, and restoration.','Nutze Museumsstaub für gezielte Boxen, Hüte und Restaurierung.'),
+    count:pickLangText('Dammbutik','Dust shop','Staubladen'),
+    emoji:'🧰',
+    open:false,
+    className:'museum-shop'
+  });
   const shopGrid=document.createElement('div');
   shopGrid.className='museum-shop-grid';
   MUSEUM_SHOP_OFFERS.forEach(offer=>{
@@ -3595,20 +3687,18 @@ function renderMuseumPage(){
     card.appendChild(actions);
     shopGrid.appendChild(card);
   });
-  shopSec.appendChild(shopGrid);
-  el.appendChild(shopSec);
-  const rewardSec=document.createElement('div');
-  rewardSec.className='museum-set';
-  rewardSec.innerHTML=`<div class="museum-set-head">
-    <div>
-      <div class="museum-set-title">🎨 ${pickLangText('Museumskins','Museum skins','Museumsskins')}</div>
-      <div class="museum-set-sub">${pickLangText('Relikset och rarity-milstolpar låser upp nya prestigeormar.','Relic sets and rarity milestones unlock new prestige snakes.','Reliktsets und Seltenheits-Meilensteine schalten neue Prestigeschlangen frei.')}</div>
-    </div>
-    <div class="museum-set-count">${SKINS_DEF.filter(skin=>skin.unlockMuseum).filter(skin=>isSkinUnlocked(skin.id)).length} / ${SKINS_DEF.filter(skin=>skin.unlockMuseum).length}</div>
-  </div>`;
+  shopSec.body.appendChild(shopGrid);
+  el.appendChild(shopSec.sec);
+  const rewardSec=createMuseumSection({
+    title:pickLangText('Museumskins','Museum skins','Museumsskins'),
+    sub:pickLangText('Relikset och rarity-milstolpar låser upp nya prestigeormar.','Relic sets and rarity milestones unlock new prestige snakes.','Reliktsets und Seltenheits-Meilensteine schalten neue Prestigeschlangen frei.'),
+    count:`${unlockedMuseumSkins} / ${museumSkins.length}`,
+    emoji:'🎨',
+    open:false
+  });
   const rewardGrid=document.createElement('div');
   rewardGrid.className='museum-reward-grid';
-  SKINS_DEF.filter(skin=>skin.unlockMuseum).forEach(skin=>{
+  museumSkins.forEach(skin=>{
     const unlockedSkin=isSkinUnlocked(skin.id);
     const prog=getMuseumSkinProgressInfo(skin,museum);
     const card=document.createElement('div');
@@ -3621,19 +3711,17 @@ function renderMuseumPage(){
       <div class="museum-reward-status">${unlockedSkin?pickLangText('Upplåst','Unlocked','Freigeschaltet'):pickLangText('Prestigebelöning','Prestige reward','Prestigebelohnung')}</div>`;
     rewardGrid.appendChild(card);
   });
-  rewardSec.appendChild(rewardGrid);
-  el.appendChild(rewardSec);
+  rewardSec.body.appendChild(rewardGrid);
+  el.appendChild(rewardSec.sec);
   const nextTargets=getNextMuseumSkinTargets(museum,3);
   if(nextTargets.length){
-    const nextSec=document.createElement('div');
-    nextSec.className='museum-set';
-    nextSec.innerHTML=`<div class="museum-set-head">
-      <div>
-        <div class="museum-set-title">🎯 ${pickLangText('Närmast att låsa upp','Closest to unlock','Am nächsten zum Freischalten')}</div>
-        <div class="museum-set-sub">${pickLangText('Här är de museumsskins som ligger närmast just nu.','These museum skins are currently the closest targets.','Diese Museumsskins sind aktuell am nächsten.')}</div>
-      </div>
-      <div class="museum-set-count">${nextTargets.length}</div>
-    </div>`;
+    const nextSec=createMuseumSection({
+      title:pickLangText('Närmast att låsa upp','Closest to unlock','Am nächsten zum Freischalten'),
+      sub:pickLangText('Här är de museumsskins som ligger närmast just nu.','These museum skins are currently the closest targets.','Diese Museumsskins sind aktuell am nächsten.'),
+      count:String(nextTargets.length),
+      emoji:'🎯',
+      open:true
+    });
     const nextGrid=document.createElement('div');
     nextGrid.className='museum-reward-grid';
     nextTargets.forEach(entry=>{
@@ -3647,21 +3735,19 @@ function renderMuseumPage(){
         <div class="museum-reward-status">${remaining<=0?pickLangText('Redo att låsas upp','Ready to unlock','Bereit zum Freischalten'):pickLangText(`${remaining} kvar`,`${remaining} left`,`${remaining} übrig`)}</div>`;
       nextGrid.appendChild(card);
     });
-    nextSec.appendChild(nextGrid);
-    el.appendChild(nextSec);
+    nextSec.body.appendChild(nextGrid);
+    el.appendChild(nextSec.sec);
   }
   Object.entries(MUSEUM_SETS).forEach(([op,set])=>{
     const items=getMuseumSetItems(op);
     const unlocked=items.filter(item=>museum.items&&museum.items[item.id]).length;
-    const sec=document.createElement('div');
-    sec.className='museum-set';
-    sec.innerHTML=`<div class="museum-set-head">
-      <div>
-        <div class="museum-set-title">${set.emoji} ${pickLangText(set.nameSv,set.nameEn,set.nameDe||set.nameEn)}</div>
-        <div class="museum-set-sub">${pickLangText(set.descSv,set.descEn,set.descDe||set.descEn)}</div>
-      </div>
-      <div class="museum-set-count">${unlocked} / ${items.length}</div>
-    </div>`;
+    const sec=createMuseumSection({
+      title:pickLangText(set.nameSv,set.nameEn,set.nameDe||set.nameEn),
+      sub:pickLangText(set.descSv,set.descEn,set.descDe||set.descEn),
+      count:`${unlocked} / ${items.length}`,
+      emoji:set.emoji,
+      open:false
+    });
     const grid=document.createElement('div');
     grid.className='museum-grid';
     items.forEach(item=>{
@@ -3678,8 +3764,8 @@ function renderMuseumPage(){
       ${unlockedItem?'':`<div class="museum-locked-hint">${pickLangText('Föremålet är fortfarande gömt.','Still hidden in the museum.','Noch im Museum verborgen.')}</div>`}`;
       grid.appendChild(card);
     });
-    sec.appendChild(grid);
-    el.appendChild(sec);
+    sec.body.appendChild(grid);
+    el.appendChild(sec.sec);
   });
 }
 
@@ -3734,7 +3820,8 @@ function importData(file){
    AUDIO
    ═══════════════════════════════════════ */
 const bgMusic=document.getElementById('bgMusic'),fastMusic=document.getElementById('fastMusic');
-const titelMusic=document.getElementById('titelMusic');
+const titelMusic=document.getElementById('titelMusic'),mysteryMusic=document.getElementById('mysteryMusic');
+mysteryMusic.volume=.82;
 const MUSIC_PACKS={
   original:{title:'siffersnoken_titel.mp3',normal:'siffersnoken_musik.mp3',fast:'siffersnoken_snabb.mp3'},
   progrock:{title:'progrock_titel.mp3',normal:'progrock_normal.mp3',fast:'progrock_snabb.mp3'},
@@ -3801,9 +3888,20 @@ function tryTitelMusic(){
 function stopTitelMusic(resetTime){
   titelMusic.pause();if(resetTime)titelMusic.currentTime=0;
 }
+function tryMysteryMusic(){
+  if(!musicOn)return;
+  stopTitelMusic(false);
+  bgMusic.pause();fastMusic.pause();
+  mysteryMusic.play().then(()=>{audioUnlocked=true;}).catch(()=>{});
+}
+function stopMysteryMusic(resetTime){
+  mysteryMusic.pause();
+  if(resetTime)mysteryMusic.currentTime=0;
+}
 let musicSwitchPending=false;
 function tryMusic(){
   if(!musicOn)return;
+  stopMysteryMusic(true);
   stopTitelMusic(false);
   musicSwitchPending=true;
   if(shouldFast()){
@@ -3837,9 +3935,10 @@ function toggleMusic(){
   updateMenuMusicBtn();
   if(musicOn){
     if(state==='menu')tryTitelMusic();
+    else if(state==='mystery')tryMysteryMusic();
     else tryMusic();
   }else{
-    titelMusic.pause();bgMusic.pause();fastMusic.pause();isFastMusic=false;
+    titelMusic.pause();bgMusic.pause();fastMusic.pause();stopMysteryMusic(false);isFastMusic=false;
   }
 }
 
@@ -4070,24 +4169,94 @@ function createMysteryPrompt(box){
     resultText:''
   };
 }
+function clearMysteryQuestionTimer(){
+  if(mysteryTimerTick){clearInterval(mysteryTimerTick);mysteryTimerTick=null;}
+  if(mysteryTimerTimeout){clearTimeout(mysteryTimerTimeout);mysteryTimerTimeout=null;}
+}
+function getMysteryTimeLeftMs(prompt=mysteryPrompt){
+  if(!prompt||prompt.answered||!prompt.expiresAt)return 0;
+  return Math.max(0,prompt.expiresAt-Date.now());
+}
+function updateMysteryTimerDisplay(){
+  const el=$('mysteryTimerEl');
+  if(!el||!mysteryPrompt)return;
+  if(mysteryPrompt.answered){
+    el.textContent=mysteryPrompt.timedOut
+      ? pickLangText('Tiden ute','Time up','Zeit abgelaufen')
+      : pickLangText('Klar!','Done!','Geschafft!');
+    el.classList.toggle('danger',!!mysteryPrompt.timedOut);
+    return;
+  }
+  const rawLeft=mysteryPrompt.expiresAt?getMysteryTimeLeftMs(mysteryPrompt):MYSTERY_QUESTION_TIME_MS;
+  const secs=Math.max(1,Math.ceil(rawLeft/1000));
+  el.textContent=pickLangText(`Tid: ${secs}s`,`Time: ${secs}s`,`Zeit: ${secs}s`);
+  el.classList.toggle('danger',secs<=3);
+}
+function startMysteryQuestionTimer(){
+  clearMysteryQuestionTimer();
+  if(!mysteryPrompt||mysteryPrompt.answered)return;
+  mysteryPrompt.expiresAt=Date.now()+MYSTERY_QUESTION_TIME_MS;
+  updateMysteryTimerDisplay();
+  mysteryTimerTick=setInterval(()=>{
+    if(!mysteryPrompt||mysteryPrompt.answered){
+      clearMysteryQuestionTimer();
+      return;
+    }
+    updateMysteryTimerDisplay();
+  },200);
+  mysteryTimerTimeout=setTimeout(()=>answerMysteryQuestion(null,{timedOut:true}),MYSTERY_QUESTION_TIME_MS+30);
+}
+function clearResumeCountdown(){
+  if(resumeCountdownTimeout){clearTimeout(resumeCountdownTimeout);resumeCountdownTimeout=null;}
+  if($('countdownOverlay'))$('countdownOverlay').classList.remove('show');
+}
+function finishResumeCountdown(){
+  clearResumeCountdown();
+  state='playing';
+  tryMusic();
+  lastTickTime=performance.now();
+  requestAnimationFrame(gameLoop);
+}
+function startMysteryResumeCountdown(){
+  clearResumeCountdown();
+  state='countdown';
+  let current=MYSTERY_COUNTDOWN_START;
+  const step=()=>{
+    $('countdownTitleEl').textContent=String(current);
+    $('countdownDescEl').textContent=pickLangText('Gör dig redo att svänga igen...','Get ready to steer again...','Mach dich bereit, wieder zu lenken...');
+    $('countdownOverlay').classList.add('show');
+    if(current<=1){
+      resumeCountdownTimeout=setTimeout(finishResumeCountdown,1000);
+      return;
+    }
+    current-=1;
+    resumeCountdownTimeout=setTimeout(step,1000);
+  };
+  step();
+}
 function openMysteryChallenge(box){
   mysteryPrompt=createMysteryPrompt(box);
   mysteryBox=null;
   state='mystery';
+  clearResumeCountdown();
+  clearMysteryQuestionTimer();
   bgMusic.pause();fastMusic.pause();
+  tryMysteryMusic();
   renderMysteryOverlay();
   $('mysteryOverlay').classList.add('show');
+  startMysteryQuestionTimer();
 }
 function getMysteryReward(op,rarityId){
   const item=MUSEUM_ITEMS.find(entry=>entry.op===op&&entry.rarity===rarityId)||MUSEUM_ITEMS.find(entry=>entry.op===op)||MUSEUM_ITEMS[0];
   const scoreBonus=MYSTERY_SCORE_BONUS[rarityId]||12;
   return awardMuseumItem(item,{scoreBonus,duplicateDust:true});
 }
-function answerMysteryQuestion(value){
+function answerMysteryQuestion(value,{timedOut=false}={}){
   if(!mysteryPrompt||mysteryPrompt.answered)return;
+  clearMysteryQuestionTimer();
   const prompt=mysteryPrompt;
-  const choice=Number(value);
-  const correct=choice===prompt.problem.answer;
+  const choice=value==null?Number.NaN:Number(value);
+  const correct=!timedOut&&choice===prompt.problem.answer;
   const museum=loadMuseum();
   museum.boxesOpened=(museum.boxesOpened||0)+1;
   let reward=null;
@@ -4105,20 +4274,22 @@ function answerMysteryQuestion(value){
     museum.dust=(museum.dust||0)+failDust;
     saveMuseum(museum);
     updateMuseumNavBtn();
-    prompt.resultText=pickLangText(`Boxen sprack, men du räddade ${failDust} museidamm.`,`The box cracked, but you saved ${failDust} museum dust.`,`Die Box zerbrach, aber du hast ${failDust} Museumsstaub gerettet.`);
+    prompt.resultText=timedOut
+      ? pickLangText(`Tiden tog slut. Boxen sprack, men du räddade ${failDust} museidamm.`,`Time ran out. The box cracked, but you saved ${failDust} museum dust.`,`Die Zeit ist abgelaufen. Die Box zerbrach, aber du hast ${failDust} Museumsstaub gerettet.`)
+      : pickLangText(`Boxen sprack, men du räddade ${failDust} museidamm.`,`The box cracked, but you saved ${failDust} museum dust.`,`Die Box zerbrach, aber du hast ${failDust} Museumsstaub gerettet.`);
   }
   prompt.answered=true;
-  prompt.selected=choice;
+  prompt.selected=Number.isFinite(choice)?choice:null;
+  prompt.timedOut=timedOut;
   renderMysteryOverlay();
 }
 function resumeFromMystery(){
   if(!mysteryPrompt||!mysteryPrompt.answered)return;
+  clearMysteryQuestionTimer();
+  stopMysteryMusic(true);
   mysteryPrompt=null;
   $('mysteryOverlay').classList.remove('show');
-  state='playing';
-  tryMusic();
-  lastTickTime=performance.now();
-  requestAnimationFrame(gameLoop);
+  startMysteryResumeCountdown();
 }
 function renderMysteryOverlay(){
   if(!mysteryPrompt)return;
@@ -4130,6 +4301,7 @@ function renderMysteryOverlay(){
     ? prompt.resultText
     : pickLangText(`${rarity.blurbSv} Svara rätt för att öppna den och få ett fynd i ${pickLangText(MUSEUM_SETS[prompt.op].nameSv,MUSEUM_SETS[prompt.op].nameEn,MUSEUM_SETS[prompt.op].nameDe||MUSEUM_SETS[prompt.op].nameEn)}.`,`${rarity.blurbEn} Answer correctly to open it and claim a relic from the ${pickLangText(MUSEUM_SETS[prompt.op].nameSv,MUSEUM_SETS[prompt.op].nameEn,MUSEUM_SETS[prompt.op].nameDe||MUSEUM_SETS[prompt.op].nameEn)}.`,`${rarity.blurbDe} Antworte richtig, um sie zu öffnen und eine Reliquie aus ${pickLangText(MUSEUM_SETS[prompt.op].nameSv,MUSEUM_SETS[prompt.op].nameEn,MUSEUM_SETS[prompt.op].nameDe||MUSEUM_SETS[prompt.op].nameEn)} zu erhalten.`);
   $('mysteryEqText').textContent=`${prompt.problem.expr} = ?`;
+  updateMysteryTimerDisplay();
   const choicesEl=$('mysteryChoices');
   choicesEl.innerHTML='';
   prompt.choices.forEach(choice=>{
@@ -4206,6 +4378,9 @@ function startGame(){
   if(!activeOps.size){alert('Välj minst ett räknesätt!');return;}
   if((activeOps.has('*')||activeOps.has('/'))&&!tables.size){alert('Välj minst en multiplikationstabell!');return;}
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}
+  clearMysteryQuestionTimer();
+  clearResumeCountdown();
+  stopMysteryMusic(true);
   goldPhase=false;isFastMusic=false;
   bonusLife=null;bonusLifeUsedThisRound=false;
   mysteryBox=null;mysteryPrompt=null;
@@ -5730,6 +5905,9 @@ function flashFx(type){
    ═══════════════════════════════════════ */
 function triggerGameOver(){
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
+  clearMysteryQuestionTimer();
+  clearResumeCountdown();
+  stopMysteryMusic(true);
   bonusLife=null;
   mysteryBox=null;mysteryPrompt=null;
   state='gameover';sfxDie();bgMusic.pause();fastMusic.pause();isFastMusic=false;
@@ -5829,6 +6007,9 @@ if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>req
 function goToMenu(){
   state='menu';bgMusic.pause();bgMusic.currentTime=0;fastMusic.pause();fastMusic.currentTime=0;isFastMusic=false;
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
+  clearMysteryQuestionTimer();
+  clearResumeCountdown();
+  stopMysteryMusic(true);
   mysteryBox=null;mysteryPrompt=null;
   flushBufferedProgress();
   showTouchControls(false);
@@ -6046,7 +6227,7 @@ function goToSettings(){showScreen('settingsScreen');}
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
-  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.1';
+  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.5';
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
@@ -6678,6 +6859,8 @@ document.addEventListener('keydown',e=>{
     }else if(mysteryPrompt.answered&&['Enter','Escape',' '].includes(e.key)){
       resumeFromMystery();
     }
+  }else if(state==='countdown'){
+    if(e.key==='Escape')goToMenu();
   }
 });
 
