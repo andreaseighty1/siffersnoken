@@ -1024,7 +1024,7 @@ const MUSEUM_SHOP_OFFERS=[
    labelSv:'Kurator-box',labelEn:'Curator Box',labelDe:'Kurator-Box',
    descSv:'Välj räknesätt och öppna en riktad box med hela rarity-trappan.',descEn:'Pick an operation and open a targeted box with the full rarity ladder.',descDe:'Wähle eine Rechenart und öffne eine gezielte Box mit der vollen Seltenheitsleiter.'},
   {id:'fine_box',kind:'museum_box',cost:34,targeted:true,odds:{uncommon:30,rare:40,epic:23,legendary:7},
-   labelSv:'Finbox',labelEn:'Fine Box',labelDe:'Feinbox',
+   labelSv:'Prismabox',labelEn:'Prism Box',labelDe:'Prismabox',
    descSv:'En dyrare box utan vanliga fynd, perfekt när museet växer.',descEn:'A pricier box without common finds, perfect once the museum grows.',descDe:'Eine teurere Box ohne gewöhnliche Funde, perfekt wenn das Museum wächst.'},
   {id:'hat_crate',kind:'headwear_box',cost:60,targeted:false,odds:{rare:48,epic:40,legendary:12},
    labelSv:'Hattask',labelEn:'Hat Crate',labelDe:'Hutkiste',
@@ -2546,6 +2546,7 @@ const BONUS_LIFE_FALLBACK_MAX_DIST=10;
 const MYSTERY_MIN_SCORE=120;
 const MYSTERY_MIN_QUESTIONS=4;
 const MYSTERY_MIN_DIST=5;
+const MYSTERY_BOX_LIFETIME=9500;
 const MYSTERY_BOX_CHANCES={correct:0.18,recover:0.08,gold:0.12};
 
 /* ═══════════════════════════════════════
@@ -2928,7 +2929,7 @@ function showMuseumItemToast(item,rarityId,duplicate=false,dust=0){
     ? pickLangText('🎁 Dubblett omvandlad','🎁 Duplicate converted','🎁 Doppelstück umgewandelt')
     : pickLangText('🎁 Ny museirelik','🎁 New museum relic','🎁 Neue Museumsreliquie');
   const desc=duplicate
-    ? pickLangText(`+${dust} museidamm`,`+${dust} museum dust`,`+${dust} Museumsstaub`)
+    ? pickLangText(`✨ +${dust} Sifferstoft`,`✨ +${dust} Number Dust`,`✨ +${dust} Zahlenstaub`)
     : `${pickMuseumField(item,'name')} · ${getRarityLabel(rarityId)}`;
   enqueueToast({
     borderColor:rarity.ring,
@@ -2936,6 +2937,16 @@ function showMuseumItemToast(item,rarityId,duplicate=false,dust=0){
     <div class="mt-text"><div class="mt-label">${title}</div>
     <div class="mt-name">${pickMuseumField(item,'name')}</div>
     <div class="mt-desc">${desc}</div></div>`
+  });
+}
+function showMysteryDustToast(rarityId,dust){
+  const rarity=MYSTERY_RARITIES[rarityId]||MYSTERY_RARITIES.common;
+  enqueueToast({
+    borderColor:rarity.ring,
+    html:`<div class="mt-emoji">${rarity.emoji}</div>
+    <div class="mt-text"><div class="mt-label">${pickLangText('⏳ Mysterybox upplöst','⏳ Mystery box dissolved','⏳ Mysterybox zerfallen')}</div>
+    <div class="mt-name">${pickLangText('✨ Sifferstoft räddat','✨ Number Dust saved','✨ Zahlenstaub gerettet')}</div>
+    <div class="mt-desc">${pickLangText(`✨ +${dust} Sifferstoft`,`✨ +${dust} Number Dust`,`✨ +${dust} Zahlenstaub`)}</div></div>`
   });
 }
 function showMuseumSetToast(op){
@@ -2965,7 +2976,7 @@ function showMuseumMilestoneToast(def){
     html:`<div class="mt-emoji">${def.emoji}</div>
     <div class="mt-text"><div class="mt-label">${pickLangText('✨ Museibonus låst upp','✨ Museum bonus unlocked','✨ Museumsbonus freigeschaltet')}</div>
     <div class="mt-name">${pickLangText(def.labelSv,def.labelEn,def.labelDe||def.labelEn)}</div>
-    <div class="mt-desc">${pickLangText(`+${def.dust} museidamm`,`+${def.dust} museum dust`,`+${def.dust} Museumsstaub`)}</div></div>`
+    <div class="mt-desc">${pickLangText(`✨ +${def.dust} Sifferstoft`,`✨ +${def.dust} Number Dust`,`✨ +${def.dust} Zahlenstaub`)}</div></div>`
   });
 }
 function awardMuseumItem(item,{scoreBonus=0,duplicateDust=true}={}){
@@ -3566,9 +3577,9 @@ function renderMuseumPage(){
         <div class="sub">${pickLangText('Varje räknesätt har ett eget samlarset.','Each operation has its own collection set.','Jede Rechenart hat ihr eigenes Sammelset.')}</div>
       </div>
       <div class="museum-summary-card">
-        <div class="kicker">${pickLangText('Museidamm','Museum dust','Museumsstaub')}</div>
-        <div class="value">${museum.dust||0}</div>
-        <div class="sub">${pickLangText('Dubbletter och spruckna boxar blir damm.','Duplicates and cracked boxes become dust.','Doppelstücke und kaputte Boxen werden zu Staub.')}</div>
+        <div class="kicker">${pickLangText('Sifferstoft','Number Dust','Zahlenstaub')}</div>
+        <div class="value">✨ ${museum.dust||0}</div>
+        <div class="sub">${pickLangText('Dubbletter, missade boxar och spruckna boxar blir Sifferstoft.','Duplicates, missed boxes, and cracked boxes become Number Dust.','Doppelstücke, verpasste Boxen und zerbrochene Boxen werden zu Zahlenstaub.')}</div>
       </div>
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Öppnade boxar','Boxes opened','Geöffnete Boxen')}</div>
@@ -3591,9 +3602,9 @@ function renderMuseumPage(){
         <div class="sub">${pickLangText(`${skinCounts.museumTotal} av skinnen hör till museet och prestigejakten.`,`${skinCounts.museumTotal} of the skins belong to the museum prestige track.`,`${skinCounts.museumTotal} der Skins gehören zur Museums-Prestigeschiene.`)}</div>
       </div>
       <div class="museum-summary-card">
-        <div class="kicker">${pickLangText('Bonusdamm','Bonus dust','Bonusstaub')}</div>
+        <div class="kicker">${pickLangText('Bonusstoft','Bonus Dust','Bonusstaub')}</div>
         <div class="value">${milestoneCounts.found} / ${milestoneCounts.total}</div>
-        <div class="sub">${pickLangText('Kompletta set och rarity-mastery ger extra museidamm.','Complete sets and rarity mastery grant extra museum dust.','Komplette Sets und Seltenheits-Mastery geben extra Museumsstaub.')}</div>
+        <div class="sub">${pickLangText('Kompletta set och rarity-mastery ger extra Sifferstoft.','Complete sets and rarity mastery grant extra Number Dust.','Komplette Sets und Seltenheits-Mastery geben extra Zahlenstaub.')}</div>
       </div>`;
   }
   const el=$('museumPageContent');
@@ -3627,8 +3638,8 @@ function renderMuseumPage(){
   }
   const shopSec=createMuseumSection({
     title:pickLangText('Museiverkstad','Museum Workshop','Museumswerkstatt'),
-    sub:pickLangText('Använd museidamm för riktade boxar, hattar och restaurering.','Spend museum dust on targeted boxes, hats, and restoration.','Nutze Museumsstaub für gezielte Boxen, Hüte und Restaurierung.'),
-    count:pickLangText('Dammbutik','Dust shop','Staubladen'),
+    sub:pickLangText('Använd Sifferstoft för riktade boxar, hattar och restaurering.','Spend Number Dust on targeted boxes, hats, and restoration.','Nutze Zahlenstaub für gezielte Boxen, Hüte und Restaurierung.'),
+    count:pickLangText('Stoftbutik','Dust shop','Staubladen'),
     emoji:'🧰',
     open:false,
     className:'museum-shop'
@@ -3643,6 +3654,7 @@ function renderMuseumPage(){
     const title=pickLangText(offer.labelSv,offer.labelEn,offer.labelDe||offer.labelEn);
     const desc=pickLangText(offer.descSv,offer.descEn,offer.descDe||offer.descEn);
     let stockText='';
+    let costMeta=pickLangText(`Kostar ✨ ${cost} Sifferstoft`,`Costs ✨ ${cost} Number Dust`,`Kostet ✨ ${cost} Zahlenstaub`);
     let oddsHtml='';
     let noteHtml='';
     const actions=document.createElement('div');
@@ -3697,6 +3709,7 @@ function renderMuseumPage(){
       <div class="museum-shop-cost">✨ ${cost}</div>
     </div>
     <div class="museum-shop-desc">${desc}</div>
+    <div class="museum-shop-meta">${costMeta}</div>
     ${oddsHtml?`<div class="museum-shop-odds">${oddsHtml}</div>`:''}
     <div class="museum-shop-stock">${stockText}</div>
     ${noteHtml}`;
@@ -3723,7 +3736,7 @@ function renderMuseumPage(){
       <div class="museum-reward-name">${pickDefText(skin,'name',SKIN_I18N_DE)}</div>
       <div class="museum-reward-desc">${pickDefText(skin,'desc',SKIN_I18N_DE,'descSv')}</div>
       <div class="museum-reward-meta">${prog.label?`${prog.label}: ${Math.min(prog.cur,prog.max)} / ${prog.max}`:''}</div>
-      <div class="museum-reward-meta museum-reward-bonus">${pickLangText('Bonusdamm via milstolpar hjälper dig vidare i butiken.','Milestone bonus dust helps fund the workshop.','Bonusstaub aus Meilensteinen hilft dir weiter in der Werkstatt.')}</div>
+      <div class="museum-reward-meta museum-reward-bonus">${pickLangText('Bonusstoft via milstolpar hjälper dig vidare i butiken.','Bonus Dust from milestones helps fund the workshop.','Bonusstaub aus Meilensteinen hilft dir weiter in der Werkstatt.')}</div>
       <div class="museum-reward-status">${unlockedSkin?pickLangText('Upplåst','Unlocked','Freigeschaltet'):pickLangText('Prestigebelöning','Prestige reward','Prestigebelohnung')}</div>`;
     rewardGrid.appendChild(card);
   });
@@ -4046,6 +4059,28 @@ function removeFromWrongPool(expr){
 function updateBonusLife(now=performance.now()){
   if(bonusLife&&now>=bonusLife.expiresAt)bonusLife=null;
 }
+function getMissedMysteryDust(rarityId){
+  if(rarityId==='legendary')return 3;
+  if(rarityId==='rare'||rarityId==='epic')return 2;
+  return 1;
+}
+function expireMysteryBox(box){
+  if(!box)return;
+  const dust=getMissedMysteryDust(box.rarity);
+  addMuseumDust(dust);
+  showMysteryDustToast(box.rarity,dust);
+}
+function updateMysteryBox(now=performance.now()){
+  if(mysteryBox&&now>=mysteryBox.expiresAt){
+    const expiredBox=mysteryBox;
+    mysteryBox=null;
+    expireMysteryBox(expiredBox);
+  }
+}
+function updateRoundBonuses(now=performance.now()){
+  updateBonusLife(now);
+  updateMysteryBox(now);
+}
 function canSpawnBonusLife(){
   return !practiceMode&&!bonusLife&&!bonusLifeUsedThisRound&&!goldPhase&&score>=BONUS_LIFE_MIN_SCORE&&lives>0&&lives<3;
 }
@@ -4128,7 +4163,7 @@ function maybeSpawnMysteryBox(source='correct'){
   if(Math.random()>chance)return false;
   const p=findMysteryBoxSpot();
   if(!p)return false;
-  mysteryBox={x:p.x,y:p.y,rarity:rollMysteryRarity(),spawnedAt:performance.now()};
+  mysteryBox={x:p.x,y:p.y,rarity:rollMysteryRarity(),spawnedAt:performance.now(),expiresAt:performance.now()+MYSTERY_BOX_LIFETIME};
   return true;
 }
 function maybeSpawnRoundBonuses(source='correct'){
@@ -4281,7 +4316,7 @@ function answerMysteryQuestion(value,{timedOut=false}={}){
     saveMuseum(museum);
     reward=getMysteryReward(prompt.op,prompt.box.rarity);
     prompt.resultText=reward.duplicate
-      ? pickLangText(`Dubblett! ${pickMuseumField(reward.item,'name')} blev ${reward.dust} museidamm och +${reward.scoreBonus} poäng.`,`Duplicate! ${pickMuseumField(reward.item,'name')} turned into ${reward.dust} museum dust and +${reward.scoreBonus} points.`,`Doppelstück! ${pickMuseumField(reward.item,'name')} wurde zu ${reward.dust} Museumsstaub und +${reward.scoreBonus} Punkten.`)
+      ? pickLangText(`Dubblett! ${pickMuseumField(reward.item,'name')} blev ✨ ${reward.dust} Sifferstoft och +${reward.scoreBonus} poäng.`,`Duplicate! ${pickMuseumField(reward.item,'name')} turned into ✨ ${reward.dust} Number Dust and +${reward.scoreBonus} points.`,`Doppelstück! ${pickMuseumField(reward.item,'name')} wurde zu ✨ ${reward.dust} Zahlenstaub und +${reward.scoreBonus} Punkten.`)
       : pickLangText(`Du öppnade boxen och hittade ${pickMuseumField(reward.item,'name')}! +${reward.scoreBonus} poäng.`,`You opened the box and found ${pickMuseumField(reward.item,'name')}! +${reward.scoreBonus} points.`,`Du hast die Box geöffnet und ${pickMuseumField(reward.item,'name')} gefunden! +${reward.scoreBonus} Punkte.`);
     if(reward.completedSet)prompt.resultText+=' '+pickLangText('Hela samlingen för det här räknesättet är nu komplett!','That operation collection is now complete!','Diese Rechenarten-Sammlung ist jetzt komplett!');
   }else{
@@ -4291,8 +4326,8 @@ function answerMysteryQuestion(value,{timedOut=false}={}){
     saveMuseum(museum);
     updateMuseumNavBtn();
     prompt.resultText=timedOut
-      ? pickLangText(`Tiden tog slut. Boxen sprack, men du räddade ${failDust} museidamm.`,`Time ran out. The box cracked, but you saved ${failDust} museum dust.`,`Die Zeit ist abgelaufen. Die Box zerbrach, aber du hast ${failDust} Museumsstaub gerettet.`)
-      : pickLangText(`Boxen sprack, men du räddade ${failDust} museidamm.`,`The box cracked, but you saved ${failDust} museum dust.`,`Die Box zerbrach, aber du hast ${failDust} Museumsstaub gerettet.`);
+      ? pickLangText(`Tiden tog slut. Boxen sprack, men du räddade ✨ ${failDust} Sifferstoft.`,`Time ran out. The box cracked, but you saved ✨ ${failDust} Number Dust.`,`Die Zeit ist abgelaufen. Die Box zerbrach, aber du hast ✨ ${failDust} Zahlenstaub gerettet.`)
+      : pickLangText(`Boxen sprack, men du räddade ✨ ${failDust} Sifferstoft.`,`The box cracked, but you saved ✨ ${failDust} Number Dust.`,`Die Box zerbrach, aber du hast ✨ ${failDust} Zahlenstaub gerettet.`);
   }
   prompt.answered=true;
   prompt.selected=Number.isFinite(choice)?choice:null;
@@ -4335,7 +4370,7 @@ function renderMysteryOverlay(){
   });
   $('mysteryResultEl').textContent=prompt.answered
     ? prompt.resultText
-    : pickLangText('Rätt svar öppnar boxen. Fel svar ger bara lite museidamm.','A correct answer opens the box. A wrong answer only gives a little museum dust.','Eine richtige Antwort öffnet die Box. Eine falsche Antwort gibt nur etwas Museumsstaub.');
+    : pickLangText('Rätt svar öppnar boxen. Fel svar ger bara lite Sifferstoft.','A correct answer opens the box. A wrong answer only gives a little Number Dust.','Eine richtige Antwort öffnet die Box. Eine falsche Antwort gibt nur etwas Zahlenstaub.');
   $('btnMysteryContinue').style.display=prompt.answered?'':'none';
 }
 
@@ -4454,7 +4489,7 @@ function pollGamepad(){
 
 function gameLoop(ts){
   if(state!=='playing')return;
-  updateBonusLife(ts);
+  updateRoundBonuses(ts);
   pollGamepad();
   let spd=getSpeed(),elapsed=ts-lastTickTime,steps=0;
   // Kör ikapp med små kontrollerade steg i stället för att hoppa rakt till nuet.
@@ -4489,7 +4524,7 @@ function tick(){
   if(pendingDirs.length)dir={...pendingDirs.shift()};
   else dir={...nextDir};
   nextDir=pendingDirs.length?{...pendingDirs[0]}:{...dir};
-  updateBonusLife();
+  updateRoundBonuses();
   const old=snake.map(s=>({x:s.x,y:s.y,px:s.px,py:s.py}));
   let hx=snake[0].x+dir.x, hy=snake[0].y+dir.y;
 
@@ -4945,7 +4980,7 @@ function _perfTick(t){
 }
 function draw(t){
   _perfTick(t);
-  updateBonusLife();
+  updateRoundBonuses();
   const _theme=getActiveTheme();
   drawBackground(_theme);
   tiles.forEach(tile=>drawTile(tile));
@@ -5146,6 +5181,8 @@ function drawMysteryBox(){
   const px=mysteryBox.x*CELL+4,py=mysteryBox.y*CELL+4,s=CELL-8;
   const T=performance.now();
   const pulse=0.88+0.12*Math.sin(T/220);
+  const lifeLeft=Math.max(0,(mysteryBox.expiresAt||T)-T);
+  const lifeFrac=Math.max(0,Math.min(1,lifeLeft/MYSTERY_BOX_LIFETIME));
   const aura=ctx.createRadialGradient(cx,cy,2,cx,cy,CELL*0.78);
   aura.addColorStop(0,rarity.glow.replace(/0?\.\d+\)/,'.34)'));
   aura.addColorStop(0.55,rarity.glow.replace(/0?\.\d+\)/,'.16)'));
@@ -5173,6 +5210,11 @@ function drawMysteryBox(){
   ctx.font=`900 ${Math.floor(CELL*0.54)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
   ctx.fillText(rarity.emoji,cx,cy+1);
   ctx.shadowBlur=0;
+  ctx.lineWidth=2.7;
+  ctx.strokeStyle=lifeFrac<0.35?'rgba(255,120,120,0.95)':'rgba(255,255,255,0.82)';
+  ctx.beginPath();
+  ctx.arc(cx,cy,CELL*0.44,-Math.PI/2,-Math.PI/2+Math.PI*2*lifeFrac,false);
+  ctx.stroke();
   ctx.restore();
 }
 function drawSeg(rx,ry,i,isHead){
