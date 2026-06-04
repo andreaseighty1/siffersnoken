@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SifferSnoken V3.5 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
+<title>SifferSnoken V3.8 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Nunito:wght@700;900&display=swap');
 :root{
@@ -487,6 +487,16 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .museum-craft-name{font-size:10px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;}
 .museum-note{font-size:9px;color:var(--muted);line-height:1.4;}
 .museum-reward-tip{font-size:9px;color:rgba(255,255,255,.64);line-height:1.4;}
+.museum-action-banner{border:1px solid rgba(255,215,120,.16);border-radius:14px;background:linear-gradient(135deg,rgba(255,215,120,.08),rgba(255,255,255,.03));padding:12px 14px;margin-bottom:10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.03);}
+.museum-guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;}
+.museum-guide-card{border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.2);padding:10px;display:flex;flex-direction:column;gap:7px;min-height:128px;}
+.museum-guide-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.museum-guide-emoji{font-size:24px;line-height:1;}
+.museum-guide-step{font-size:9px;color:#ffd27d;letter-spacing:.08em;text-transform:uppercase;font-weight:900;}
+.museum-guide-title{font-size:12px;font-weight:900;color:var(--text);line-height:1.35;}
+.museum-guide-desc{font-size:10px;color:var(--muted);line-height:1.45;}
+.museum-rarity-help{display:flex;flex-direction:column;gap:6px;margin-top:10px;}
+.museum-rarity-row{display:flex;flex-wrap:wrap;gap:6px;}
 .mystery-card{max-width:430px;}
 .mystery-kicker{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px;}
 .mystery-desc{line-height:1.6;max-width:340px;margin:0 auto 12px;}
@@ -500,6 +510,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .mystery-choice-btn.good{border-color:rgba(0,255,136,.45);background:rgba(0,255,136,.08);color:var(--accent);}
 .mystery-choice-btn.bad{border-color:rgba(255,70,70,.4);background:rgba(255,70,70,.08);color:#ff7a86;}
 .mystery-result{min-height:34px;line-height:1.5;}
+.portal-card{max-width:450px;}
+.portal-note{font-size:10px;color:var(--muted);line-height:1.5;margin-top:6px;}
 .countdown-overlay{background:transparent;backdrop-filter:none;pointer-events:none;z-index:105;gap:8px;}
 .countdown-title{font-size:clamp(42px,10vw,88px);margin-bottom:0;}
 .countdown-sub{font-size:14px;max-width:280px;text-align:center;line-height:1.55;}
@@ -587,8 +599,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.5! <strong>Mysteryboxar</strong>, <strong>bonusfrågor</strong> och <strong>Mysteriemuseum</strong></span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.5! <strong>Mysteryboxar</strong>, <strong>bonusfrågor</strong> och <strong>Mysteriemuseum</strong></span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.8! <strong>Smartare Sifferportal</strong>, <strong>upp till 2 per runda</strong> och <strong>lättare att hitta</strong></span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.8! <strong>Smartare Sifferportal</strong>, <strong>upp till 2 per runda</strong> och <strong>lättare att hitta</strong></span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -651,7 +663,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <span style="color:var(--text);font-weight:600"><span style="color:var(--accent)">42</span> Improbable Owls</span>
     </span>
   </a>
-  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.5</div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.8</div>
   <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
 </div>
 
@@ -916,6 +928,20 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
     </div>
   </div>
 </div>
+<div class="overlay" id="portalOverlay">
+  <div class="ov-card mystery-card portal-card">
+    <div class="mystery-kicker" id="portalKickerEl">🌀 Sifferportal</div>
+    <div class="ov-title" id="portalTitleEl" style="font-size:24px;margin-bottom:6px;">BONUSBANA</div>
+    <div class="ov-meta mystery-desc" id="portalDescEl"></div>
+    <div class="ov-meta mystery-timer" id="portalMetaEl"></div>
+    <div class="eq-text mystery-eq" id="portalMissionEl">Samla jämna tal!</div>
+    <div class="ov-meta mystery-result" id="portalResultEl"></div>
+    <div class="portal-note" id="portalNoteEl"></div>
+    <div class="ov-btns">
+      <button class="ov-btn primary" id="btnPortalAction">Kör!</button>
+    </div>
+  </div>
+</div>
 <div class="overlay countdown-overlay" id="countdownOverlay">
   <div class="ov-title countdown-title" id="countdownTitleEl">3</div>
   <div class="ov-meta countdown-sub" id="countdownDescEl">Gör dig redo...</div>
@@ -987,6 +1013,49 @@ const MYSTERY_RANGE_BOOST={common:0.8,uncommon:0.92,rare:1.04,epic:1.14,legendar
 const MYSTERY_TABLE_MAX={common:10,uncommon:10,rare:11,epic:12,legendary:12};
 const MYSTERY_QUESTION_TIME_MS=12000;
 const MYSTERY_COUNTDOWN_START=3;
+const PORTAL_MAX_PER_ROUND=2;
+const PORTAL_FIRST_MIN_QUESTIONS=10;
+const PORTAL_BETWEEN_PORTALS_QUESTIONS=10;
+const PORTAL_MIN_DIST=6;
+const PORTAL_BOX_LIFETIME=9000;
+const PORTAL_BASE_CHANCES=[0.07,0.05];
+const PORTAL_MAX_CHANCES=[0.15,0.13];
+const PORTAL_PITY_STEP=0.01;
+const PORTAL_RUN_TIME_MS=15000;
+const PORTAL_TIME_PENALTY_MS=1500;
+const PORTAL_RUN_SPEED=172;
+const PORTAL_TILE_COUNT=6;
+const PORTAL_CORRECT_DUST=1;
+const PORTAL_STREAK_BONUS_EVERY=4;
+const PORTAL_STREAK_BONUS_DUST=2;
+const PORTAL_VALUE_MIN=2;
+const PORTAL_VALUE_MAX=36;
+const PORTAL_MISSIONS=[
+  {
+    id:'even',tier:1,emoji:'2️⃣',
+    labelSv:'Samla jämna tal',labelEn:'Collect even numbers',labelDe:'Sammle gerade Zahlen',
+    descSv:'Ät bara tal som kan delas med 2.',descEn:'Eat only numbers divisible by 2.',descDe:'Iss nur Zahlen, die durch 2 teilbar sind.',
+    match:n=>n%2===0
+  },
+  {
+    id:'odd',tier:1,emoji:'1️⃣',
+    labelSv:'Samla udda tal',labelEn:'Collect odd numbers',labelDe:'Sammle ungerade Zahlen',
+    descSv:'Ät bara tal som inte kan delas jämnt med 2.',descEn:'Eat only numbers that are not evenly divisible by 2.',descDe:'Iss nur Zahlen, die nicht gleichmäßig durch 2 teilbar sind.',
+    match:n=>Math.abs(n%2)===1
+  },
+  {
+    id:'div3',tier:2,emoji:'3️⃣',
+    labelSv:'Samla tal delbara med 3',labelEn:'Collect numbers divisible by 3',labelDe:'Sammle durch 3 teilbare Zahlen',
+    descSv:'Ät bara tal där 3 går jämnt upp.',descEn:'Eat only numbers where 3 divides evenly.',descDe:'Iss nur Zahlen, die sich glatt durch 3 teilen lassen.',
+    match:n=>n%3===0
+  },
+  {
+    id:'div4',tier:3,emoji:'4️⃣',
+    labelSv:'Samla tal delbara med 4',labelEn:'Collect numbers divisible by 4',labelDe:'Sammle durch 4 teilbare Zahlen',
+    descSv:'Ät bara tal där 4 går jämnt upp.',descEn:'Eat only numbers where 4 divides evenly.',descDe:'Iss nur Zahlen, die sich glatt durch 4 teilen lassen.',
+    match:n=>n%4===0
+  }
+];
 const MUSEUM_SETS={
   '+':{emoji:'🍎',nameSv:'Additionsateljén',nameEn:'Addition Atelier',nameDe:'Additionsatelier',
        descSv:'Söta och glittriga fynd från plusvärlden.',descEn:'Sweet and shiny finds from the world of addition.',descDe:'Süße und glänzende Funde aus der Welt der Addition.'},
@@ -1022,19 +1091,19 @@ const MUSEUM_ITEMS=[
 const MUSEUM_SHOP_OFFERS=[
   {id:'curator_box',kind:'museum_box',cost:12,targeted:true,odds:{common:38,uncommon:34,rare:20,epic:7,legendary:1},
    labelSv:'Kurator-box',labelEn:'Curator Box',labelDe:'Kurator-Box',
-   descSv:'Välj räknesätt och öppna en riktad box med hela rarity-trappan.',descEn:'Pick an operation and open a targeted box with the full rarity ladder.',descDe:'Wähle eine Rechenart und öffne eine gezielte Box mit der vollen Seltenheitsleiter.'},
+   descSv:'Välj ett räknesätt. Boxen försöker först ge dig en relik du saknar.',descEn:'Pick an operation. The box tries to give you a relic you do not have yet.',descDe:'Wähle eine Rechenart. Die Box versucht dir zuerst ein Relikt zu geben, das dir noch fehlt.'},
   {id:'fine_box',kind:'museum_box',cost:34,targeted:true,odds:{uncommon:30,rare:40,epic:23,legendary:7},
    labelSv:'Prismabox',labelEn:'Prism Box',labelDe:'Prismabox',
-   descSv:'En dyrare box utan vanliga fynd, perfekt när museet växer.',descEn:'A pricier box without common finds, perfect once the museum grows.',descDe:'Eine teurere Box ohne gewöhnliche Funde, perfekt wenn das Museum wächst.'},
+   descSv:'Dyrare box med bättre chans på fina reliker.',descEn:'A pricier box with a better chance of valuable relics.',descDe:'Eine teurere Box mit besserer Chance auf wertvolle Relikte.'},
   {id:'hat_crate',kind:'headwear_box',cost:60,targeted:false,odds:{rare:48,epic:40,legendary:12},
    labelSv:'Hattask',labelEn:'Hat Crate',labelDe:'Hutkiste',
-   descSv:'Ger en ny huvudbonad när det finns någon kvar i poolen.',descEn:'Grants a new headwear item while any remain in the pool.',descDe:'Gewährt einen neuen Kopfschmuck, solange noch einer im Pool übrig ist.'},
+   descSv:'Ger en ny museumshatt om det finns någon kvar att hitta.',descEn:'Grants a new museum hat if there is still one left to find.',descDe:'Gibt einen neuen Museumshut, wenn noch einer zu finden ist.'},
   {id:'relic_workshop',kind:'craft_relic',cost:120,targeted:true,allowedRarities:['common','uncommon','rare','epic'],
    labelSv:'Relikverkstad',labelEn:'Relic Workshop',labelDe:'Reliktwerkstatt',
-   descSv:'Crafta en valfri saknad relik upp till episk nivå.',descEn:'Craft any missing relic up to epic rarity.',descDe:'Stelle ein beliebiges fehlendes Relikt bis zur epischen Seltenheit her.'},
+   descSv:'Välj exakt vilken saknad relik du vill laga, upp till lila nivå.',descEn:'Choose exactly which missing relic you want to restore, up to epic rarity.',descDe:'Wähle genau das fehlende Relikt, das du wiederherstellen willst, bis zur epischen Stufe.'},
   {id:'legendary_restore',kind:'craft_relic',cost:240,targeted:true,allowedRarities:['legendary'],
    labelSv:'Legendarisk restaurering',labelEn:'Legendary Restoration',labelDe:'Legendäre Restaurierung',
-   descSv:'Återställ en valfri saknad legendarisk relik.',descEn:'Restore any missing legendary relic.',descDe:'Stelle ein beliebiges fehlendes legendäres Relikt wieder her.'}
+   descSv:'Välj en saknad orange relik direkt.',descEn:'Pick one missing orange legendary relic directly.',descDe:'Wähle direkt ein fehlendes oranges legendäres Relikt.'}
 ];
 const MUSEUM_HEADWEAR_DEF=[
   {id:'apple_bow',rarity:'uncommon',source:'set_milestone',op:'+',needed:3,emoji:'🍎',nameSv:'Appelrosett',nameEn:'Apple Bow',nameDe:'Apfelschleife'},
@@ -1099,9 +1168,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i version <strong>3.5</strong>! <strong>Mysteryboxar</strong>, <strong>bonusfrågor</strong> och <strong>Mysteriemuseum</strong>',
-    'New in version <strong>3.5</strong>! <strong>Mystery boxes</strong>, <strong>bonus questions</strong>, and the <strong>Mystery Museum</strong>',
-    'Neu in Version <strong>3.5</strong>! <strong>Mysteryboxen</strong>, <strong>Bonusfragen</strong> und das <strong>Mysterienmuseum</strong>'
+    'Nytt i version <strong>3.8</strong>! <strong>Smartare Sifferportal</strong>, <strong>upp till 2 per runda</strong> och <strong>lättare att hitta</strong>',
+    'New in version <strong>3.8</strong>! A <strong>smarter Number Portal</strong>, <strong>up to 2 per run</strong>, and <strong>easier to find</strong>',
+    'Neu in Version <strong>3.8</strong>! Ein <strong>klügeres Zahlenportal</strong>, <strong>bis zu 2 pro Runde</strong> und <strong>leichter zu finden</strong>'
   );
 }
 function getRangeLabel(range){
@@ -2522,6 +2591,7 @@ let musicOn=true,audioUnlocked=false,isFastMusic=false;
 let goldPhase=false,goldTimeout=null;
 let bonusLife=null,bonusLifeUsedThisRound=false;
 let mysteryBox=null,mysteryPrompt=null;
+let portalBox=null,portalRun=null,portalSnapshot=null,portalOverlayMode='intro',portalSpawnCount=0,portalAnsweredCheckpoint=0,portalPityCorrect=0;
 let mysteryTimerTick=null,mysteryTimerTimeout=null,resumeCountdownTimeout=null;
 let personalBestAtStart=0,recordSoundPlayed=false;
 let eatAnim=null; // {x,y,value,startTime}
@@ -3515,7 +3585,52 @@ function getLatestMuseumFinds(limit=6,museum=loadMuseum()){
     .sort((a,b)=>(museum.items[b.id]||0)-(museum.items[a.id]||0))
     .slice(0,limit);
 }
-function createMuseumSection({title,sub,count,emoji='',open=true,className=''}){
+function getMuseumGuideTip(museum=loadMuseum()){
+  const found=getMuseumCounts(museum).found;
+  const dust=museum.dust||0;
+  const headwearCounts=getMuseumHeadwearCounts(museum);
+  const curatorCost=(MUSEUM_SHOP_OFFERS.find(offer=>offer.id==='curator_box')||{}).cost||0;
+  if(found===0){
+    return pickLangText(
+      'Börja i spelet: ät en mysterybox och svara rätt på bonusfrågan för att få din första relik.',
+      'Start in the game: eat a mystery box and answer the bonus question correctly to get your first relic.',
+      'Starte im Spiel: Iss eine Mysterybox und beantworte die Bonusfrage richtig, um dein erstes Relikt zu bekommen.'
+    );
+  }
+  if(dust>=curatorCost&&found<5){
+    return pickLangText(
+      'Du har råd med en Kurator-box. Välj det räknesätt du helst vill hitta fler reliker i.',
+      'You can afford a Curator Box. Choose the operation where you most want more relics.',
+      'Du kannst dir eine Kurator-Box leisten. Wähle die Rechenart, in der du am liebsten mehr Relikte finden willst.'
+    );
+  }
+  const nextSet=Object.keys(MUSEUM_SETS)
+    .map(op=>({op,cur:countUnlockedMuseumSetItems(op,museum),max:getMuseumSetItems(op).length}))
+    .filter(entry=>entry.cur<entry.max)
+    .sort((a,b)=>((b.cur/b.max)-(a.cur/a.max))||(b.cur-a.cur))[0];
+  if(nextSet){
+    const set=MUSEUM_SETS[nextSet.op];
+    const setLabel=pickLangText(set.nameSv,set.nameEn,set.nameDe||set.nameEn);
+    return pickLangText(
+      `Tips: ${setLabel} är närmast fullt. Du har ${nextSet.cur} av ${nextSet.max} reliker där.`,
+      `Tip: ${setLabel} is closest to full. You already have ${nextSet.cur} of ${nextSet.max} relics there.`,
+      `Tipp: ${setLabel} ist am nächsten komplett. Dort hast du schon ${nextSet.cur} von ${nextSet.max} Relikten.`
+    );
+  }
+  if(headwearCounts.found<headwearCounts.total){
+    return pickLangText(
+      'Nu kan du börja jaga museumshattar och stora skinbelöningar i verkstaden.',
+      'Now you can start chasing museum hats and big skin rewards in the workshop.',
+      'Jetzt kannst du in der Werkstatt Museumshüte und große Skin-Belohnungen jagen.'
+    );
+  }
+  return pickLangText(
+    'Nu är du inne på de stora målen: samla sällsynta reliker och fyll hela museet.',
+    'You are now on the big goals: collect rare relics and fill the whole museum.',
+    'Jetzt bist du bei den großen Zielen: Sammle seltene Relikte und fülle das ganze Museum.'
+  );
+}
+function createMuseumSection({title,sub,count,emoji='',open=true,className=''}){  
   const sec=document.createElement('div');
   sec.className=`museum-set toggleable${className?` ${className}`:''}${open?'':' collapsed'}`;
   sec.innerHTML=`<div class="museum-set-head" role="button" tabindex="0" aria-expanded="${open?'true':'false'}">
@@ -3566,6 +3681,7 @@ function renderMuseumPage(){
   const museumSkins=SKINS_DEF.filter(skin=>skin.unlockMuseum);
   const unlockedMuseumSkins=museumSkins.filter(skin=>isSkinUnlocked(skin.id)).length;
   const recentFinds=getLatestMuseumFinds(6,museum);
+  const guideTip=getMuseumGuideTip(museum);
   const pageCount=pickLangText(`${found} / ${total} fynd`,`${found} / ${total} finds`,`${found} / ${total} Funde`);
   if($('museumPageCount'))$('museumPageCount').textContent=pageCount;
   const summary=$('museumSummary');
@@ -3574,42 +3690,92 @@ function renderMuseumPage(){
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Reliker funna','Relics found','Relikte gefunden')}</div>
         <div class="value">${found} / ${total}</div>
-        <div class="sub">${pickLangText('Varje räknesätt har ett eget samlarset.','Each operation has its own collection set.','Jede Rechenart hat ihr eigenes Sammelset.')}</div>
+        <div class="sub">${pickLangText('Varje räknesätt har 5 egna reliker att samla.','Each operation has 5 relics of its own to collect.','Jede Rechenart hat 5 eigene Relikte zum Sammeln.')}</div>
       </div>
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Sifferstoft','Number Dust','Zahlenstaub')}</div>
         <div class="value">✨ ${museum.dust||0}</div>
-        <div class="sub">${pickLangText('Dubbletter, missade boxar och spruckna boxar blir Sifferstoft.','Duplicates, missed boxes, and cracked boxes become Number Dust.','Doppelstücke, verpasste Boxen und zerbrochene Boxen werden zu Zahlenstaub.')}</div>
+        <div class="sub">${pickLangText('Museets pengar. Du får det från dubbletter och missade boxar.','The museum currency. You get it from duplicates and missed boxes.','Das Geld des Museums. Du bekommst es durch Doppelstücke und verpasste Boxen.')}</div>
       </div>
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Öppnade boxar','Boxes opened','Geöffnete Boxen')}</div>
         <div class="value">${(museum.boxesOpened||0).toLocaleString('sv')}</div>
-        <div class="sub">${pickLangText(`${museum.boxesWon||0} lyckade · ${museum.boxesLost||0} spruckna`,`${museum.boxesWon||0} solved · ${museum.boxesLost||0} cracked`,`${museum.boxesWon||0} geschafft · ${museum.boxesLost||0} zerbrochen`)}</div>
+        <div class="sub">${pickLangText(`${museum.boxesWon||0} öppnade rätt · ${museum.boxesLost||0} sprack`,`${museum.boxesWon||0} opened right · ${museum.boxesLost||0} cracked`,`${museum.boxesWon||0} richtig geöffnet · ${museum.boxesLost||0} zerbrochen`)}</div>
       </div>
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Kompletta set','Completed sets','Komplette Sets')}</div>
         <div class="value">${completedSets.length} / ${Object.keys(MUSEUM_SETS).length}</div>
-        <div class="sub">${pickLangText('Spela olika räknesätt för att fylla hela museet.','Play different operations to fill the whole museum.','Spiele verschiedene Rechenarten, um das ganze Museum zu füllen.')}</div>
+        <div class="sub">${pickLangText('När ett helt set är fullt får du extra belöningar.','When a full set is complete, you earn extra rewards.','Wenn ein ganzes Set voll ist, bekommst du extra Belohnungen.')}</div>
       </div>
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Museumshattar','Museum hats','Museumshüte')}</div>
         <div class="value">${headwearCounts.found} / ${headwearCounts.total}</div>
-        <div class="sub">${pickLangText('Setmilstolpar, hattaskar och mastery låser upp nya bonader.','Set milestones, hat crates, and mastery unlock new headwear.','Set-Meilensteine, Hutkisten und Mastery schalten neuen Kopfschmuck frei.')}</div>
+        <div class="sub">${pickLangText('Nya hattar kommer från fyllda set, hattaskar och stora mål.','New hats come from full sets, hat crates, and big goals.','Neue Hüte kommen aus vollen Sets, Hutkisten und großen Zielen.')}</div>
       </div>
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Skins totalt','Total skins','Skins gesamt')}</div>
         <div class="value">${skinCounts.unlocked} / ${skinCounts.total}</div>
-        <div class="sub">${pickLangText(`${skinCounts.museumTotal} av skinnen hör till museet och prestigejakten.`,`${skinCounts.museumTotal} of the skins belong to the museum prestige track.`,`${skinCounts.museumTotal} der Skins gehören zur Museums-Prestigeschiene.`)}</div>
+        <div class="sub">${pickLangText(`${skinCounts.museumTotal} skins hör till museet och låses upp här.`,`${skinCounts.museumTotal} skins belong to the museum and unlock here.`,`${skinCounts.museumTotal} Skins gehören zum Museum und werden hier freigeschaltet.`)}</div>
       </div>
       <div class="museum-summary-card">
         <div class="kicker">${pickLangText('Bonusstoft','Bonus Dust','Bonusstaub')}</div>
         <div class="value">${milestoneCounts.found} / ${milestoneCounts.total}</div>
-        <div class="sub">${pickLangText('Kompletta set och rarity-mastery ger extra Sifferstoft.','Complete sets and rarity mastery grant extra Number Dust.','Komplette Sets und Seltenheits-Mastery geben extra Zahlenstaub.')}</div>
+        <div class="sub">${pickLangText('Du får extra Sifferstoft när du klarar hela set och stora mål.','You earn extra Number Dust when you finish full sets and big goals.','Du bekommst extra Zahlenstaub, wenn du ganze Sets und große Ziele schaffst.')}</div>
       </div>`;
   }
   const el=$('museumPageContent');
   if(!el)return;
   el.innerHTML='';
+  const guideSec=createMuseumSection({
+    title:pickLangText('Så funkar museet','How the museum works','So funktioniert das Museum'),
+    sub:pickLangText('Kort version för att snabbt förstå vad du ska göra här.','A short version so you quickly understand what to do here.','Die Kurzversion, damit du schnell verstehst, was du hier tun sollst.'),
+    count:pickLangText('4 steg','4 steps','4 Schritte'),
+    emoji:'🗺️',
+    open:true
+  });
+  const guideBanner=document.createElement('div');
+  guideBanner.className='museum-action-banner';
+  guideBanner.innerHTML=`<div class="museum-guide-step">${pickLangText('Börja här','Start here','Starte hier')}</div><div class="museum-guide-title">${guideTip}</div>`;
+  guideSec.body.appendChild(guideBanner);
+  const guideGrid=document.createElement('div');
+  guideGrid.className='museum-guide-grid';
+  [
+    {
+      emoji:'🎁',
+      step:pickLangText('Steg 1','Step 1','Schritt 1'),
+      title:pickLangText('Ät en mysterybox','Eat a mystery box','Iss eine Mysterybox'),
+      desc:pickLangText('När du hittar en box i spelet får du en bonusfråga.','When you find a box in the game, you get a bonus question.','Wenn du im Spiel eine Box findest, bekommst du eine Bonusfrage.')
+    },
+    {
+      emoji:'🧠',
+      step:pickLangText('Steg 2','Step 2','Schritt 2'),
+      title:pickLangText('Svara rätt','Answer correctly','Antworte richtig'),
+      desc:pickLangText('Rätt svar öppnar boxen. Fel svar eller timeout ger bara lite Sifferstoft.','A correct answer opens the box. A wrong answer or timeout only gives a little Number Dust.','Eine richtige Antwort öffnet die Box. Eine falsche Antwort oder Zeitablauf gibt nur etwas Zahlenstaub.')
+    },
+    {
+      emoji:'✨',
+      step:pickLangText('Steg 3','Step 3','Schritt 3'),
+      title:pickLangText('Samla Sifferstoft','Collect Number Dust','Sammle Zahlenstaub'),
+      desc:pickLangText('Dubbletter och missade boxar blir Sifferstoft. Det är museets pengar.','Duplicates and missed boxes become Number Dust. It is the museum currency.','Doppelstücke und verpasste Boxen werden zu Zahlenstaub. Das ist die Währung des Museums.')
+    },
+    {
+      emoji:'🎨',
+      step:pickLangText('Steg 4','Step 4','Schritt 4'),
+      title:pickLangText('Köp och lås upp','Buy and unlock','Kaufen und freischalten'),
+      desc:pickLangText('Använd Sifferstoft i verkstaden. Fyllda set ger fler hattar, stoft och skins.','Use Number Dust in the workshop. Full sets give more hats, dust, and skins.','Benutze Zahlenstaub in der Werkstatt. Volle Sets geben mehr Hüte, Staub und Skins.')
+    }
+  ].forEach(entry=>{
+    const card=document.createElement('div');
+    card.className='museum-guide-card';
+    card.innerHTML=`<div class="museum-guide-card-top"><div class="museum-guide-emoji">${entry.emoji}</div><div class="museum-guide-step">${entry.step}</div></div><div class="museum-guide-title">${entry.title}</div><div class="museum-guide-desc">${entry.desc}</div>`;
+    guideGrid.appendChild(card);
+  });
+  guideSec.body.appendChild(guideGrid);
+  const rarityHelp=document.createElement('div');
+  rarityHelp.className='museum-rarity-help';
+  rarityHelp.innerHTML=`<div class="museum-guide-step">${pickLangText('Färg på reliker','Relic colors','Reliktfarben')}</div><div class="museum-rarity-row">${MUSEUM_RARITY_ORDER.map(rarityId=>`<span class="rarity-chip ${rarityId}">${getRarityLabel(rarityId)}</span>`).join('')}</div><div class="museum-guide-desc">${pickLangText('Vit är vanligast att hitta. Orange är svårast och mest speciell.','White is the most common to find. Orange is the rarest and most special.','Weiß ist am häufigsten zu finden. Orange ist am seltensten und am besonderssten.')}</div>`;
+  guideSec.body.appendChild(rarityHelp);
+  el.appendChild(guideSec.sec);
   if(recentFinds.length){
     const recentSec=createMuseumSection({
       title:pickLangText('Senast funna reliker','Latest relics found','Zuletzt gefundene Relikte'),
@@ -3637,9 +3803,9 @@ function renderMuseumPage(){
     el.appendChild(recentSec.sec);
   }
   const shopSec=createMuseumSection({
-    title:pickLangText('Museiverkstad','Museum Workshop','Museumswerkstatt'),
-    sub:pickLangText('Använd Sifferstoft för riktade boxar, hattar och restaurering.','Spend Number Dust on targeted boxes, hats, and restoration.','Nutze Zahlenstaub für gezielte Boxen, Hüte und Restaurierung.'),
-    count:pickLangText('Stoftbutik','Dust shop','Staubladen'),
+    title:pickLangText('Butik & verkstad','Shop & workshop','Shop & Werkstatt'),
+    sub:pickLangText('Här använder du Sifferstoft för att hitta fler reliker, hattar och stora belöningar.','This is where you spend Number Dust on more relics, hats, and big rewards.','Hier gibst du Zahlenstaub für mehr Relikte, Hüte und große Belohnungen aus.'),
+    count:pickLangText('Köp här','Buy here','Hier kaufen'),
     emoji:'🧰',
     open:false,
     className:'museum-shop'
@@ -3660,7 +3826,7 @@ function renderMuseumPage(){
     const actions=document.createElement('div');
     actions.className=offer.kind==='craft_relic'?'museum-craft-grid':'museum-shop-actions';
     if(offer.kind==='museum_box'){
-      stockText=pickLangText('Välj vilket räknesätt boxen ska leta i.','Choose which operation the box should search in.','Wähle, in welcher Rechenart die Box suchen soll.');
+      stockText=pickLangText('Välj vilket räknesätt du vill leta reliker i.','Choose which operation you want to search for relics in.','Wähle, in welcher Rechenart du nach Relikten suchen willst.');
       oddsHtml=renderMuseumOddsChips(offer.odds||{});
       const opRow=document.createElement('div');
       opRow.className='museum-op-row';
@@ -3674,12 +3840,12 @@ function renderMuseumPage(){
         opRow.appendChild(btn);
       });
       actions.appendChild(opRow);
-      noteHtml=`<div class="museum-reward-tip">${pickLangText('Missing-first inom vald samling: boxen försöker alltid ge något du saknar innan den ger dubbletter.','Missing-first inside the chosen collection: the box tries to give you something new before any duplicate.','Missing-first innerhalb der gewählten Sammlung: Die Box versucht zuerst etwas Neues zu geben, bevor sie Doppelstücke gibt.')}</div>`;
+      noteHtml=`<div class="museum-reward-tip">${pickLangText('Försöker först ge dig något nytt innan den ger en dubblett.','It tries to give you something new before any duplicate.','Sie versucht dir zuerst etwas Neues zu geben, bevor sie ein Doppelstück gibt.')}</div>`;
     }else if(offer.kind==='headwear_box'){
       const pool=getMuseumHeadwearPool(offer,museum);
       const weights=getMuseumOfferRarityWeights(offer,pool);
       stockText=pool.length
-        ? pickLangText(`${pool.length} museumshattar kvar i poolen.`,`${pool.length} museum hats still in the pool.`,`${pool.length} Museumshüte sind noch im Pool.`)
+        ? pickLangText(`${pool.length} nya museumshattar finns kvar att hitta.`,`${pool.length} new museum hats are still waiting to be found.`,`${pool.length} neue Museumshüte warten noch darauf, gefunden zu werden.`)
         : pickLangText('Alla hattar från hattasken är redan upplåsta.','All hats from the hat crate are already unlocked.','Alle Hüte aus der Hutkiste sind bereits freigeschaltet.');
       oddsHtml=pool.length?renderMuseumOddsChips(weights):'';
       const btn=document.createElement('button');
@@ -3688,12 +3854,12 @@ function renderMuseumPage(){
       btn.textContent=pickLangText('Öppna hattask','Open hat crate','Hutkiste öffnen');
       btn.addEventListener('click',()=>purchaseMuseumHeadwearBox(offer.id));
       actions.appendChild(btn);
-      noteHtml=`<div class="museum-note">${pickLangText('Hattasken ger bara museumshuvudbonader som du inte redan äger.','The hat crate only grants museum headwear you do not already own.','Die Hutkiste gibt nur Museumskopfschmuck, den du noch nicht besitzt.')}</div>`;
+      noteHtml=`<div class="museum-note">${pickLangText('Ger alltid en ny museumshatt om det finns någon kvar.','It always gives a new museum hat if one is still left.','Sie gibt immer einen neuen Museumshut, wenn noch einer übrig ist.')}</div>`;
     }else if(offer.kind==='craft_relic'){
       const craftable=getCraftableMuseumItems(offer,museum);
       stockText=craftable.length
-        ? pickLangText(`${craftable.length} reliker kan restaureras just nu.`,`${craftable.length} relics can be restored right now.`,`${craftable.length} Relikte können gerade restauriert werden.`)
-        : pickLangText('Inga saknade reliker matchar den här verkstaden just nu.','No missing relics match this workshop right now.','Aktuell passen keine fehlenden Relikte zu dieser Werkstatt.');
+        ? pickLangText(`${craftable.length} saknade reliker går att laga just nu.`,`${craftable.length} missing relics can be restored right now.`,`${craftable.length} fehlende Relikte können gerade wiederhergestellt werden.`)
+        : pickLangText('Just nu finns inga saknade reliker som passar här.','Right now there are no missing relics that fit here.','Im Moment gibt es hier keine passenden fehlenden Relikte.');
       craftable.forEach(item=>{
         const btn=document.createElement('button');
         btn.className='museum-craft-btn';
@@ -3702,7 +3868,7 @@ function renderMuseumPage(){
         btn.addEventListener('click',()=>craftMuseumItemFromOffer(offer.id,item.id));
         actions.appendChild(btn);
       });
-      if(!craftable.length)noteHtml=`<div class="museum-note">${pickLangText('Spela eller öppna boxar först för att skapa nya luckor att restaurera mot.','Play or open boxes first if you want new missing relic targets to restore.','Spiele oder öffne zuerst Boxen, wenn du neue fehlende Relikte zum Restaurieren möchtest.')}</div>`;
+      if(!craftable.length)noteHtml=`<div class="museum-note">${pickLangText('Spela vidare och hitta fler reliker först, så får verkstaden nya mål.','Keep playing and find more relics first, then the workshop gets new targets.','Spiele weiter und finde zuerst mehr Relikte, dann bekommt die Werkstatt neue Ziele.')}</div>`;
     }
     card.innerHTML=`<div class="museum-shop-top">
       <div class="museum-shop-title">${title}</div>
@@ -3719,8 +3885,8 @@ function renderMuseumPage(){
   shopSec.body.appendChild(shopGrid);
   el.appendChild(shopSec.sec);
   const rewardSec=createMuseumSection({
-    title:pickLangText('Museumskins','Museum skins','Museumsskins'),
-    sub:pickLangText('Relikset och rarity-milstolpar låser upp nya prestigeormar.','Relic sets and rarity milestones unlock new prestige snakes.','Reliktsets und Seltenheits-Meilensteine schalten neue Prestigeschlangen frei.'),
+    title:pickLangText('Skins att låsa upp','Skins to unlock','Skins zum Freischalten'),
+    sub:pickLangText('När du fyller set och hittar sällsynta reliker låser du upp större skinbelöningar.','When you fill sets and find rare relics, you unlock bigger skin rewards.','Wenn du Sets füllst und seltene Relikte findest, schaltest du größere Skin-Belohnungen frei.'),
     count:`${unlockedMuseumSkins} / ${museumSkins.length}`,
     emoji:'🎨',
     open:false
@@ -3736,8 +3902,8 @@ function renderMuseumPage(){
       <div class="museum-reward-name">${pickDefText(skin,'name',SKIN_I18N_DE)}</div>
       <div class="museum-reward-desc">${pickDefText(skin,'desc',SKIN_I18N_DE,'descSv')}</div>
       <div class="museum-reward-meta">${prog.label?`${prog.label}: ${Math.min(prog.cur,prog.max)} / ${prog.max}`:''}</div>
-      <div class="museum-reward-meta museum-reward-bonus">${pickLangText('Bonusstoft via milstolpar hjälper dig vidare i butiken.','Bonus Dust from milestones helps fund the workshop.','Bonusstaub aus Meilensteinen hilft dir weiter in der Werkstatt.')}</div>
-      <div class="museum-reward-status">${unlockedSkin?pickLangText('Upplåst','Unlocked','Freigeschaltet'):pickLangText('Prestigebelöning','Prestige reward','Prestigebelohnung')}</div>`;
+      <div class="museum-reward-meta museum-reward-bonus">${pickLangText('Stora mål ger extra Sifferstoft på vägen.','Big goals give extra Number Dust along the way.','Große Ziele geben unterwegs extra Zahlenstaub.')}</div>
+      <div class="museum-reward-status">${unlockedSkin?pickLangText('Upplåst','Unlocked','Freigeschaltet'):pickLangText('Stor belöning','Big reward','Große Belohnung')}</div>`;
     rewardGrid.appendChild(card);
   });
   rewardSec.body.appendChild(rewardGrid);
@@ -3745,8 +3911,8 @@ function renderMuseumPage(){
   const nextTargets=getNextMuseumSkinTargets(museum,3);
   if(nextTargets.length){
     const nextSec=createMuseumSection({
-      title:pickLangText('Närmast att låsa upp','Closest to unlock','Am nächsten zum Freischalten'),
-      sub:pickLangText('Här är de museumsskins som ligger närmast just nu.','These museum skins are currently the closest targets.','Diese Museumsskins sind aktuell am nächsten.'),
+      title:pickLangText('Bra mål just nu','Good goals right now','Gute Ziele gerade jetzt'),
+      sub:pickLangText('Om du inte vet vad du ska jaga härnäst, börja med någon av de här.','If you do not know what to chase next, start with one of these.','Wenn du nicht weißt, was du als Nächstes jagen sollst, fang mit einem von diesen an.'),
       count:String(nextTargets.length),
       emoji:'🎯',
       open:true
@@ -4080,9 +4246,10 @@ function updateMysteryBox(now=performance.now()){
 function updateRoundBonuses(now=performance.now()){
   updateBonusLife(now);
   updateMysteryBox(now);
+  updatePortalBox(now);
 }
 function canSpawnBonusLife(){
-  return !practiceMode&&!bonusLife&&!bonusLifeUsedThisRound&&!goldPhase&&score>=BONUS_LIFE_MIN_SCORE&&lives>0&&lives<3;
+  return !practiceMode&&!bonusLife&&!bonusLifeUsedThisRound&&!portalBox&&!goldPhase&&score>=BONUS_LIFE_MIN_SCORE&&lives>0&&lives<3;
 }
 function boardDistance(ax,ay,bx,by){
   let dx=Math.abs(ax-bx),dy=Math.abs(ay-by);
@@ -4096,7 +4263,8 @@ function findBonusLifeSpot(){
   const occ=new Set([
     ...snake.map(s=>`${s.x},${s.y}`),
     ...tiles.map(t=>`${t.x},${t.y}`),
-    ...(mysteryBox?[`${mysteryBox.x},${mysteryBox.y}`]:[])
+    ...(mysteryBox?[`${mysteryBox.x},${mysteryBox.y}`]:[]),
+    ...(portalBox?[`${portalBox.x},${portalBox.y}`]:[])
   ]);
   const head=snake[0];
   const preferred=[],fallback=[],anyValid=[];
@@ -4123,7 +4291,7 @@ function maybeSpawnBonusLife(){
   return true;
 }
 function canSpawnMysteryBox(){
-  return !mysteryBox&&!mysteryPrompt&&!goldPhase&&score>=MYSTERY_MIN_SCORE&&sessionTotal>=MYSTERY_MIN_QUESTIONS;
+  return !mysteryBox&&!mysteryPrompt&&!portalBox&&!goldPhase&&score>=MYSTERY_MIN_SCORE&&sessionTotal>=MYSTERY_MIN_QUESTIONS;
 }
 function rollWeightedRarity(weights){
   const entries=MUSEUM_RARITY_ORDER.filter(rarityId=>weights&&weights[rarityId]>0);
@@ -4143,7 +4311,8 @@ function findMysteryBoxSpot(){
   const occ=new Set([
     ...snake.map(s=>`${s.x},${s.y}`),
     ...tiles.map(t=>`${t.x},${t.y}`),
-    ...(bonusLife?[`${bonusLife.x},${bonusLife.y}`]:[])
+    ...(bonusLife?[`${bonusLife.x},${bonusLife.y}`]:[]),
+    ...(portalBox?[`${portalBox.x},${portalBox.y}`]:[])
   ]);
   const head=snake[0];
   const pool=[];
@@ -4169,6 +4338,334 @@ function maybeSpawnMysteryBox(source='correct'){
 function maybeSpawnRoundBonuses(source='correct'){
   maybeSpawnBonusLife();
   maybeSpawnMysteryBox(source);
+  maybeSpawnPortalBox(source);
+}
+function cloneSnakeState(list){return(list||[]).map(seg=>({...seg}));}
+function cloneTileState(list){return(list||[]).map(tile=>({...tile}));}
+function cloneDirQueue(list){return(list||[]).map(d=>({...d}));}
+function getPortalMissionPool(){
+  if(portalSpawnCount<=1)return PORTAL_MISSIONS.filter(mission=>mission.tier===1);
+  return PORTAL_MISSIONS;
+}
+function pickPortalMission(){
+  const pool=getPortalMissionPool();
+  return pool[R(0,Math.max(0,pool.length-1))]||PORTAL_MISSIONS[0];
+}
+function getPortalMissionLabel(mission=portalRun?.mission){
+  if(!mission)return '';
+  return pickLangText(mission.labelSv,mission.labelEn,mission.labelDe||mission.labelEn);
+}
+function getPortalMissionDesc(mission=portalRun?.mission){
+  if(!mission)return '';
+  return pickLangText(mission.descSv,mission.descEn,mission.descDe||mission.descEn);
+}
+function getPortalTimeLeftMs(run=portalRun){
+  if(!run||!run.endsAt)return 0;
+  return Math.max(0,run.endsAt-performance.now());
+}
+function updatePortalBox(now=performance.now()){
+  if(portalBox&&now>=portalBox.expiresAt){
+    portalBox=null;
+    enqueueToast({
+      borderColor:'rgba(120,236,255,.58)',
+      html:`<div class="mt-emoji">🌀</div>
+      <div class="mt-text"><div class="mt-label">${pickLangText('Portalen slöt sig','The portal closed','Das Portal schloss sich')}</div>
+      <div class="mt-name">${pickLangText('Bonusbanan försvann den här gången.','The bonus lane vanished this time.','Die Bonusbahn ist diesmal verschwunden.')}</div>
+      <div class="mt-desc">${pickLangText('Efter fler rätta svar kan en ny portal öppnas senare i rundan.','After more correct answers, a new portal can open later in the run.','Nach mehr richtigen Antworten kann sich später in der Runde ein neues Portal öffnen.')}</div></div>`
+    });
+  }
+}
+function getPortalQuestionGate(){
+  return portalSpawnCount<=0?PORTAL_FIRST_MIN_QUESTIONS:(portalAnsweredCheckpoint+PORTAL_BETWEEN_PORTALS_QUESTIONS);
+}
+function getPortalChanceTierIndex(){
+  return Math.min(portalSpawnCount,PORTAL_MAX_PER_ROUND-1);
+}
+function getPortalSpawnChance(){
+  const idx=getPortalChanceTierIndex();
+  const base=PORTAL_BASE_CHANCES[idx]??PORTAL_BASE_CHANCES[PORTAL_BASE_CHANCES.length-1]??0.05;
+  const max=PORTAL_MAX_CHANCES[idx]??PORTAL_MAX_CHANCES[PORTAL_MAX_CHANCES.length-1]??0.12;
+  return Math.min(max,base+portalPityCorrect*PORTAL_PITY_STEP);
+}
+function canSpawnPortalBox(){
+  return !portalBox&&!portalRun&&!portalSnapshot&&!mysteryBox&&!mysteryPrompt&&!bonusLife&&!goldPhase&&portalSpawnCount<PORTAL_MAX_PER_ROUND&&sessionTotal>=getPortalQuestionGate();
+}
+function findPortalBoxSpot(){
+  const occ=new Set([
+    ...snake.map(s=>`${s.x},${s.y}`),
+    ...tiles.map(t=>`${t.x},${t.y}`),
+    ...(bonusLife?[`${bonusLife.x},${bonusLife.y}`]:[]),
+    ...(mysteryBox?[`${mysteryBox.x},${mysteryBox.y}`]:[])
+  ]);
+  const head=snake[0];
+  const pool=[];
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      if(occ.has(`${x},${y}`))continue;
+      if(boardDistance(x,y,head.x,head.y)<PORTAL_MIN_DIST)continue;
+      pool.push({x,y});
+    }
+  }
+  return pool.length?pool[R(0,pool.length-1)]:null;
+}
+function maybeSpawnPortalBox(source='correct'){
+  if(source!=='correct'||!canSpawnPortalBox())return false;
+  const chance=getPortalSpawnChance();
+  if(Math.random()>chance){
+    portalPityCorrect++;
+    return false;
+  }
+  const p=findPortalBoxSpot();
+  if(!p)return false;
+  portalBox={x:p.x,y:p.y,spawnedAt:performance.now(),expiresAt:performance.now()+PORTAL_BOX_LIFETIME};
+  portalSpawnCount++;
+  portalAnsweredCheckpoint=sessionTotal;
+  portalPityCorrect=0;
+  enqueueToast({
+    borderColor:'rgba(120,236,255,.58)',
+    duration:2800,
+    html:`<div class="mt-emoji">🌀</div>
+    <div class="mt-text"><div class="mt-label">${pickLangText('Sifferportal öppnad!','Number Portal opened!','Zahlenportal geöffnet!')}</div>
+    <div class="mt-name">${pickLangText('Ät portalen för en kort bonusbana.','Eat the portal for a short bonus lane.','Iss das Portal für eine kurze Bonusbahn.')}</div>
+    <div class="mt-desc">${pickLangText(`Portal ${portalSpawnCount} av ${PORTAL_MAX_PER_ROUND} den här rundan.`,`Portal ${portalSpawnCount} of ${PORTAL_MAX_PER_ROUND} this run.`,`Portal ${portalSpawnCount} von ${PORTAL_MAX_PER_ROUND} in dieser Runde.`)}</div></div>`
+  });
+  return true;
+}
+function createPortalSnapshot(){
+  return{
+    snake:cloneSnakeState(snake),
+    tiles:cloneTileState(tiles),
+    dir:{...dir},
+    nextDir:{...nextDir},
+    pendingDirs:cloneDirQueue(pendingDirs),
+    problem:problem?{...problem}:null,
+    bonusLife:bonusLife?{...bonusLife}:null,
+    bonusLifeUsedThisRound:!!bonusLifeUsedThisRound,
+    mysteryBox:mysteryBox?{...mysteryBox}:null,
+    eatAnim:eatAnim?{...eatAnim}:null
+  };
+}
+function restorePortalSnapshot(){
+  if(!portalSnapshot)return;
+  const snap=portalSnapshot;
+  snake=cloneSnakeState(snap.snake);
+  tiles=cloneTileState(snap.tiles);
+  dir={...snap.dir};
+  nextDir={...snap.nextDir};
+  pendingDirs=cloneDirQueue(snap.pendingDirs);
+  problem=snap.problem?{...snap.problem}:problem;
+  bonusLife=snap.bonusLife?{...snap.bonusLife}:null;
+  bonusLifeUsedThisRound=!!snap.bonusLifeUsedThisRound;
+  mysteryBox=snap.mysteryBox?{...snap.mysteryBox}:null;
+  eatAnim=snap.eatAnim?{...snap.eatAnim}:null;
+  portalSnapshot=null;
+  portalBox=null;
+}
+function findPortalTileSpot(minDist=2){
+  const occ=new Set([
+    ...snake.map(s=>`${s.x},${s.y}`),
+    ...tiles.map(t=>`${t.x},${t.y}`)
+  ]);
+  const head=snake[0];
+  const pool=[];
+  for(let y=0;y<ROWS;y++){
+    for(let x=0;x<COLS;x++){
+      if(occ.has(`${x},${y}`))continue;
+      if(boardDistance(x,y,head.x,head.y)<minDist)continue;
+      pool.push({x,y});
+    }
+  }
+  return pool.length?pool[R(0,pool.length-1)]:null;
+}
+function rollPortalValueForMission(mission,wantValid){
+  for(let att=0;att<240;att++){
+    const value=R(PORTAL_VALUE_MIN,PORTAL_VALUE_MAX);
+    if(!!mission.match(value)===!!wantValid)return value;
+  }
+  for(let value=PORTAL_VALUE_MIN;value<=PORTAL_VALUE_MAX;value++){
+    if(!!mission.match(value)===!!wantValid)return value;
+  }
+  return PORTAL_VALUE_MIN;
+}
+function createPortalTileAt(x,y,mission,forceValid=null){
+  const wantValid=forceValid==null?(Math.random()<0.58):!!forceValid;
+  const value=rollPortalValueForMission(mission,wantValid);
+  return {x,y,value,correct:!!mission.match(value),portal:true,isGold:false};
+}
+function getPortalRefillBias(){
+  const validCount=tiles.filter(tile=>tile.portal&&tile.correct).length;
+  const invalidCount=tiles.filter(tile=>tile.portal&&!tile.correct).length;
+  if(validCount<2)return true;
+  if(invalidCount<2)return false;
+  return null;
+}
+function refillPortalTiles(){
+  if(!portalRun)return;
+  let guard=0;
+  while(tiles.length<PORTAL_TILE_COUNT&&guard<32){
+    const spot=findPortalTileSpot(2);
+    if(!spot)break;
+    tiles.push(createPortalTileAt(spot.x,spot.y,portalRun.mission,getPortalRefillBias()));
+    guard++;
+  }
+}
+function renderPortalOverlay(){
+  if(!portalRun)return;
+  const isResult=portalOverlayMode==='result'||!!portalRun.finished;
+  const missionLabel=getPortalMissionLabel(portalRun.mission);
+  const missionDesc=getPortalMissionDesc(portalRun.mission);
+  const secs=Math.max(0,Math.ceil(getPortalTimeLeftMs(portalRun)/1000));
+  $('portalKickerEl').textContent=pickLangText('🌀 Sifferportal','🌀 Number Portal','🌀 Zahlenportal');
+  $('portalMissionEl').textContent=`${portalRun.mission?.emoji||'🧠'} ${missionLabel}`;
+  if(!isResult){
+    $('portalTitleEl').textContent=pickLangText('BONUSBANA','BONUS LANE','BONUSBAHN');
+    $('portalDescEl').textContent=pickLangText('Du hittade en hemlig portal. Här inne jagar du Sifferstoft på tid i en trygg bonusbana.','You found a secret portal. Inside, you hunt Number Dust on a timer in a safe bonus lane.','Du hast ein geheimes Portal gefunden. Darin jagst du Zahlenstaub auf Zeit in einer sicheren Bonusbahn.');
+    $('portalMetaEl').textContent=pickLangText(`Tid: ${Math.max(1,Math.ceil(PORTAL_RUN_TIME_MS/1000))} sekunder · upp till ${PORTAL_MAX_PER_ROUND} portaler per runda`,`Time: ${Math.max(1,Math.ceil(PORTAL_RUN_TIME_MS/1000))} seconds · up to ${PORTAL_MAX_PER_ROUND} portals per run`,`Zeit: ${Math.max(1,Math.ceil(PORTAL_RUN_TIME_MS/1000))} Sekunden · bis zu ${PORTAL_MAX_PER_ROUND} Portale pro Runde`);
+    $('portalResultEl').textContent=pickLangText(`Rätt tal ger ✨ ${PORTAL_CORRECT_DUST} Sifferstoft. Var ${PORTAL_STREAK_BONUS_EVERY}:e rätt i rad ger +${PORTAL_STREAK_BONUS_DUST} bonus.`,`Correct numbers give ✨ ${PORTAL_CORRECT_DUST} Number Dust. Every ${PORTAL_STREAK_BONUS_EVERY}th correct in a row gives +${PORTAL_STREAK_BONUS_DUST} bonus.`,`Richtige Zahlen geben ✨ ${PORTAL_CORRECT_DUST} Zahlenstaub. Jede ${PORTAL_STREAK_BONUS_EVERY}. richtige Zahl in Folge gibt +${PORTAL_STREAK_BONUS_DUST} Bonus.`);
+    $('portalNoteEl').textContent=pickLangText(`${missionDesc} Fel tal eller en krock med kroppen kostar ${Math.floor(PORTAL_TIME_PENALTY_MS/100)/10} sekunder.`,`${missionDesc} A wrong number or a body bump costs ${Math.floor(PORTAL_TIME_PENALTY_MS/100)/10} seconds.`,`${missionDesc} Eine falsche Zahl oder ein Körperstoß kostet ${Math.floor(PORTAL_TIME_PENALTY_MS/100)/10} Sekunden.`);
+    $('btnPortalAction').textContent=pickLangText('Kör!','Go!','Los!');
+  }else{
+    $('portalTitleEl').textContent=pickLangText('PORTAL KLAR','PORTAL CLEAR','PORTAL GESCHAFFT');
+    $('portalDescEl').textContent=pickLangText(`Portalen stängdes efter ${Math.max(0,Math.ceil((portalRun.durationMs||PORTAL_RUN_TIME_MS)/1000))} sekunder.`,`The portal closed after ${Math.max(0,Math.ceil((portalRun.durationMs||PORTAL_RUN_TIME_MS)/1000))} seconds.`,`Das Portal schloss sich nach ${Math.max(0,Math.ceil((portalRun.durationMs||PORTAL_RUN_TIME_MS)/1000))} Sekunden.`);
+    $('portalMetaEl').textContent=pickLangText(`Rätt: ${portalRun.correct||0} · Fel: ${portalRun.wrong||0} · Bästa streak: ${portalRun.bestStreak||0}`,`Correct: ${portalRun.correct||0} · Wrong: ${portalRun.wrong||0} · Best streak: ${portalRun.bestStreak||0}`,`Richtig: ${portalRun.correct||0} · Falsch: ${portalRun.wrong||0} · Beste Serie: ${portalRun.bestStreak||0}`);
+    $('portalResultEl').textContent=(portalRun.dust||0)>0
+      ? pickLangText(`✨ +${portalRun.dust} Sifferstoft läggs nu till i Mysteriemuseum.`,`✨ +${portalRun.dust} Number Dust is now added to the Mystery Museum.`,`✨ +${portalRun.dust} Zahlenstaub wird jetzt dem Mysterienmuseum hinzugefügt.`)
+      : pickLangText('Den här gången hann du inte samla något Sifferstoft.','This time you did not manage to collect any Number Dust.','Diesmal konntest du keinen Zahlenstaub sammeln.');
+    $('portalNoteEl').textContent=pickLangText(`Uppdrag: ${missionLabel}. Klarar du fler tal kan en andra portal fortfarande dyka upp senare i rundan.`,`Mission: ${missionLabel}. If you solve more answers, a second portal can still appear later in the run.`,`Aufgabe: ${missionLabel}. Wenn du mehr Aufgaben schaffst, kann später in der Runde noch ein zweites Portal erscheinen.`);
+    $('btnPortalAction').textContent=pickLangText('Tillbaka','Back','Zurück');
+  }
+}
+function openPortalChallenge(box){
+  if(!box)return;
+  portalSnapshot=createPortalSnapshot();
+  portalBox=null;
+  bonusLife=null;
+  mysteryBox=null;
+  eatAnim=null;
+  portalRun={
+    mission:pickPortalMission(),
+    dust:0,
+    correct:0,
+    wrong:0,
+    streak:0,
+    bestStreak:0,
+    finished:false,
+    rewardGranted:false,
+    startedAt:0,
+    endsAt:0,
+    durationMs:PORTAL_RUN_TIME_MS
+  };
+  portalOverlayMode='intro';
+  state='portal_intro';
+  clearResumeCountdown();
+  clearMysteryQuestionTimer();
+  bgMusic.pause();
+  fastMusic.pause();
+  tryMysteryMusic();
+  renderPortalOverlay();
+  $('portalOverlay').classList.add('show');
+}
+function startPortalRun(){
+  if(!portalRun)return;
+  const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
+  snake=[
+    {x:mx,y:my,px:mx,py:my},
+    {x:mx-1,y:my,px:mx-1,py:my}
+  ];
+  dir={x:1,y:0};
+  nextDir={x:1,y:0};
+  pendingDirs=[];
+  tiles=[];
+  portalRun.startedAt=performance.now();
+  portalRun.endsAt=portalRun.startedAt+PORTAL_RUN_TIME_MS;
+  portalRun.durationMs=PORTAL_RUN_TIME_MS;
+  refillPortalTiles();
+  $('portalOverlay').classList.remove('show');
+  state='portal';
+  moveProgress=0;
+  updateHUD();
+  lastTickTime=performance.now();
+  requestAnimationFrame(gameLoop);
+}
+function applyPortalPenalty(ms=PORTAL_TIME_PENALTY_MS){
+  if(!portalRun)return;
+  const now=performance.now();
+  portalRun.endsAt=Math.max(now+1100,portalRun.endsAt-ms);
+  flashFx('bad');
+  sfxBad();
+}
+function finishPortalRun(reason='time'){
+  if(!portalRun||portalRun.finished)return;
+  portalRun.finished=true;
+  portalRun.finishReason=reason;
+  if(!portalRun.rewardGranted){
+    portalRun.rewardGranted=true;
+    if(portalRun.dust>0)addMuseumDust(portalRun.dust);
+    updateMuseumNavBtn();
+  }
+  portalOverlayMode='result';
+  state='portal_result';
+  renderPortalOverlay();
+  $('portalOverlay').classList.add('show');
+}
+function resumeFromPortal(){
+  if(!portalRun||!portalRun.finished)return;
+  stopMysteryMusic(true);
+  $('portalOverlay').classList.remove('show');
+  restorePortalSnapshot();
+  portalRun=null;
+  portalOverlayMode='intro';
+  updateHUD();
+  startMysteryResumeCountdown();
+}
+function tickPortal(){
+  if(!portalRun)return;
+  if(pendingDirs.length)dir={...pendingDirs.shift()};
+  else dir={...nextDir};
+  nextDir=pendingDirs.length?{...pendingDirs[0]}:{...dir};
+  const old=cloneSnakeState(snake);
+  let hx=snake[0].x+dir.x,hy=snake[0].y+dir.y;
+  hx=((hx%COLS)+COLS)%COLS;
+  hy=((hy%ROWS)+ROWS)%ROWS;
+  const bodyCheckLen=Math.max(0,snake.length-1);
+  for(let i=0;i<bodyCheckLen;i++){
+    if(snake[i].x===hx&&snake[i].y===hy){
+      portalRun.streak=0;
+      applyPortalPenalty(PORTAL_TIME_PENALTY_MS);
+      updateHUD();
+      if(getPortalTimeLeftMs()<=0)finishPortalRun('time');
+      return;
+    }
+  }
+  snake.unshift({x:hx,y:hy,px:old[0].x,py:old[0].y});
+  snake.pop();
+  for(let i=1;i<snake.length;i++){
+    if(old[i]){
+      snake[i].px=old[i].x;
+      snake[i].py=old[i].y;
+    }
+  }
+  const ti=tiles.findIndex(tile=>tile.x===hx&&tile.y===hy);
+  if(ti!==-1){
+    const tile=tiles.splice(ti,1)[0];
+    if(tile.correct){
+      portalRun.correct=(portalRun.correct||0)+1;
+      portalRun.streak=(portalRun.streak||0)+1;
+      portalRun.bestStreak=Math.max(portalRun.bestStreak||0,portalRun.streak);
+      let gain=PORTAL_CORRECT_DUST;
+      if(portalRun.streak%PORTAL_STREAK_BONUS_EVERY===0)gain+=PORTAL_STREAK_BONUS_DUST;
+      portalRun.dust=(portalRun.dust||0)+gain;
+      flashFx('good');
+      sfxOk('+');
+    }else{
+      portalRun.wrong=(portalRun.wrong||0)+1;
+      portalRun.streak=0;
+      applyPortalPenalty(PORTAL_TIME_PENALTY_MS);
+    }
+    refillPortalTiles();
+  }
+  updateHUD();
+  if(getPortalTimeLeftMs()<=0)finishPortalRun('time');
 }
 function genMysteryProblemForOp(op,rarityId){
   const rarityBoost=MYSTERY_RANGE_BOOST[rarityId]||1;
@@ -4382,7 +4879,8 @@ function placeTiles(){
   const occ=new Set([
     ...snake.map(s=>`${s.x},${s.y}`),
     ...(mysteryBox?[`${mysteryBox.x},${mysteryBox.y}`]:[]),
-    ...(bonusLife?[`${bonusLife.x},${bonusLife.y}`]:[])
+    ...(bonusLife?[`${bonusLife.x},${bonusLife.y}`]:[]),
+    ...(portalBox?[`${portalBox.x},${portalBox.y}`]:[])
   ]);
   const head=snake[0];
   const MIN_DIST=3;      // generellt minsta avstånd
@@ -4435,6 +4933,7 @@ function startGame(){
   goldPhase=false;isFastMusic=false;
   bonusLife=null;bonusLifeUsedThisRound=false;
   mysteryBox=null;mysteryPrompt=null;
+  portalBox=null;portalRun=null;portalSnapshot=null;portalOverlayMode='intro';portalSpawnCount=0;portalAnsweredCheckpoint=0;portalPityCorrect=0;
   wrongPool=[];
   sessionCorrect=0;sessionTotal=0;sessionOpStats={};sessionWrongMap={};
   const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
@@ -4488,18 +4987,23 @@ function pollGamepad(){
 }
 
 function gameLoop(ts){
-  if(state!=='playing')return;
-  updateRoundBonuses(ts);
+  if(state!=='playing'&&state!=='portal')return;
+  if(state==='playing')updateRoundBonuses(ts);
+  if(state==='portal'&&portalRun&&getPortalTimeLeftMs(portalRun)<=0){
+    finishPortalRun('time');
+    return;
+  }
   pollGamepad();
-  let spd=getSpeed(),elapsed=ts-lastTickTime,steps=0;
+  let spd=state==='portal'?PORTAL_RUN_SPEED:getSpeed(),elapsed=ts-lastTickTime,steps=0;
   // Kör ikapp med små kontrollerade steg i stället för att hoppa rakt till nuet.
   while(elapsed>=spd&&steps<2){
     lastTickTime+=spd;
     elapsed=ts-lastTickTime;
     moveProgress=0;
-    tick();
-    if(state!=='playing')return;
-    spd=getSpeed();
+    if(state==='portal')tickPortal();
+    else tick();
+    if(state!=='playing'&&state!=='portal')return;
+    spd=state==='portal'?PORTAL_RUN_SPEED:getSpeed();
     steps++;
   }
   moveProgress=Math.min(1,Math.max(0,elapsed/spd));
@@ -4557,6 +5061,11 @@ function tick(){
   }
   if(mysteryBox&&mysteryBox.x===hx&&mysteryBox.y===hy){
     openMysteryChallenge(mysteryBox);
+    updateHUD();
+    return;
+  }
+  if(portalBox&&portalBox.x===hx&&portalBox.y===hy){
+    openPortalChallenge(portalBox);
     updateHUD();
     return;
   }
@@ -4929,6 +5438,35 @@ function drawBackground(theme){
   ctx.fillRect(0,0,canvas.width,canvas.height);
   if(theme.particles)drawParticles(theme.particles);
 }
+function drawPortalBackground(){
+  const T=performance.now(),W=canvas.width,H=canvas.height;
+  const grad=ctx.createLinearGradient(0,0,W,H);
+  grad.addColorStop(0,'#050718');
+  grad.addColorStop(0.45,'#12052b');
+  grad.addColorStop(1,'#03141f');
+  ctx.fillStyle=grad;
+  ctx.fillRect(0,0,W,H);
+  const vortex=ctx.createRadialGradient(W/2,H/2,20,W/2,H/2,Math.max(W,H)*0.55);
+  vortex.addColorStop(0,'rgba(110,235,255,0.2)');
+  vortex.addColorStop(0.32,'rgba(188,102,255,0.14)');
+  vortex.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=vortex;
+  ctx.fillRect(0,0,W,H);
+  drawParticles('shooting');
+  ctx.save();
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  for(let i=0;i<18;i++){
+    const num=((i*7)%9)+1;
+    const x=(i*97+Math.sin(T/1100+i*0.8)*34)%W;
+    const y=(i*61+Math.cos(T/1400+i*1.1)*26+T/18*(0.05+(i%3)*0.02))%H;
+    const a=0.08+0.06*(0.5+0.5*Math.sin(T/620+i*1.4));
+    ctx.fillStyle=`rgba(${i%2?140:220},${i%2?230:180},255,${a})`;
+    ctx.font=`800 ${12+(i%4)*2}px Orbitron,monospace`;
+    ctx.fillText(String(num),x,y);
+  }
+  ctx.restore();
+}
 function rRectOn(drawCtx,x,y,w,h,r){
   drawCtx.beginPath();drawCtx.moveTo(x+r,y);drawCtx.lineTo(x+w-r,y);drawCtx.quadraticCurveTo(x+w,y,x+w,y+r);
   drawCtx.lineTo(x+w,y+h-r);drawCtx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
@@ -4982,9 +5520,11 @@ function draw(t){
   _perfTick(t);
   updateRoundBonuses();
   const _theme=getActiveTheme();
-  drawBackground(_theme);
+  if(state==='portal')drawPortalBackground();
+  else drawBackground(_theme);
   tiles.forEach(tile=>drawTile(tile));
   if(mysteryBox)drawMysteryBox();
+  if(portalBox)drawPortalBox();
   if(bonusLife)drawBonusLife();
   // Tugga-animation: rätt svar krymper mot huvudet
   if(eatAnim){
@@ -5029,7 +5569,15 @@ function draw(t){
     }
   }
   // Tydlig kant runt spelplanen — visar var väggarna går
-  if(!wallWrap){
+  if(state==='portal'){
+    ctx.save();
+    ctx.shadowBlur=20;
+    ctx.shadowColor='rgba(130,240,255,.38)';
+    ctx.strokeStyle='rgba(160,245,255,.75)';
+    ctx.lineWidth=4;
+    ctx.strokeRect(2,2,canvas.width-4,canvas.height-4);
+    ctx.restore();
+  }else if(!wallWrap){
     // Hårda väggar: röd varningsram (man dör vid kontakt)
     ctx.save();
     ctx.shadowBlur=14;
@@ -5055,6 +5603,10 @@ function draw(t){
   }
 }
 function drawTile(t){
+  if(t.portal){
+    drawPortalTile(t);
+    return;
+  }
   const r=Math.floor(CELL*0.18);
   const px=t.x*CELL+2,py=t.y*CELL+2,s=CELL-4;
   const cx=t.x*CELL+CELL/2,cy=t.y*CELL+CELL/2;
@@ -5215,6 +5767,86 @@ function drawMysteryBox(){
   ctx.beginPath();
   ctx.arc(cx,cy,CELL*0.44,-Math.PI/2,-Math.PI/2+Math.PI*2*lifeFrac,false);
   ctx.stroke();
+  ctx.restore();
+}
+function drawPortalBox(){
+  if(!portalBox)return;
+  const cx=portalBox.x*CELL+CELL/2,cy=portalBox.y*CELL+CELL/2;
+  const T=performance.now();
+  const lifeLeft=Math.max(0,(portalBox.expiresAt||T)-T);
+  const lifeFrac=Math.max(0,Math.min(1,lifeLeft/PORTAL_BOX_LIFETIME));
+  const aura=ctx.createRadialGradient(cx,cy,4,cx,cy,CELL*0.9);
+  aura.addColorStop(0,'rgba(110,245,255,0.32)');
+  aura.addColorStop(0.45,'rgba(184,102,255,0.2)');
+  aura.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.save();
+  ctx.fillStyle=aura;
+  ctx.beginPath();
+  ctx.arc(cx,cy,CELL*0.82+Math.sin(T/240)*2,0,Math.PI*2);
+  ctx.fill();
+  ctx.translate(cx,cy);
+  ctx.rotate(T/850);
+  ctx.strokeStyle='rgba(170,245,255,0.9)';
+  ctx.lineWidth=3;
+  ctx.beginPath();
+  ctx.arc(0,0,CELL*0.28,0.2,Math.PI*1.65);
+  ctx.stroke();
+  ctx.strokeStyle='rgba(206,132,255,0.86)';
+  ctx.lineWidth=2.2;
+  ctx.beginPath();
+  ctx.arc(0,0,CELL*0.4,-Math.PI*0.7,Math.PI*0.75);
+  ctx.stroke();
+  ctx.rotate(-T/420);
+  ctx.strokeStyle='rgba(255,255,255,0.88)';
+  ctx.lineWidth=1.5;
+  ctx.beginPath();
+  ctx.arc(0,0,CELL*0.18,0,Math.PI*2);
+  ctx.stroke();
+  ctx.shadowColor='rgba(255,255,255,0.9)';
+  ctx.shadowBlur=18;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.font=`900 ${Math.floor(CELL*0.8)}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;
+  ctx.fillText('🌀',0,1);
+  ctx.shadowBlur=0;
+  ctx.lineWidth=2.7;
+  ctx.strokeStyle=lifeFrac<0.35?'rgba(255,126,126,0.95)':'rgba(255,255,255,0.82)';
+  ctx.beginPath();
+  ctx.arc(0,0,CELL*0.46,-Math.PI/2,-Math.PI/2+Math.PI*2*lifeFrac,false);
+  ctx.stroke();
+  ctx.restore();
+}
+function drawPortalTile(tile){
+  const px=tile.x*CELL+3,py=tile.y*CELL+3,s=CELL-6,cx=tile.x*CELL+CELL/2,cy=tile.y*CELL+CELL/2;
+  const T=performance.now();
+  const hue=190+((tile.value*13)%70);
+  const aura=ctx.createRadialGradient(cx,cy,3,cx,cy,CELL*0.62);
+  aura.addColorStop(0,`hsla(${hue},95%,72%,0.24)`);
+  aura.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.save();
+  ctx.fillStyle=aura;
+  ctx.beginPath();
+  ctx.arc(cx,cy,CELL*0.62+Math.sin(T/260+tile.value)*1.4,0,Math.PI*2);
+  ctx.fill();
+  const grad=ctx.createLinearGradient(px,py,px+s,py+s);
+  grad.addColorStop(0,'rgba(255,255,255,0.95)');
+  grad.addColorStop(0.45,`hsla(${hue},90%,76%,0.94)`);
+  grad.addColorStop(1,`hsla(${(hue+28)%360},88%,63%,0.9)`);
+  ctx.fillStyle=grad;
+  ctx.shadowColor=`hsla(${hue},90%,72%,0.5)`;
+  ctx.shadowBlur=14;
+  rRect(px,py,s,s,12);
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.lineWidth=2.2;
+  ctx.strokeStyle='rgba(235,246,255,0.9)';
+  rRect(px,py,s,s,12);
+  ctx.stroke();
+  ctx.fillStyle='rgba(12,26,48,0.92)';
+  ctx.font=`900 ${tile.value>9?15:18}px Orbitron,monospace`;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText(String(tile.value),cx,cy+0.5);
   ctx.restore();
 }
 function drawSeg(rx,ry,i,isHead){
@@ -5928,6 +6560,29 @@ function rRect(x,y,w,h,r){
    ═══════════════════════════════════════ */
 let _hudCache={score:'',level:'',eq:'',combo:'',livesKey:''};
 function updateHUD(){
+  if(state==='portal'&&portalRun){
+    const scoreText=String(score);
+    const levelText=pickLangText('🌀 BONUS','🌀 BONUS','🌀 BONUS');
+    const eqText=`${portalRun.mission?.emoji||'🧠'} ${getPortalMissionLabel(portalRun.mission)}`;
+    const secs=Math.max(0,Math.ceil(getPortalTimeLeftMs(portalRun)/1000));
+    const comboText=pickLangText(`✨ ${portalRun.dust||0} · ${secs}s kvar`,`✨ ${portalRun.dust||0} · ${secs}s left`,`✨ ${portalRun.dust||0} · ${secs}s übrig`);
+    const lengthText=String(snake.length);
+    if(_hudCache.score!==scoreText){setTextIfChanged($('scoreDisp'),scoreText);_hudCache.score=scoreText;}
+    if(_hudCache.level!==levelText){setTextIfChanged($('levelDisp'),levelText);_hudCache.level=levelText;}
+    if(_hudCache.eq!==eqText){setTextIfChanged($('eqText'),eqText);_hudCache.eq=eqText;}
+    if(_hudCache.combo!==comboText){setTextIfChanged($('comboDisp'),comboText);_hudCache.combo=comboText;}
+    setTextIfChanged($('lengthDisp'),lengthText);
+    if($('practiceModeNote'))$('practiceModeNote').classList.toggle('show',false);
+    const livesKey=practiceMode?'practice':'lives:'+lives;
+    if(_hudCache.livesKey!==livesKey){
+      const ld=$('livesDisp');ld.innerHTML='';
+      if(!practiceMode){
+        for(let i=0;i<3;i++){const d=document.createElement('div');d.className='life'+(i>=lives?' lost':'');d.textContent='❤️';ld.appendChild(d);}
+      }
+      _hudCache.livesKey=livesKey;
+    }
+    return;
+  }
   const scoreText=String(score);
   const levelText=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join('/');
   const eqText=`${problem.expr} = ?`;
@@ -5968,6 +6623,7 @@ function triggerGameOver(){
   stopMysteryMusic(true);
   bonusLife=null;
   mysteryBox=null;mysteryPrompt=null;
+  portalBox=null;portalRun=null;portalSnapshot=null;portalOverlayMode='intro';portalSpawnCount=0;portalAnsweredCheckpoint=0;portalPityCorrect=0;
   state='gameover';sfxDie();bgMusic.pause();fastMusic.pause();isFastMusic=false;
   flushBufferedProgress();
   stopTitelMusic(true); // börja om från början när spelaren går till menyn
@@ -6069,6 +6725,7 @@ function goToMenu(){
   clearResumeCountdown();
   stopMysteryMusic(true);
   mysteryBox=null;mysteryPrompt=null;
+  portalBox=null;portalRun=null;portalSnapshot=null;portalOverlayMode='intro';portalSpawnCount=0;portalAnsweredCheckpoint=0;portalPityCorrect=0;
   flushBufferedProgress();
   showTouchControls(false);
   hideOverlays();showScreen('menuScreen');renderHS();updateMedalNavBtn();updateMuseumNavBtn();updatePlayerBar();updateMenuSettingsSummary();
@@ -6206,7 +6863,7 @@ document.querySelectorAll('.lang-btn[data-lang]').forEach(btn=>{
 /* ═══════════════════════════════════════
    TOUCH D-PAD & SVEP
    ═══════════════════════════════════════ */
-function dpadPress(nd){if(state==='playing')applyDir(nd);}
+function dpadPress(nd){if(state==='playing'||state==='portal')applyDir(nd);}
 function setupDpad(){
   const dirs={dUp:{x:0,y:-1},dDown:{x:0,y:1},dLeft:{x:-1,y:0},dRight:{x:1,y:0}};
   Object.entries(dirs).forEach(([id,nd])=>{
@@ -6229,7 +6886,7 @@ canvas.addEventListener('touchstart',e=>{
 },{passive:false});
 canvas.addEventListener('touchend',e=>{
   e.preventDefault();
-  if(state!=='playing')return;
+  if(state!=='playing'&&state!=='portal')return;
   const dx=e.changedTouches[0].clientX-touchStartX;
   const dy=e.changedTouches[0].clientY-touchStartY;
   const dt=Date.now()-touchStartTime;
@@ -6285,13 +6942,13 @@ function goToSettings(){showScreen('settingsScreen');}
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
-  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.5';
+  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.8';
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
-    'Alvin & Ludvig`nCecilia Norlander – idéer och feedback`nHugo Persson – som ihärdigt kämpade med att slå sitt personbästa!`nMalin Vu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass`nIris Kruslock – för idén med tydligare väggar och extraliv`nMilton Garpenrud – För idén till Radioactive-skinnet`nMille Renberg – För idén till Ghost-skinnet`nNoelle Brusberg Aschan – grym försäljare av Majblommor`nAlla elever på Slättenskolan i Norrahammar`nAnthropic / Claude AI – för ovärderlig hjälp med koden',
-    'Alvin & Ludvig`nCecilia Norlander – ideas and feedback`nHugo Persson – who persistently fought to beat his personal best!`nMalin Vu – math teacher at Slättenskolan who tried SifferSnoken with her class`nIris Kruslock – for the idea of clearer walls and extra lives`nMilton Garpenrud – for the idea behind the Radioactive skin`nMille Renberg – for the idea behind the Ghost skin`nNoelle Brusberg Aschan – amazing seller of May flowers`nAll students at Slättenskolan in Norrahammar`nAnthropic / Claude AI – for invaluable help with the code',
-    'Alvin & Ludvig`nCecilia Norlander – Ideen & Feedback`nHugo Persson – der hartnäckig versucht hat, seinen persönlichen Rekord zu schlagen`nMalin Vu – Mathematiklehrerin an der Slättenskolan, die SifferSnoken mit ihrer Klasse ausprobiert hat`nIris Kruslock – für die Idee mit klareren Wänden und Extraleben`nMilton Garpenrud – für die Idee zum Radioactive-Skin`nMille Renberg – für die Idee zum Ghost-Skin`nNoelle Brusberg Aschan – großartige Verkäuferin von Maiblumen`nAlle Schülerinnen und Schüler der Slättenskolan in Norrahammar`nAnthropic / Claude AI – für unschätzbare Hilfe beim Code'
+    'Alvin & Ludvig`nCecilia Norlander – idéer och feedback`nHugo Persson – som ihärdigt kämpade med att slå sitt personbästa!`nMalin Vu – Mattelärare på Slättenskolan som provade SifferSnoken med sin klass`nIris Kruslock – för idén med tydligare väggar och extraliv`nMilton Garpenrud – För idén till Radioactive-skinnet`nMille Renberg – För idén till Ghost-skinnet`nSixten Ekvall – För idén till portalen och bonusbanan`nNoelle Brusberg Aschan – grym försäljare av Majblommor`nAlla elever på Slättenskolan i Norrahammar`nAnthropic / Claude AI – för ovärderlig hjälp med koden',
+    'Alvin & Ludvig`nCecilia Norlander – ideas and feedback`nHugo Persson – who persistently fought to beat his personal best!`nMalin Vu – math teacher at Slättenskolan who tried SifferSnoken with her class`nIris Kruslock – for the idea of clearer walls and extra lives`nMilton Garpenrud – for the idea behind the Radioactive skin`nMille Renberg – for the idea behind the Ghost skin`nSixten Ekvall – for the idea behind the portal and bonus lane`nNoelle Brusberg Aschan – amazing seller of May flowers`nAll students at Slättenskolan in Norrahammar`nAnthropic / Claude AI – for invaluable help with the code',
+    'Alvin & Ludvig`nCecilia Norlander – Ideen & Feedback`nHugo Persson – der hartnäckig versucht hat, seinen persönlichen Rekord zu schlagen`nMalin Vu – Mathematiklehrerin an der Slättenskolan, die SifferSnoken mit ihrer Klasse ausprobiert hat`nIris Kruslock – für die Idee mit klareren Wänden und Extraleben`nMilton Garpenrud – für die Idee zum Radioactive-Skin`nMille Renberg – für die Idee zum Ghost-Skin`nSixten Ekvall – für die Idee zum Portal und zur Bonusbahn`nNoelle Brusberg Aschan – großartige Verkäuferin von Maiblumen`nAlle Schülerinnen und Schüler der Slättenskolan in Norrahammar`nAnthropic / Claude AI – für unschätzbare Hilfe beim Code'
   ).replaceAll('`n','\n');
   if($('btnAboutClose'))$('btnAboutClose').textContent=pickLangText('Stäng','Close','Schließen');
   $('aboutOverlay').classList.add('show');
@@ -6887,6 +7544,10 @@ $('btnBackFromStats').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnResume').addEventListener('click',()=>{state='playing';$('pauseOverlay').classList.remove('show');tryMusic();lastTickTime=performance.now();requestAnimationFrame(gameLoop);});
 $('btnPauseMenu').addEventListener('click',goToMenu);
 $('btnMysteryContinue').addEventListener('click',resumeFromMystery);
+$('btnPortalAction').addEventListener('click',()=>{
+  if(portalOverlayMode==='result')resumeFromPortal();
+  else startPortalRun();
+});
 $('btnSaveScore').addEventListener('click',()=>{addScore($('hsNameInp').value);goToMenu();});
 $('btnGoMenu').addEventListener('click',goToMenu);
 $('hsNameInp').addEventListener('keydown',e=>{if(e.key==='Enter')$('btnSaveScore').click();});
@@ -6898,13 +7559,13 @@ window.addEventListener('pagehide',flushBufferedProgress);
    ═══════════════════════════════════════ */
 document.addEventListener('keydown',e=>{
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();
-  if(state==='playing'){
+  if(state==='playing'||state==='portal'){
     const map={ArrowUp:{x:0,y:-1},w:{x:0,y:-1},W:{x:0,y:-1},
       ArrowDown:{x:0,y:1},s:{x:0,y:1},S:{x:0,y:1},
       ArrowLeft:{x:-1,y:0},a:{x:-1,y:0},A:{x:-1,y:0},
       ArrowRight:{x:1,y:0},d:{x:1,y:0},D:{x:1,y:0}};
     const nd=map[e.key];if(nd)applyDir(nd);
-    if(e.key==='p'||e.key==='P')pauseGame();
+    if(state==='playing'&&(e.key==='p'||e.key==='P'))pauseGame();
     if(e.key==='Escape')goToMenu();if(e.key==='m'||e.key==='M')toggleMusic();
   }else if(state==='paused'){
     if(['p','P','Escape'].includes(e.key)){state='playing';$('pauseOverlay').classList.remove('show');tryMusic();lastTickTime=performance.now();requestAnimationFrame(gameLoop);}
@@ -6919,6 +7580,11 @@ document.addEventListener('keydown',e=>{
     }
   }else if(state==='countdown'){
     if(e.key==='Escape')goToMenu();
+  }else if(state==='portal_intro'){
+    if(['Enter',' '].includes(e.key))startPortalRun();
+    if(e.key==='Escape')goToMenu();
+  }else if(state==='portal_result'){
+    if(['Enter','Escape',' '].includes(e.key))resumeFromPortal();
   }
 });
 
