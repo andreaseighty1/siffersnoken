@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SifferSnoken V3.8 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
+<title>SifferSnoken V3.9 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Nunito:wght@700;900&display=swap');
 :root{
@@ -599,8 +599,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.8! <strong>Smartare Sifferportal</strong>, <strong>upp till 2 per runda</strong> och <strong>lättare att hitta</strong></span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.8! <strong>Smartare Sifferportal</strong>, <strong>upp till 2 per runda</strong> och <strong>lättare att hitta</strong></span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.9! <strong>Fixad Sifferportal-atergang</strong> och <strong>spelet syns igen under 3 2 1</strong></span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.9! <strong>Fixad Sifferportal-atergang</strong> och <strong>spelet syns igen under 3 2 1</strong></span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -663,7 +663,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <span style="color:var(--text);font-weight:600"><span style="color:var(--accent)">42</span> Improbable Owls</span>
     </span>
   </a>
-  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.8</div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.9</div>
   <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
 </div>
 
@@ -1168,9 +1168,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i version <strong>3.8</strong>! <strong>Smartare Sifferportal</strong>, <strong>upp till 2 per runda</strong> och <strong>lättare att hitta</strong>',
-    'New in version <strong>3.8</strong>! A <strong>smarter Number Portal</strong>, <strong>up to 2 per run</strong>, and <strong>easier to find</strong>',
-    'Neu in Version <strong>3.8</strong>! Ein <strong>klügeres Zahlenportal</strong>, <strong>bis zu 2 pro Runde</strong> und <strong>leichter zu finden</strong>'
+    'Nytt i version <strong>3.9</strong>! <strong>Fixad Sifferportal-atergang</strong> och <strong>spelet syns igen under 3 2 1</strong>',
+    'New in version <strong>3.9</strong>! <strong>Fixed Number Portal return</strong> and <strong>the game stays visible during 3 2 1</strong>',
+    'Neu in Version <strong>3.9</strong>! <strong>Behobene Zahlenportal-Ruckkehr</strong> und <strong>das Spiel bleibt wahrend 3 2 1 sichtbar</strong>'
   );
 }
 function getRangeLabel(range){
@@ -4768,6 +4768,8 @@ function finishResumeCountdown(){
 function startMysteryResumeCountdown(){
   clearResumeCountdown();
   state='countdown';
+  moveProgress=1;
+  draw(1);
   let current=MYSTERY_COUNTDOWN_START;
   const step=()=>{
     $('countdownTitleEl').textContent=String(current);
@@ -6942,7 +6944,7 @@ function goToSettings(){showScreen('settingsScreen');}
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
-  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.8';
+  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.9';
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
