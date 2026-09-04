@@ -581,11 +581,13 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 .menu-nav-btn .nav-count{font-size:10px;color:var(--muted);font-weight:400;}
 
 /* ── INSTÄLLNINGSSIDA ── */
-#settingsScreen{justify-content:flex-start;padding-top:12px;}
+#settingsScreen{justify-content:flex-start;padding-top:12px;overflow-y:auto;}
 .settings-wrap{width:100%;max-width:960px;padding:0 12px;}
 .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;margin-top:12px;}
 .settings-col{display:flex;flex-direction:column;gap:12px;}
 .settings-col .menu-panel{max-width:none;min-width:0;flex:none;}
+.bonus-event-row .bonus-event-btn{min-width:120px;}
+.bonus-event-btn:not(.sel){border-color:rgba(255,255,255,.12);background:rgba(0,0,0,.12);}
 
 /* ── INSTÄLLNINGSSUMMERING PÅ MENY ── */
 .menu-settings-summary{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.04em;}
@@ -765,6 +767,19 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
           </div>
           <div class="panel-desc" id="modeDesc" style="margin-top:6px;">3 liv. Fel svar krymper ormen och tappar ett liv.</div>
         </div>
+        <div class="menu-panel" id="bonusEventsPanel">
+          <div class="panel-title" id="bonusEventsTitle">🎉 Bonushändelser</div>
+          <div class="toggle-row">
+            <button class="toggle-btn bonus-preset-btn sel" data-bonus-preset="all" id="bonusPresetAll">✨ Alla på</button>
+            <button class="toggle-btn bonus-preset-btn" data-bonus-preset="calm" id="bonusPresetCalm">🌿 Lugn runda</button>
+          </div>
+          <div class="toggle-row bonus-event-row">
+            <button class="toggle-btn bonus-event-btn sel" data-bonus-event="mystery" id="bonusMysteryBtn">🎁 Mysterieboxar · PÅ</button>
+            <button class="toggle-btn bonus-event-btn sel" data-bonus-event="portals" id="bonusPortalsBtn">🌀 Sifferportaler · PÅ</button>
+            <button class="toggle-btn bonus-event-btn sel" data-bonus-event="lives" id="bonusLivesBtn">❤️ Bonusliv · PÅ</button>
+          </div>
+          <div class="panel-desc" id="bonusEventsDesc" style="margin-top:7px;">Lugn runda stänger av alla tre. Museet och dina fynd finns kvar.</div>
+        </div>
         <div class="menu-panel">
           <div class="panel-title"></div>
           <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
@@ -776,6 +791,14 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
             <button class="toggle-btn theme-btn" data-theme="klassrum">📝 Klassrum</button>
             <button class="toggle-btn theme-btn" data-theme="klar">👀 Klar</button>
           </div>
+        </div>
+        <div class="menu-panel">
+          <div class="panel-title" id="graphicsModeTitle">🖼️ Grafikläge</div>
+          <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
+            <button class="toggle-btn graphics-mode-btn sel" data-graphics="classic" id="graphicsClassicBtn">🧩 Classic</button>
+            <button class="toggle-btn graphics-mode-btn" data-graphics="modern" id="graphicsModernBtn">✨ Modern</button>
+          </div>
+          <div class="panel-desc" id="graphicsModeDesc">Klassisk grafik är standard. Modernt läge använder de nya orm-assetsen.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1341,9 +1364,10 @@ function applyLang(){
   if($('modeDesc'))$('modeDesc').textContent=t(typeof practiceMode!=='undefined'&&practiceMode?'modeDescPractice':'modeDescStandard');
   // Inställningar: panel-titlar (Spelläge, Utseende osv)
   document.querySelectorAll('#settingsScreen .panel-title').forEach((el,i)=>{
-    const keys=['panelOps','panelRange','panelTables','panelSpeed','panelWalls','panelMode','panelAppearance','panelMusicStyle'];
+    const keys=['panelOps','panelRange','panelTables','panelSpeed','panelWalls','panelMode','panelBonusEvents','panelAppearance','panelGraphicsMode','panelMusicStyle'];
     if(keys[i])el.textContent=t(keys[i]);
   });
+  updateBonusEventControls();
   document.querySelectorAll('.theme-btn').forEach(b=>{
     const tmap={
       natt:t('themeNight'),
@@ -1367,6 +1391,11 @@ function applyLang(){
   });
   if($('musicStyleTitle'))$('musicStyleTitle').textContent=pickLangText('🎵 Musikstil','🎵 Music style','🎵 Musikstil');
   if($('musicStyleDesc'))$('musicStyleDesc').textContent=pickLangText('Välj soundtrack för meny och spel.','Choose the soundtrack for menu and gameplay.','Wähle den Soundtrack für Menü und Spiel.');
+  if($('graphicsModeTitle'))$('graphicsModeTitle').textContent=t('panelGraphicsMode');
+  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=t('graphicsModeDesc');
+  if($('graphicsClassicBtn'))$('graphicsClassicBtn').textContent=t('graphicsClassic');
+  if($('graphicsModernBtn'))$('graphicsModernBtn').textContent=t('graphicsModern');
+  document.querySelectorAll('.graphics-mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.graphics===graphicsMode));
   buildGradeRow();
   // Speed description (uppdatera med nuvarande speedMode)
   const _sdMap={none:t('speedDescNone'),score:t('speedDescScore'),length:t('speedDescLength')};
@@ -2355,6 +2384,17 @@ const SKINS_DEF=[
    previewCss:'linear-gradient(135deg,rgba(245,250,255,0.95),rgba(170,220,255,0.5),rgba(120,170,220,0.18))'},
 ];
 
+// Moderna grundassets delas mellan webb och Android. Specialskin fortsätter
+// att använda sin befintliga procedur-rendering tills de får egna assets.
+const MODERN_BASIC_ASSETS=Object.freeze({
+  klassisk:{headAsset:'skins/modern-classic-green-head-base.webp',bodyAsset:'skins/modern-classic-green-body-straight.webp',tailAsset:'skins/modern-classic-green-tail.webp'},
+  isbla:{headAsset:'skins/modern-iceblue-head-base.webp',bodyAsset:'skins/modern-iceblue-body-straight.webp',tailAsset:'skins/modern-iceblue-tail.webp'},
+  rosa:{headAsset:'skins/modern-pink-head-base.webp',bodyAsset:'skins/modern-pink-body-straight.webp',tailAsset:'skins/modern-pink-tail.webp'},
+  lila:{headAsset:'skins/modern-purple-head-base.webp',bodyAsset:'skins/modern-purple-body-straight.webp',tailAsset:'skins/modern-purple-tail.webp'}
+});
+const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
+const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
+
 const MEDAL_CAT_DE={
   '🏅 Poäng':'🏅 Punkte',
   '🔢 Räknesätt':'🔢 Rechenarten',
@@ -2590,7 +2630,8 @@ function toggleHeadAccessory(){cycleHeadAccessory();}
    ═══════════════════════════════════════ */
 function saveSettings(){
   localStorage.setItem(SETTINGS_KEY,JSON.stringify({
-    ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap,multiTableSelect,musicGenre
+    ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap,multiTableSelect,musicGenre,
+    mysteryEventsEnabled,portalEventsEnabled,bonusLivesEnabled,graphicsMode
   }));
 }
 function loadSettings(){
@@ -2604,10 +2645,54 @@ function loadSettings(){
     if(typeof s.wallWrap==='boolean')wallWrap=s.wallWrap;
     if(typeof s.multiTableSelect==='boolean')multiTableSelect=s.multiTableSelect;
     if(typeof s.musicGenre==='string'&&['original','progrock','synth80','house'].includes(s.musicGenre))musicGenre=s.musicGenre;
+    if(typeof s.mysteryEventsEnabled==='boolean')mysteryEventsEnabled=s.mysteryEventsEnabled;
+    if(typeof s.portalEventsEnabled==='boolean')portalEventsEnabled=s.portalEventsEnabled;
+    if(typeof s.bonusLivesEnabled==='boolean')bonusLivesEnabled=s.bonusLivesEnabled;
+    if(s.graphicsMode==='classic'||s.graphicsMode==='modern')graphicsMode=s.graphicsMode;
   }catch(e){}
 }
 let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
 let speedMode='none',wallWrap=false,multiTableSelect=false,musicGenre='original';
+let mysteryEventsEnabled=true,portalEventsEnabled=true,bonusLivesEnabled=true;
+let graphicsMode='classic';
+function isCalmRound(){return !mysteryEventsEnabled&&!portalEventsEnabled&&!bonusLivesEnabled;}
+function updateBonusEventControls(){
+  const state={mystery:mysteryEventsEnabled,portals:portalEventsEnabled,lives:bonusLivesEnabled};
+  const labelKey={mystery:'bonusMystery',portals:'bonusPortals',lives:'bonusLives'};
+  document.querySelectorAll('.bonus-event-btn').forEach(btn=>{
+    const enabled=!!state[btn.dataset.bonusEvent];
+    btn.classList.toggle('sel',enabled);
+    btn.setAttribute('aria-pressed',String(enabled));
+    btn.textContent=`${t(labelKey[btn.dataset.bonusEvent])} · ${t(enabled?'bonusOn':'bonusOff')}`;
+  });
+  document.querySelectorAll('.bonus-preset-btn').forEach(btn=>{
+    const selected=btn.dataset.bonusPreset==='all'
+      ?mysteryEventsEnabled&&portalEventsEnabled&&bonusLivesEnabled
+      :isCalmRound();
+    btn.classList.toggle('sel',selected);
+    btn.setAttribute('aria-pressed',String(selected));
+  });
+  if($('bonusPresetAll'))$('bonusPresetAll').textContent=t('bonusAllOn');
+  if($('bonusPresetCalm'))$('bonusPresetCalm').textContent=t('bonusCalm');
+  if($('bonusEventsDesc'))$('bonusEventsDesc').textContent=t('bonusEventsDesc');
+}
+function setBonusEventPreset(preset){
+  const enabled=preset==='all';
+  mysteryEventsEnabled=enabled;
+  portalEventsEnabled=enabled;
+  bonusLivesEnabled=enabled;
+  updateBonusEventControls();
+  saveSettings();
+  updateMenuSettingsSummary();
+}
+function toggleBonusEvent(type){
+  if(type==='mystery')mysteryEventsEnabled=!mysteryEventsEnabled;
+  else if(type==='portals')portalEventsEnabled=!portalEventsEnabled;
+  else if(type==='lives')bonusLivesEnabled=!bonusLivesEnabled;
+  updateBonusEventControls();
+  saveSettings();
+  updateMenuSettingsSummary();
+}
 
 /* ═══════════════════════════════════════
    SPELVARIABLER
@@ -3068,6 +3153,109 @@ function loadActiveSkin(){
   if(_activeSkinCache!==null)return _activeSkinCache;
   _activeSkinCache=localStorage.getItem(ACTIVE_SKIN_KEY)||'klassisk';
   return _activeSkinCache;
+}
+const modernSkinAssetCache=new Map();
+function getModernSkinAssetDef(skin){
+  const assets=MODERN_BASIC_ASSETS[skin&&skin.id];
+  return assets?{...skin,...assets,eyesOpenAsset:MODERN_EYES_OPEN_ASSET,eyesBlinkAsset:MODERN_EYES_BLINK_ASSET,assetFacing:'up',headAssetScale:1.75,bodyAssetScale:1.26,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:0.78}:null;
+}
+function isModernGraphics(){return graphicsMode==='modern';}
+function skinHasModernAssets(skin){return !!getModernSkinAssetDef(skin);}
+let modernEyeBlinkUntil=0,modernEyeBlinkNextAt=0;
+function isModernEyeBlinking(now=_renderNow||performance.now()){
+  if(!modernEyeBlinkNextAt)modernEyeBlinkNextAt=now+3200+Math.random()*2600;
+  if(now>=modernEyeBlinkNextAt){
+    modernEyeBlinkUntil=now+125;
+    modernEyeBlinkNextAt=now+3200+Math.random()*3000;
+  }
+  return now<modernEyeBlinkUntil;
+}
+function loadModernSkinAsset(src){
+  if(!src)return null;
+  let image=modernSkinAssetCache.get(src);
+  if(image)return image;
+  image=new Image();image.decoding='async';image.src=src;modernSkinAssetCache.set(src,image);
+  return image;
+}
+function bodyWrapDelta(from,to,size){
+  let d=to-from;
+  if(Math.abs(d)>1)d=d>0?d-size:d+size;
+  return Math.max(-1,Math.min(1,d));
+}
+function bodyDirection(from,to){
+  return {x:bodyWrapDelta(from.x,to.x,COLS),y:bodyWrapDelta(from.y,to.y,ROWS)};
+}
+function bodyFacingAngle(direction){
+  return direction.x===1?0:direction.y===1?Math.PI/2:direction.x===-1?Math.PI:-Math.PI/2;
+}
+function bodyMotionDirection(index){
+  const segment=snake[index];
+  if(!segment)return{x:1,y:0};
+  const previous={x:segment.px??segment.x,y:segment.py??segment.y};
+  const motion=bodyDirection(previous,segment);
+  return motion.x||motion.y?motion:bodyDirection(segment,snake[Math.min(index+1,snake.length-1)]||segment);
+}
+function getSnakeRenderPoint(segment,progress){
+  const px=segment.px??segment.x,py=segment.py??segment.y;
+  let dx=segment.x-px,dy=segment.y-py;
+  if(Math.abs(dx)>1)dx=dx>0?dx-COLS:dx+COLS;
+  if(Math.abs(dy)>1)dy=dy>0?dy-ROWS:dy+ROWS;
+  return{x:px+dx*progress,y:py+dy*progress};
+}
+function drawModernHeadAccessory(cx,cy){
+  const theme=getActiveTheme(),userPick=loadHeadAccessory();
+  const skinAcc=(SKIN_THEMES[loadActiveSkin()]||{}).headAcc;
+  let acc=null;
+  if(theme.isSeasonal&&theme.headAcc)acc=theme.headAcc;
+  else if(userPick==='off')acc=null;
+  else if(userPick==='auto')acc=skinAcc;
+  else acc=userPick;
+  if(acc)drawHeadAccessory(acc,cx,cy);
+}
+function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
+  const image=loadModernSkinAsset(skin.headAsset);
+  if(!image||!image.complete||!image.naturalWidth)return false;
+  const cx=rx*CELL+cell/2,cy=ry*CELL+cell/2;
+  const size=cell*(skin.headAssetScale||1.75),ratio=image.naturalHeight/image.naturalWidth;
+  const angle=bodyFacingAngle(heading)+(skin.assetFacing==='up'?Math.PI/2:0);
+  drawCtx.save();drawCtx.translate(cx,cy);drawCtx.rotate(angle);
+  drawCtx.shadowColor=skin.shadow||'transparent';drawCtx.shadowBlur=skin.assetShadowBlur||5;
+  drawCtx.drawImage(image,-size/2,-size*ratio/2,size,size*ratio);drawCtx.restore();
+  const eyes=loadModernSkinAsset(isModernEyeBlinking()?skin.eyesBlinkAsset:skin.eyesOpenAsset);
+  if(eyes&&eyes.complete&&eyes.naturalWidth){
+    const eyesRatio=eyes.naturalHeight/eyes.naturalWidth;
+    drawCtx.save();drawCtx.translate(cx,cy);drawCtx.rotate(angle);
+    drawCtx.drawImage(eyes,-size/2,-size*eyesRatio/2,size,size*eyesRatio);drawCtx.restore();
+  }
+  drawModernHeadAccessory(cx,cy);
+  return true;
+}
+function modernBodyVisualScale(index){
+  if(!isModernGraphics()||index<=1||index>=snake.length-2)return 1;
+  return 1+Math.sin(index*2.2)*0.018;
+}
+function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
+  const isTail=index===snake.length-1;
+  let angle=0;
+  if(index>0){
+    const toPrev=bodyDirection(snake[index],snake[index-1]);
+    if(isTail){
+      const lastBodyMotion=bodyMotionDirection(index-1);
+      angle=bodyFacingAngle({x:-lastBodyMotion.x,y:-lastBodyMotion.y})-Math.PI/2;
+    }else{
+      const facing=index===snake.length-2&&snake[index+1]?bodyMotionDirection(index):toPrev;
+      angle=bodyFacingAngle(facing);
+    }
+  }
+  const image=loadModernSkinAsset(isTail?skin.tailAsset:skin.bodyAsset);
+  if(!image||!image.complete||!image.naturalWidth)return false;
+  const cx=rx*CELL+cell/2,cy=ry*CELL+cell/2;
+  const size=cell*(skin.bodyAssetScale||1.26)*modernBodyVisualScale(index);
+  drawCtx.save();drawCtx.globalAlpha=Math.max(0.35,1-index*0.035);
+  drawCtx.translate(cx,cy);drawCtx.rotate(angle);
+  drawCtx.shadowColor=skin.shadow||'transparent';drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
+  drawCtx.drawImage(image,-size/2,-size/2,size,size);drawCtx.restore();
+  return true;
 }
 function saveActiveSkin(id){
   const next=id||'klassisk';
@@ -4392,7 +4580,7 @@ function updateRoundBonuses(now=performance.now()){
   updatePortalBox(now);
 }
 function canSpawnBonusLife(){
-  return !practiceMode&&!bonusLife&&!bonusLifeUsedThisRound&&!portalBox&&!goldPhase&&score>=BONUS_LIFE_MIN_SCORE&&lives>0&&lives<3;
+  return bonusLivesEnabled&&!practiceMode&&!bonusLife&&!bonusLifeUsedThisRound&&!portalBox&&!goldPhase&&score>=BONUS_LIFE_MIN_SCORE&&lives>0&&lives<3;
 }
 function boardDistance(ax,ay,bx,by){
   let dx=Math.abs(ax-bx),dy=Math.abs(ay-by);
@@ -4434,7 +4622,7 @@ function maybeSpawnBonusLife(){
   return true;
 }
 function canSpawnMysteryBox(){
-  return !mysteryBox&&!mysteryPrompt&&!portalBox&&!goldPhase
+  return mysteryEventsEnabled&&!mysteryBox&&!mysteryPrompt&&!portalBox&&!goldPhase
     && score>=MYSTERY_MIN_SCORE
     && sessionTotal>=MYSTERY_MIN_QUESTIONS
     && mysterySpawnCount<MYSTERY_MAX_PER_ROUND
@@ -4537,7 +4725,7 @@ function getPortalSpawnChance(){
   return Math.min(max,base+portalPityCorrect*PORTAL_PITY_STEP);
 }
 function canSpawnPortalBox(){
-  return !portalBox&&!portalRun&&!portalSnapshot&&!mysteryBox&&!mysteryPrompt&&!bonusLife&&!goldPhase&&portalSpawnCount<PORTAL_MAX_PER_ROUND&&sessionTotal>=getPortalQuestionGate();
+  return portalEventsEnabled&&!portalBox&&!portalRun&&!portalSnapshot&&!mysteryBox&&!mysteryPrompt&&!bonusLife&&!goldPhase&&portalSpawnCount<PORTAL_MAX_PER_ROUND&&sessionTotal>=getPortalQuestionGate();
 }
 function findPortalBoxSpot(){
   const occ=new Set([
@@ -5773,15 +5961,15 @@ function draw(t,frameNow=performance.now()){
     if(Math.abs(dx)>1){
       // Svänger horisontellt
       const ry=lerp(s.py,s.y,t);
-      if(dx<-1){drawSeg(lerp(s.px,COLS,t),ry,i,isHead);drawSeg(lerp(-1,s.x,t),ry,i,isHead);}
-      else     {drawSeg(lerp(s.px,-1,t),ry,i,isHead);  drawSeg(lerp(COLS,s.x,t),ry,i,isHead);}
+      if(dx<-1){drawSeg(lerp(s.px,COLS,t),ry,i,isHead,t);drawSeg(lerp(-1,s.x,t),ry,i,isHead,t);}
+      else     {drawSeg(lerp(s.px,-1,t),ry,i,isHead,t);  drawSeg(lerp(COLS,s.x,t),ry,i,isHead,t);}
     }else if(Math.abs(dy)>1){
       // Svänger vertikalt
       const rx=lerp(s.px,s.x,t);
-      if(dy<-1){drawSeg(rx,lerp(s.py,ROWS,t),i,isHead);drawSeg(rx,lerp(-1,s.y,t),i,isHead);}
-      else     {drawSeg(rx,lerp(s.py,-1,t),i,isHead);  drawSeg(rx,lerp(ROWS,s.y,t),i,isHead);}
+      if(dy<-1){drawSeg(rx,lerp(s.py,ROWS,t),i,isHead,t);drawSeg(rx,lerp(-1,s.y,t),i,isHead,t);}
+      else     {drawSeg(rx,lerp(s.py,-1,t),i,isHead,t);  drawSeg(rx,lerp(ROWS,s.y,t),i,isHead,t);}
     }else{
-      drawSeg(lerp(s.px,s.x,t),lerp(s.py,s.y,t),i,isHead);
+      drawSeg(lerp(s.px,s.x,t),lerp(s.py,s.y,t),i,isHead,t);
     }
   }
   // Tydlig kant runt spelplanen — visar var väggarna går
@@ -6066,8 +6254,26 @@ function drawPortalTile(tile){
   ctx.fillText(String(tile.value),cx,cy+0.5);
   ctx.restore();
 }
-function drawSeg(rx,ry,i,isHead){
+function drawSeg(rx,ry,i,isHead,progress=moveProgress){
   const skin=getActiveSkinDef();
+  const modernSkin=isModernGraphics()?getModernSkinAssetDef(skin):null;
+  let assetRx=rx,assetRy=ry;
+  if(modernSkin&&!isHead&&i===snake.length-1&&snake.length>=2){
+    const lastBodyIndex=snake.length-2;
+    const bodyPoint=getSnakeRenderPoint(snake[lastBodyIndex],progress);
+    const motion=bodyMotionDirection(lastBodyIndex);
+    const tailDirection={x:-motion.x,y:-motion.y};
+    const offset=modernSkin.tailAssetOffset??0.78;
+    let anchoredX=bodyPoint.x+tailDirection.x*offset;
+    let anchoredY=bodyPoint.y+tailDirection.y*offset;
+    if(wallWrap){
+      anchoredX+=Math.round((rx-anchoredX)/COLS)*COLS;
+      anchoredY+=Math.round((ry-anchoredY)/ROWS)*ROWS;
+    }
+    assetRx=anchoredX;assetRy=anchoredY;
+  }
+  if(modernSkin&&isHead&&drawModernSkinHead(ctx,modernSkin,rx,ry,CELL,dir))return;
+  if(modernSkin&&!isHead&&drawModernSkinBody(ctx,modernSkin,assetRx,assetRy,i,CELL))return;
   const isTail=!isHead&&i===snake.length-1;
   const isDogTail=isTail&&skin.id==='hund'&&snake.length>=2;
   const isCatTail=isTail&&skin.id==='katt'&&snake.length>=2;
@@ -7023,6 +7229,12 @@ document.querySelectorAll('.toggle-btn[data-ww]').forEach(btn=>{
     saveSettings();
   });
 });
+document.querySelectorAll('.bonus-preset-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>setBonusEventPreset(btn.dataset.bonusPreset));
+});
+document.querySelectorAll('.bonus-event-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>toggleBonusEvent(btn.dataset.bonusEvent));
+});
 function buildGradeRow(){
   const row=$('gradeRow');row.innerHTML='';
   Object.entries(GRADES).forEach(([g,cfg])=>{
@@ -7113,6 +7325,13 @@ function applyUITheme(id){
   localStorage.setItem('mattormen_ui_theme',id);
   document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('sel',b.dataset.theme===id));
 }
+function applyGraphicsMode(mode,{persist=true}={}){
+  graphicsMode=mode==='modern'?'modern':'classic';
+  document.body.dataset.graphics=graphicsMode;
+  document.querySelectorAll('.graphics-mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.graphics===graphicsMode));
+  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=t('graphicsModeDesc');
+  if(persist)saveSettings();
+}
 
 /* ═══════════════════════════════════════
    SPELLÄGE (standard / övning)
@@ -7132,7 +7351,7 @@ function applyMode(m){
    ═══════════════════════════════════════ */
 
 /* ─── Inställningssida ─── */
-function goToSettings(){showScreen('settingsScreen');}
+function goToSettings(){updateBonusEventControls();showScreen('settingsScreen');}
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
@@ -7153,7 +7372,12 @@ function updateMenuSettingsSummary(){
   const om={'+':'➕','-':'➖','*':'✖️','/':'➗'};
   const opsStr=[...activeOps].map(o=>om[o]||o).join(' ');
   const tStr=(tables.size>0&&(activeOps.has('*')||activeOps.has('/')))?' · '+getTablesShortLabel()+': '+[...tables].sort((a,b)=>a-b).join(', '):'';
-  el.textContent=opsStr+' · '+getRangeLabel(numRange)+tStr;
+  const enabledCount=[mysteryEventsEnabled,portalEventsEnabled,bonusLivesEnabled].filter(Boolean).length;
+  const bonusStr=enabledCount===0
+    ?' · '+pickLangText('🌿 Lugn runda','🌿 Calm round','🌿 Ruhige Runde')
+    :enabledCount<3?' · 🎉 Bonus '+enabledCount+'/3':'';
+  const graphicsStr=graphicsMode==='modern'?' · ✨ Modern':'';
+  el.textContent=opsStr+' · '+getRangeLabel(numRange)+tStr+bonusStr+graphicsStr;
 }
 
 /* ─── WebView2: exportera spelstatistik ─── */
@@ -7720,6 +7944,7 @@ if($('btnAbout')){
 }
 document.querySelectorAll('.theme-btn').forEach(btn=>btn.addEventListener('click',()=>applyUITheme(btn.dataset.theme)));
 document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>applyMode(btn.dataset.mode)));
+document.querySelectorAll('.graphics-mode-btn').forEach(btn=>btn.addEventListener('click',()=>applyGraphicsMode(btn.dataset.graphics)));
 document.querySelectorAll('.music-style-btn').forEach(btn=>btn.addEventListener('click',()=>applyMusicGenre(btn.dataset.genre)));
 $('btnGoMedals').addEventListener('click',goToMedals);
 $('btnGoHS').addEventListener('click',goToHS);
@@ -7805,6 +8030,7 @@ renderHS();updateMedalNavBtn();updateSkinNavBtn();updateMuseumNavBtn();updatePla
 applyUITheme(loadUITheme());
 applyMode(localStorage.getItem('mattormen_mode')||'standard');
 loadSettings();
+applyGraphicsMode(graphicsMode,{persist:false});
 applyMusicGenre(musicGenre,{persist:false,restart:false});
 setTables([...tables]);
 syncTableMultiToggle();
