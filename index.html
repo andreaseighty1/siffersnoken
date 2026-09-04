@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SifferSnoken V3.10 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
+<title>SifferSnoken V3.11 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Nunito:wght@700;900&display=swap');
 :root{
@@ -629,8 +629,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.10! <strong>Lugnare mysteryboxar</strong> och <strong>snyggare 3 2 1-nedrakning</strong></span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.10! <strong>Lugnare mysteryboxar</strong> och <strong>snyggare 3 2 1-nedrakning</strong></span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.11! <strong>Modernt grafikläge</strong> med blinkande ögon och följsam svans</span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.11! <strong>Modernt grafikläge</strong> med blinkande ögon och följsam svans</span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -693,7 +693,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <span style="color:var(--text);font-weight:600"><span style="color:var(--accent)">42</span> Improbable Owls</span>
     </span>
   </a>
-  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.10</div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.11</div>
   <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
 </div>
 
@@ -708,7 +708,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <!-- Vänster kolumn -->
       <div class="settings-col">
         <div class="menu-panel">
-          <div class="panel-title"></div>
+          <div class="panel-title" id="opsPanelTitle"></div>
           <div class="op-grid">
             <button class="op-btn sel" data-op="+">+</button>
             <button class="op-btn sel" data-op="-">−</button>
@@ -717,7 +717,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
           </div>
         </div>
         <div class="menu-panel">
-          <div class="panel-title"></div>
+          <div class="panel-title" id="rangePanelTitle"></div>
           <div class="range-row">
             <button class="range-btn" data-r="10">Inom 10</button>
             <button class="range-btn sel" data-r="20">Upp till 20</button>
@@ -746,21 +746,21 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
       <!-- Höger kolumn -->
       <div class="settings-col">
         <div class="menu-panel">
-          <div class="panel-title"></div>
+          <div class="panel-title" id="speedPanelTitle"></div>
           <div class="speed-row">
             <button class="speed-btn sel" data-sm="none">Ingen ändring</button>
             <button class="speed-btn" data-sm="score">⬆ Poängbaserad</button>
             <button class="speed-btn" data-sm="length">⬆ Längdbaserad</button>
           </div>
           <div class="panel-desc" id="speedDesc">Konstant hastighet hela spelet.</div>
-          <div class="panel-title" style="margin-top:9px;">🧱 Väggar</div>
+          <div class="panel-title" id="wallsPanelTitle" style="margin-top:9px;">🧱 Väggar</div>
           <div class="toggle-row">
             <button class="toggle-btn sel" data-ww="false">☠️ Dör av väggar</button>
             <button class="toggle-btn" data-ww="true">🔄 Runda väggar</button>
           </div>
         </div>
         <div class="menu-panel">
-          <div class="panel-title"></div>
+          <div class="panel-title" id="modePanelTitle"></div>
           <div class="toggle-row">
             <button class="toggle-btn mode-btn sel" data-mode="standard">⚔️ Standard</button>
             <button class="toggle-btn mode-btn" data-mode="practice">📚 Övning</button>
@@ -781,7 +781,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
           <div class="panel-desc" id="bonusEventsDesc" style="margin-top:7px;">Lugn runda stänger av alla tre. Museet och dina fynd finns kvar.</div>
         </div>
         <div class="menu-panel">
-          <div class="panel-title"></div>
+          <div class="panel-title" id="appearancePanelTitle"></div>
           <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
             <button class="toggle-btn theme-btn sel" data-theme="natt">🌑 Natt</button>
             <button class="toggle-btn theme-btn" data-theme="skog">🌸 Rosy</button>
@@ -1218,6 +1218,10 @@ function t(key,vars={}){
   Object.entries(vars).forEach(([k,v])=>{str=str.replace('{'+k+'}',v);});
   return str;
 }
+function tOr(key,sv,en,de=en){
+  const value=t(key);
+  return value===key?pickLangText(sv,en,de):value;
+}
 function pickLangText(sv,en,de=en){
   const lang=getLang();
   if(lang==='sv')return sv;
@@ -1226,9 +1230,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i version <strong>3.10</strong>! <strong>Lugnare mysteryboxar</strong> och <strong>snyggare 3 2 1-nedrakning</strong>',
-    'New in version <strong>3.10</strong>! <strong>Calmer mystery boxes</strong> and a <strong>cleaner 3 2 1 countdown</strong>',
-    'Neu in Version <strong>3.10</strong>! <strong>Ruhigere Mysteryboxen</strong> und ein <strong>schonerer 3 2 1-Countdown</strong>'
+    'Nytt i version <strong>3.11</strong>! <strong>Modernt grafikläge</strong> med blinkande ögon och följsam svans',
+    'New in version <strong>3.11</strong>! <strong>Modern graphics mode</strong> with blinking eyes and a smoothly anchored tail',
+    'Neu in Version <strong>3.11</strong>! <strong>Moderner Grafikmodus</strong> mit blinkenden Augen und einer sauber verankerten Schwanzspitze'
   );
 }
 function getRangeLabel(range){
@@ -1278,14 +1282,14 @@ function applyLang(){
   $('btnPlay').textContent=t('btnPlay');
   $('btnChangeName').textContent=t('changeName');
   updateMenuMusicBtn();
-  // Meny panel-titlar via querySelectorAll (index-baserat)
+  // Meny- och inställningsrubriker via stabila id:n, inte indexordning.
   const pts=document.querySelectorAll('.panel-title');
   if(pts[0])pts[0].textContent=t('panelPreset');
-  if(pts[1])pts[1].textContent=t('panelOps');
-  if(pts[2])pts[2].textContent=t('panelRange');
-  if(pts[3])pts[3].textContent=t('panelTables');
-  if(pts[4])pts[4].textContent=t('panelSpeed');
-  if(pts[5])pts[5].textContent=t('panelWalls');
+  if($('opsPanelTitle'))$('opsPanelTitle').textContent=t('panelOps');
+  if($('rangePanelTitle'))$('rangePanelTitle').textContent=t('panelRange');
+  if($('tablePanelTitle'))$('tablePanelTitle').textContent=t('panelTables');
+  if($('speedPanelTitle'))$('speedPanelTitle').textContent=t('panelSpeed');
+  if($('wallsPanelTitle'))$('wallsPanelTitle').textContent=t('panelWalls');
   // Range buttons
   document.querySelectorAll('.range-btn').forEach(b=>{
     const r=b.dataset.r;
@@ -1362,11 +1366,12 @@ function applyLang(){
     if(b.dataset.mode==='practice')b.textContent=t('modePractice');
   });
   if($('modeDesc'))$('modeDesc').textContent=t(typeof practiceMode!=='undefined'&&practiceMode?'modeDescPractice':'modeDescStandard');
-  // Inställningar: panel-titlar (Spelläge, Utseende osv)
-  document.querySelectorAll('#settingsScreen .panel-title').forEach((el,i)=>{
-    const keys=['panelOps','panelRange','panelTables','panelSpeed','panelWalls','panelMode','panelBonusEvents','panelAppearance','panelGraphicsMode','panelMusicStyle'];
-    if(keys[i])el.textContent=t(keys[i]);
-  });
+  // Inställningar: rubriker via id:n så nya paneler inte förskjuter texten.
+  if($('modePanelTitle'))$('modePanelTitle').textContent=t('panelMode');
+  if($('bonusEventsTitle'))$('bonusEventsTitle').textContent=tOr('panelBonusEvents','🎉 Bonushändelser','🎉 Bonus events','🎉 Bonusereignisse');
+  if($('appearancePanelTitle'))$('appearancePanelTitle').textContent=t('panelAppearance');
+  if($('graphicsModeTitle'))$('graphicsModeTitle').textContent=tOr('panelGraphicsMode','🖼️ Grafikläge','🖼️ Graphics mode','🖼️ Grafikmodus');
+  if($('musicStyleTitle'))$('musicStyleTitle').textContent=t('panelMusicStyle');
   updateBonusEventControls();
   document.querySelectorAll('.theme-btn').forEach(b=>{
     const tmap={
@@ -1391,10 +1396,10 @@ function applyLang(){
   });
   if($('musicStyleTitle'))$('musicStyleTitle').textContent=pickLangText('🎵 Musikstil','🎵 Music style','🎵 Musikstil');
   if($('musicStyleDesc'))$('musicStyleDesc').textContent=pickLangText('Välj soundtrack för meny och spel.','Choose the soundtrack for menu and gameplay.','Wähle den Soundtrack für Menü und Spiel.');
-  if($('graphicsModeTitle'))$('graphicsModeTitle').textContent=t('panelGraphicsMode');
-  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=t('graphicsModeDesc');
-  if($('graphicsClassicBtn'))$('graphicsClassicBtn').textContent=t('graphicsClassic');
-  if($('graphicsModernBtn'))$('graphicsModernBtn').textContent=t('graphicsModern');
+  if($('graphicsModeTitle'))$('graphicsModeTitle').textContent=tOr('panelGraphicsMode','🖼️ Grafikläge','🖼️ Graphics mode','🖼️ Grafikmodus');
+  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc','Klassisk grafik är standard. Modernt läge använder de nya orm-assetsen.','Classic graphics is the default. Modern mode uses the new snake assets.','Klassische Grafik ist der Standard. Der moderne Modus verwendet die neuen Schlangen-Assets.');
+  if($('graphicsClassicBtn'))$('graphicsClassicBtn').textContent=tOr('graphicsClassic','🧩 Classic','🧩 Classic','🧩 Klassisch');
+  if($('graphicsModernBtn'))$('graphicsModernBtn').textContent=tOr('graphicsModern','✨ Modern','✨ Modern','✨ Modern');
   document.querySelectorAll('.graphics-mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.graphics===graphicsMode));
   buildGradeRow();
   // Speed description (uppdatera med nuvarande speedMode)
@@ -2659,11 +2664,13 @@ function isCalmRound(){return !mysteryEventsEnabled&&!portalEventsEnabled&&!bonu
 function updateBonusEventControls(){
   const state={mystery:mysteryEventsEnabled,portals:portalEventsEnabled,lives:bonusLivesEnabled};
   const labelKey={mystery:'bonusMystery',portals:'bonusPortals',lives:'bonusLives'};
+  const labelFallback={mystery:['🎁 Mysterieboxar','🎁 Mystery boxes','🎁 Mysteryboxen'],portals:['🌀 Sifferportaler','🌀 Number portals','🌀 Zahlenportale'],lives:['❤️ Bonusliv','❤️ Bonus lives','❤️ Bonusleben']};
   document.querySelectorAll('.bonus-event-btn').forEach(btn=>{
     const enabled=!!state[btn.dataset.bonusEvent];
     btn.classList.toggle('sel',enabled);
     btn.setAttribute('aria-pressed',String(enabled));
-    btn.textContent=`${t(labelKey[btn.dataset.bonusEvent])} · ${t(enabled?'bonusOn':'bonusOff')}`;
+    const fallback=labelFallback[btn.dataset.bonusEvent]||['','', ''];
+    btn.textContent=`${tOr(labelKey[btn.dataset.bonusEvent],...fallback)} · ${tOr(enabled?'bonusOn':'bonusOff',enabled?'PÅ':'ON',enabled?'ON':'ON',enabled?'AN':'AUS')}`;
   });
   document.querySelectorAll('.bonus-preset-btn').forEach(btn=>{
     const selected=btn.dataset.bonusPreset==='all'
@@ -2672,9 +2679,9 @@ function updateBonusEventControls(){
     btn.classList.toggle('sel',selected);
     btn.setAttribute('aria-pressed',String(selected));
   });
-  if($('bonusPresetAll'))$('bonusPresetAll').textContent=t('bonusAllOn');
-  if($('bonusPresetCalm'))$('bonusPresetCalm').textContent=t('bonusCalm');
-  if($('bonusEventsDesc'))$('bonusEventsDesc').textContent=t('bonusEventsDesc');
+  if($('bonusPresetAll'))$('bonusPresetAll').textContent=tOr('bonusAllOn','✨ Alla på','✨ All on','✨ Alle an');
+  if($('bonusPresetCalm'))$('bonusPresetCalm').textContent=tOr('bonusCalm','🌿 Lugn runda','🌿 Calm round','🌿 Ruhige Runde');
+  if($('bonusEventsDesc'))$('bonusEventsDesc').textContent=tOr('bonusEventsDesc','Lugn runda stänger av alla tre. Museet och dina fynd finns kvar.','Calm round turns off all three. The museum and your discoveries remain.','Die ruhige Runde schaltet alle drei aus. Museum und Funde bleiben erhalten.');
 }
 function setBonusEventPreset(preset){
   const enabled=preset==='all';
@@ -7329,7 +7336,7 @@ function applyGraphicsMode(mode,{persist=true}={}){
   graphicsMode=mode==='modern'?'modern':'classic';
   document.body.dataset.graphics=graphicsMode;
   document.querySelectorAll('.graphics-mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.graphics===graphicsMode));
-  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=t('graphicsModeDesc');
+  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc','Klassisk grafik är standard. Modernt läge använder de nya orm-assetsen.','Classic graphics is the default. Modern mode uses the new snake assets.','Klassische Grafik ist der Standard. Der moderne Modus verwendet die neuen Schlangen-Assets.');
   if(persist)saveSettings();
 }
 
@@ -7355,7 +7362,7 @@ function goToSettings(){updateBonusEventControls();showScreen('settingsScreen');
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
-  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.10';
+  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.11';
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
