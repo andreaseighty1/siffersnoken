@@ -195,6 +195,10 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
   font-size:16px;font-weight:700;cursor:pointer;transition:.15s;letter-spacing:.06em;
   box-shadow:0 0 20px rgba(0,255,136,.2);margin-bottom:8px;}
 .play-btn:hover{background:rgba(0,255,136,.22);box-shadow:0 0 32px rgba(0,255,136,.35);transform:translateY(-1px)}
+.ss-icon{display:inline-flex;width:1.15em;height:1.15em;flex:0 0 auto;align-items:center;justify-content:center;vertical-align:-.18em;}
+.ss-icon svg{width:100%;height:100%;display:block;overflow:visible;}
+.ss-button-label{display:inline-block;}
+.play-btn .ss-icon{width:20px;height:20px;margin-right:7px;vertical-align:-.27em;}
 
 /* ── MENY BOTTEN ── */
 .menu-bottom{display:flex;gap:10px;align-items:stretch;flex-wrap:wrap;
@@ -319,6 +323,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   transition:background .08s;backdrop-filter:blur(4px);
 }
 .dpad-btn:active,.dpad-btn.pressed{background:rgba(0,255,136,.32);border-color:var(--accent);}
+.dpad-btn .ss-icon{width:22px;height:22px;vertical-align:0;}
 #dUp,#dDown{font-size:18px;}
 #dLeft,#dRight{font-size:16px;}
 .dpad-center{width:54px;height:54px;}/* spacer */
@@ -577,6 +582,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   min-height:76px;justify-content:center;text-align:center;}
 .menu-nav-btn:hover{border-color:var(--accent);background:rgba(0,255,136,.07);}
 .menu-nav-btn .nav-emoji{font-size:22px;line-height:1;}
+.menu-nav-btn .nav-emoji .ss-icon{width:22px;height:22px;vertical-align:0;}
 .menu-nav-btn .nav-label{font-family:'Orbitron',monospace;font-size:10px;color:var(--accent);letter-spacing:.08em;}
 .menu-nav-btn .nav-count{font-size:10px;color:var(--muted);font-weight:400;}
 
@@ -1265,6 +1271,56 @@ function setLang(lang){
   updateLangButtons(lang);
   applyLang();
 }
+/* ── Siffersnokens egna UI-ikoner ── */
+// Små, handritade SVG-former med currentColor: inga externa ikonbibliotek och
+// samma pixelstorlek kan användas i meny, knappar och touchkontroller.
+const SS_ICONS={
+  play:'<path d="M8 5.2v13.6l10.5-6.8L8 5.2Z" fill="currentColor"/>',
+  edit:'<path d="m5.1 16.9-.8 3.1 3.1-.8L18.7 8 16 5.3 5.1 16.9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m14.8 6.5 2.7 2.7M5 20l3-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  music:'<path d="M8.5 18.3V6.1L18 4v12.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="6.2" cy="18.4" rx="2.8" ry="2.1" fill="currentColor"/><ellipse cx="15.7" cy="16.3" rx="2.8" ry="2.1" fill="currentColor"/>',
+  mute:'<path d="M8.5 18.3V6.1L18 4v12.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><ellipse cx="6.2" cy="18.4" rx="2.8" ry="2.1" fill="currentColor"/><ellipse cx="15.7" cy="16.3" rx="2.8" ry="2.1" fill="currentColor"/><path d="m4 4 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+  settings:'<path d="m9.7 3.7.6 1.8a7.8 7.8 0 0 1 2.4 0l.6-1.8 2.1.9-.7 1.8a8 8 0 0 1 1.7 1.7l1.8-.7.9 2.1-1.8.6a7.8 7.8 0 0 1 0 2.4l1.8.6-.9 2.1-1.8-.7a8 8 0 0 1-1.7 1.7l.7 1.8-2.1.9-.6-1.8a7.8 7.8 0 0 1-2.4 0l-.6 1.8-2.1-.9.7-1.8a8 8 0 0 1-1.7-1.7l-1.8.7-.9-2.1 1.8-.6a7.8 7.8 0 0 1 0-2.4l-1.8-.6.9-2.1 1.8.7a8 8 0 0 1 1.7-1.7l-.7-1.8 2.1-.9Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/><circle cx="12" cy="9.9" r="2.8" fill="none" stroke="currentColor" stroke-width="1.5"/>',
+  medals:'<circle cx="12" cy="14.2" r="5.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m8.5 10.4-1.2-6 4.7 2.4 4.7-2.4-1.2 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m12 11.8.7 1.5 1.7.2-1.2 1.1.3 1.7-1.5-.8-1.5.8.3-1.7-1.2-1.1 1.7-.2.7-1.5Z" fill="currentColor"/>',
+  trophy:'<path d="M8 4.5h8v4.2c0 3.1-1.5 5-4 5s-4-1.9-4-5V4.5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 6H4.5v1.2c0 2.4 1.4 4 3.7 4M16 6h3.5v1.2c0 2.4-1.4 4-3.7 4M12 13.7V18M8.3 20h7.4M9.5 18h5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+  palette:'<path d="M12 4.2c-4.7 0-8.3 3-8.3 7.1 0 3.8 3 6.8 6.7 6.8h1.3c1 0 1.6-.6 1.6-1.4 0-.9-.7-1.2-.7-2 0-1 1-1.5 2-1.5h1.3c2.4 0 4.4-1.5 4.4-4 0-2.9-3.3-5-8.3-5Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7.7" cy="10" r="1" fill="currentColor"/><circle cx="11.7" cy="7.8" r="1" fill="currentColor"/><circle cx="16" cy="8.6" r="1" fill="currentColor"/>',
+  gift:'<path d="M4.2 10h15.6v10H4.2zM3 7.1h18v2.9H3zM12 7.1V20M12 7.1c-2.6 0-5-.7-5-2.4 0-1.2 1.2-1.8 2.2-1.3C10.6 4 12 7.1 12 7.1Zm0 0c2.6 0 5-.7 5-2.4 0-1.2-1.2-1.8-2.2-1.3C13.4 4 12 7.1 12 7.1Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>',
+  stats:'<path d="M4 19.5V13M10 19.5V8M16 19.5V4.5M22 19.5H2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  up:'<path d="m5.5 14.5 6.5-6 6.5 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+  down:'<path d="m5.5 9.5 6.5 6 6.5-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+  left:'<path d="m14.5 5.5-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>',
+  right:'<path d="m9.5 5.5 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
+};
+function ownIconSvg(name){
+  const body=SS_ICONS[name]||SS_ICONS.play;
+  return `<span class="ss-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">${body}</svg></span>`;
+}
+function cleanOwnButtonLabel(label){
+  // De äldre översättningarna har en emoji först; ikonen tar över den rollen.
+  return String(label||'').replace(/^[^\p{L}\p{N}]*/u,'').trim();
+}
+function setOwnButtonContent(el,icon,label){
+  if(!el)return;
+  el.innerHTML=ownIconSvg(icon)+'<span class="ss-button-label"></span>';
+  const labelEl=el.querySelector('.ss-button-label');
+  if(labelEl)labelEl.textContent=cleanOwnButtonLabel(label);
+}
+function setOwnIconOnly(el,icon,ariaLabel){
+  if(!el)return;
+  el.innerHTML=ownIconSvg(icon);
+  if(ariaLabel)el.setAttribute('aria-label',ariaLabel);
+}
+function renderOwnButtonIcons(){
+  setOwnButtonContent($('btnPlay'),'play',t('btnPlay'));
+  setOwnButtonContent($('btnChangeName'),'edit',t('changeName'));
+  setOwnButtonContent($('statsBtnLabel'),'stats',t('statsBtn'));
+  const navIcons={btnGoSettings:'settings',btnGoMedals:'medals',btnGoHS:'trophy',btnGoSkins:'palette',btnGoMuseum:'gift'};
+  Object.entries(navIcons).forEach(([id,icon])=>{
+    const el=$(id)?.querySelector('.nav-emoji');
+    if(el)el.innerHTML=ownIconSvg(icon);
+  });
+  const dpadLabels={dUp:['up','Upp'],dLeft:['left','Vänster'],dRight:['right','Höger'],dDown:['down','Ned']};
+  Object.entries(dpadLabels).forEach(([id,[icon,label]])=>setOwnIconOnly($(id),icon,label));
+}
 function applyLang(){
   const l=getLang();
   const banner=$('menuBanner');
@@ -1407,6 +1463,7 @@ function applyLang(){
   if($('speedDesc'))$('speedDesc').textContent=_sdMap[speedMode]||'';
   updateMenuSettingsSummary();
   renderHS();updateMedalNavBtn();
+  renderOwnButtonIcons();
 }
 
 const GRADES={
@@ -2712,6 +2769,8 @@ const _scaleTextureSpriteCache=new Map();
 const _segmentLightSpriteCache=new Map();
 const _segmentBaseSpriteCache=new Map();
 let _portalBackgroundSprite=null;
+let _fairyForestBackdropSprite=null;
+let _fairyForestBackdropKey='';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
   sprite.width=size;
@@ -4459,9 +4518,8 @@ function updateMusicMode(){
   }
 }
 function updateMenuMusicBtn(){
-  const icon=musicOn?'🔊 ':'🔇 ';
   const txt=pickLangText('Musik','Music','Musik');
-  $('btnMenuMusic').textContent=icon+txt;
+  setOwnButtonContent($('btnMenuMusic'),musicOn?'music':'mute',txt);
 }
 function toggleMusic(){
   musicOn=!musicOn;
@@ -5792,8 +5850,87 @@ function drawParticles(type){
     }
   }
 }
+const FAIRY_FOREST_FIREFLIES=[
+  [.11,.22,1.8,0.2],[.19,.64,1.4,1.1],[.29,.31,1.6,2.2],[.39,.76,1.5,0.8],
+  [.51,.2,1.4,1.8],[.61,.57,1.8,2.7],[.73,.3,1.5,1.4],[.84,.71,1.7,0.3],
+  [.92,.18,1.3,2.5],[.07,.84,1.4,1.6],[.46,.46,1.2,0.4],[.68,.86,1.3,2.1]
+];
+const FAIRY_FOREST_LEAVES=[
+  [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
+  [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
+];
+function getFairyForestPalette(){
+  const skin=loadActiveSkin();
+  if(skin==='isbla')return {top:'#071b2d',mid:'#0d3a4c',bottom:'#143e3a',hill:'#1d6659',hill2:'#2a8066',leaf:'#93d6a6',light:'#d7f6a1'};
+  if(skin==='rosa')return {top:'#28152b',mid:'#583257',bottom:'#264b48',hill:'#6b6c73',hill2:'#7d8d75',leaf:'#eab0b5',light:'#ffe0a8'};
+  if(skin==='lila')return {top:'#171432',mid:'#302354',bottom:'#173e45',hill:'#4f5b8a',hill2:'#648a82',leaf:'#c3b2ef',light:'#f5d79d'};
+  return {top:'#071d25',mid:'#0b4547',bottom:'#164d3d',hill:'#26705a',hill2:'#3f9167',leaf:'#a8df9a',light:'#ffe28a'};
+}
+function getFairyForestBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  const key=`${W}x${H}|${loadActiveSkin()}`;
+  if(_fairyForestBackdropSprite&&_fairyForestBackdropKey===key)return _fairyForestBackdropSprite;
+  const p=getFairyForestPalette();
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  const grad=sctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,p.top);grad.addColorStop(.52,p.mid);grad.addColorStop(1,p.bottom);
+  sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  const glow=sctx.createRadialGradient(W*.5,H*.38,10,W*.5,H*.38,Math.max(W,H)*.72);
+  glow.addColorStop(0,'rgba(255,241,174,.12)');glow.addColorStop(.46,'rgba(137,232,168,.055)');glow.addColorStop(1,'rgba(0,0,0,0)');
+  sctx.fillStyle=glow;sctx.fillRect(0,0,W,H);
+  // Mjuka kullar ger banan djup utan att konkurrera med talbrickorna.
+  sctx.fillStyle=`${p.hill}aa`;sctx.beginPath();sctx.moveTo(0,H*.82);
+  sctx.bezierCurveTo(W*.16,H*.66,W*.3,H*.78,W*.47,H*.7);
+  sctx.bezierCurveTo(W*.66,H*.61,W*.8,H*.8,W,H*.68);sctx.lineTo(W,H);sctx.lineTo(0,H);sctx.closePath();sctx.fill();
+  sctx.fillStyle=`${p.hill2}66`;sctx.beginPath();sctx.moveTo(0,H*.9);
+  sctx.bezierCurveTo(W*.2,H*.75,W*.34,H*.88,W*.57,H*.79);
+  sctx.bezierCurveTo(W*.78,H*.7,W*.88,H*.9,W,H*.8);sctx.lineTo(W,H);sctx.lineTo(0,H);sctx.closePath();sctx.fill();
+  // Enkla, halvgenomskinliga sagoträd i kanterna. Allt detta ritas en gång per storlek.
+  sctx.save();sctx.globalAlpha=.24;sctx.fillStyle=p.leaf;
+  for(let i=0;i<10;i++){
+    const side=i%2===0?1:-1;
+    const x=side>0?W*(.015+(i%5)*.045):W*(.985-(i%5)*.045);
+    const base=H*(.88-(i%3)*.035),h=H*(.18+(i%4)*.035),r=W*(.055+(i%3)*.012);
+    sctx.fillStyle=i%3===0?p.hill2:p.leaf;
+    sctx.fillRect(x-W*.008,base-h*.32,W*.016,h*.45);
+    sctx.beginPath();sctx.arc(x,base-h*.55,r,0,Math.PI*2);sctx.arc(x-r*.62,base-h*.35,r*.72,0,Math.PI*2);sctx.arc(x+r*.62,base-h*.35,r*.72,0,Math.PI*2);sctx.fill();
+  }
+  sctx.restore();
+  _fairyForestBackdropSprite=sprite;_fairyForestBackdropKey=key;
+  return sprite;
+}
+function drawFairyForestAnimations(){
+  const T=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?0:_renderNow;
+  const W=canvas.width,H=canvas.height,p=getFairyForestPalette();
+  ctx.save();
+  // Begränsad mängd enkel geometri: levande känsla med mycket låg renderkostnad.
+  ctx.globalCompositeOperation='screen';
+  for(let i=0;i<FAIRY_FOREST_FIREFLIES.length;i++){
+    const [rx,ry,r,phase]=FAIRY_FOREST_FIREFLIES[i];
+    const x=rx*W+Math.sin(T/2300+phase)*W*.012;
+    const y=ry*H+Math.cos(T/1900+phase)*H*.018;
+    const a=.12+.16*(.5+.5*Math.sin(T/560+phase));
+    ctx.fillStyle=`rgba(255,${p.light==='#d7f6a1'?245:220},${p.light==='#ffe0a8'?168:145},${a})`;
+    ctx.beginPath();ctx.arc(x,y,r*(.8+.35*Math.sin(T/470+phase)),0,Math.PI*2);ctx.fill();
+  }
+  ctx.globalCompositeOperation='source-over';ctx.globalAlpha=.2;ctx.fillStyle=p.leaf;
+  for(let i=0;i<FAIRY_FOREST_LEAVES.length;i++){
+    const [rx,ry,size,phase]=FAIRY_FOREST_LEAVES[i];
+    const x=(rx*W+Math.sin(T/3000+phase)*W*.025+W)%W;
+    const y=(ry*H+((T/90+i*47)%H)*.018+H)%H;
+    ctx.save();ctx.translate(x,y);ctx.rotate(phase+Math.sin(T/1100+i)*.14);
+    ctx.beginPath();ctx.ellipse(0,0,size,size*.48,0,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
+  if(graphicsMode==='modern'){
+    ctx.drawImage(getFairyForestBackdrop(),0,0);
+    drawFairyForestAnimations();
+    return;
+  }
   ctx.fillStyle=theme.bgA||'#060c08';
   ctx.fillRect(0,0,canvas.width,canvas.height);
   if(theme.particles)drawParticles(theme.particles);
