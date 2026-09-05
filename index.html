@@ -90,10 +90,17 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 
 /* ── MENY ── */
 .player-bar{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;
-  margin-bottom:6px;font-size:14px;font-weight:700;color:var(--accent)}
-.player-bar button{background:none;border:1px solid var(--line);border-radius:6px;color:var(--muted);
-  font-size:12px;padding:2px 7px;cursor:pointer;transition:.12s;}
+  margin-bottom:8px;font-size:14px;font-weight:700;color:var(--accent)}
+.player-bar button{background:rgba(8,24,44,.28);border:1px solid var(--line);border-radius:11px;color:var(--muted);
+  min-width:70px;min-height:48px;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-size:10px;padding:4px 8px;cursor:pointer;transition:.12s;}
 .player-bar button:hover{border-color:var(--accent);color:var(--accent)}
+.player-bar button .ss-icon,#statsBtnLabel .ss-icon{width:24px;height:24px;flex:0 0 24px;vertical-align:0;}
+.player-bar button .ss-button-label,#statsBtnLabel .ss-button-label{font-size:10px;line-height:1.05;white-space:nowrap;}
+#statsBtnLabel{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+#btnMenuMusic .ss-icon{position:relative;}
+#btnMenuMusic.music-off .ss-icon::before{content:'';position:absolute;inset:1px;border:2px solid #ff4d63;border-radius:50%;z-index:2;pointer-events:none;}
+#btnMenuMusic.music-off .ss-icon::after{content:'';position:absolute;left:1px;right:1px;top:50%;height:2px;background:#ff4d63;border-radius:2px;transform:rotate(-45deg);z-index:3;pointer-events:none;}
 .lang-row{display:flex;gap:6px;justify-content:center;margin-bottom:10px;}
 .lang-btn{padding:4px 12px;border:1px solid var(--line);border-radius:8px;
   background:transparent;color:var(--muted);font-family:'Exo 2',sans-serif;
@@ -152,12 +159,14 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
   padding:8px 12px;border:1px solid rgba(78,163,255,.2);border-radius:18px;
   background:linear-gradient(100deg,rgba(78,163,255,.055),rgba(255,255,255,.035),rgba(0,255,136,.035));
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.02),0 8px 22px rgba(0,0,0,.12);
-  display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;box-sizing:border-box;}
-.quick-select-panel .panel-title{display:flex;align-items:center;gap:4px;margin:0;white-space:nowrap;flex:0 0 auto;color:var(--accent);}
-.quick-select-panel .grade-row{display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;flex:1 1 auto;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:2px 0;}
+  display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:28px 24px;
+  grid-template-areas:"title grades" "summary summary";align-items:center;column-gap:10px;row-gap:5px;box-sizing:border-box;}
+.quick-select-panel .panel-title{grid-area:title;display:flex;align-items:center;gap:4px;margin:0;white-space:nowrap;color:var(--accent);}
+.quick-select-panel .grade-row{grid-area:grades;display:flex;align-items:center;justify-content:center;gap:6px;min-width:0;width:100%;height:28px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding:2px 0;}
 .quick-select-panel .grade-row::-webkit-scrollbar{display:none;}
 .quick-select-panel .preset-btn{padding:6px 12px;border-radius:999px;min-width:48px;flex:0 0 auto;}
-.quick-select-panel .menu-settings-summary{margin:0;padding:4px 10px;border:1px solid rgba(0,255,136,.18);border-radius:999px;background:rgba(0,255,136,.055);font-size:10px;line-height:1.3;white-space:nowrap;letter-spacing:.04em;}
+.quick-select-panel .menu-settings-summary{grid-area:summary;width:100%;height:24px;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;margin:0;padding:4px 10px;border:1px solid rgba(0,255,136,.18);border-radius:999px;background:rgba(0,255,136,.055);font-size:10px;line-height:1.3;white-space:nowrap;letter-spacing:.04em;}
+.quick-select-panel .menu-settings-summary::-webkit-scrollbar{display:none;}
 .panel-title{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
              margin-bottom:7px;font-weight:700}
 .panel-desc{font-size:10px;color:var(--muted);margin-bottom:6px;line-height:1.5}
@@ -625,10 +634,10 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   .menu-nav-btn .nav-count{font-size:9px;}
 }
 @media(max-width:560px){
-  .quick-select-panel{width:min(94vw,520px);padding:8px 9px;gap:6px;}
+  .quick-select-panel{width:min(94vw,520px);padding:8px 9px;grid-template-columns:1fr;grid-template-rows:24px 32px 24px;grid-template-areas:"title" "grades" "summary";gap:5px;}
   .quick-select-panel .panel-title{width:100%;justify-content:center;}
-  .quick-select-panel .grade-row{width:100%;flex:0 1 100%;justify-content:flex-start;}
-  .quick-select-panel .menu-settings-summary{margin:0 auto;}
+  .quick-select-panel .grade-row{width:100%;height:32px;justify-content:flex-start;}
+  .quick-select-panel .menu-settings-summary{width:100%;margin:0;}
 }
 @media(min-width:1400px) and (min-height:800px){
   #menuBanner{width:min(520px,42vw)!important;}
@@ -697,7 +706,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   <div class="quick-select-panel" id="quickSelectPanel">
     <div class="panel-title" id="panelPresetLabel">⚡ Snabbval (sätter standardvärden)</div>
     <div class="grade-row" id="gradeRow"></div>
-    <div class="menu-settings-summary" id="menuSettingsSummary" style="margin-top:8px;margin-bottom:0;"></div>
+        <div class="menu-settings-summary" id="menuSettingsSummary"></div>
   </div>
   <!-- Nav-grid -->
   <div class="menu-nav-grid">
@@ -1335,8 +1344,8 @@ function setLang(lang){
 // Små, handritade SVG-former med currentColor: inga externa ikonbibliotek och
 // samma pixelstorlek kan användas i meny, knappar och touchkontroller.
 const SS_ICON_ASSETS={
-  play:'assets/ui-play.webp',edit:'assets/ui-edit.webp',music:'assets/ui-music.webp',settings:'assets/ui-settings.webp',
-  medals:'assets/ui-medals.webp',trophy:'assets/ui-trophy.webp',palette:'assets/ui-palette.webp',gift:'assets/ui-gift.webp'
+  play:'assets/ui-modern-clean-play.webp',edit:'assets/ui-modern-clean-edit.webp',music:'assets/ui-modern-clean-music.webp',settings:'assets/ui-modern-clean-settings.webp',
+  medals:'assets/ui-modern-clean-medals.webp',trophy:'assets/ui-modern-clean-trophy.webp',palette:'assets/ui-modern-clean-palette.webp',gift:'assets/ui-modern-clean-gift.webp',stats:'assets/ui-modern-clean-stats.webp'
 };
 const SS_ICONS={
   play:'<path d="M8 5.2v13.6l10.5-6.8L8 5.2Z" fill="currentColor"/>',
@@ -1393,7 +1402,7 @@ function pageTitleIconMarkup(name){
 function renderPageTitleIcons(){
   const pageTitleIcons={
     settingsTitleEl:'settings',mpTitleEl:'medals',hsTitleEl:'trophy',
-    skinsTitleEl:'palette',museumTitleEl:'gift',statsTitleEl:'trophy'
+    skinsTitleEl:'palette',museumTitleEl:'gift',statsTitleEl:'stats'
   };
   Object.entries(pageTitleIcons).forEach(([id,icon])=>{
     const el=$(id);if(!el)return;
@@ -4609,7 +4618,9 @@ function updateMusicMode(){
 }
 function updateMenuMusicBtn(){
   const txt=pickLangText('Musik','Music','Musik');
-  setOwnButtonContent($('btnMenuMusic'),musicOn?'music':'mute',txt);
+  const btn=$('btnMenuMusic');
+  if(btn)btn.classList.toggle('music-off',!musicOn);
+  setOwnButtonContent(btn,'music',musicOn?txt:pickLangText('Musik av','Music off','Musik aus'));
 }
 function toggleMusic(){
   musicOn=!musicOn;
