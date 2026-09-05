@@ -1379,8 +1379,8 @@ function setOwnIconOnly(el,icon,ariaLabel){
 }
 function renderOwnButtonIcons(){
   setOwnButtonContent($('btnPlay'),'play',t('btnPlay'));
-  if($('btnChangeName'))$('btnChangeName').textContent='✏️ '+t('changeName');
-  if($('statsBtnLabel'))$('statsBtnLabel').textContent='📊 '+t('statsBtn');
+  if($('btnChangeName'))$('btnChangeName').textContent=t('changeName');
+  if($('statsBtnLabel'))$('statsBtnLabel').textContent=t('statsBtn');
   const navIcons={btnGoSettings:'settings',btnGoMedals:'medals',btnGoHS:'trophy',btnGoSkins:'palette',btnGoMuseum:'gift'};
   Object.entries(navIcons).forEach(([id,icon])=>{
     const el=$(id)?.querySelector('.nav-emoji');
@@ -2800,7 +2800,7 @@ function loadSettings(){
   }catch(e){}
 }
 let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
-let speedMode='none',wallWrap=false,multiTableSelect=false,musicGenre='original';
+let speedMode='none',wallWrap=true,multiTableSelect=false,musicGenre='original';
 let mysteryEventsEnabled=true,portalEventsEnabled=true,bonusLivesEnabled=true;
 let graphicsMode='classic';
 function isCalmRound(){return !mysteryEventsEnabled&&!portalEventsEnabled&&!bonusLivesEnabled;}
@@ -3305,7 +3305,7 @@ function invalidateSkinCaches(){
 function loadActiveSkin(){
   if(PERF_STRESS_SKIN&&SKINS_DEF.some(s=>s.id===PERF_STRESS_SKIN))return PERF_STRESS_SKIN;
   if(_activeSkinCache!==null)return _activeSkinCache;
-  _activeSkinCache=localStorage.getItem(ACTIVE_SKIN_KEY)||'klassisk';
+  _activeSkinCache=localStorage.getItem(ACTIVE_SKIN_KEY)||'isbla';
   return _activeSkinCache;
 }
 const modernSkinAssetCache=new Map();
@@ -3320,10 +3320,10 @@ function isModernGraphics(){return graphicsMode==='modern';}
 function skinHasModernAssets(skin){return !!getModernSkinAssetDef(skin);}
 let modernEyeBlinkUntil=0,modernEyeBlinkNextAt=0;
 function isModernEyeBlinking(now=_renderNow||performance.now()){
-  if(!modernEyeBlinkNextAt)modernEyeBlinkNextAt=now+3200+Math.random()*2600;
+  if(!modernEyeBlinkNextAt)modernEyeBlinkNextAt=now+2200+Math.random()*2000;
   if(now>=modernEyeBlinkNextAt){
     modernEyeBlinkUntil=now+125;
-    modernEyeBlinkNextAt=now+3200+Math.random()*3000;
+    modernEyeBlinkNextAt=now+2200+Math.random()*2000;
   }
   return now<modernEyeBlinkUntil;
 }
@@ -3430,7 +3430,7 @@ function isSkinUnlocked(id){
 function getActiveSkinDef(){
   const id=loadActiveSkin();
   if(_activeSkinDefCache&&_activeSkinDefCache.id===id)return _activeSkinDefCache;
-  _activeSkinDefCache=SKINS_DEF.find(s=>s.id===id)||SKINS_DEF[0];
+  _activeSkinDefCache=SKINS_DEF.find(s=>s.id===id)||SKINS_DEF.find(s=>s.id==='isbla')||SKINS_DEF[0];
   return _activeSkinDefCache;
 }
 function unlockSkin(id){
