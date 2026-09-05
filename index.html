@@ -630,6 +630,15 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   .quick-select-panel .grade-row{width:100%;flex:0 1 100%;justify-content:flex-start;}
   .quick-select-panel .menu-settings-summary{margin:0 auto;}
 }
+@media(min-width:1400px) and (min-height:800px){
+  #menuBanner{width:min(520px,42vw)!important;}
+  .menu-news-wrap{width:min(800px,70vw);}
+  .quick-select-panel{width:min(920px,82vw);}
+  .menu-nav-grid{max-width:920px;gap:20px;}
+  .menu-nav-btn{min-height:132px;height:132px;}
+  .menu-nav-btn .nav-emoji,.menu-nav-btn .menu-play-icon,.menu-nav-btn .ss-icon{width:64px;height:64px;flex-basis:64px;}
+  .menu-nav-btn .nav-emoji .ss-icon,.menu-nav-btn .menu-play-icon .ss-icon{width:64px;height:64px;}
+}
 
 /* ── INSTÄLLNINGSSIDA ── */
 #settingsScreen{justify-content:flex-start;padding-top:12px;overflow-y:auto;}
@@ -3297,6 +3306,9 @@ function loadActiveSkin(){
   return _activeSkinCache;
 }
 const modernSkinAssetCache=new Map();
+// Liten visuell överlappning kompenserar för transparenta marginaler i WebP-kropparna.
+// Den ändrar inte grid, kollisioner eller mobilens canvasmått.
+const MODERN_BODY_OVERLAP=1.08;
 function getModernSkinAssetDef(skin){
   const assets=MODERN_BASIC_ASSETS[skin&&skin.id];
   return assets?{...skin,...assets,eyesOpenAsset:MODERN_EYES_OPEN_ASSET,eyesBlinkAsset:MODERN_EYES_BLINK_ASSET,assetFacing:'up',headAssetScale:1.75,bodyAssetScale:1.26,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:0.78}:null;
@@ -3392,7 +3404,8 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   const image=loadModernSkinAsset(isTail?skin.tailAsset:skin.bodyAsset);
   if(!image||!image.complete||!image.naturalWidth)return false;
   const cx=rx*CELL+cell/2,cy=ry*CELL+cell/2;
-  const size=cell*(skin.bodyAssetScale||1.26)*modernBodyVisualScale(index);
+  const overlapScale=isTail?1.05:MODERN_BODY_OVERLAP;
+  const size=cell*(skin.bodyAssetScale||1.26)*overlapScale*modernBodyVisualScale(index);
   drawCtx.save();drawCtx.globalAlpha=Math.max(0.35,1-index*0.035);
   drawCtx.translate(cx,cy);drawCtx.rotate(angle);
   drawCtx.shadowColor=skin.shadow||'transparent';drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
@@ -7342,7 +7355,12 @@ function updateGameCanvasLayout(){
   const otherH=(top?.offsetHeight||0)+(eq?.offsetHeight||0)+(hint?.offsetHeight||0)+24;
   const availableH=Math.max(180,viewportH-padY-otherH);
   const availableW=Math.max(180,Math.min(wrap.clientWidth||canvas.width,viewportW-padX));
-  const scale=Math.min(1,availableW/canvas.width,availableH/canvas.height);
+  // Mobil och mindre fönster behåller exakt tidigare skala. På bred desktop
+  // får spelplanen använda mer av den tillgängliga höjden utan att bli större
+  // än vad layouten runtomkring klarar.
+  const wideDesktop=viewportW>=1200&&viewportH>=700;
+  const maxScale=wideDesktop?1.6:1;
+  const scale=Math.min(maxScale,availableW/canvas.width,availableH/canvas.height);
   canvas.style.width=`${Math.floor(canvas.width*scale)}px`;
   canvas.style.height=`${Math.floor(canvas.height*scale)}px`;
 }
