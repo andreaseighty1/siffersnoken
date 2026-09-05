@@ -2539,6 +2539,8 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   isbla:{headAsset:'skins/modern-iceblue-head-base.webp',bodyAsset:'skins/modern-iceblue-body-straight-clean.png',tailAsset:'skins/modern-iceblue-tail.webp'},
   rosa:{headAsset:'skins/modern-pink-head-base.webp',bodyAsset:'skins/modern-pink-body-straight-clean.png',tailAsset:'skins/modern-pink-tail.webp'},
   lila:{headAsset:'skins/modern-purple-head-base.webp',bodyAsset:'skins/modern-purple-body-straight-clean.png',tailAsset:'skins/modern-purple-tail.webp'},
+  hund:{headAsset:'skins/modern-dog-head-base.webp',bodyAsset:'skins/modern-dog-body-straight.webp',tailAsset:'skins/modern-dog-tail.webp',headAssetScale:1.48,bodyAssetScale:1.15,tailAssetScale:1.26,tailAssetOffset:1.06,tailWagAmplitude:0.28,tailWagPeriod:180,tailWagEnvelope:true,tailAssetPivotFromTop:0.085},
+  katt:{headAsset:'skins/modern-cat-head-base.webp',bodyAsset:'skins/modern-cat-body-straight.webp',tailAsset:'skins/modern-cat-tail.webp',eyesOpenAsset:'skins/modern-cat-eyes-open.webp',headAssetScale:1.48,bodyAssetScale:1.15,tailAssetScale:1.26,tailAssetOffset:1.06,tailWagAmplitude:0.13,tailWagPeriod:260,tailAssetPivotFromTop:0.095},
   jordgubbe:{headAsset:'skins/modern-strawberry-head-base.png',bodyAsset:'skins/modern-strawberry-body-straight.png',tailAsset:'skins/modern-strawberry-tail.png'}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
@@ -3318,7 +3320,7 @@ const MODERN_BODY_OVERLAP=1.08;
 const MODERN_TAIL_EDGE_OFFSET=1.04;
 function getModernSkinAssetDef(skin){
   const assets=MODERN_BASIC_ASSETS[skin&&skin.id];
-  return assets?{...skin,...assets,eyesOpenAsset:MODERN_EYES_OPEN_ASSET,eyesBlinkAsset:MODERN_EYES_BLINK_ASSET,assetFacing:'up',headAssetScale:1.75,bodyAssetScale:1.26,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:MODERN_TAIL_EDGE_OFFSET}:null;
+  return assets?{...skin,eyesOpenAsset:MODERN_EYES_OPEN_ASSET,eyesBlinkAsset:MODERN_EYES_BLINK_ASSET,assetFacing:'up',headAssetScale:1.75,bodyAssetScale:1.26,tailAssetScale:1.26,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:MODERN_TAIL_EDGE_OFFSET,...assets}:null;
 }
 function isModernGraphics(){return graphicsMode==='modern';}
 function skinHasModernAssets(skin){return !!getModernSkinAssetDef(skin);}
@@ -3412,13 +3414,28 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   if(!image||!image.complete||!image.naturalWidth)return false;
   const cx=rx*CELL+cell/2,cy=ry*CELL+cell/2;
   const overlapScale=isTail?1.05:MODERN_BODY_OVERLAP;
-  const size=cell*(skin.bodyAssetScale||1.26)*overlapScale*modernBodyVisualScale(index);
+  const assetScale=isTail?(skin.tailAssetScale||skin.bodyAssetScale||1.26):(skin.bodyAssetScale||1.26);
+  const size=cell*assetScale*overlapScale*modernBodyVisualScale(index);
   // Svansen ska förbli tydlig och fastlimmad även när bakre kroppen tonas ned.
   // Annars blandas den med sista kroppsdelen eftersom tail-asseten överlappar där.
   drawCtx.save();drawCtx.globalAlpha=isTail?1:Math.max(0.35,1-index*0.035);
-  drawCtx.translate(cx,cy);drawCtx.rotate(angle);
   drawCtx.shadowColor=skin.shadow||'transparent';drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
-  drawCtx.drawImage(image,-size/2,-size/2,size,size);drawCtx.restore();
+  if(isTail&&skin.tailWagAmplitude){
+    // Rotera kring svansens plana fäste i stället för bildens mitt.
+    // Fästpunkten ligger då kvar mot kroppen medan bara den fria änden vickar.
+    const pivotFromTop=skin.tailAssetPivotFromTop??0.09;
+    const pivotToCenter=size*(0.5-pivotFromTop);
+    const pivotX=cx+Math.sin(angle)*pivotToCenter;
+    const pivotY=cy-Math.cos(angle)*pivotToCenter;
+    const wagEnvelope=skin.tailWagEnvelope?0.35+0.65*(0.5+0.5*Math.sin(_renderNow/640)):1;
+    const wag=Math.sin(_renderNow/(skin.tailWagPeriod||220))*skin.tailWagAmplitude*wagEnvelope;
+    drawCtx.translate(pivotX,pivotY);drawCtx.rotate(angle+wag);
+    drawCtx.drawImage(image,-size/2,-pivotFromTop*size,size,size);
+  }else{
+    drawCtx.translate(cx,cy);drawCtx.rotate(angle);
+    drawCtx.drawImage(image,-size/2,-size/2,size,size);
+  }
+  drawCtx.restore();
   return true;
 }
 function saveActiveSkin(id){
