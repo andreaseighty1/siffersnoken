@@ -579,26 +579,29 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 /* ── GAMEWRAPPER (Windows/WebView2) ── */
 
 /* ── TITELSKÄRM NAV-GRID ── */
-.menu-nav-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;width:100%;max-width:620px;margin-top:10px;}
-.menu-nav-btn{padding:12px 6px;border:1px solid var(--line);border-radius:16px;background:var(--panel);
+.menu-nav-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;width:100%;max-width:760px;margin-top:10px;}
+.menu-nav-btn{padding:8px 4px;border:0;border-radius:18px;background:transparent;
   color:var(--muted);font-family:'Exo 2',sans-serif;font-size:12px;font-weight:800;cursor:pointer;
-  transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
-  display:flex;flex-direction:column;align-items:center;gap:5px;min-height:108px;
-  justify-content:center;text-align:center;position:relative;}
+  transition:transform .18s ease,filter .18s ease,opacity .18s ease;
+  display:flex;flex-direction:column;align-items:center;gap:5px;min-height:112px;height:112px;
+  box-sizing:border-box;justify-content:center;text-align:center;position:relative;}
 .menu-nav-btn.wide{grid-column:auto;}
-.menu-nav-btn:hover{border-color:var(--accent);background:rgba(0,255,136,.09);
-  box-shadow:0 0 22px rgba(0,255,136,.18);transform:translateY(-3px) scale(1.06);z-index:1;}
+.menu-nav-btn:hover{background:transparent;transform:translateY(-3px) scale(1.06);filter:drop-shadow(0 0 11px rgba(0,255,136,.45));z-index:1;}
 .menu-nav-btn:active{transform:scale(.97);}
 .menu-nav-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
-.menu-nav-btn .nav-emoji{width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:38px;line-height:1;}
-.menu-nav-btn .nav-emoji .ss-icon{width:50px;height:50px;vertical-align:0;}
-.menu-nav-btn .nav-label{font-family:'Orbitron',monospace;font-size:9px;line-height:1.2;color:var(--accent);letter-spacing:.06em;}
+.menu-nav-btn .nav-emoji,.menu-nav-btn .menu-play-icon,.menu-nav-btn .ss-icon{width:54px;height:54px;flex:0 0 54px;display:flex;align-items:center;justify-content:center;font-size:40px;line-height:1;}
+.menu-nav-btn .nav-emoji .ss-icon,.menu-nav-btn .menu-play-icon .ss-icon{width:54px;height:54px;vertical-align:0;}
+.menu-nav-btn .nav-label,.menu-nav-btn .ss-button-label{font-family:'Orbitron',monospace;font-size:9px;line-height:1.2;color:var(--accent);letter-spacing:.06em;min-height:2.4em;display:flex;align-items:flex-start;justify-content:center;}
 .menu-nav-btn .nav-count{font-size:10px;line-height:1.2;color:var(--muted);font-weight:400;min-height:1.2em;}
+.menu-play-btn::after{content:'';display:block;height:1.2em;flex:0 0 1.2em;}
+.menu-play-btn .ss-icon{margin:0;vertical-align:0;}
 @media(max-width:760px){
-  .menu-nav-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-width:430px;}
-  .menu-nav-btn{min-height:100px;padding:10px 4px;}
-  .menu-nav-btn .nav-emoji,.menu-nav-btn .nav-emoji .ss-icon{width:44px;height:44px;}
-  .menu-nav-btn .nav-label{font-size:8px;letter-spacing:.04em;}
+  .menu-nav-grid{display:flex;gap:8px;max-width:none;overflow-x:auto;justify-content:flex-start;padding:6px 10px 12px;margin-top:8px;scroll-snap-type:x mandatory;scroll-padding-inline:10px;scrollbar-width:none;}
+  .menu-nav-grid::-webkit-scrollbar{display:none;}
+  .menu-nav-btn{flex:0 0 86px;width:86px;min-height:100px;height:100px;padding:7px 2px;scroll-snap-align:start;}
+  .menu-nav-btn .nav-emoji,.menu-nav-btn .menu-play-icon,.menu-nav-btn .ss-icon{width:48px;height:48px;flex-basis:48px;}
+  .menu-nav-btn .nav-emoji .ss-icon,.menu-nav-btn .menu-play-icon .ss-icon{width:48px;height:48px;}
+  .menu-nav-btn .nav-label,.menu-nav-btn .ss-button-label{font-size:8px;letter-spacing:.04em;}
   .menu-nav-btn .nav-count{font-size:9px;}
 }
 
@@ -661,12 +664,17 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
     <div class="grade-row" id="gradeRow"></div>
     <div class="menu-settings-summary" id="menuSettingsSummary" style="margin-top:8px;margin-bottom:0;"></div>
   </div>
-  <button class="play-btn" id="btnPlay">▶ STARTA SPELET</button>
   <!-- Nav-grid -->
   <div class="menu-nav-grid">
+    <button class="menu-nav-btn menu-play-btn" id="btnPlay">
+      <span class="menu-play-icon">▶</span>
+      <span class="ss-button-label">STARTA SPELET</span>
+      <span class="nav-count" aria-hidden="true"></span>
+    </button>
     <button class="menu-nav-btn" id="btnGoSettings">
       <span class="nav-emoji">⚙️</span>
       <span class="nav-label" id="settingsBtnLabel">INSTÄLLNINGAR</span>
+      <span class="nav-count" aria-hidden="true"></span>
     </button>
     <button class="menu-nav-btn" id="btnGoMedals">
       <span class="nav-emoji">🏅</span>
@@ -676,13 +684,14 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
     <button class="menu-nav-btn" id="btnGoHS">
       <span class="nav-emoji">🏆</span>
       <span class="nav-label">HIGHSCORE</span>
+      <span class="nav-count" aria-hidden="true"></span>
     </button>
     <button class="menu-nav-btn" id="btnGoSkins">
       <span class="nav-emoji">🎨</span>
       <span class="nav-label" id="skinsBtnLabel">ORMSKINN</span>
       <span class="nav-count" id="skinsBtnCount">0 / 0</span>
     </button>
-    <button class="menu-nav-btn wide" id="btnGoMuseum">
+    <button class="menu-nav-btn" id="btnGoMuseum">
       <span class="nav-emoji">🎁</span>
       <span class="nav-label" id="museumBtnLabel">MYSTERIEMUSEUM</span>
       <span class="nav-count" id="museumBtnCount">0 / 0</span>
