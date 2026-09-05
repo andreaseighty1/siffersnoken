@@ -2535,10 +2535,11 @@ const SKINS_DEF=[
 // Moderna grundassets delas mellan webb och Android. Specialskin fortsätter
 // att använda sin befintliga procedur-rendering tills de får egna assets.
 const MODERN_BASIC_ASSETS=Object.freeze({
-  klassisk:{headAsset:'skins/modern-classic-green-head-base.webp',bodyAsset:'skins/modern-classic-green-body-straight.webp',tailAsset:'skins/modern-classic-green-tail.webp'},
-  isbla:{headAsset:'skins/modern-iceblue-head-base.webp',bodyAsset:'skins/modern-iceblue-body-straight.webp',tailAsset:'skins/modern-iceblue-tail.webp'},
-  rosa:{headAsset:'skins/modern-pink-head-base.webp',bodyAsset:'skins/modern-pink-body-straight.webp',tailAsset:'skins/modern-pink-tail.webp'},
-  lila:{headAsset:'skins/modern-purple-head-base.webp',bodyAsset:'skins/modern-purple-body-straight.webp',tailAsset:'skins/modern-purple-tail.webp'}
+  klassisk:{headAsset:'skins/modern-classic-green-head-base.webp',bodyAsset:'skins/modern-classic-green-body-straight-clean.png',tailAsset:'skins/modern-classic-green-tail.webp'},
+  isbla:{headAsset:'skins/modern-iceblue-head-base.webp',bodyAsset:'skins/modern-iceblue-body-straight-clean.png',tailAsset:'skins/modern-iceblue-tail.webp'},
+  rosa:{headAsset:'skins/modern-pink-head-base.webp',bodyAsset:'skins/modern-pink-body-straight-clean.png',tailAsset:'skins/modern-pink-tail.webp'},
+  lila:{headAsset:'skins/modern-purple-head-base.webp',bodyAsset:'skins/modern-purple-body-straight-clean.png',tailAsset:'skins/modern-purple-tail.webp'},
+  jordgubbe:{headAsset:'skins/modern-strawberry-head-base.png',bodyAsset:'skins/modern-strawberry-body-straight.png',tailAsset:'skins/modern-strawberry-tail.png'}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
 const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
@@ -3312,9 +3313,12 @@ const modernSkinAssetCache=new Map();
 // Liten visuell överlappning kompenserar för transparenta marginaler i WebP-kropparna.
 // Den ändrar inte grid, kollisioner eller mobilens canvasmått.
 const MODERN_BODY_OVERLAP=1.08;
+// Svansens synliga fästyta möter sista kroppsdelens kant vid cirka 1,04 rutor.
+// Det hindrar den ogenomskinliga svansen från att lysa igenom en nedtonad lång kropp.
+const MODERN_TAIL_EDGE_OFFSET=1.04;
 function getModernSkinAssetDef(skin){
   const assets=MODERN_BASIC_ASSETS[skin&&skin.id];
-  return assets?{...skin,...assets,eyesOpenAsset:MODERN_EYES_OPEN_ASSET,eyesBlinkAsset:MODERN_EYES_BLINK_ASSET,assetFacing:'up',headAssetScale:1.75,bodyAssetScale:1.26,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:0.78}:null;
+  return assets?{...skin,...assets,eyesOpenAsset:MODERN_EYES_OPEN_ASSET,eyesBlinkAsset:MODERN_EYES_BLINK_ASSET,assetFacing:'up',headAssetScale:1.75,bodyAssetScale:1.26,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:MODERN_TAIL_EDGE_OFFSET}:null;
 }
 function isModernGraphics(){return graphicsMode==='modern';}
 function skinHasModernAssets(skin){return !!getModernSkinAssetDef(skin);}
@@ -6516,7 +6520,7 @@ function drawSeg(rx,ry,i,isHead,progress=moveProgress){
     const bodyPoint=getSnakeRenderPoint(snake[lastBodyIndex],progress);
     const motion=bodyMotionDirection(lastBodyIndex);
     const tailDirection={x:-motion.x,y:-motion.y};
-    const offset=modernSkin.tailAssetOffset??0.78;
+    const offset=modernSkin.tailAssetOffset??MODERN_TAIL_EDGE_OFFSET;
     let anchoredX=bodyPoint.x+tailDirection.x*offset;
     let anchoredY=bodyPoint.y+tailDirection.y*offset;
     if(wallWrap){
