@@ -197,6 +197,7 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .play-btn:hover{background:rgba(0,255,136,.22);box-shadow:0 0 32px rgba(0,255,136,.35);transform:translateY(-1px)}
 .ss-icon{display:inline-flex;width:1.15em;height:1.15em;flex:0 0 auto;align-items:center;justify-content:center;vertical-align:-.18em;}
 .ss-icon svg{width:100%;height:100%;display:block;overflow:visible;}
+.ss-icon img{width:100%;height:100%;display:block;object-fit:contain;}
 .ss-button-label{display:inline-block;}
 .play-btn .ss-icon{width:20px;height:20px;margin-right:7px;vertical-align:-.27em;}
 
@@ -1274,6 +1275,10 @@ function setLang(lang){
 /* ── Siffersnokens egna UI-ikoner ── */
 // Små, handritade SVG-former med currentColor: inga externa ikonbibliotek och
 // samma pixelstorlek kan användas i meny, knappar och touchkontroller.
+const SS_ICON_ASSETS={
+  play:'assets/ui-play.webp',edit:'assets/ui-edit.webp',music:'assets/ui-music.webp',settings:'assets/ui-settings.webp',
+  medals:'assets/ui-medals.webp',trophy:'assets/ui-trophy.webp',palette:'assets/ui-palette.webp',gift:'assets/ui-gift.webp'
+};
 const SS_ICONS={
   play:'<path d="M8 5.2v13.6l10.5-6.8L8 5.2Z" fill="currentColor"/>',
   edit:'<path d="m5.1 16.9-.8 3.1 3.1-.8L18.7 8 16 5.3 5.1 16.9Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m14.8 6.5 2.7 2.7M5 20l3-1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
@@ -1291,6 +1296,7 @@ const SS_ICONS={
   right:'<path d="m9.5 5.5 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>'
 };
 function ownIconSvg(name){
+  if(SS_ICON_ASSETS[name])return `<span class="ss-icon" aria-hidden="true"><img src="${SS_ICON_ASSETS[name]}" alt="" draggable="false"></span>`;
   const body=SS_ICONS[name]||SS_ICONS.play;
   return `<span class="ss-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">${body}</svg></span>`;
 }
@@ -2771,6 +2777,8 @@ const _segmentBaseSpriteCache=new Map();
 let _portalBackgroundSprite=null;
 let _fairyForestBackdropSprite=null;
 let _fairyForestBackdropKey='';
+let _fairyForestImage=null;
+let _fairyForestImageStatus='idle';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
   sprite.width=size;
@@ -5868,8 +5876,22 @@ function getFairyForestPalette(){
 }
 function getFairyForestBackdrop(){
   const W=canvas.width,H=canvas.height;
-  const key=`${W}x${H}|${loadActiveSkin()}`;
+  if(_fairyForestImageStatus==='idle'){
+    _fairyForestImageStatus='loading';
+    _fairyForestImage=new Image();
+    _fairyForestImage.onload=()=>{_fairyForestImageStatus='ready';_fairyForestBackdropSprite=null;_fairyForestBackdropKey='';};
+    _fairyForestImage.onerror=()=>{_fairyForestImageStatus='failed';};
+    _fairyForestImage.src='assets/sagoskog.webp';
+  }
+  const key=`${W}x${H}|${_fairyForestImageStatus==='ready'?'asset':loadActiveSkin()}`;
   if(_fairyForestBackdropSprite&&_fairyForestBackdropKey===key)return _fairyForestBackdropSprite;
+  if(_fairyForestImageStatus==='ready'){
+    const assetSprite=createSpriteCanvas(W);assetSprite.height=H;
+    const assetCtx=assetSprite.getContext('2d');
+    assetCtx.drawImage(_fairyForestImage,0,0,W,H);
+    _fairyForestBackdropSprite=assetSprite;_fairyForestBackdropKey=key;
+    return assetSprite;
+  }
   const p=getFairyForestPalette();
   const sprite=createSpriteCanvas(W);sprite.height=H;
   const sctx=sprite.getContext('2d');
