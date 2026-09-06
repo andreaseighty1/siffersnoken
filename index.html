@@ -1083,6 +1083,7 @@ const PERF_STRESS_LENGTH=PERF_DEBUG
   :0;
 const PERF_STRESS_SKIN=PERF_DEBUG?(_perfParams.get('skin')||''):'';
 const PERF_STRESS_PORTAL_BG=PERF_DEBUG&&_perfParams.get('bg')==='portal';
+const PERF_STRESS_BOARD=PERF_DEBUG?(_perfParams.get('board')||''):'';
 const HS_KEY='mattormen_v3_hs', PLAYER_KEY='mattormen_player',
       MEDALS_KEY='mattormen_medals_v1', OP_SCORES_KEY='mattormen_op_scores',
       STATS_KEY='mattormen_stats', LANG_KEY='mattormen_lang',
@@ -2864,6 +2865,11 @@ let _fairyForestBackdropSprite=null;
 let _fairyForestBackdropKey='';
 let _fairyForestImage=null;
 let _fairyForestImageStatus='idle';
+let _crystalCaveBackdropSprite=null;
+let _crystalCaveBackdropKey='';
+let _crystalCaveImage=null;
+let _crystalCaveImageStatus='idle';
+let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
   sprite.width=size;
@@ -3448,9 +3454,8 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   const overlapScale=isTail?1.05:MODERN_BODY_OVERLAP;
   const assetScale=isTail?(skin.tailAssetScale||skin.bodyAssetScale||1.26):(skin.bodyAssetScale||1.26);
   const size=cell*assetScale*overlapScale*modernBodyVisualScale(index);
-  // Svansen ska förbli tydlig och fastlimmad även när bakre kroppen tonas ned.
-  // Annars blandas den med sista kroppsdelen eftersom tail-asseten överlappar där.
-  drawCtx.save();drawCtx.globalAlpha=isTail?1:Math.max(0.35,1-index*0.035);
+  // Samma gradvisa nedtoning används genom hela kroppen, inklusive svansen.
+  drawCtx.save();drawCtx.globalAlpha=Math.max(0.35,1-index*0.035);
   drawCtx.shadowColor=hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`;drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
   if(isTail&&skin.tailWagAmplitude){
     // Rotera kring svansens plana fäste i stället för bildens mitt.
@@ -5488,6 +5493,7 @@ function startGame(){
   portalBox=null;portalRun=null;portalSnapshot=null;portalOverlayMode='intro';portalSpawnCount=0;portalAnsweredCheckpoint=0;portalPityCorrect=0;
   wrongPool=[];
   sessionCorrect=0;sessionTotal=0;sessionOpStats={};sessionWrongMap={};
+  if(graphicsMode==='modern')selectModernBoardTheme();
   const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
   snake=[];for(let i=0;i<4;i++)snake.push({x:mx-i,y:my,px:mx-i,py:my});
   if(PERF_STRESS_LENGTH){
@@ -6007,6 +6013,19 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
+const MODERN_BOARD_THEME_IDS=['forest','crystal'];
+const CRYSTAL_CAVE_SPARKLES=[
+  [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
+  [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
+  [.07,.62,1.3,2.1],[.83,.08,1.1,.9]
+];
+function selectModernBoardTheme(){
+  if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
+    modernBoardThemeId=PERF_STRESS_BOARD;
+    return;
+  }
+  modernBoardThemeId=MODERN_BOARD_THEME_IDS[Math.floor(Math.random()*MODERN_BOARD_THEME_IDS.length)];
+}
 function getFairyForestPalette(){
   const skin=loadActiveSkin();
   if(skin==='isbla')return {top:'#071b2d',mid:'#0d3a4c',bottom:'#143e3a',hill:'#1d6659',hill2:'#2a8066',leaf:'#93d6a6',light:'#d7f6a1'};
@@ -6086,11 +6105,54 @@ function drawFairyForestAnimations(){
   }
   ctx.restore();
 }
+function getCrystalCaveBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_crystalCaveImageStatus==='idle'){
+    _crystalCaveImageStatus='loading';
+    _crystalCaveImage=new Image();
+    _crystalCaveImage.onload=()=>{_crystalCaveImageStatus='ready';_crystalCaveBackdropSprite=null;_crystalCaveBackdropKey='';};
+    _crystalCaveImage.onerror=()=>{_crystalCaveImageStatus='failed';};
+    _crystalCaveImage.src='assets/kristallgrotta.webp';
+  }
+  const key=`${W}x${H}|${_crystalCaveImageStatus}`;
+  if(_crystalCaveBackdropSprite&&_crystalCaveBackdropKey===key)return _crystalCaveBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_crystalCaveImageStatus==='ready'){
+    sctx.drawImage(_crystalCaveImage,0,0,W,H);
+  }else{
+    const grad=sctx.createLinearGradient(0,0,0,H);
+    grad.addColorStop(0,'#102d57');grad.addColorStop(.5,'#147c98');grad.addColorStop(1,'#17274f');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+    const glow=sctx.createRadialGradient(W*.5,H*.48,8,W*.5,H*.48,Math.max(W,H)*.65);
+    glow.addColorStop(0,'rgba(99,232,255,.3)');glow.addColorStop(.55,'rgba(90,179,218,.1)');glow.addColorStop(1,'rgba(24,17,71,.22)');
+    sctx.fillStyle=glow;sctx.fillRect(0,0,W,H);
+  }
+  _crystalCaveBackdropSprite=sprite;_crystalCaveBackdropKey=key;
+  return sprite;
+}
+function drawCrystalCaveAnimations(){
+  const T=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?0:_renderNow;
+  const W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<CRYSTAL_CAVE_SPARKLES.length;i++){
+    const [rx,ry,r,phase]=CRYSTAL_CAVE_SPARKLES[i];
+    const pulse=.12+.3*(.5+.5*Math.sin(T/520+phase));
+    ctx.fillStyle=i%3===0?`rgba(210,152,255,${pulse})`:`rgba(118,239,255,${pulse})`;
+    ctx.beginPath();ctx.arc(rx*W,ry*H,r*(.75+.35*Math.sin(T/430+phase)),0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
-    ctx.drawImage(getFairyForestBackdrop(),0,0);
-    drawFairyForestAnimations();
+    if(modernBoardThemeId==='crystal'){
+      ctx.drawImage(getCrystalCaveBackdrop(),0,0);
+      drawCrystalCaveAnimations();
+    }else{
+      ctx.drawImage(getFairyForestBackdrop(),0,0);
+      drawFairyForestAnimations();
+    }
     return;
   }
   ctx.fillStyle=theme.bgA||'#060c08';
