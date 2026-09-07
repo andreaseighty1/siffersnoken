@@ -2546,7 +2546,11 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   guld:{headAsset:'skins/modern-gold-head-base.webp',bodyAsset:'skins/modern-gold-body-straight.webp',tailAsset:'skins/modern-gold-tail.webp'},
   jordgubbe:{headAsset:'skins/modern-strawberry-head-base.webp',bodyAsset:'skins/modern-strawberry-body-straight.webp',tailAsset:'skins/modern-strawberry-tail.webp'},
   vattenmelon:{headAsset:'skins/modern-watermelon-head-base.webp',bodyAsset:'skins/modern-watermelon-body-straight.webp',tailAsset:'skins/modern-watermelon-tail.webp'},
-  fotboll:{headAsset:'skins/modern-football-head-base.webp',bodyAsset:'skins/modern-football-body-straight.webp',tailAsset:'skins/modern-football-tail.webp'}
+  fotboll:{headAsset:'skins/modern-football-head-base.webp',bodyAsset:'skins/modern-football-body-straight.webp',tailAsset:'skins/modern-football-tail.webp'},
+  polkagris:{headAsset:'skins/modern-candy-cane-head-base.webp',bodyAsset:'skins/modern-candy-cane-body-straight.webp',tailAsset:'skins/modern-candy-cane-tail.webp'},
+  galax:{headAsset:'skins/modern-galaxy-head-base.webp',bodyAsset:'skins/modern-galaxy-body-straight.webp',tailAsset:'skins/modern-galaxy-tail.webp',galaxyTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
+  obsidian:{headAsset:'skins/modern-obsidian-head-base.webp',bodyAsset:'skins/modern-obsidian-body-straight.webp',tailAsset:'skins/modern-obsidian-tail.webp',magmaPulse:true,assetShadowBlur:8,assetBodyShadowBlur:5},
+  drake:{headAsset:'skins/modern-dragon-head-base.webp',bodyAsset:'skins/modern-dragon-body-straight.webp',tailAsset:'skins/modern-dragon-tail.webp',headAssetScale:1.75,eyesAssetScale:.74,eyesAssetOffsetY:-.035,assetShadowBlur:8,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.085,tailWagPeriod:270,tailWagEnvelope:true,tailAssetPivotFromTop:.085}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
 const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
@@ -2875,6 +2879,10 @@ let _sunTempleBackdropSprite=null;
 let _sunTempleBackdropKey='';
 let _sunTempleImage=null;
 let _sunTempleImageStatus='idle';
+let _footballPitchBackdropSprite=null;
+let _footballPitchBackdropKey='';
+let _footballPitchImage=null;
+let _footballPitchImageStatus='idle';
 let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
@@ -3414,6 +3422,31 @@ function drawModernHeadAccessory(cx,cy){
   else acc=userPick;
   if(acc)drawHeadAccessory(acc,cx,cy);
 }
+const MODERN_GALAXY_TWINKLES=[
+  [-.23,-.12,.026,.2],[.2,-.2,.02,1.4],[-.08,.2,.023,2.6]
+];
+const MODERN_GALAXY_TAIL_TWINKLES=[
+  [-.12,-.24,.022,.5],[.1,-.04,.019,2.1],[0,.22,.016,3.2]
+];
+const MODERN_REDUCED_MOTION_QUERY=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):null;
+function drawModernGalaxyTwinkles(drawCtx,size,index,isTail=false){
+  const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||performance.now());
+  const points=isTail?MODERN_GALAXY_TAIL_TWINKLES:MODERN_GALAXY_TWINKLES;
+  drawCtx.save();drawCtx.globalCompositeOperation='screen';
+  for(let i=0;i<points.length;i++){
+    const [rx,ry,scale,phase]=points[i];
+    const pulse=.28+.58*(.5+.5*Math.sin(T/560+phase+index*.73));
+    const radius=Math.max(.8,size*scale*(.7+.3*pulse));
+    const x=rx*size,y=ry*size;
+    drawCtx.strokeStyle=i%2===0?`rgba(180,242,255,${pulse})`:`rgba(255,188,249,${pulse})`;
+    drawCtx.lineWidth=Math.max(.65,size*.009);
+    drawCtx.beginPath();
+    drawCtx.moveTo(x-radius*2.2,y);drawCtx.lineTo(x+radius*2.2,y);
+    drawCtx.moveTo(x,y-radius*2.2);drawCtx.lineTo(x,y+radius*2.2);
+    drawCtx.stroke();
+  }
+  drawCtx.restore();
+}
 function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   const image=loadModernSkinAsset(skin.headAsset);
   if(!image||!image.complete||!image.naturalWidth)return false;
@@ -3423,13 +3456,20 @@ function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   const size=cell*(skin.headAssetScale||1.75),ratio=image.naturalHeight/image.naturalWidth;
   const angle=bodyFacingAngle(heading)+(skin.assetFacing==='up'?Math.PI/2:0);
   drawCtx.save();drawCtx.translate(cx,cy);drawCtx.rotate(angle);
-  drawCtx.shadowColor=hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`;drawCtx.shadowBlur=skin.assetShadowBlur||5;
-  drawCtx.drawImage(renderImage,-size/2,-size*ratio/2,size,size*ratio);drawCtx.restore();
+  const galaxyTime=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||0);
+  const galaxyGlow=skin.galaxyTwinkles?`hsl(${235+45*Math.sin(galaxyTime/2800)},100%,67%)`:null;
+  const magmaGlow=skin.magmaPulse?`hsl(${16+5*Math.sin(galaxyTime/1050)},100%,${58+7*Math.sin(galaxyTime/780)}%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`);drawCtx.shadowBlur=skin.assetShadowBlur||5;
+  drawCtx.drawImage(renderImage,-size/2,-size*ratio/2,size,size*ratio);
+  if(skin.galaxyTwinkles)drawModernGalaxyTwinkles(drawCtx,size,0,false);
+  drawCtx.restore();
   const eyes=loadModernSkinAsset(isModernEyeBlinking()?skin.eyesBlinkAsset:skin.eyesOpenAsset);
   if(eyes&&eyes.complete&&eyes.naturalWidth){
     const eyesRatio=eyes.naturalHeight/eyes.naturalWidth;
+    const eyesSize=size*(skin.eyesAssetScale||1);
+    const eyesOffsetY=size*(skin.eyesAssetOffsetY||0);
     drawCtx.save();drawCtx.translate(cx,cy);drawCtx.rotate(angle);
-    drawCtx.drawImage(eyes,-size/2,-size*eyesRatio/2,size,size*eyesRatio);drawCtx.restore();
+    drawCtx.drawImage(eyes,-eyesSize/2,-eyesSize*eyesRatio/2+eyesOffsetY,eyesSize,eyesSize*eyesRatio);drawCtx.restore();
   }
   drawModernHeadAccessory(cx,cy);
   return true;
@@ -3462,7 +3502,10 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   const size=cell*assetScale*overlapScale*modernBodyVisualScale(index);
   // Samma gradvisa nedtoning används genom hela kroppen, inklusive svansen.
   drawCtx.save();drawCtx.globalAlpha=Math.max(0.35,1-index*0.035);
-  drawCtx.shadowColor=hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`;drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
+  const galaxyTime=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||0);
+  const galaxyGlow=skin.galaxyTwinkles?`hsl(${235+45*Math.sin(galaxyTime/2800+index*.5)},100%,62%)`:null;
+  const magmaGlow=skin.magmaPulse?`hsl(${16+5*Math.sin(galaxyTime/1050+index*.42)},100%,${54+8*Math.sin(galaxyTime/780+index*.42)}%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`);drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
   if(isTail&&skin.tailWagAmplitude){
     // Rotera kring svansens plana fäste i stället för bildens mitt.
     // Fästpunkten ligger då kvar mot kroppen medan bara den fria änden vickar.
@@ -3476,7 +3519,9 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
     drawCtx.drawImage(renderImage,-size/2,-pivotFromTop*size,size,size);
   }else{
     drawCtx.translate(cx,cy);drawCtx.rotate(angle);
+    if(skin.assetAlternateMirror&&!isTail&&index%2===1)drawCtx.scale(-1,1);
     drawCtx.drawImage(renderImage,-size/2,-size/2,size,size);
+    if(skin.galaxyTwinkles)drawModernGalaxyTwinkles(drawCtx,size,index,isTail);
   }
   drawCtx.restore();
   return true;
@@ -6019,7 +6064,7 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
-const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple'];
+const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch'];
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6029,6 +6074,11 @@ const SUN_TEMPLE_GLINTS=[
   [.08,.16,1.4,.2],[.18,.88,1.2,1.1],[.31,.08,1.1,2.4],[.48,.93,1.5,.7],
   [.64,.09,1.2,1.8],[.79,.91,1.4,2.8],[.92,.2,1.3,1.4],[.94,.72,1.1,.4],
   [.07,.61,1.2,2.1],[.85,.08,1.0,.9]
+];
+const FOOTBALL_PITCH_CONFETTI=[
+  [.05,.13,4,1,.2],[.13,.94,5,-1,1.1],[.28,.05,4,1,2.3],[.45,.96,4,-1,.7],
+  [.62,.04,5,1,1.8],[.78,.95,4,-1,2.8],[.94,.17,5,1,1.4],[.95,.75,4,-1,.4],
+  [.04,.58,4,1,2.1],[.87,.06,4,-1,.9]
 ];
 function selectModernBoardTheme(){
   if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
@@ -6191,6 +6241,44 @@ function drawSunTempleAnimations(){
   }
   ctx.restore();
 }
+function getFootballPitchBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_footballPitchImageStatus==='idle'){
+    _footballPitchImageStatus='loading';
+    _footballPitchImage=new Image();
+    _footballPitchImage.onload=()=>{_footballPitchImageStatus='ready';_footballPitchBackdropSprite=null;_footballPitchBackdropKey='';};
+    _footballPitchImage.onerror=()=>{_footballPitchImageStatus='failed';};
+    _footballPitchImage.src='assets/fotbollsplan.webp';
+  }
+  const key=`${W}x${H}|${_footballPitchImageStatus}`;
+  if(_footballPitchBackdropSprite&&_footballPitchBackdropKey===key)return _footballPitchBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_footballPitchImageStatus==='ready'){
+    sctx.drawImage(_footballPitchImage,0,0,W,H);
+  }else{
+    const grad=sctx.createLinearGradient(0,0,W,H);
+    grad.addColorStop(0,'#166b34');grad.addColorStop(.5,'#43a941');grad.addColorStop(1,'#176b3b');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _footballPitchBackdropSprite=sprite;_footballPitchBackdropKey=key;
+  return sprite;
+}
+function drawFootballPitchAnimations(){
+  const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:_renderNow;
+  const W=canvas.width,H=canvas.height;
+  ctx.save();
+  for(let i=0;i<FOOTBALL_PITCH_CONFETTI.length;i++){
+    const [rx,ry,size,dir,phase]=FOOTBALL_PITCH_CONFETTI[i];
+    const x=rx*W+Math.sin(T/1700+phase)*W*.004;
+    const y=ry*H+Math.cos(T/1450+phase)*H*.006;
+    ctx.save();ctx.translate(x,y);ctx.rotate(dir*(T/2600+phase));
+    ctx.globalAlpha=.28+.18*(.5+.5*Math.sin(T/620+phase));
+    ctx.fillStyle=i%3===0?'#f7d447':i%3===1?'#3b8cff':'#ffffff';
+    ctx.fillRect(-size*.55,-size*.25,size*1.1,size*.5);ctx.restore();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
@@ -6200,6 +6288,9 @@ function drawBackground(theme){
     }else if(modernBoardThemeId==='sunTemple'){
       ctx.drawImage(getSunTempleBackdrop(),0,0);
       drawSunTempleAnimations();
+    }else if(modernBoardThemeId==='footballPitch'){
+      ctx.drawImage(getFootballPitchBackdrop(),0,0);
+      drawFootballPitchAnimations();
     }else{
       ctx.drawImage(getFairyForestBackdrop(),0,0);
       drawFairyForestAnimations();
