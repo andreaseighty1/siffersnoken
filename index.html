@@ -2533,8 +2533,8 @@ const SKINS_DEF=[
    previewCss:'linear-gradient(135deg,rgba(245,250,255,0.95),rgba(170,220,255,0.5),rgba(120,170,220,0.18))'},
 ];
 
-// Moderna grundassets delas mellan webb och Android. Specialskin fortsätter
-// att använda sin befintliga procedur-rendering tills de får egna assets.
+// Moderna skin-assets delas mellan webb och Android. Skin som ännu saknas här
+// fortsätter att använda sin befintliga procedur-rendering.
 const MODERN_BASIC_ASSETS=Object.freeze({
   klassisk:{headAsset:'skins/modern-classic-green-head-base.webp',bodyAsset:'skins/modern-classic-green-body-straight-clean.webp',tailAsset:'skins/modern-classic-green-tail.webp'},
   isbla:{headAsset:'skins/modern-iceblue-head-base.webp',bodyAsset:'skins/modern-iceblue-body-straight-clean.webp',tailAsset:'skins/modern-iceblue-tail.webp'},
@@ -2544,7 +2544,9 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   katt:{headAsset:'skins/modern-cat-head-base.webp',bodyAsset:'skins/modern-cat-body-straight.webp',tailAsset:'skins/modern-cat-tail.webp',eyesOpenAsset:'skins/modern-cat-eyes-open.webp',headAssetScale:1.48,bodyAssetScale:1.19,tailAssetScale:1.26,tailAssetOffset:1.06,tailWagAmplitude:0.13,tailWagPeriod:260,tailAssetPivotFromTop:0.095},
   regnbage:{headAsset:'skins/modern-rainbow-head-base.webp',bodyAsset:'skins/modern-rainbow-body-straight.webp',tailAsset:'skins/modern-rainbow-tail.webp',assetHueCycle:true},
   guld:{headAsset:'skins/modern-gold-head-base.webp',bodyAsset:'skins/modern-gold-body-straight.webp',tailAsset:'skins/modern-gold-tail.webp'},
-  jordgubbe:{headAsset:'skins/modern-strawberry-head-base.webp',bodyAsset:'skins/modern-strawberry-body-straight.webp',tailAsset:'skins/modern-strawberry-tail.webp'}
+  jordgubbe:{headAsset:'skins/modern-strawberry-head-base.webp',bodyAsset:'skins/modern-strawberry-body-straight.webp',tailAsset:'skins/modern-strawberry-tail.webp'},
+  vattenmelon:{headAsset:'skins/modern-watermelon-head-base.webp',bodyAsset:'skins/modern-watermelon-body-straight.webp',tailAsset:'skins/modern-watermelon-tail.webp'},
+  fotboll:{headAsset:'skins/modern-football-head-base.webp',bodyAsset:'skins/modern-football-body-straight.webp',tailAsset:'skins/modern-football-tail.webp'}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
 const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
@@ -2869,6 +2871,10 @@ let _crystalCaveBackdropSprite=null;
 let _crystalCaveBackdropKey='';
 let _crystalCaveImage=null;
 let _crystalCaveImageStatus='idle';
+let _sunTempleBackdropSprite=null;
+let _sunTempleBackdropKey='';
+let _sunTempleImage=null;
+let _sunTempleImageStatus='idle';
 let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
@@ -6013,11 +6019,16 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
-const MODERN_BOARD_THEME_IDS=['forest','crystal'];
+const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple'];
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
   [.07,.62,1.3,2.1],[.83,.08,1.1,.9]
+];
+const SUN_TEMPLE_GLINTS=[
+  [.08,.16,1.4,.2],[.18,.88,1.2,1.1],[.31,.08,1.1,2.4],[.48,.93,1.5,.7],
+  [.64,.09,1.2,1.8],[.79,.91,1.4,2.8],[.92,.2,1.3,1.4],[.94,.72,1.1,.4],
+  [.07,.61,1.2,2.1],[.85,.08,1.0,.9]
 ];
 function selectModernBoardTheme(){
   if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
@@ -6143,12 +6154,52 @@ function drawCrystalCaveAnimations(){
   }
   ctx.restore();
 }
+function getSunTempleBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_sunTempleImageStatus==='idle'){
+    _sunTempleImageStatus='loading';
+    _sunTempleImage=new Image();
+    _sunTempleImage.onload=()=>{_sunTempleImageStatus='ready';_sunTempleBackdropSprite=null;_sunTempleBackdropKey='';};
+    _sunTempleImage.onerror=()=>{_sunTempleImageStatus='failed';};
+    _sunTempleImage.src='assets/soltemplet.webp';
+  }
+  const key=`${W}x${H}|${_sunTempleImageStatus}`;
+  if(_sunTempleBackdropSprite&&_sunTempleBackdropKey===key)return _sunTempleBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_sunTempleImageStatus==='ready'){
+    sctx.drawImage(_sunTempleImage,0,0,W,H);
+  }else{
+    const grad=sctx.createRadialGradient(W*.5,H*.46,8,W*.5,H*.46,Math.max(W,H)*.72);
+    grad.addColorStop(0,'#f9d976');grad.addColorStop(.56,'#dca64d');grad.addColorStop(1,'#8b542b');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _sunTempleBackdropSprite=sprite;_sunTempleBackdropKey=key;
+  return sprite;
+}
+function drawSunTempleAnimations(){
+  const T=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?0:_renderNow;
+  const W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<SUN_TEMPLE_GLINTS.length;i++){
+    const [rx,ry,r,phase]=SUN_TEMPLE_GLINTS[i];
+    const pulse=.1+.24*(.5+.5*Math.sin(T/610+phase));
+    const x=rx*W+Math.sin(T/2800+phase)*W*.004;
+    const y=ry*H+Math.cos(T/2400+phase)*H*.006;
+    ctx.fillStyle=`rgba(255,239,145,${pulse})`;
+    ctx.beginPath();ctx.arc(x,y,r*(.75+.3*Math.sin(T/490+phase)),0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
     if(modernBoardThemeId==='crystal'){
       ctx.drawImage(getCrystalCaveBackdrop(),0,0);
       drawCrystalCaveAnimations();
+    }else if(modernBoardThemeId==='sunTemple'){
+      ctx.drawImage(getSunTempleBackdrop(),0,0);
+      drawSunTempleAnimations();
     }else{
       ctx.drawImage(getFairyForestBackdrop(),0,0);
       drawFairyForestAnimations();
