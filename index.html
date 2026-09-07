@@ -2550,7 +2550,7 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   polkagris:{headAsset:'skins/modern-candy-cane-head-base.webp',bodyAsset:'skins/modern-candy-cane-body-straight.webp',tailAsset:'skins/modern-candy-cane-tail.webp'},
   galax:{headAsset:'skins/modern-galaxy-head-base.webp',bodyAsset:'skins/modern-galaxy-body-straight.webp',tailAsset:'skins/modern-galaxy-tail.webp',galaxyTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   obsidian:{headAsset:'skins/modern-obsidian-head-base.webp',bodyAsset:'skins/modern-obsidian-body-straight.webp',tailAsset:'skins/modern-obsidian-tail.webp',magmaPulse:true,assetShadowBlur:8,assetBodyShadowBlur:5},
-  drake:{headAsset:'skins/modern-dragon-head-base.webp',bodyAsset:'skins/modern-dragon-body-straight.webp',tailAsset:'skins/modern-dragon-tail.webp',headAssetScale:1.75,eyesAssetScale:.74,eyesAssetOffsetY:-.035,assetShadowBlur:8,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.085,tailWagPeriod:270,tailWagEnvelope:true,tailAssetPivotFromTop:.085},
+  drake:{headAsset:'skins/modern-dragon-head-base.webp',bodyAsset:'skins/modern-dragon-body-straight.webp',tailAsset:'skins/modern-dragon-tail.webp',headAssetScale:1.75,eyesAssetScale:.74,eyesAssetOffsetY:-.035,bodyAssetRotation:Math.PI/2,assetShadowBlur:8,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.085,tailWagPeriod:270,tailWagEnvelope:true,tailAssetPivotFromTop:.085},
   aurora:{headAsset:'skins/modern-aurora-head-base.webp',bodyAsset:'skins/modern-aurora-body-straight.webp',tailAsset:'skins/modern-aurora-tail.webp',auroraFlow:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6},
   ghost:{headAsset:'skins/modern-ghost-head-base.webp',bodyAsset:'skins/modern-ghost-body-straight.webp',tailAsset:'skins/modern-ghost-tail.webp',ghostEcho:true,assetShadowBlur:9,assetBodyShadowBlur:6},
   lava:{headAsset:'skins/modern-lava-head-base.webp',bodyAsset:'skins/modern-lava-body-straight.webp',tailAsset:'skins/modern-lava-tail.webp',magmaPulse:true,assetAlternateMirror:true,assetShadowBlur:10,assetBodyShadowBlur:7},
@@ -3532,6 +3532,7 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
       angle=bodyFacingAngle(facing);
     }
   }
+  if(!isTail&&skin.bodyAssetRotation)angle+=skin.bodyAssetRotation;
   const image=loadModernSkinAsset(isTail?skin.tailAsset:skin.bodyAsset);
   if(!image||!image.complete||!image.naturalWidth)return false;
   const assetSrc=isTail?skin.tailAsset:skin.bodyAsset;
