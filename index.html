@@ -2550,7 +2550,13 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   polkagris:{headAsset:'skins/modern-candy-cane-head-base.webp',bodyAsset:'skins/modern-candy-cane-body-straight.webp',tailAsset:'skins/modern-candy-cane-tail.webp'},
   galax:{headAsset:'skins/modern-galaxy-head-base.webp',bodyAsset:'skins/modern-galaxy-body-straight.webp',tailAsset:'skins/modern-galaxy-tail.webp',galaxyTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   obsidian:{headAsset:'skins/modern-obsidian-head-base.webp',bodyAsset:'skins/modern-obsidian-body-straight.webp',tailAsset:'skins/modern-obsidian-tail.webp',magmaPulse:true,assetShadowBlur:8,assetBodyShadowBlur:5},
-  drake:{headAsset:'skins/modern-dragon-head-base.webp',bodyAsset:'skins/modern-dragon-body-straight.webp',tailAsset:'skins/modern-dragon-tail.webp',headAssetScale:1.75,eyesAssetScale:.74,eyesAssetOffsetY:-.035,assetShadowBlur:8,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.085,tailWagPeriod:270,tailWagEnvelope:true,tailAssetPivotFromTop:.085}
+  drake:{headAsset:'skins/modern-dragon-head-base.webp',bodyAsset:'skins/modern-dragon-body-straight.webp',tailAsset:'skins/modern-dragon-tail.webp',headAssetScale:1.75,eyesAssetScale:.74,eyesAssetOffsetY:-.035,assetShadowBlur:8,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.085,tailWagPeriod:270,tailWagEnvelope:true,tailAssetPivotFromTop:.085},
+  aurora:{headAsset:'skins/modern-aurora-head-base.webp',bodyAsset:'skins/modern-aurora-body-straight.webp',tailAsset:'skins/modern-aurora-tail.webp',auroraFlow:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6},
+  ghost:{headAsset:'skins/modern-ghost-head-base.webp',bodyAsset:'skins/modern-ghost-body-straight.webp',tailAsset:'skins/modern-ghost-tail.webp',ghostEcho:true,assetShadowBlur:9,assetBodyShadowBlur:6},
+  lava:{headAsset:'skins/modern-lava-head-base.webp',bodyAsset:'skins/modern-lava-body-straight.webp',tailAsset:'skins/modern-lava-tail.webp',magmaPulse:true,assetAlternateMirror:true,assetShadowBlur:10,assetBodyShadowBlur:7},
+  stjarnhimmel:{headAsset:'skins/modern-starry-sky-head-base.webp',bodyAsset:'skins/modern-starry-sky-body-straight.webp',tailAsset:'skins/modern-starry-sky-tail.webp',starryTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
+  tiger:{headAsset:'skins/modern-tiger-head-base.webp',bodyAsset:'skins/modern-tiger-body-straight.webp',tailAsset:'skins/modern-tiger-tail.webp',headAssetScale:1.52,eyesAssetScale:.9,eyesAssetOffsetY:.025,assetAlternateMirror:true,assetShadowBlur:6,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.15,tailWagPeriod:245,tailWagEnvelope:true,tailAssetPivotFromTop:.1},
+  hav:{headAsset:'skins/modern-ocean-head-base.webp',bodyAsset:'skins/modern-ocean-body-straight.webp',tailAsset:'skins/modern-ocean-tail.webp',oceanFlow:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
 const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
@@ -2883,6 +2889,14 @@ let _footballPitchBackdropSprite=null;
 let _footballPitchBackdropKey='';
 let _footballPitchImage=null;
 let _footballPitchImageStatus='idle';
+let _hockeyRinkBackdropSprite=null;
+let _hockeyRinkBackdropKey='';
+let _hockeyRinkImage=null;
+let _hockeyRinkImageStatus='idle';
+let _coralReefBackdropSprite=null;
+let _coralReefBackdropKey='';
+let _coralReefImage=null;
+let _coralReefImageStatus='idle';
 let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
@@ -3428,6 +3442,12 @@ const MODERN_GALAXY_TWINKLES=[
 const MODERN_GALAXY_TAIL_TWINKLES=[
   [-.12,-.24,.022,.5],[.1,-.04,.019,2.1],[0,.22,.016,3.2]
 ];
+const MODERN_STARRY_TWINKLES=[
+  [-.2,-.18,.022,.1],[.19,-.08,.019,1.5],[-.05,.19,.02,2.7],[.22,.23,.015,3.6]
+];
+const MODERN_STARRY_TAIL_TWINKLES=[
+  [-.11,-.25,.02,.4],[.08,-.04,.017,1.9],[-.02,.23,.015,3.1]
+];
 const MODERN_REDUCED_MOTION_QUERY=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):null;
 function drawModernGalaxyTwinkles(drawCtx,size,index,isTail=false){
   const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||performance.now());
@@ -3447,6 +3467,21 @@ function drawModernGalaxyTwinkles(drawCtx,size,index,isTail=false){
   }
   drawCtx.restore();
 }
+function drawModernStarryTwinkles(drawCtx,size,index,isTail=false){
+  const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||performance.now());
+  const points=isTail?MODERN_STARRY_TAIL_TWINKLES:MODERN_STARRY_TWINKLES;
+  drawCtx.save();drawCtx.globalCompositeOperation='screen';
+  for(let i=0;i<points.length;i++){
+    const [rx,ry,scale,phase]=points[i];
+    const pulse=.22+.64*(.5+.5*Math.sin(T/720+phase+index*.47));
+    const radius=Math.max(.7,size*scale*(.68+.3*pulse));
+    const x=rx*size,y=ry*size;
+    drawCtx.strokeStyle=i%2===0?`rgba(255,242,184,${pulse})`:`rgba(225,240,255,${pulse})`;
+    drawCtx.lineWidth=Math.max(.55,size*.008);
+    drawCtx.beginPath();drawCtx.moveTo(x-radius*2,y);drawCtx.lineTo(x+radius*2,y);drawCtx.moveTo(x,y-radius*2);drawCtx.lineTo(x,y+radius*2);drawCtx.stroke();
+  }
+  drawCtx.restore();
+}
 function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   const image=loadModernSkinAsset(skin.headAsset);
   if(!image||!image.complete||!image.naturalWidth)return false;
@@ -3459,9 +3494,15 @@ function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   const galaxyTime=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||0);
   const galaxyGlow=skin.galaxyTwinkles?`hsl(${235+45*Math.sin(galaxyTime/2800)},100%,67%)`:null;
   const magmaGlow=skin.magmaPulse?`hsl(${16+5*Math.sin(galaxyTime/1050)},100%,${58+7*Math.sin(galaxyTime/780)}%)`:null;
-  drawCtx.shadowColor=galaxyGlow||magmaGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`);drawCtx.shadowBlur=skin.assetShadowBlur||5;
+  const auroraGlow=skin.auroraFlow?`hsl(${175+55*(.5+.5*Math.sin(galaxyTime/2300))},100%,68%)`:null;
+  const ghostGlow=skin.ghostEcho?'rgba(130,235,255,.72)':null;
+  const starryGlow=skin.starryTwinkles?`hsl(${218+10*Math.sin(galaxyTime/3200)},92%,68%)`:null;
+  const oceanGlow=skin.oceanFlow?`hsl(${182+18*Math.sin(galaxyTime/2400)},96%,64%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`);drawCtx.shadowBlur=skin.assetShadowBlur||5;
+  if(skin.ghostEcho){drawCtx.save();drawCtx.globalAlpha*=.2;drawCtx.drawImage(renderImage,-size/2,-size*ratio/2+size*.09,size,size*ratio);drawCtx.restore();}
   drawCtx.drawImage(renderImage,-size/2,-size*ratio/2,size,size*ratio);
   if(skin.galaxyTwinkles)drawModernGalaxyTwinkles(drawCtx,size,0,false);
+  if(skin.starryTwinkles)drawModernStarryTwinkles(drawCtx,size,0,false);
   drawCtx.restore();
   const eyes=loadModernSkinAsset(isModernEyeBlinking()?skin.eyesBlinkAsset:skin.eyesOpenAsset);
   if(eyes&&eyes.complete&&eyes.naturalWidth){
@@ -3505,7 +3546,11 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   const galaxyTime=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||0);
   const galaxyGlow=skin.galaxyTwinkles?`hsl(${235+45*Math.sin(galaxyTime/2800+index*.5)},100%,62%)`:null;
   const magmaGlow=skin.magmaPulse?`hsl(${16+5*Math.sin(galaxyTime/1050+index*.42)},100%,${54+8*Math.sin(galaxyTime/780+index*.42)}%)`:null;
-  drawCtx.shadowColor=galaxyGlow||magmaGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`);drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
+  const auroraGlow=skin.auroraFlow?`hsl(${175+55*(.5+.5*Math.sin(galaxyTime/2300+index*.38))},100%,64%)`:null;
+  const ghostGlow=skin.ghostEcho?'rgba(115,226,255,.65)':null;
+  const starryGlow=skin.starryTwinkles?`hsl(${218+10*Math.sin(galaxyTime/3200+index*.31)},92%,62%)`:null;
+  const oceanGlow=skin.oceanFlow?`hsl(${182+18*Math.sin(galaxyTime/2400+index*.34)},96%,59%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`);drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
   if(isTail&&skin.tailWagAmplitude){
     // Rotera kring svansens plana fäste i stället för bildens mitt.
     // Fästpunkten ligger då kvar mot kroppen medan bara den fria änden vickar.
@@ -3520,8 +3565,10 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   }else{
     drawCtx.translate(cx,cy);drawCtx.rotate(angle);
     if(skin.assetAlternateMirror&&!isTail&&index%2===1)drawCtx.scale(-1,1);
+    if(skin.ghostEcho){drawCtx.save();drawCtx.globalAlpha*=.18;drawCtx.drawImage(renderImage,-size/2,-size/2+size*.09,size,size);drawCtx.restore();}
     drawCtx.drawImage(renderImage,-size/2,-size/2,size,size);
     if(skin.galaxyTwinkles)drawModernGalaxyTwinkles(drawCtx,size,index,isTail);
+    if(skin.starryTwinkles)drawModernStarryTwinkles(drawCtx,size,index,isTail);
   }
   drawCtx.restore();
   return true;
@@ -6064,7 +6111,7 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
-const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch'];
+const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef'];
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6079,6 +6126,16 @@ const FOOTBALL_PITCH_CONFETTI=[
   [.05,.13,4,1,.2],[.13,.94,5,-1,1.1],[.28,.05,4,1,2.3],[.45,.96,4,-1,.7],
   [.62,.04,5,1,1.8],[.78,.95,4,-1,2.8],[.94,.17,5,1,1.4],[.95,.75,4,-1,.4],
   [.04,.58,4,1,2.1],[.87,.06,4,-1,.9]
+];
+const HOCKEY_RINK_GLINTS=[
+  [.05,.13,1.2,.2],[.12,.91,1.0,1.1],[.28,.055,1.1,2.3],[.46,.95,1.2,.7],
+  [.65,.05,1.0,1.8],[.79,.94,1.2,2.8],[.95,.17,1.1,1.4],[.96,.76,1.0,.4],
+  [.045,.59,1.1,2.1],[.88,.06,1.0,.9]
+];
+const CORAL_REEF_BUBBLES=[
+  [.045,.18,1.2,.2],[.11,.88,1.0,1.1],[.27,.055,.9,2.3],[.48,.95,1.1,.7],
+  [.67,.05,.9,1.8],[.8,.94,1.2,2.8],[.95,.22,1.1,1.4],[.955,.72,.9,.4],
+  [.045,.57,1.0,2.1],[.89,.065,.9,.9]
 ];
 function selectModernBoardTheme(){
   if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
@@ -6279,6 +6336,81 @@ function drawFootballPitchAnimations(){
   }
   ctx.restore();
 }
+function getHockeyRinkBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_hockeyRinkImageStatus==='idle'){
+    _hockeyRinkImageStatus='loading';
+    _hockeyRinkImage=new Image();
+    _hockeyRinkImage.onload=()=>{_hockeyRinkImageStatus='ready';_hockeyRinkBackdropSprite=null;_hockeyRinkBackdropKey='';};
+    _hockeyRinkImage.onerror=()=>{_hockeyRinkImageStatus='failed';};
+    _hockeyRinkImage.src='assets/hockeyrink.webp';
+  }
+  const key=`${W}x${H}|${_hockeyRinkImageStatus}`;
+  if(_hockeyRinkBackdropSprite&&_hockeyRinkBackdropKey===key)return _hockeyRinkBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_hockeyRinkImageStatus==='ready'){
+    sctx.drawImage(_hockeyRinkImage,0,0,W,H);
+  }else{
+    const grad=sctx.createRadialGradient(W*.5,H*.5,8,W*.5,H*.5,Math.max(W,H)*.72);
+    grad.addColorStop(0,'#edfaff');grad.addColorStop(.62,'#b8e0f2');grad.addColorStop(1,'#356c96');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _hockeyRinkBackdropSprite=sprite;_hockeyRinkBackdropKey=key;
+  return sprite;
+}
+function drawHockeyRinkAnimations(){
+  const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:_renderNow;
+  const W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<HOCKEY_RINK_GLINTS.length;i++){
+    const [rx,ry,r,phase]=HOCKEY_RINK_GLINTS[i];
+    const pulse=.08+.22*(.5+.5*Math.sin(T/620+phase));
+    const x=rx*W+Math.sin(T/2600+phase)*W*.003;
+    const y=ry*H+Math.cos(T/2300+phase)*H*.004;
+    ctx.strokeStyle=`rgba(215,250,255,${pulse})`;ctx.lineWidth=Math.max(.6,r*.55);
+    ctx.beginPath();ctx.moveTo(x-r*2,y);ctx.lineTo(x+r*2,y);ctx.moveTo(x,y-r*2);ctx.lineTo(x,y+r*2);ctx.stroke();
+  }
+  ctx.restore();
+}
+function getCoralReefBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_coralReefImageStatus==='idle'){
+    _coralReefImageStatus='loading';
+    _coralReefImage=new Image();
+    _coralReefImage.onload=()=>{_coralReefImageStatus='ready';_coralReefBackdropSprite=null;_coralReefBackdropKey='';};
+    _coralReefImage.onerror=()=>{_coralReefImageStatus='failed';};
+    _coralReefImage.src='assets/korallrev.webp';
+  }
+  const key=`${W}x${H}|${_coralReefImageStatus}`;
+  if(_coralReefBackdropSprite&&_coralReefBackdropKey===key)return _coralReefBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_coralReefImageStatus==='ready'){
+    sctx.drawImage(_coralReefImage,0,0,W,H);
+  }else{
+    const grad=sctx.createRadialGradient(W*.5,H*.48,8,W*.5,H*.48,Math.max(W,H)*.72);
+    grad.addColorStop(0,'#72e1e4');grad.addColorStop(.6,'#2399b5');grad.addColorStop(1,'#073f70');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _coralReefBackdropSprite=sprite;_coralReefBackdropKey=key;
+  return sprite;
+}
+function drawCoralReefAnimations(){
+  const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:_renderNow;
+  const W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<CORAL_REEF_BUBBLES.length;i++){
+    const [rx,ry,r,phase]=CORAL_REEF_BUBBLES[i];
+    const rise=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:((T/105+i*37)%18);
+    const x=rx*W+Math.sin(T/1800+phase)*W*.003;
+    const y=ry*H-rise;
+    ctx.globalAlpha=.12+.18*(.5+.5*Math.sin(T/720+phase));
+    ctx.strokeStyle='#d8ffff';ctx.lineWidth=Math.max(.65,r*.5);
+    ctx.beginPath();ctx.arc(x,y,r*(.8+.2*Math.sin(T/610+phase)),0,Math.PI*2);ctx.stroke();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
@@ -6291,6 +6423,12 @@ function drawBackground(theme){
     }else if(modernBoardThemeId==='footballPitch'){
       ctx.drawImage(getFootballPitchBackdrop(),0,0);
       drawFootballPitchAnimations();
+    }else if(modernBoardThemeId==='hockeyRink'){
+      ctx.drawImage(getHockeyRinkBackdrop(),0,0);
+      drawHockeyRinkAnimations();
+    }else if(modernBoardThemeId==='coralReef'){
+      ctx.drawImage(getCoralReefBackdrop(),0,0);
+      drawCoralReefAnimations();
     }else{
       ctx.drawImage(getFairyForestBackdrop(),0,0);
       drawFairyForestAnimations();
