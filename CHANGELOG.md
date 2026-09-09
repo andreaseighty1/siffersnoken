@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-09-09
+
+### Nya ikoner även inne på undersidorna
+- `index.html`
+  - använder de stora nya menyillustrationerna även i rubrikerna för Inställningar, Medaljer, Highscore, Ormskinn och Mysteriemuseum
+  - behåller den enklare statistikikonen eftersom Statistik är en kompakt toppknapp och inte ingår i den stora ikonfamiljen
+  - skalar rubrikikonerna responsivt till 46 px på större skärmar och 36 px på mobil
+
+### Moderna skins: Plasma och Blodmåne
+- `skins/modern-plasma-*.webp`
+  - nytt cyan–magenta energiskin med runt kroppssegment, tydligt huvud och kantansluten svans
+- `skins/modern-blood-moon-*.webp`
+  - nytt mörkt rubinrött månstenstema med halvmånedetaljer och en lätt vickande specialsvans
+- `index.html`
+  - kopplat skinnen till befintliga upplåsningar för Plasma och Blodmåne
+  - lagt till diskreta pulserande sken som respekterar inställningen för reducerad rörelse
+
+### Ny modern banbakgrund: Molnstaden
+- `assets/molnstaden.webp`
+  - ny ljus svävande sagostad med fri, lågkontrast spelplan i mitten
+- `index.html`
+  - lagt till Molnstaden i den slumpade rotationen av moderna banbakgrunder
+  - lagt till lätta kantglitter utan att belasta eller störa spelplanen
+
 ## 2026-09-08
 
 ### Ikonernas runtimefiler flyttade till `/assets`
