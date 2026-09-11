@@ -2590,6 +2590,7 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   katt:{headAsset:'skins/modern-cat-head-base.webp',bodyAsset:'skins/modern-cat-body-straight.webp',tailAsset:'skins/modern-cat-tail.webp',eyesOpenAsset:'skins/modern-cat-eyes-open.webp',headAssetScale:1.48,bodyAssetScale:1.19,tailAssetScale:1.26,tailAssetOffset:1.06,tailWagAmplitude:0.13,tailWagPeriod:260,tailAssetPivotFromTop:0.095},
   regnbage:{headAsset:'skins/modern-rainbow-head-base.webp',bodyAsset:'skins/modern-rainbow-body-straight.webp',tailAsset:'skins/modern-rainbow-tail.webp',assetHueCycle:true},
   guld:{headAsset:'skins/modern-gold-head-base.webp',bodyAsset:'skins/modern-gold-body-straight.webp',tailAsset:'skins/modern-gold-tail.webp'},
+  kunglig:{headAsset:'skins/modern-royal-head-base.webp',bodyAsset:'skins/modern-royal-body-straight.webp',tailAsset:'skins/modern-royal-tail.webp',royalShimmer:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   jordgubbe:{headAsset:'skins/modern-strawberry-head-base.webp',bodyAsset:'skins/modern-strawberry-body-straight.webp',tailAsset:'skins/modern-strawberry-tail.webp'},
   vattenmelon:{headAsset:'skins/modern-watermelon-head-base.webp',bodyAsset:'skins/modern-watermelon-body-straight.webp',tailAsset:'skins/modern-watermelon-tail.webp'},
   fotboll:{headAsset:'skins/modern-football-head-base.webp',bodyAsset:'skins/modern-football-body-straight.webp',tailAsset:'skins/modern-football-tail.webp'},
@@ -2601,6 +2602,7 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   ghost:{headAsset:'skins/modern-ghost-head-base.webp',bodyAsset:'skins/modern-ghost-body-straight.webp',tailAsset:'skins/modern-ghost-tail.webp',ghostEcho:true,assetShadowBlur:9,assetBodyShadowBlur:6},
   lava:{headAsset:'skins/modern-lava-head-base.webp',bodyAsset:'skins/modern-lava-body-straight.webp',tailAsset:'skins/modern-lava-tail.webp',magmaPulse:true,assetAlternateMirror:true,assetShadowBlur:10,assetBodyShadowBlur:7},
   plasma:{headAsset:'skins/modern-plasma-head-base.webp',bodyAsset:'skins/modern-plasma-body-straight.webp',tailAsset:'skins/modern-plasma-tail.webp',plasmaPulse:true,assetAlternateMirror:true,assetShadowBlur:11,assetBodyShadowBlur:7},
+  radioaktiv:{headAsset:'skins/modern-radioactive-head-base.webp',bodyAsset:'skins/modern-radioactive-body-straight.webp',tailAsset:'skins/modern-radioactive-tail.webp',radioactivePulse:true,assetAlternateMirror:true,assetShadowBlur:12,assetBodyShadowBlur:8},
   eld:{headAsset:'skins/modern-blood-moon-head-base.webp',bodyAsset:'skins/modern-blood-moon-body-straight.webp',tailAsset:'skins/modern-blood-moon-tail.webp',bloodMoonPulse:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6,tailAssetOffset:1.05,tailWagAmplitude:.07,tailWagPeriod:340,tailWagEnvelope:true,tailAssetPivotFromTop:.08},
   stjarnhimmel:{headAsset:'skins/modern-starry-sky-head-base.webp',bodyAsset:'skins/modern-starry-sky-body-straight.webp',tailAsset:'skins/modern-starry-sky-tail.webp',starryTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   tiger:{headAsset:'skins/modern-tiger-head-base.webp',bodyAsset:'skins/modern-tiger-body-straight.webp',tailAsset:'skins/modern-tiger-tail.webp',headAssetScale:1.52,eyesAssetScale:.9,eyesAssetOffsetY:.025,assetAlternateMirror:true,assetShadowBlur:6,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.15,tailWagPeriod:245,tailWagEnvelope:true,tailAssetPivotFromTop:.1},
@@ -2949,6 +2951,10 @@ let _cloudCityBackdropSprite=null;
 let _cloudCityBackdropKey='';
 let _cloudCityImage=null;
 let _cloudCityImageStatus='idle';
+let _volcanoIslandBackdropSprite=null;
+let _volcanoIslandBackdropKey='';
+let _volcanoIslandImage=null;
+let _volcanoIslandImageStatus='idle';
 let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
@@ -3553,7 +3559,9 @@ function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   const plasmaMix=.5+.5*Math.sin(galaxyTime/920);
   const plasmaGlow=skin.plasmaPulse?`rgb(${Math.floor(45+210*plasmaMix)},${Math.floor(238-118*plasmaMix)},255)`:null;
   const bloodMoonGlow=skin.bloodMoonPulse?`rgb(255,${Math.floor(26+22*(.5+.5*Math.sin(galaxyTime/1180)))},72)`:null;
-  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`);drawCtx.shadowBlur=skin.assetShadowBlur||5;
+  const royalGlow=skin.royalShimmer?`hsl(${278+10*Math.sin(galaxyTime/2100)},88%,68%)`:null;
+  const radioactiveGlow=skin.radioactivePulse?`hsl(${92+8*Math.sin(galaxyTime/900)},100%,57%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||royalGlow||radioactiveGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`);drawCtx.shadowBlur=skin.assetShadowBlur||5;
   if(skin.ghostEcho){drawCtx.save();drawCtx.globalAlpha*=.2;drawCtx.drawImage(renderImage,-size/2,-size*ratio/2+size*.09,size,size*ratio);drawCtx.restore();}
   drawCtx.drawImage(renderImage,-size/2,-size*ratio/2,size,size*ratio);
   if(skin.galaxyTwinkles)drawModernGalaxyTwinkles(drawCtx,size,0,false);
@@ -3609,7 +3617,9 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   const plasmaMix=.5+.5*Math.sin(galaxyTime/920+index*.36);
   const plasmaGlow=skin.plasmaPulse?`rgb(${Math.floor(45+210*plasmaMix)},${Math.floor(238-118*plasmaMix)},255)`:null;
   const bloodMoonGlow=skin.bloodMoonPulse?`rgb(255,${Math.floor(22+24*(.5+.5*Math.sin(galaxyTime/1180+index*.3)))},68)`:null;
-  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`);drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
+  const royalGlow=skin.royalShimmer?`hsl(${278+10*Math.sin(galaxyTime/2100+index*.28)},88%,64%)`:null;
+  const radioactiveGlow=skin.radioactivePulse?`hsl(${92+8*Math.sin(galaxyTime/900+index*.35)},100%,53%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||royalGlow||radioactiveGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`);drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
   if(isTail&&skin.tailWagAmplitude){
     // Rotera kring svansens plana fäste i stället för bildens mitt.
     // Fästpunkten ligger då kvar mot kroppen medan bara den fria änden vickar.
@@ -6171,7 +6181,7 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
-const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity'];
+const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity','volcanoIsland'];
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6201,6 +6211,10 @@ const CLOUD_CITY_GLINTS=[
   [.055,.15,1.3,.2],[.15,.9,1.0,1.1],[.3,.055,1.1,2.3],[.48,.95,1.3,.7],
   [.66,.05,1.0,1.8],[.8,.94,1.25,2.8],[.95,.18,1.15,1.4],[.955,.76,1.0,.4],
   [.045,.58,1.05,2.1],[.88,.065,1.0,.9]
+];
+const VOLCANO_ISLAND_EMBERS=[
+  [.035,.22,1.2,.2],[.09,.82,1.0,1.1],[.22,.955,.9,2.3],[.79,.95,1.1,.7],
+  [.94,.78,1.0,1.8],[.965,.28,1.2,2.8],[.82,.055,1.0,1.4],[.16,.05,.9,.4]
 ];
 function selectModernBoardTheme(){
   if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
@@ -6513,6 +6527,44 @@ function drawCloudCityAnimations(){
   }
   ctx.restore();
 }
+function getVolcanoIslandBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_volcanoIslandImageStatus==='idle'){
+    _volcanoIslandImageStatus='loading';
+    _volcanoIslandImage=new Image();
+    _volcanoIslandImage.onload=()=>{_volcanoIslandImageStatus='ready';_volcanoIslandBackdropSprite=null;_volcanoIslandBackdropKey='';};
+    _volcanoIslandImage.onerror=()=>{_volcanoIslandImageStatus='failed';};
+    _volcanoIslandImage.src='assets/vulkanon.webp';
+  }
+  const key=`${W}x${H}|${_volcanoIslandImageStatus}`;
+  if(_volcanoIslandBackdropSprite&&_volcanoIslandBackdropKey===key)return _volcanoIslandBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_volcanoIslandImageStatus==='ready'){
+    sctx.drawImage(_volcanoIslandImage,0,0,W,H);
+  }else{
+    const grad=sctx.createRadialGradient(W*.5,H*.48,8,W*.5,H*.48,Math.max(W,H)*.72);
+    grad.addColorStop(0,'#645851');grad.addColorStop(.62,'#393332');grad.addColorStop(1,'#171518');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _volcanoIslandBackdropSprite=sprite;_volcanoIslandBackdropKey=key;
+  return sprite;
+}
+function drawVolcanoIslandAnimations(){
+  const reduced=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches;
+  const T=reduced?0:_renderNow,W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<VOLCANO_ISLAND_EMBERS.length;i++){
+    const [rx,ry,r,phase]=VOLCANO_ISLAND_EMBERS[i];
+    const drift=reduced?0:((T/150+i*11)%15);
+    const x=rx*W+Math.sin(T/1500+phase)*W*.0025;
+    const y=ry*H-drift;
+    ctx.globalAlpha=.12+.28*(.5+.5*Math.sin(T/610+phase));
+    ctx.fillStyle=i%3===0?'#fff0a8':'#ff7b24';
+    ctx.beginPath();ctx.arc(x,y,Math.max(.7,r*(.82+.18*Math.sin(T/530+phase))),0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
@@ -6534,6 +6586,9 @@ function drawBackground(theme){
     }else if(modernBoardThemeId==='cloudCity'){
       ctx.drawImage(getCloudCityBackdrop(),0,0);
       drawCloudCityAnimations();
+    }else if(modernBoardThemeId==='volcanoIsland'){
+      ctx.drawImage(getVolcanoIslandBackdrop(),0,0);
+      drawVolcanoIslandAnimations();
     }else{
       ctx.drawImage(getFairyForestBackdrop(),0,0);
       drawFairyForestAnimations();

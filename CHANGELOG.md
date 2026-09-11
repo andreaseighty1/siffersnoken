@@ -1,5 +1,26 @@
 # Changelog
 
+## 2026-09-11
+
+### Moderna skins: Kunglig och Radioaktiv
+- `skins/modern-royal-*.webp`
+  - nytt rundat kungligt skin i djup lila, guld och juveltoner; den befintliga separata kronan används fortfarande på huvudet
+- `skins/modern-radioactive-*.webp`
+  - nytt grafitfärgat skin med giftgröna energifåror och rundade kroppsdelar
+- `index.html`
+  - kopplat skinnen till befintliga upplåsningar för Kunglig och Radioaktiv
+  - lagt till diskreta lila respektive gröna pulssken som respekterar reducerad rörelse
+
+### Ny modern banbakgrund: Vulkanön
+- `assets/vulkanon.webp`
+  - ny tropisk vulkanö med lava, gejsrar och vegetation längs kanterna samt en lugn, öppen spelplan i mitten
+- `index.html`
+  - lagt till Vulkanön i den slumpade rotationen av moderna banbakgrunder
+  - lagt till sparsamma glödande kantgnistor utan att störa spelområdet
+
+### Planerat omtag
+- Blodmåneskinnets nuvarande moderna utseende ska göras om i en senare runda; befintliga filer och kod lämnas orörda tills dess.
+
 ## 2026-09-09
 
 ### Nya ikoner även inne på undersidorna
