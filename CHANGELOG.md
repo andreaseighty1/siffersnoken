@@ -2,6 +2,16 @@
 
 ## 2026-09-11
 
+### Korrigerat perspektiv för moderna banbakgrunder
+- `assets/kristallgrotta.webp`, `assets/soltemplet.webp`, `assets/fotbollsplan.webp`, `assets/hockeyrink.webp`, `assets/korallrev.webp`, `assets/molnstaden.webp`, `assets/vulkanon.webp` och `assets/magiska-biblioteket.webp`
+  - omgjorda till strikt ortografisk 90-gradersvy uppifrån så perspektivet stämmer med snoken
+  - behåller respektive tema men visar bara plana ytor och ovansidor längs kanterna
+  - fotbollsplanen och hockeyrinken har exakt två mål vardera, ett på vänster och ett på höger kortsida
+- `assets/sagoskog.webp`
+  - granskad och lämnad orörd eftersom den redan följer top-down-regeln
+- `AGENTS.md`
+  - dokumenterar top-down-perspektivet och övriga etablerade grafikregler för framtida arbetspass
+
 ### Moderna skins: Prismagodis och Clockwork
 - `skins/modern-prism-candy-*.webp`
   - nytt rundat och halvtransparent kristallgodisskin med pärlemor, prismatiska färgskiftningar och mjukt regnbågsskimmer
