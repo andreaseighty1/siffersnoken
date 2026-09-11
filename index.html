@@ -2589,6 +2589,7 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   hund:{headAsset:'skins/modern-dog-head-base.webp',bodyAsset:'skins/modern-dog-body-straight.webp',tailAsset:'skins/modern-dog-tail.webp',headAssetScale:1.48,bodyAssetScale:1.15,tailAssetScale:1.26,tailAssetOffset:1.06,tailWagAmplitude:0.28,tailWagPeriod:180,tailWagEnvelope:true,tailAssetPivotFromTop:0.085},
   katt:{headAsset:'skins/modern-cat-head-base.webp',bodyAsset:'skins/modern-cat-body-straight.webp',tailAsset:'skins/modern-cat-tail.webp',eyesOpenAsset:'skins/modern-cat-eyes-open.webp',headAssetScale:1.48,bodyAssetScale:1.19,tailAssetScale:1.26,tailAssetOffset:1.06,tailWagAmplitude:0.13,tailWagPeriod:260,tailAssetPivotFromTop:0.095},
   regnbage:{headAsset:'skins/modern-rainbow-head-base.webp',bodyAsset:'skins/modern-rainbow-body-straight.webp',tailAsset:'skins/modern-rainbow-tail.webp',assetHueCycle:true},
+  prismagodis:{headAsset:'skins/modern-prism-candy-head-base.webp',bodyAsset:'skins/modern-prism-candy-body-straight.webp',tailAsset:'skins/modern-prism-candy-tail.webp',prismShimmer:true,assetAlternateMirror:true,assetShadowBlur:10,assetBodyShadowBlur:7},
   guld:{headAsset:'skins/modern-gold-head-base.webp',bodyAsset:'skins/modern-gold-body-straight.webp',tailAsset:'skins/modern-gold-tail.webp'},
   kunglig:{headAsset:'skins/modern-royal-head-base.webp',bodyAsset:'skins/modern-royal-body-straight.webp',tailAsset:'skins/modern-royal-tail.webp',royalShimmer:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   jordgubbe:{headAsset:'skins/modern-strawberry-head-base.webp',bodyAsset:'skins/modern-strawberry-body-straight.webp',tailAsset:'skins/modern-strawberry-tail.webp'},
@@ -2597,6 +2598,7 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   polkagris:{headAsset:'skins/modern-candy-cane-head-base.webp',bodyAsset:'skins/modern-candy-cane-body-straight.webp',tailAsset:'skins/modern-candy-cane-tail.webp'},
   galax:{headAsset:'skins/modern-galaxy-head-base.webp',bodyAsset:'skins/modern-galaxy-body-straight.webp',tailAsset:'skins/modern-galaxy-tail.webp',galaxyTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   obsidian:{headAsset:'skins/modern-obsidian-head-base.webp',bodyAsset:'skins/modern-obsidian-body-straight.webp',tailAsset:'skins/modern-obsidian-tail.webp',magmaPulse:true,assetShadowBlur:8,assetBodyShadowBlur:5},
+  clockwork:{headAsset:'skins/modern-clockwork-head-base.webp',bodyAsset:'skins/modern-clockwork-body-straight.webp',tailAsset:'skins/modern-clockwork-tail.webp',clockworkPulse:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5,tailAssetOffset:1.05,tailWagAmplitude:.035,tailWagPeriod:185,tailAssetPivotFromTop:.085},
   drake:{headAsset:'skins/modern-dragon-head-base.webp',bodyAsset:'skins/modern-dragon-body-straight.webp',tailAsset:'skins/modern-dragon-tail.webp',headAssetScale:1.75,eyesAssetScale:.74,eyesAssetOffsetY:-.035,bodyAssetRotation:Math.PI/2,assetShadowBlur:8,assetBodyShadowBlur:4,tailAssetOffset:1.06,tailWagAmplitude:.085,tailWagPeriod:270,tailWagEnvelope:true,tailAssetPivotFromTop:.085},
   aurora:{headAsset:'skins/modern-aurora-head-base.webp',bodyAsset:'skins/modern-aurora-body-straight.webp',tailAsset:'skins/modern-aurora-tail.webp',auroraFlow:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6},
   ghost:{headAsset:'skins/modern-ghost-head-base.webp',bodyAsset:'skins/modern-ghost-body-straight.webp',tailAsset:'skins/modern-ghost-tail.webp',ghostEcho:true,assetShadowBlur:9,assetBodyShadowBlur:6},
@@ -2955,6 +2957,10 @@ let _volcanoIslandBackdropSprite=null;
 let _volcanoIslandBackdropKey='';
 let _volcanoIslandImage=null;
 let _volcanoIslandImageStatus='idle';
+let _enchantedLibraryBackdropSprite=null;
+let _enchantedLibraryBackdropKey='';
+let _enchantedLibraryImage=null;
+let _enchantedLibraryImageStatus='idle';
 let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
@@ -3561,7 +3567,9 @@ function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   const bloodMoonGlow=skin.bloodMoonPulse?`rgb(255,${Math.floor(26+22*(.5+.5*Math.sin(galaxyTime/1180)))},72)`:null;
   const royalGlow=skin.royalShimmer?`hsl(${278+10*Math.sin(galaxyTime/2100)},88%,68%)`:null;
   const radioactiveGlow=skin.radioactivePulse?`hsl(${92+8*Math.sin(galaxyTime/900)},100%,57%)`:null;
-  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||royalGlow||radioactiveGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`);drawCtx.shadowBlur=skin.assetShadowBlur||5;
+  const prismGlow=skin.prismShimmer?`hsl(${195+110*(.5+.5*Math.sin(galaxyTime/1800))},100%,76%)`:null;
+  const clockworkGlow=skin.clockworkPulse?`hsl(${178+8*Math.sin(galaxyTime/1450)},92%,58%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||royalGlow||radioactiveGlow||prismGlow||clockworkGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,58%)`);drawCtx.shadowBlur=skin.assetShadowBlur||5;
   if(skin.ghostEcho){drawCtx.save();drawCtx.globalAlpha*=.2;drawCtx.drawImage(renderImage,-size/2,-size*ratio/2+size*.09,size,size*ratio);drawCtx.restore();}
   drawCtx.drawImage(renderImage,-size/2,-size*ratio/2,size,size*ratio);
   if(skin.galaxyTwinkles)drawModernGalaxyTwinkles(drawCtx,size,0,false);
@@ -3619,7 +3627,9 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   const bloodMoonGlow=skin.bloodMoonPulse?`rgb(255,${Math.floor(22+24*(.5+.5*Math.sin(galaxyTime/1180+index*.3)))},68)`:null;
   const royalGlow=skin.royalShimmer?`hsl(${278+10*Math.sin(galaxyTime/2100+index*.28)},88%,64%)`:null;
   const radioactiveGlow=skin.radioactivePulse?`hsl(${92+8*Math.sin(galaxyTime/900+index*.35)},100%,53%)`:null;
-  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||royalGlow||radioactiveGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`);drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
+  const prismGlow=skin.prismShimmer?`hsl(${195+110*(.5+.5*Math.sin(galaxyTime/1800+index*.38))},100%,72%)`:null;
+  const clockworkGlow=skin.clockworkPulse?`hsl(${178+8*Math.sin(galaxyTime/1450+index*.32)},92%,54%)`:null;
+  drawCtx.shadowColor=galaxyGlow||magmaGlow||auroraGlow||ghostGlow||starryGlow||oceanGlow||plasmaGlow||bloodMoonGlow||royalGlow||radioactiveGlow||prismGlow||clockworkGlow||(hue===null?(skin.shadow||'transparent'):`hsl(${hue},95%,52%)`);drawCtx.shadowBlur=skin.assetBodyShadowBlur||3;
   if(isTail&&skin.tailWagAmplitude){
     // Rotera kring svansens plana fäste i stället för bildens mitt.
     // Fästpunkten ligger då kvar mot kroppen medan bara den fria änden vickar.
@@ -6181,7 +6191,7 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
-const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity','volcanoIsland'];
+const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity','volcanoIsland','enchantedLibrary'];
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6215,6 +6225,10 @@ const CLOUD_CITY_GLINTS=[
 const VOLCANO_ISLAND_EMBERS=[
   [.035,.22,1.2,.2],[.09,.82,1.0,1.1],[.22,.955,.9,2.3],[.79,.95,1.1,.7],
   [.94,.78,1.0,1.8],[.965,.28,1.2,2.8],[.82,.055,1.0,1.4],[.16,.05,.9,.4]
+];
+const ENCHANTED_LIBRARY_MOTES=[
+  [.035,.2,1.1,.2],[.075,.73,.9,1.1],[.2,.95,1.0,2.3],[.77,.95,1.1,.7],
+  [.94,.72,.9,1.8],[.965,.24,1.1,2.8],[.79,.05,1.0,1.4],[.19,.055,.9,.4]
 ];
 function selectModernBoardTheme(){
   if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
@@ -6565,6 +6579,43 @@ function drawVolcanoIslandAnimations(){
   }
   ctx.restore();
 }
+function getEnchantedLibraryBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_enchantedLibraryImageStatus==='idle'){
+    _enchantedLibraryImageStatus='loading';
+    _enchantedLibraryImage=new Image();
+    _enchantedLibraryImage.onload=()=>{_enchantedLibraryImageStatus='ready';_enchantedLibraryBackdropSprite=null;_enchantedLibraryBackdropKey='';};
+    _enchantedLibraryImage.onerror=()=>{_enchantedLibraryImageStatus='failed';};
+    _enchantedLibraryImage.src='assets/magiska-biblioteket.webp';
+  }
+  const key=`${W}x${H}|${_enchantedLibraryImageStatus}`;
+  if(_enchantedLibraryBackdropSprite&&_enchantedLibraryBackdropKey===key)return _enchantedLibraryBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_enchantedLibraryImageStatus==='ready'){
+    sctx.drawImage(_enchantedLibraryImage,0,0,W,H);
+  }else{
+    const grad=sctx.createRadialGradient(W*.5,H*.48,8,W*.5,H*.48,Math.max(W,H)*.72);
+    grad.addColorStop(0,'#d4aa72');grad.addColorStop(.62,'#8e603e');grad.addColorStop(1,'#2d2332');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _enchantedLibraryBackdropSprite=sprite;_enchantedLibraryBackdropKey=key;
+  return sprite;
+}
+function drawEnchantedLibraryAnimations(){
+  const reduced=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches;
+  const T=reduced?0:_renderNow,W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<ENCHANTED_LIBRARY_MOTES.length;i++){
+    const [rx,ry,r,phase]=ENCHANTED_LIBRARY_MOTES[i];
+    const x=rx*W+Math.sin(T/2100+phase)*W*.003;
+    const y=ry*H+Math.cos(T/1800+phase)*H*.004;
+    const pulse=.1+.28*(.5+.5*Math.sin(T/680+phase));
+    ctx.fillStyle=i%2===0?`rgba(118,225,255,${pulse})`:`rgba(255,220,116,${pulse})`;
+    ctx.beginPath();ctx.arc(x,y,Math.max(.7,r*(.8+.2*Math.sin(T/570+phase))),0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
@@ -6589,6 +6640,9 @@ function drawBackground(theme){
     }else if(modernBoardThemeId==='volcanoIsland'){
       ctx.drawImage(getVolcanoIslandBackdrop(),0,0);
       drawVolcanoIslandAnimations();
+    }else if(modernBoardThemeId==='enchantedLibrary'){
+      ctx.drawImage(getEnchantedLibraryBackdrop(),0,0);
+      drawEnchantedLibraryAnimations();
     }else{
       ctx.drawImage(getFairyForestBackdrop(),0,0);
       drawFairyForestAnimations();

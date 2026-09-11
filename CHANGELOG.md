@@ -2,6 +2,22 @@
 
 ## 2026-09-11
 
+### Moderna skins: Prismagodis och Clockwork
+- `skins/modern-prism-candy-*.webp`
+  - nytt rundat och halvtransparent kristallgodisskin med pärlemor, prismatiska färgskiftningar och mjukt regnbågsskimmer
+- `skins/modern-clockwork-*.webp`
+  - nytt rundat mässings- och kopparskin med asymmetriska kugghjul, patina och turkosa energifönster
+- `index.html`
+  - kopplat skinnen till de befintliga relikupplåsningarna för Prismagodis och Clockwork
+  - lagt till diskreta prismatiska respektive turkosa pulssken samt en mycket liten mekanisk svansrörelse för Clockwork
+
+### Ny modern banbakgrund: Det förtrollade biblioteket
+- `assets/magiska-biblioteket.webp`
+  - ny varm sagobiblioteksbana med hyllor, målat glas och magiska ljus längs kanterna samt en öppen parkettyta i mitten
+- `index.html`
+  - lagt till biblioteket i den slumpade rotationen av moderna banbakgrunder
+  - lagt till sparsamma blå och gyllene kantljus som respekterar reducerad rörelse
+
 ### Moderna skins: Kunglig och Radioaktiv
 - `skins/modern-royal-*.webp`
   - nytt rundat kungligt skin i djup lila, guld och juveltoner; den befintliga separata kronan används fortfarande på huvudet
