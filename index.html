@@ -2608,7 +2608,9 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   eld:{headAsset:'skins/modern-blood-moon-head-base.webp',bodyAsset:'skins/modern-blood-moon-body-straight.webp',tailAsset:'skins/modern-blood-moon-tail.webp',bloodMoonPulse:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6,tailAssetOffset:1.05,tailWagAmplitude:.07,tailWagPeriod:340,tailWagEnvelope:true,tailAssetPivotFromTop:.08},
   stjarnhimmel:{headAsset:'skins/modern-starry-sky-head-base.webp',bodyAsset:'skins/modern-starry-sky-body-straight.webp',tailAsset:'skins/modern-starry-sky-tail.webp',starryTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   tiger:{headAsset:'skins/modern-tiger-head-base.webp?v=2',bodyAsset:'skins/modern-tiger-body-straight.webp',tailAsset:'skins/modern-tiger-tail.webp?v=2',headAssetScale:1.52,eyesAssetScale:.9,eyesAssetOffsetY:.025,assetAlternateMirror:true,assetShadowBlur:6,assetBodyShadowBlur:4,tailAssetOffset:1.02,tailWagAmplitude:.08,tailWagPeriod:245,tailWagEnvelope:true,tailAssetPivotFromTop:.095},
-  hav:{headAsset:'skins/modern-ocean-head-base.webp',bodyAsset:'skins/modern-ocean-body-straight.webp',tailAsset:'skins/modern-ocean-tail.webp',oceanFlow:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6}
+  hav:{headAsset:'skins/modern-ocean-head-base.webp',bodyAsset:'skins/modern-ocean-body-straight.webp',tailAsset:'skins/modern-ocean-tail.webp',oceanFlow:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6},
+  miamisunset:{headAsset:'skins/modern-miami-sunset-head-base.webp',bodyAsset:'skins/modern-miami-sunset-body-straight.webp',tailAsset:'skins/modern-miami-sunset-tail.webp',headAssetScale:1.54,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5,tailAssetOffset:1.03},
+  bi:{headAsset:'skins/modern-cow-head-base.webp',bodyAsset:'skins/modern-cow-body-straight.webp',tailAsset:'skins/modern-cow-tail.webp',headAssetScale:1.5,eyesAssetScale:.92,eyesAssetOffsetY:-.015,assetAlternateMirror:true,assetShadowBlur:6,assetBodyShadowBlur:4,tailAssetOffset:1.03,tailWagAmplitude:.05,tailWagPeriod:285,tailWagEnvelope:true,tailAssetPivotFromTop:.08}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
 const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
@@ -2961,6 +2963,10 @@ let _enchantedLibraryBackdropSprite=null;
 let _enchantedLibraryBackdropKey='';
 let _enchantedLibraryImage=null;
 let _enchantedLibraryImageStatus='idle';
+let _neonArcadeBackdropSprite=null;
+let _neonArcadeBackdropKey='';
+let _neonArcadeImage=null;
+let _neonArcadeImageStatus='idle';
 let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
@@ -6191,7 +6197,7 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
-const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity','volcanoIsland','enchantedLibrary'];
+const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity','volcanoIsland','enchantedLibrary','neonArcade'];
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6229,6 +6235,10 @@ const VOLCANO_ISLAND_EMBERS=[
 const ENCHANTED_LIBRARY_MOTES=[
   [.035,.2,1.1,.2],[.075,.73,.9,1.1],[.2,.95,1.0,2.3],[.77,.95,1.1,.7],
   [.94,.72,.9,1.8],[.965,.24,1.1,2.8],[.79,.05,1.0,1.4],[.19,.055,.9,.4]
+];
+const NEON_ARCADE_GLINTS=[
+  [.035,.2,1.1,.2],[.07,.74,.9,1.1],[.2,.96,1.0,2.3],[.79,.95,1.1,.7],
+  [.95,.72,.9,1.8],[.965,.24,1.1,2.8],[.8,.045,1.0,1.4],[.2,.05,.9,.4]
 ];
 function selectModernBoardTheme(){
   if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
@@ -6616,6 +6626,43 @@ function drawEnchantedLibraryAnimations(){
   }
   ctx.restore();
 }
+function getNeonArcadeBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_neonArcadeImageStatus==='idle'){
+    _neonArcadeImageStatus='loading';
+    _neonArcadeImage=new Image();
+    _neonArcadeImage.onload=()=>{_neonArcadeImageStatus='ready';_neonArcadeBackdropSprite=null;_neonArcadeBackdropKey='';};
+    _neonArcadeImage.onerror=()=>{_neonArcadeImageStatus='failed';};
+    _neonArcadeImage.src='assets/neonarkaden.webp';
+  }
+  const key=`${W}x${H}|${_neonArcadeImageStatus}`;
+  if(_neonArcadeBackdropSprite&&_neonArcadeBackdropKey===key)return _neonArcadeBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_neonArcadeImageStatus==='ready'){
+    sctx.drawImage(_neonArcadeImage,0,0,W,H);
+  }else{
+    const grad=sctx.createRadialGradient(W*.5,H*.48,8,W*.5,H*.48,Math.max(W,H)*.72);
+    grad.addColorStop(0,'#17215c');grad.addColorStop(.58,'#14103c');grad.addColorStop(1,'#07051b');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _neonArcadeBackdropSprite=sprite;_neonArcadeBackdropKey=key;
+  return sprite;
+}
+function drawNeonArcadeAnimations(){
+  const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:_renderNow;
+  const W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<NEON_ARCADE_GLINTS.length;i++){
+    const [rx,ry,r,phase]=NEON_ARCADE_GLINTS[i];
+    const pulse=.08+.3*(.5+.5*Math.sin(T/720+phase));
+    const x=rx*W,y=ry*H;
+    ctx.strokeStyle=i%2===0?`rgba(49,237,255,${pulse})`:`rgba(255,52,213,${pulse})`;
+    ctx.lineWidth=Math.max(.6,r*.5);
+    ctx.beginPath();ctx.moveTo(x-r*2.2,y);ctx.lineTo(x+r*2.2,y);ctx.moveTo(x,y-r*2.2);ctx.lineTo(x,y+r*2.2);ctx.stroke();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
@@ -6643,6 +6690,9 @@ function drawBackground(theme){
     }else if(modernBoardThemeId==='enchantedLibrary'){
       ctx.drawImage(getEnchantedLibraryBackdrop(),0,0);
       drawEnchantedLibraryAnimations();
+    }else if(modernBoardThemeId==='neonArcade'){
+      ctx.drawImage(getNeonArcadeBackdrop(),0,0);
+      drawNeonArcadeAnimations();
     }else{
       ctx.drawImage(getFairyForestBackdrop(),0,0);
       drawFairyForestAnimations();

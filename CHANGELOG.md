@@ -2,6 +2,22 @@
 
 ## 2026-09-11
 
+### Moderna skins: Miami Sunset och Ko
+- `skins/modern-miami-sunset-*.webp`
+  - nytt synthwave-skin med cyan, korall, rosa och violetta fjäll samt diskreta palmblad
+  - originalnära runt huvud, helt cirkulära kroppsdelar och en smal svans med kant-i-kant-fäste
+- `skins/modern-cow-*.webp`
+  - nytt svartvitt Holstein-skin med mjuk pälsstruktur och en liten rosa nosaccent
+  - små öron och horn placerade på huvudets bakre halva bakom spelögonen
+  - helt cirkulära kroppsdelar och en smal, lätt vickande svans med fast fästpunkt
+
+### Ny modern banbakgrund: Neonarkaden
+- `assets/neonarkaden.webp`
+  - ny strikt top-down-bana med mörkt arkadgolv, neonljus och arkadmaskiner längs ytterkanterna
+- `index.html`
+  - lagt till Neonarkaden i den slumpade rotationen av moderna banbakgrunder
+  - lagt till sparsamma cyan- och magentafärgade kantglimtar som respekterar reducerad rörelse
+
 ### Kvalitetskorrigering av moderna skins
 - `skins/modern-aurora-head-base.webp`, `skins/modern-plasma-head-base.webp` och `skins/modern-radioactive-head-base.webp`
   - återställda till en bred, enkel och rundad huvudform som ligger nära originalsnoken
