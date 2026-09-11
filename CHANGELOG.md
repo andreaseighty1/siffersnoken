@@ -2,6 +2,22 @@
 
 ## 2026-09-11
 
+### Kvalitetskorrigering av moderna skins
+- `skins/modern-aurora-head-base.webp`, `skins/modern-plasma-head-base.webp` och `skins/modern-radioactive-head-base.webp`
+  - återställda till en bred, enkel och rundad huvudform som ligger nära originalsnoken
+  - behåller respektive färg-, material- och ljuseffekt
+- `skins/modern-tiger-head-base.webp` och `skins/modern-tiger-tail.webp`
+  - öronen flyttade bakåt bakom spelögonen medan den omtyckta tigerkroppen lämnats helt orörd
+  - svansen gjord smalare med samma päls och V-randning som kroppen samt tätare fäste utan synlig glipa
+- `skins/modern-dragon-head-base.webp`
+  - hornen flyttade bakåt, gjorda något mindre och placerade bakom spelögonen
+- `index.html`
+  - minskat Kunglig-huvudets renderingsstorlek
+  - finjusterat storlek och cacheversion för korrigerade huvuden samt tigersvansens fäste och vickning
+  - verifierat Tiger-, Drake- och Radioaktiv-kropparnas rotation både rakt och genom en 90-graderssväng
+- `AGENTS.md`
+  - förtydligat regler för huvudform, öron/horn, rundade kroppar, mönsterrotation och svansproportioner
+
 ### Korrigerat perspektiv för moderna banbakgrunder
 - `assets/kristallgrotta.webp`, `assets/soltemplet.webp`, `assets/fotbollsplan.webp`, `assets/hockeyrink.webp`, `assets/korallrev.webp`, `assets/molnstaden.webp`, `assets/vulkanon.webp` och `assets/magiska-biblioteket.webp`
   - omgjorda till strikt ortografisk 90-gradersvy uppifrån så perspektivet stämmer med snoken
