@@ -2,6 +2,11 @@
 
 ## 2026-10-01
 
+### Ny modern banbakgrund: Basketplan
+- `assets/basketplan.webp`: blågrön basketplan i strikt ortografisk vy uppifrån, exakt två korgar och öppen lågkontrastyta i mitten.
+- `index.html`: tillagd i slumpningen av moderna banor med cachelagrad bakgrund och diskret reservbakgrund under laddning.
+- Bakgrunden är ogenomskinlig WebP i 1536 × 1024.
+
 ### Basketboll och tydligare Blixt
 - Nytt Basketboll-skin med orange bollstruktur och tydliga svarta sömmar, både i klassiskt och modernt grafikläge.
 - Basketboll låses upp med den befintliga medaljen ”Hetsar på!”: 5 rätt i rad. Spelare som redan har medaljen får skinnet automatiskt.
