@@ -2,6 +2,12 @@
 
 ## 2026-10-01
 
+### Basketboll och tydligare Blixt
+- Nytt Basketboll-skin med orange bollstruktur och tydliga svarta sömmar, både i klassiskt och modernt grafikläge.
+- Basketboll låses upp med den befintliga medaljen ”Hetsar på!”: 5 rätt i rad. Spelare som redan har medaljen får skinnet automatiskt.
+- Blixt omgjort med stora gulvita förgrenade blixtar över en mörk bas på huvud, kropp och svans; fjällen är nu underordnade blixttemat.
+- Alla nya runtimebilder är transparenta WebP i 512 × 512. Blixtbildernas cacheversion har höjts.
+
 ### Moderna skins: Tidvatten och Blixt
 - `skins/modern-tideglass-*.webp`
   - turkosa havsglasfjäll med pärlemorskimrande vattenreflexer och mörk petrolkant

@@ -1754,6 +1754,22 @@ const SKINS_DEF=[
      cx.restore();
    },
    previewCss:'radial-gradient(circle at 35% 30%,#ffffff 0%,#eef2f5 48%,#cfd6dc 100%)'},
+  {id:'basketboll', emoji:'🏀', name:'Basketboll', nameEn:'Basketball',
+   free:false, unlockMedal:'c5',
+   descSv:'Lås upp: 5 rätt i rad', descEn:'Unlock: 5 correct in a row',
+   headA:'#ffb14d', headB:'#b84309', shadow:'#ff923d',
+   bodyFn:(a)=>`rgba(235,${Math.floor(100+a*40)},24,${Math.min(1,a+.05)})`,
+   overlayFn:(cx,px,py,s,i,a)=>{
+     cx.strokeStyle=`rgba(35,18,9,${0.65+a*0.25})`;
+     cx.lineWidth=s*.065;cx.lineCap='round';
+     cx.beginPath();
+     cx.moveTo(px+s*.5,py);cx.lineTo(px+s*.5,py+s);
+     cx.moveTo(px,py+s*.5);cx.lineTo(px+s,py+s*.5);
+     cx.moveTo(px+s*.08,py);cx.bezierCurveTo(px+s*.62,py+s*.22,px+s*.62,py+s*.78,px+s*.08,py+s);
+     cx.moveTo(px+s*.92,py);cx.bezierCurveTo(px+s*.38,py+s*.22,px+s*.38,py+s*.78,px+s*.92,py+s);
+     cx.stroke();
+   },
+   previewCss:'radial-gradient(circle at 35% 30%,#ffb14d,#ed7a20 55%,#b84309)'},
   {id:'hund', emoji:'🐶', name:'Hund', nameEn:'Dog',
    free:false, unlockMedal:'mul10000',
    descSv:'Lås upp: Tabellmästare-medaljen', descEn:'Unlock: Table Master medal',
@@ -2595,6 +2611,7 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   jordgubbe:{headAsset:'skins/modern-strawberry-head-base.webp',bodyAsset:'skins/modern-strawberry-body-straight.webp',tailAsset:'skins/modern-strawberry-tail.webp'},
   vattenmelon:{headAsset:'skins/modern-watermelon-head-base.webp',bodyAsset:'skins/modern-watermelon-body-straight.webp',tailAsset:'skins/modern-watermelon-tail.webp'},
   fotboll:{headAsset:'skins/modern-football-head-base.webp',bodyAsset:'skins/modern-football-body-straight.webp',tailAsset:'skins/modern-football-tail.webp'},
+  basketboll:{headAsset:'skins/modern-basketball-head-base.webp',bodyAsset:'skins/modern-basketball-body-straight.webp',tailAsset:'skins/modern-basketball-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:1.03},
   polkagris:{headAsset:'skins/modern-candy-cane-head-base.webp',bodyAsset:'skins/modern-candy-cane-body-straight.webp',tailAsset:'skins/modern-candy-cane-tail.webp'},
   galax:{headAsset:'skins/modern-galaxy-head-base.webp',bodyAsset:'skins/modern-galaxy-body-straight.webp',tailAsset:'skins/modern-galaxy-tail.webp',galaxyTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   obsidian:{headAsset:'skins/modern-obsidian-head-base.webp',bodyAsset:'skins/modern-obsidian-body-straight.webp',tailAsset:'skins/modern-obsidian-tail.webp',magmaPulse:true,assetShadowBlur:8,assetBodyShadowBlur:5},
@@ -2614,7 +2631,7 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   skuggmysterium:{headAsset:'skins/modern-shadow-mystery-head-base.webp',bodyAsset:'skins/modern-shadow-mystery-body-straight.webp',tailAsset:'skins/modern-shadow-mystery-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:7,assetBodyShadowBlur:4,tailAssetOffset:1.03},
   smaragd:{headAsset:'skins/modern-emerald-head-base.webp',bodyAsset:'skins/modern-emerald-body-straight.webp',tailAsset:'skins/modern-emerald-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5,tailAssetOffset:1.03},
   tidvatten:{headAsset:'skins/modern-tideglass-head-base.webp',bodyAsset:'skins/modern-tideglass-body-straight.webp',tailAsset:'skins/modern-tideglass-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:7,assetBodyShadowBlur:4,tailAssetOffset:1.03},
-  inferno:{headAsset:'skins/modern-lightning-head-base.webp',bodyAsset:'skins/modern-lightning-body-straight.webp',tailAsset:'skins/modern-lightning-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:7,assetBodyShadowBlur:4,tailAssetOffset:1.03}
+  inferno:{headAsset:'skins/modern-lightning-head-base.webp?v=2',bodyAsset:'skins/modern-lightning-body-straight.webp?v=2',tailAsset:'skins/modern-lightning-tail.webp?v=2',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:7,assetBodyShadowBlur:4,tailAssetOffset:1.03}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
 const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
@@ -2694,6 +2711,7 @@ const SKIN_I18N_DE={
   stjarnhimmel:{name:'Sternenhimmel',desc:'Freischalten: 75er-Serie'},
   ghost:{name:'Geist',desc:'Freischalten: Medaille „Mythische Schlange“ (Länge 100)'},
   fotboll:{name:'Fussball',desc:'Freischalten: 100 Spiele spielen'},
+  basketboll:{name:'Basketball',desc:'Freischalten: 5 richtige Antworten in Folge'},
   hund:{name:'Hund',desc:'Freischalten: Medaille „Tabellenmeister“'},
   katt:{name:'Katze',desc:'Freischalten: Medaille „Additionsmeister“'},
   jordgubbe:{name:'Erdbeere',desc:'Freischalten: Medaille „Subtraktionsmeister“'},
@@ -2717,6 +2735,7 @@ const SKIN_THEMES={
   'isbla':    {bgA:'#03070f',bgB:'#020510',gridColor:'rgba(80,160,255,.04)', particles:'snow',  headAcc:null},
   'miamisunset': {bgA:'#13021e',bgB:'#050714',gridColor:'rgba(255,110,190,.05)',particles:'stars', headAcc:null},
   'fotboll':  {bgA:'#0a1014',bgB:'#04080b',gridColor:'rgba(255,255,255,.035)',particles:'stars', headAcc:null},
+  'basketboll':{bgA:'#160a03',bgB:'#080401',gridColor:'rgba(255,147,60,.035)',particles:'stars',headAcc:null},
   'rosa':     {bgA:'#0f0308',bgB:'#0a0206',gridColor:'rgba(255,80,160,.04)', particles:'hearts',headAcc:null},
   'lila':     {bgA:'#07030f',bgB:'#04020a',gridColor:'rgba(140,60,255,.04)', particles:'stars', headAcc:null},
   'regnbage': {bgA:'#050508',bgB:'#030308',gridColor:'rgba(180,130,255,.04)',particles:'rainbow',headAcc:null},
