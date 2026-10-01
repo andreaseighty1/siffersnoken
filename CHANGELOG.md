@@ -2,6 +2,11 @@
 
 ## 2026-10-01
 
+### Lugnare bollmönster genom svängar
+- Moderna Basketboll och Fotboll behåller kroppsdelarnas mönstervinkel när snoken svänger, utan växelvis spegling.
+- Huvudets riktning, svansens fäste och rotation samt kroppens transparens är oförändrade.
+- Övriga skins behåller riktningsföljande mönster, inklusive drakens tidigare rotationskorrigering.
+
 ### Ny modern banbakgrund: Basketplan
 - `assets/basketplan.webp`: blågrön basketplan i strikt ortografisk vy uppifrån, exakt två korgar och öppen lågkontrastyta i mitten.
 - `index.html`: tillagd i slumpningen av moderna banor med cachelagrad bakgrund och diskret reservbakgrund under laddning.

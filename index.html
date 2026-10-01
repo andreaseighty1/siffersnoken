@@ -2610,8 +2610,8 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   kunglig:{headAsset:'skins/modern-royal-head-base.webp',bodyAsset:'skins/modern-royal-body-straight.webp',tailAsset:'skins/modern-royal-tail.webp',headAssetScale:1.5,royalShimmer:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   jordgubbe:{headAsset:'skins/modern-strawberry-head-base.webp',bodyAsset:'skins/modern-strawberry-body-straight.webp',tailAsset:'skins/modern-strawberry-tail.webp'},
   vattenmelon:{headAsset:'skins/modern-watermelon-head-base.webp',bodyAsset:'skins/modern-watermelon-body-straight.webp',tailAsset:'skins/modern-watermelon-tail.webp'},
-  fotboll:{headAsset:'skins/modern-football-head-base.webp',bodyAsset:'skins/modern-football-body-straight.webp',tailAsset:'skins/modern-football-tail.webp'},
-  basketboll:{headAsset:'skins/modern-basketball-head-base.webp',bodyAsset:'skins/modern-basketball-body-straight.webp',tailAsset:'skins/modern-basketball-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:1.03},
+  fotboll:{headAsset:'skins/modern-football-head-base.webp',bodyAsset:'skins/modern-football-body-straight.webp',tailAsset:'skins/modern-football-tail.webp',bodyAssetFixedOrientation:true},
+  basketboll:{headAsset:'skins/modern-basketball-head-base.webp',bodyAsset:'skins/modern-basketball-body-straight.webp',tailAsset:'skins/modern-basketball-tail.webp',headAssetScale:1.5,bodyAssetFixedOrientation:true,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:1.03},
   polkagris:{headAsset:'skins/modern-candy-cane-head-base.webp',bodyAsset:'skins/modern-candy-cane-body-straight.webp',tailAsset:'skins/modern-candy-cane-tail.webp'},
   galax:{headAsset:'skins/modern-galaxy-head-base.webp',bodyAsset:'skins/modern-galaxy-body-straight.webp',tailAsset:'skins/modern-galaxy-tail.webp',galaxyTwinkles:true,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5},
   obsidian:{headAsset:'skins/modern-obsidian-head-base.webp',bodyAsset:'skins/modern-obsidian-body-straight.webp',tailAsset:'skins/modern-obsidian-tail.webp',magmaPulse:true,assetShadowBlur:8,assetBodyShadowBlur:5},
@@ -3635,7 +3635,7 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
     if(isTail){
       const lastBodyMotion=bodyMotionDirection(index-1);
       angle=bodyFacingAngle({x:-lastBodyMotion.x,y:-lastBodyMotion.y})-Math.PI/2;
-    }else{
+    }else if(!skin.bodyAssetFixedOrientation){
       const facing=index===snake.length-2&&snake[index+1]?bodyMotionDirection(index):toPrev;
       angle=bodyFacingAngle(facing);
     }
@@ -3680,7 +3680,8 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
     drawCtx.drawImage(renderImage,-size/2,-pivotFromTop*size,size,size);
   }else{
     drawCtx.translate(cx,cy);drawCtx.rotate(angle);
-    if(skin.assetAlternateMirror&&!isTail&&index%2===1)drawCtx.scale(-1,1);
+    // Bollmönster behåller både vinkel och spegling, även genom svängar.
+    if(skin.assetAlternateMirror&&!skin.bodyAssetFixedOrientation&&!isTail&&index%2===1)drawCtx.scale(-1,1);
     if(skin.ghostEcho){drawCtx.save();drawCtx.globalAlpha*=.18;drawCtx.drawImage(renderImage,-size/2,-size/2+size*.09,size,size);drawCtx.restore();}
     drawCtx.drawImage(renderImage,-size/2,-size/2,size,size);
     if(skin.galaxyTwinkles)drawModernGalaxyTwinkles(drawCtx,size,index,isTail);
