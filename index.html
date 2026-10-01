@@ -186,6 +186,8 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 .op-btn:hover{border-color:var(--accent);color:var(--accent)}
 .op-btn.sel{border-color:var(--accent);background:rgba(0,255,136,.12);
             color:var(--accent);box-shadow:0 0 10px rgba(0,255,136,.15)}
+.op-btn.signed-op-btn{grid-column:1/-1;font-family:'Exo 2',sans-serif;font-size:13px;line-height:1.4;}
+.signed-op-desc{margin:7px 0 0;}
 .range-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px}
 .range-btn{padding:5px 10px;border:1px solid var(--line);border-radius:8px;
   background:transparent;color:var(--muted);font-family:'Orbitron',monospace;
@@ -799,7 +801,9 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
             <button class="op-btn sel" data-op="-">−</button>
             <button class="op-btn" data-op="*">×</button>
             <button class="op-btn" data-op="/">÷</button>
+            <button class="op-btn signed-op-btn" data-op="signed" id="signedOpBtn" aria-pressed="false" aria-describedby="signedOpDesc">Negativa tal (+/−)</button>
           </div>
+          <div class="panel-desc signed-op-desc" id="signedOpDesc">Plus och minus med negativa tal. Välj bara denna eller blanda med andra räknesätt.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="rangePanelTitle"></div>
@@ -1086,7 +1090,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
-<script src="translations.js"></script>
+<script src="translations.js?v=negative-numbers-1"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -1327,6 +1331,13 @@ function getRangeLabel(range){
   if(label!==key)return label;
   return pickLangText(`upp till ${range}`,`up to ${range}`,`bis ${range}`);
 }
+function getOperationLabel(op,compact=false){
+  if(op==='signed')return compact?'±':t('signedOpLabel');
+  return ({'+':'+','-':'−','*':'×','/':'÷'})[op]||op;
+}
+function getPracticeRangeLabel(range,ops){
+  return [...ops].includes('signed')?`−${range} … ${range}`:getRangeLabel(range);
+}
 function getTablesShortLabel(){
   return pickLangText('Tabeller','Tables','Einmaleins');
 }
@@ -1474,6 +1485,8 @@ function applyLang(){
   const pts=document.querySelectorAll('.panel-title');
   if(pts[0])pts[0].textContent=t('panelPreset');
   if($('opsPanelTitle'))$('opsPanelTitle').textContent=t('panelOps');
+  if($('signedOpBtn'))$('signedOpBtn').textContent=t('signedOpLabel');
+  if($('signedOpDesc'))$('signedOpDesc').textContent=t('signedOpDesc');
   if($('rangePanelTitle'))$('rangePanelTitle').textContent=t('panelRange');
   if($('tablePanelTitle'))$('tablePanelTitle').textContent=t('panelTables');
   if($('speedPanelTitle'))$('speedPanelTitle').textContent=t('panelSpeed');
@@ -2881,7 +2894,10 @@ function loadSettings(){
   try{
     const s=JSON.parse(localStorage.getItem(SETTINGS_KEY));
     if(!s)return;
-    if(s.ops&&s.ops.length)activeOps=new Set(s.ops);
+    if(Array.isArray(s.ops)){
+      const supported=s.ops.filter(op=>['+','-','*','/','signed'].includes(op));
+      if(supported.length)activeOps=new Set(supported);
+    }
     if(s.numRange)numRange=s.numRange;
     if(Array.isArray(s.tables))tables=new Set(s.tables);
     if(s.speedMode)speedMode=s.speedMode;
@@ -4150,7 +4166,7 @@ function checkMedals(){
   if(snake.length>=50) unlockMedal('len50');
   if(snake.length>=75) unlockMedal('len75');
   if(snake.length>=100) unlockMedal('mytisk');
-  if(score>=1000&&activeOps.size===4&&numRange===1000) unlockMedal('genius');
+  if(score>=1000&&['+','-','*','/'].every(op=>activeOps.has(op))&&numRange===1000) unlockMedal('genius');
   if(speedMode!=='none'&&score>=5000) unlockMedal('snabbaskrillor');
   if(speedMode!=='none'&&score>=10000) unlockMedal('fartdemon');
   if(speedMode!=='none'&&score>=15000) unlockMedal('overhettad');
@@ -4945,6 +4961,7 @@ function genProblem(){
 function genFreshProblem(){
   const ops=[...activeOps];if(!ops.length)return{expr:'2 + 2',answer:4,op:'+'};
   const op=ops[Math.floor(Math.random()*ops.length)];
+  if(op==='signed')return genSignedProblem(numRange);
   for(let att=0;att<120;att++){
     if(op==='+'){
       const max=numRange,a=R(1,Math.floor(max*.9)),b=R(1,Math.min(Math.floor(max*.9),max-a));
@@ -4969,12 +4986,28 @@ function genFreshProblem(){
   }
   return{expr:'2 + 3',answer:5,op:'+'};
 }
-function genWrongs(correct){
+function formatSignedOperand(value,parenthesize=false){
+  const text=value<0?`−${Math.abs(value)}`:String(value);
+  return value<0&&parenthesize?`(${text})`:text;
+}
+function genSignedProblem(max){
+  const op=Math.random()<.5?'+':'-';
+  // Tal och svar stannar inom valt intervall. Negativ operand eller svar krävs.
+  for(let att=0;att<120;att++){
+    const a=R(-max,max),b=R(-max,max);
+    if(b===0)continue;
+    const answer=op==='+'?a+b:a-b;
+    if((a>=0&&b>=0&&answer>=0)||Math.abs(answer)>max)continue;
+    return{expr:`${formatSignedOperand(a)} ${op==='+'?'+':'−'} ${formatSignedOperand(b,true)}`,answer,op,category:'signed'};
+  }
+  return{expr:op==='+'?'−1 + 1':'−1 − (−1)',answer:0,op,category:'signed'};
+}
+function genWrongs(correct,allowNegative=correct<0){
   const spread=numRange>=1000?60:numRange>=100?15:numRange>=20?6:3;
   const s=new Set();let att=0;
   while(s.size<3&&att++<600){const off=R(-spread,spread);if(!off)continue;
-    const w=correct+off;if(w<0||w===correct||s.has(w))continue;s.add(w);}
-  for(let f=correct+1;s.size<3;f++)if(f!==correct&&f>=0)s.add(f);
+    const w=correct+off;if((!allowNegative&&w<0)||w===correct||s.has(w))continue;s.add(w);}
+  for(let f=correct+1;s.size<3;f++)if(f!==correct&&(allowNegative||f>=0))s.add(f);
   return[...s].slice(0,3);
 }
 function addToWrongPool(prob){
@@ -5439,6 +5472,8 @@ function tickPortal(){
   if(getPortalTimeLeftMs()<=0)finishPortalRun('time');
 }
 function genMysteryProblemForOp(op,rarityId){
+  // Även bonusfrågor följer den valda kategorin och dess tydliga talintervall.
+  if(op==='signed')return genSignedProblem(numRange);
   const rarityBoost=MYSTERY_RANGE_BOOST[rarityId]||1;
   for(let att=0;att<140;att++){
     if(op==='+'){
@@ -5482,7 +5517,7 @@ function createMysteryPrompt(box){
     box,
     op:puzzle.op,
     problem:puzzle,
-    choices:shuffle([puzzle.answer,...genWrongs(puzzle.answer)]),
+    choices:shuffle([puzzle.answer,...genWrongs(puzzle.answer,puzzle.category==='signed')]),
     answered:false,
     selected:null,
     resultText:''
@@ -5681,7 +5716,7 @@ function placeTiles(){
     }
     return null;
   }
-  shuffle([problem.answer,...genWrongs(problem.answer)]).forEach(val=>{
+  shuffle([problem.answer,...genWrongs(problem.answer,problem.category==='signed')]).forEach(val=>{
     let p,att=0,ok=false;
     while(!ok&&att<300){
       p={x:R(0,COLS-1),y:R(0,ROWS-1)};att++;
@@ -5867,12 +5902,13 @@ function tick(){
   if(ti!==-1){
     const tile=tiles.splice(ti,1)[0];
     sessionTotal++;
-    if(!sessionOpStats[problem.op])sessionOpStats[problem.op]={correct:0,total:0};
-    sessionOpStats[problem.op].total++;
+    const statsCategory=problem.category||problem.op;
+    if(!sessionOpStats[statsCategory])sessionOpStats[statsCategory]={correct:0,total:0};
+    sessionOpStats[statsCategory].total++;
 
     if(tile.correct){
       combo++;correctStreak++;sessionCorrect++;
-      sessionOpStats[problem.op].correct++;
+      sessionOpStats[statsCategory].correct++;
       const base=10+(getSpeed()/10|0),bonus=combo>1?Math.floor(base*(combo-1)*.4):0;
       const pts=base+bonus;score+=pts;growPending+=1;sfxOk(problem.op);flashFx('good');
       eatAnim={x:tile.x,y:tile.y,value:tile.value,startTime:performance.now()};
@@ -7997,7 +8033,7 @@ function updateHUD(){
     return;
   }
   const scoreText=String(score);
-  const levelText=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join('/');
+  const levelText=[...activeOps].map(o=>getOperationLabel(o,true)).join('/');
   const eqText=`${problem.expr} = ?`;
   const lengthText=String(snake.length);
   const base=10+(getSpeed()/10|0);
@@ -8042,9 +8078,9 @@ function triggerGameOver(){
   stopTitelMusic(true); // börja om från början när spelaren går till menyn
   showTouchControls(false);
   $('goScore').textContent=`${t('goScoreLabel')} ${score}`;
-  const opsStr=[...activeOps].map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join(' ');
-  const tStr=tables.size>0?` · ${getTablesShortLabel()}: ${[...tables].sort((a,b)=>a-b).join(', ')}`:'';
-  $('goMeta').textContent=`${opsStr} · ${getRangeLabel(numRange)}${tStr}`;
+  const opsStr=[...activeOps].map(o=>getOperationLabel(o)).join(' ');
+  const tStr=tables.size>0&&(activeOps.has('*')||activeOps.has('/'))?` · ${getTablesShortLabel()}: ${[...tables].sort((a,b)=>a-b).join(', ')}`:'';
+  $('goMeta').textContent=`${opsStr} · ${getPracticeRangeLabel(numRange,activeOps)}${tStr}`;
 
   // Bygg statistik-chips
   const statsEl=$('goStats');statsEl.innerHTML='';
@@ -8074,10 +8110,9 @@ function triggerGameOver(){
 const loadHS=()=>{try{return JSON.parse(localStorage.getItem(HS_KEY))||[];}catch(e){return[];}};
 const saveHS=hs=>localStorage.setItem(HS_KEY,JSON.stringify(hs));
 function getHSDesc(h){
-  const opsMap={'+':'+','-':'−','*':'×','/':'÷'};
   if(h&&Array.isArray(h.ops)&&Number.isFinite(parseInt(h.range,10))){
-    const ops=h.ops.map(o=>opsMap[o]||o).join('/');
-    return `${ops} · ${getRangeLabel(parseInt(h.range,10))}`;
+    const ops=h.ops.map(o=>getOperationLabel(o)).join('/');
+    return `${ops} · ${getPracticeRangeLabel(parseInt(h.range,10),h.ops)}`;
   }
   const raw=String(h?.desc||'').trim();
   const m=raw.match(/^([+\-−×÷/* ]+?)(?:\s*[·|]\s*)?(?:inom|within|up to|upp till|bis)\s+(\d{1,4})$/i);
@@ -8089,7 +8124,7 @@ function getHSDesc(h){
 function addScore(name){
   const hs=loadHS();
   const ops=[...activeOps];
-  const desc=ops.map(o=>({'+':'+','-':'−','*':'×','/':'÷'})[o]).join('/')+' · '+getRangeLabel(numRange);
+  const desc=ops.map(o=>getOperationLabel(o)).join('/')+' · '+getPracticeRangeLabel(numRange,ops);
   hs.push({name:name.trim()||getPlayer(),score,desc,ops,range:numRange});
   hs.sort((a,b)=>b.score-a.score);saveHS(hs.slice(0,10));
 }
@@ -8172,7 +8207,12 @@ function renderHSPage(){
 /* ═══════════════════════════════════════
    MENY: BUILDERS
    ═══════════════════════════════════════ */
-function updateRangeHint(){const map={10:t('rangeHint10'),20:t('rangeHint20'),100:t('rangeHint100'),1000:t('rangeHint1000')};$('rangeHint').textContent=map[numRange]||'';}
+function updateRangeHint(){
+  const map={10:t('rangeHint10'),20:t('rangeHint20'),100:t('rangeHint100'),1000:t('rangeHint1000')};
+  const ordinary=[...activeOps].some(op=>op==='+'||op==='-')?map[numRange]||'':'';
+  const signed=activeOps.has('signed')?t('signedRangeHint',{n:numRange,max:numRange}):'';
+  $('rangeHint').textContent=[ordinary,signed].filter(Boolean).join(' · ');
+}
 document.querySelectorAll('.range-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{numRange=parseInt(btn.dataset.r);
     document.querySelectorAll('.range-btn').forEach(b=>b.classList.remove('sel'));
@@ -8227,11 +8267,18 @@ if($('tableMultiChk')){
   });
 }
 function updateTablePanelVisibility(){$('tablePanel').style.display=(activeOps.has('*')||activeOps.has('/'))? 'block':'none';}
+function syncOperationButtons(){
+  document.querySelectorAll('.op-btn').forEach(btn=>{
+    const selected=activeOps.has(btn.dataset.op);
+    btn.classList.toggle('sel',selected);
+    btn.setAttribute('aria-pressed',String(selected));
+  });
+}
 document.querySelectorAll('.op-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{const op=btn.dataset.op;
     if(activeOps.has(op)){if(activeOps.size===1)return;activeOps.delete(op);btn.classList.remove('sel');}
     else{activeOps.add(op);btn.classList.add('sel');}
-    updateTablePanelVisibility();deselectPreset();saveSettings();updateMenuSettingsSummary();});
+    syncOperationButtons();updateRangeHint();updateTablePanelVisibility();deselectPreset();saveSettings();updateMenuSettingsSummary();});
 });
 document.querySelectorAll('.speed-btn').forEach(btn=>{
   btn.addEventListener('click',()=>{speedMode=btn.dataset.sm;
@@ -8259,7 +8306,7 @@ function buildGradeRow(){
     const btn=document.createElement('button');btn.className='preset-btn';btn.textContent=pickLangText(cfg.label,cfg.labelEn||cfg.label,cfg.labelDe||cfg.labelEn||cfg.label);
     btn.addEventListener('click',()=>{
       activeOps=new Set(cfg.ops);numRange=cfg.range;setTables(cfg.tbls);
-      document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
+      syncOperationButtons();
       document.querySelectorAll('.range-btn').forEach(rb=>rb.classList.toggle('sel',parseInt(rb.dataset.r)===numRange));
       updateRangeHint();updateTablePanelVisibility();saveSettings();updateMenuSettingsSummary();
       document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');});
@@ -8387,7 +8434,7 @@ function showAbout(){
 
 function updateMenuSettingsSummary(){
   const el=$('menuSettingsSummary');if(!el)return;
-  const om={'+':'➕','-':'➖','*':'✖️','/':'➗'};
+  const om={'+':'➕','-':'➖','*':'✖️','/':'➗',signed:getOperationLabel('signed')};
   const opsStr=[...activeOps].map(o=>om[o]||o).join(' ');
   const tStr=(tables.size>0&&(activeOps.has('*')||activeOps.has('/')))?' · '+getTablesShortLabel()+': '+[...tables].sort((a,b)=>a-b).join(', '):'';
   const enabledCount=[mysteryEventsEnabled,portalEventsEnabled,bonusLivesEnabled].filter(Boolean).length;
@@ -8395,7 +8442,7 @@ function updateMenuSettingsSummary(){
     ?' · '+pickLangText('🌿 Lugn runda','🌿 Calm round','🌿 Ruhige Runde')
     :enabledCount<3?' · 🎉 Bonus '+enabledCount+'/3':'';
   const graphicsStr=graphicsMode==='modern'?' · ✨ Modern':'';
-  el.textContent=opsStr+' · '+getRangeLabel(numRange)+tStr+bonusStr+graphicsStr;
+  el.textContent=opsStr+' · '+getPracticeRangeLabel(numRange,activeOps)+tStr+bonusStr+graphicsStr;
 }
 
 /* ─── WebView2: exportera spelstatistik ─── */
@@ -8456,6 +8503,8 @@ function renderStatsPage(){
   const opLabelEn={'+':'➕ Addition','-':'➖ Subtraction','*':'✖️ Multiplication','/':'➗ Division'};
   const opLabelDe={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
   const opSym={'+':'+','-':'−','*':'×','/':'÷'};
+  opLabel.signed=opLabelEn.signed=opLabelDe.signed=t('signedOpLabel');
+  opSym.signed='±';
 
   // ── Sammanfattning ──
   const totalGames=getTotalGamesPlayed();
@@ -8686,6 +8735,9 @@ function renderStatsTeacherPage(){
   const opSym={'+':'+','-':'−','*':'×','/':'÷'};
   const opLabelDe={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
   const opNameDe={'+':'Addition','-':'Subtraktion','*':'Multiplikation','/':'Division'};
+  opLabel.signed=opLabelEn.signed=opLabelDe.signed=t('signedOpLabel');
+  opName.signed=opNameEn.signed=opNameDe.signed=t('signedOpLabel');
+  opSym.signed='±';
   const pct=(correct,total)=>total>0?Math.round(correct/total*100):0;
   const getWrongPairs=h=>{
     if(h&&h.wrongMap&&typeof h.wrongMap==='object'&&Object.keys(h.wrongMap).length){
@@ -8709,10 +8761,10 @@ function renderStatsTeacherPage(){
   const sessionMetaText=h=>{
     const bits=[];
     const ops=getSessionOps(h);
-    const opsText=ops.map(o=>opSym[o]||o).join('');
+    const opsText=ops.map(o=>getOperationLabel(o)).join(' ');
     if(h.player)bits.push(h.player);
     if(opsText)bits.push(opsText);
-    if(h.numRange)bits.push(getRangeLabel(h.numRange));
+    if(h.numRange)bits.push(getPracticeRangeLabel(h.numRange,ops));
     if(Array.isArray(h.tables)&&h.tables.length&&(ops.includes('*')||ops.includes('/'))){
       bits.push(`${txt.tablesLabel} ${h.tables.slice().sort((a,b)=>a-b).join(',')}`);
     }
@@ -8747,7 +8799,7 @@ function renderStatsTeacherPage(){
       opAcc[op].total+=d.total||0;
     });
   });
-  const opStats=['+','-','*','/']
+  const opStats=['+','-','*','/','signed']
     .map(op=>({
       op,
       correct:opAcc[op]?.correct||0,
@@ -8924,7 +8976,7 @@ function exportSessionStats(){
     now.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'}),
     loadPlayer()||'Okänd',score,sessionCorrect,sessionTotal,
     (sessionTotal>0?Math.round((sessionCorrect/sessionTotal)*100):0)+'%',
-    [...activeOps].map(o=>({'+':'+','-':'-','*':'*','/':'/'})[o]).join('+'),
+    [...activeOps].map(o=>({'+':'+','-':'-','*':'*','/':'/',signed:getOperationLabel('signed')})[o]||o).join('+'),
     numRange,snake.length,practiceMode?'Övning':'Standard'
   ].join(';');
   if(window.chrome&&window.chrome.webview)
@@ -9052,7 +9104,7 @@ applyGraphicsMode(graphicsMode,{persist:false});
 applyMusicGenre(musicGenre,{persist:false,restart:false});
 setTables([...tables]);
 syncTableMultiToggle();
-document.querySelectorAll('.op-btn').forEach(ob=>ob.classList.toggle('sel',activeOps.has(ob.dataset.op)));
+syncOperationButtons();
 document.querySelectorAll('.range-btn').forEach(rb=>rb.classList.toggle('sel',parseInt(rb.dataset.r)===numRange));
 document.querySelectorAll('.speed-btn').forEach(sb=>sb.classList.toggle('sel',sb.dataset.sm===speedMode));
 document.querySelectorAll('.toggle-btn[data-ww]').forEach(tb=>tb.classList.toggle('sel',tb.dataset.ww===(wallWrap?'true':'false')));

@@ -2,6 +2,12 @@
 
 ## 2026-10-01
 
+### Ny valbar kategori: Negativa tal (+/−)
+- Addition och subtraktion med negativa heltal kan väljas separat eller blandas med befintliga räknesätt.
+- Operander och svar hålls inom det valda intervallet, exempelvis −20 till 20. Negativ andra operand visas inom parentes.
+- Svarsalternativ och mysteriefrågor stöder negativa tal. Inställningen sparas och äldre standardval ändras inte.
+- Kategorin visas i meny, highscore och historik, med separat träffsäkerhet i lärarstatistiken. Befintliga plus-/minusmedaljer fungerar som tidigare.
+
 ### Lugnare bollmönster genom svängar
 - Moderna Basketboll och Fotboll behåller kroppsdelarnas mönstervinkel när snoken svänger, utan växelvis spegling.
 - Huvudets riktning, svansens fäste och rotation samt kroppens transparens är oförändrade.
