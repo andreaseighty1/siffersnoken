@@ -1,5 +1,33 @@
 # Changelog
 
+## 2026-10-01
+
+### Moderna skins: Tidvatten och Blixt
+- `skins/modern-tideglass-*.webp`
+  - turkosa havsglasfjäll med pärlemorskimrande vattenreflexer och mörk petrolkant
+- `skins/modern-lightning-*.webp`
+  - mörka brons- och kolfärgade fjäll med tunna förgrenade gyllene blixtådror
+- Båda använder originalnära runda huvuden, cirkulära kroppsdelar och smala plana svansfästen med samma material som kroppen.
+- `index.html`
+  - kopplar de nya WebP-bilderna till befintliga skins och behåller deras upplåsningskrav samt klassiska grafikläge
+- Slutfört integrationen av den tidigare avbrutna rundan: Skuggmysterium, Smaragd och Månträdgården.
+
+## 2026-09-12
+
+### Moderna skins: Skuggmysterium och Smaragd
+- `skins/modern-shadow-mystery-*.webp`
+  - nytt svart och silverfärgat skin med pärlemorskimrande fjäll och diskreta skuggslöjor
+- `skins/modern-emerald-*.webp`
+  - nytt smaragdgrönt skin med polerade jadefjäll och små kristallglimtar
+- Båda har originalnära runda huvuden, cirkulära kroppsdelar och smala svansfästen i samma material som kroppen.
+
+### Ny modern banbakgrund: Månträdgården
+- `assets/mantradgarden.webp`
+  - strikt top-down-trädgård med stilla stenläggning i mitten och månblommor, dammar samt växter längs kanterna
+- `index.html`
+  - lagt till båda skinnen i modern grafik och Månträdgården i slumpningen av moderna banor
+  - sparsamma kanteldflugor respekterar inställningen för reducerad rörelse
+
 ## 2026-09-11
 
 ### Moderna skins: Miami Sunset och Ko

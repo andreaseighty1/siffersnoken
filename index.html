@@ -2610,7 +2610,11 @@ const MODERN_BASIC_ASSETS=Object.freeze({
   tiger:{headAsset:'skins/modern-tiger-head-base.webp?v=2',bodyAsset:'skins/modern-tiger-body-straight.webp',tailAsset:'skins/modern-tiger-tail.webp?v=2',headAssetScale:1.52,eyesAssetScale:.9,eyesAssetOffsetY:.025,assetAlternateMirror:true,assetShadowBlur:6,assetBodyShadowBlur:4,tailAssetOffset:1.02,tailWagAmplitude:.08,tailWagPeriod:245,tailWagEnvelope:true,tailAssetPivotFromTop:.095},
   hav:{headAsset:'skins/modern-ocean-head-base.webp',bodyAsset:'skins/modern-ocean-body-straight.webp',tailAsset:'skins/modern-ocean-tail.webp',oceanFlow:true,assetAlternateMirror:true,assetShadowBlur:9,assetBodyShadowBlur:6},
   miamisunset:{headAsset:'skins/modern-miami-sunset-head-base.webp',bodyAsset:'skins/modern-miami-sunset-body-straight.webp',tailAsset:'skins/modern-miami-sunset-tail.webp',headAssetScale:1.54,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5,tailAssetOffset:1.03},
-  bi:{headAsset:'skins/modern-cow-head-base.webp',bodyAsset:'skins/modern-cow-body-straight.webp',tailAsset:'skins/modern-cow-tail.webp',headAssetScale:1.5,eyesAssetScale:.92,eyesAssetOffsetY:-.015,assetAlternateMirror:true,assetShadowBlur:6,assetBodyShadowBlur:4,tailAssetOffset:1.03,tailWagAmplitude:.05,tailWagPeriod:285,tailWagEnvelope:true,tailAssetPivotFromTop:.08}
+  bi:{headAsset:'skins/modern-cow-head-base.webp',bodyAsset:'skins/modern-cow-body-straight.webp',tailAsset:'skins/modern-cow-tail.webp',headAssetScale:1.5,eyesAssetScale:.92,eyesAssetOffsetY:-.015,assetAlternateMirror:true,assetShadowBlur:6,assetBodyShadowBlur:4,tailAssetOffset:1.03,tailWagAmplitude:.05,tailWagPeriod:285,tailWagEnvelope:true,tailAssetPivotFromTop:.08},
+  skuggmysterium:{headAsset:'skins/modern-shadow-mystery-head-base.webp',bodyAsset:'skins/modern-shadow-mystery-body-straight.webp',tailAsset:'skins/modern-shadow-mystery-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:7,assetBodyShadowBlur:4,tailAssetOffset:1.03},
+  smaragd:{headAsset:'skins/modern-emerald-head-base.webp',bodyAsset:'skins/modern-emerald-body-straight.webp',tailAsset:'skins/modern-emerald-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:8,assetBodyShadowBlur:5,tailAssetOffset:1.03},
+  tidvatten:{headAsset:'skins/modern-tideglass-head-base.webp',bodyAsset:'skins/modern-tideglass-body-straight.webp',tailAsset:'skins/modern-tideglass-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:7,assetBodyShadowBlur:4,tailAssetOffset:1.03},
+  inferno:{headAsset:'skins/modern-lightning-head-base.webp',bodyAsset:'skins/modern-lightning-body-straight.webp',tailAsset:'skins/modern-lightning-tail.webp',headAssetScale:1.5,assetAlternateMirror:true,assetShadowBlur:7,assetBodyShadowBlur:4,tailAssetOffset:1.03}
 });
 const MODERN_EYES_OPEN_ASSET='skins/modern-basic-eyes-open.webp';
 const MODERN_EYES_BLINK_ASSET='skins/modern-basic-eyes-blink.webp';
@@ -2967,6 +2971,10 @@ let _neonArcadeBackdropSprite=null;
 let _neonArcadeBackdropKey='';
 let _neonArcadeImage=null;
 let _neonArcadeImageStatus='idle';
+let _moonGardenBackdropSprite=null;
+let _moonGardenBackdropKey='';
+let _moonGardenImage=null;
+let _moonGardenImageStatus='idle';
 let modernBoardThemeId='forest';
 function createSpriteCanvas(size){
   const sprite=document.createElement('canvas');
@@ -6197,7 +6205,7 @@ const FAIRY_FOREST_LEAVES=[
   [.14,.42,8,-.5],[.26,.86,7,.35],[.42,.1,6,-.8],[.58,.9,8,.6],
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
-const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity','volcanoIsland','enchantedLibrary','neonArcade'];
+const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','hockeyRink','coralReef','cloudCity','volcanoIsland','enchantedLibrary','neonArcade','moonGarden'];
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6239,6 +6247,10 @@ const ENCHANTED_LIBRARY_MOTES=[
 const NEON_ARCADE_GLINTS=[
   [.035,.2,1.1,.2],[.07,.74,.9,1.1],[.2,.96,1.0,2.3],[.79,.95,1.1,.7],
   [.95,.72,.9,1.8],[.965,.24,1.1,2.8],[.8,.045,1.0,1.4],[.2,.05,.9,.4]
+];
+const MOON_GARDEN_FIREFLIES=[
+  [.035,.18,.9,.2],[.07,.72,.8,1.1],[.2,.96,.9,2.3],[.79,.95,.9,.7],
+  [.95,.7,.8,1.8],[.965,.22,.9,2.8],[.81,.045,.8,1.4],[.19,.055,.8,.4]
 ];
 function selectModernBoardTheme(){
   if(MODERN_BOARD_THEME_IDS.includes(PERF_STRESS_BOARD)){
@@ -6663,6 +6675,43 @@ function drawNeonArcadeAnimations(){
   }
   ctx.restore();
 }
+function getMoonGardenBackdrop(){
+  const W=canvas.width,H=canvas.height;
+  if(_moonGardenImageStatus==='idle'){
+    _moonGardenImageStatus='loading';
+    _moonGardenImage=new Image();
+    _moonGardenImage.onload=()=>{_moonGardenImageStatus='ready';_moonGardenBackdropSprite=null;_moonGardenBackdropKey='';};
+    _moonGardenImage.onerror=()=>{_moonGardenImageStatus='failed';};
+    _moonGardenImage.src='assets/mantradgarden.webp';
+  }
+  const key=`${W}x${H}|${_moonGardenImageStatus}`;
+  if(_moonGardenBackdropSprite&&_moonGardenBackdropKey===key)return _moonGardenBackdropSprite;
+  const sprite=createSpriteCanvas(W);sprite.height=H;
+  const sctx=sprite.getContext('2d');
+  if(_moonGardenImageStatus==='ready'){
+    sctx.drawImage(_moonGardenImage,0,0,W,H);
+  }else{
+    const grad=sctx.createRadialGradient(W*.5,H*.48,8,W*.5,H*.48,Math.max(W,H)*.72);
+    grad.addColorStop(0,'#344252');grad.addColorStop(.65,'#263444');grad.addColorStop(1,'#152432');
+    sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
+  }
+  _moonGardenBackdropSprite=sprite;_moonGardenBackdropKey=key;
+  return sprite;
+}
+function drawMoonGardenAnimations(){
+  const T=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:_renderNow;
+  const W=canvas.width,H=canvas.height;
+  ctx.save();ctx.globalCompositeOperation='screen';
+  for(let i=0;i<MOON_GARDEN_FIREFLIES.length;i++){
+    const [rx,ry,r,phase]=MOON_GARDEN_FIREFLIES[i];
+    const pulse=.1+.24*(.5+.5*Math.sin(T/820+phase));
+    const x=rx*W+Math.sin(T/2500+phase)*W*.002;
+    const y=ry*H+Math.cos(T/2100+phase)*H*.002;
+    ctx.fillStyle=`rgba(255,236,164,${pulse})`;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
   if(graphicsMode==='modern'){
@@ -6693,6 +6742,9 @@ function drawBackground(theme){
     }else if(modernBoardThemeId==='neonArcade'){
       ctx.drawImage(getNeonArcadeBackdrop(),0,0);
       drawNeonArcadeAnimations();
+    }else if(modernBoardThemeId==='moonGarden'){
+      ctx.drawImage(getMoonGardenBackdrop(),0,0);
+      drawMoonGardenAnimations();
     }else{
       ctx.drawImage(getFairyForestBackdrop(),0,0);
       drawFairyForestAnimations();
