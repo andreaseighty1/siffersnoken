@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-02
+
+### Uppdaterad nyhetsticker
+- Menyn lyfter nu negativa tal som egen kategori eller blandning, Basketbollens upplåsning med 5 rätt i rad samt Basketplan och nya moderna skins.
+- Uppdaterat svenska, engelska och tyska samt den svenska reservtexten i HTML.
+- Förlängt rullningen från 24 till 40 sekunder för att hålla den längre texten lättläst.
+
 ## 2026-10-01
 
 ### Ny valbar kategori: Negativa tal (+/−)

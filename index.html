@@ -139,7 +139,7 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
   box-sizing:border-box;
   flex:0 0 auto;
   padding:0 16px;
-  animation:menuNewsScroll 24s linear infinite;
+  animation:menuNewsScroll 40s linear infinite;
 }
 .menu-news-item{
   font-size:11px;
@@ -710,8 +710,8 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i version 3.11! <strong>Modernt grafikläge</strong> med blinkande ögon och följsam svans</span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i version 3.11! <strong>Modernt grafikläge</strong> med blinkande ögon och följsam svans</span>
+      <span class="menu-news-item" id="menuNewsA">Nytt! <strong>Negativa tal (+/−)</strong> – öva separat eller blanda · <strong>Basketboll</strong> – lås upp med 5 rätt i rad · <strong>Basketplan</strong> och fler moderna skins!</span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt! <strong>Negativa tal (+/−)</strong> – öva separat eller blanda · <strong>Basketboll</strong> – lås upp med 5 rätt i rad · <strong>Basketplan</strong> och fler moderna skins!</span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -1320,9 +1320,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i version <strong>3.11</strong>! <strong>Modernt grafikläge</strong> med blinkande ögon och följsam svans',
-    'New in version <strong>3.11</strong>! <strong>Modern graphics mode</strong> with blinking eyes and a smoothly anchored tail',
-    'Neu in Version <strong>3.11</strong>! <strong>Moderner Grafikmodus</strong> mit blinkenden Augen und einer sauber verankerten Schwanzspitze'
+    'Nytt! <strong>Negativa tal (+/−)</strong> – öva separat eller blanda · <strong>Basketboll</strong> – lås upp med 5 rätt i rad · <strong>Basketplan</strong> och fler moderna skins!',
+    'New! <strong>Negative numbers (+/−)</strong> – practise alone or mix · <strong>Basketball</strong> – unlock with 5 correct in a row · <strong>Basketball court</strong> and more modern skins!',
+    'Neu! <strong>Negative Zahlen (+/−)</strong> – einzeln üben oder mischen · <strong>Basketball</strong> – mit 5 richtigen Antworten in Folge freischalten · <strong>Basketballfeld</strong> und weitere moderne Skins!'
   );
 }
 function getRangeLabel(range){
