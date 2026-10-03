@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -74,6 +74,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['rosePetals','forestLeaves'].includes(theme.pattern))return botanicalSvg(theme,size,part,lightCenter);
   if(['magmaCracks','obsidianSheen'].includes(theme.pattern))return stoneSvg(theme,size,part,lightCenter);
   if(theme.pattern==='sunsetWaves')return sunsetSvg(theme,size,part,lightCenter);
   if(theme.pattern==='electricCurrent')return lightningSvg(theme,size,part);
@@ -111,6 +112,21 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='rosePetals'||theme.pattern==='forestLeaves'){
+    const [u,v]=motifCoordinates(nx,ny,part),rose=theme.pattern==='rosePetals';
+    if(rose){
+      const petal=roseShapes.findIndex(points=>football.contains(points,u,v));
+      if(petal>=0){
+        if(openPathDistance([...roseShapes[petal],roseShapes[petal][0]],u,v)<.022)return p.detail;
+        return color===p.edge||color===p.shade?p.base:p.edge;
+      }
+      // A pink motif must not recolor the rounded dark underside outside petals.
+      return color===p.edge?p.shade:color;
+    }
+    if(forestVeins.some(points=>openPathDistance(points,u,v)<.019))return p.detail;
+    if(forestShapes.some(points=>football.contains(points,u,v)))return color===p.shade||color===p.edge?p.base:p.light;
+    if(openPathDistance(forestStem,u,v)<.021)return p.shade;
+  }
   if(theme.pattern==='magmaCracks'){
     const [u,v]=surfaceCoordinates(nx,ny,part),distance=Math.min(...magmaPaths.map(points=>openPathDistance(points,u,v)));
     if(distance<.023)return p.detail;
@@ -170,6 +186,45 @@ function motifCoordinates(nx,ny,part){
     part==='tail'?[(nx-.5)/.32+.5,(ny-.125)/.40]:[nx,ny];
 }
 function motifFrame(part){return part==='head-base'?{x:.09,y:.60,w:.82,h:.36}:part==='tail'?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};}
+// Sample curves once at build time. Both styles use the same botanical shapes,
+// with a shaded toy material and a native six-color pixel interpretation.
+function cubicPoints(a,b,c,d){
+  return Array.from({length:25},(_,i)=>{
+    const t=i/24,s=1-t;return [0,1].map(k=>s*s*s*a[k]+3*s*s*t*b[k]+3*s*t*t*c[k]+t*t*t*d[k]);
+  });
+}
+function petalShape(a,b,c,d,e,f){return cubicPoints(a,b,c,d).concat(cubicPoints(d,e,f,a).slice(1));}
+const roseShapes=[
+  petalShape([.00,.50],[-.06,.07],[.52,-.01],[.77,.34],[.46,.13],[.28,.35]),
+  petalShape([.43,.13],[1.02,.13],[1.09,.76],[.60,1.05],[.91,.56],[.78,.33]),
+  petalShape([.91,.52],[.78,1.10],[-.01,1.02],[.06,.40],[.31,.83],[.64,.77]),
+  petalShape([.29,.53],[.24,.18],[.74,.21],[.73,.59],[.60,.37],[.43,.37])
+];
+const forestStem=[[.25,.79],[.41,.61],[.55,.45],[.69,.28],[.76,.15]];
+const forestVeins=[[[.41,.61],[.17,.40]],[[.55,.45],[.36,.18]],[[.41,.61],[.73,.72]],[[.55,.45],[.84,.51]],[[.69,.28],[.76,.15]]];
+function leafShape([a,b],width){
+  const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),sides=[];
+  for(const side of [1,-1]){
+    const points=Array.from({length:17},(_,i)=>{
+      const t=i/16,w=Math.sin(Math.PI*t)*width*side;
+      return [a[0]+dx*t-dy/len*w,a[1]+dy*t+dx/len*w];
+    });sides.push(side===1?points:points.reverse());
+  }
+  return sides.flat();
+}
+const forestShapes=forestVeins.map((vein,i)=>leafShape(vein,i===4?.053:.067));
+function botanicalSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,rose=theme.pattern==='rosePetals',f=motifFrame(part),p=theme.patternPalette;
+  const pt=([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`;
+  const d=points=>'M '+points.map(pt).join(' L ');
+  const shapes=rose?roseShapes:forestShapes,material=toyMaterial(p,id,size,{tail:part==='tail',lightCenter});
+  const fills=shapes.map(points=>`<path d="${d(points)} Z" fill="white"/>`).join('');
+  const mask=`<mask id="${id}-botanical" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${fills}</mask>`;
+  const stroke=(points,width,color,opacity)=>`<path d="${d(points)}" fill="none" stroke="${color}" stroke-width="${size*width*f.w}" stroke-opacity="${opacity}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const lines=rose?shapes.map(points=>stroke(points,.008,p.detail,.60)).join(''):
+    stroke(forestStem,.018,theme.palette.edge,.80)+forestVeins.map(points=>stroke(points,.010,p.detail,.82)).join('');
+  return {defs:material.defs+mask,paint:`<g mask="url(#${id}-botanical)">${material.paint}</g>`+lines};
+}
 function waveY(u){return .65+.045*Math.sin((u-.12)*Math.PI*2);}
 function sunsetSun(u,v){return Math.hypot(u-.44,v-.35)<.19;}
 function sunsetCut(v){return v>.36&&v<.385||v>.435&&v<.46;}
@@ -200,6 +255,7 @@ function openPathDistance(points,x,y){
   let distance=Infinity;
   for(let i=1;i<points.length;i++){
     const [ax,ay]=points[i-1],[bx,by]=points[i],dx=bx-ax,dy=by-ay;
+    if(dx===0&&dy===0)continue; // Sampled closed curves can repeat the first point.
     const t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy)));
     distance=Math.min(distance,Math.hypot(x-ax-t*dx,y-ay-t*dy));
   }
@@ -381,7 +437,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,electricPaths,openPathDistance,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

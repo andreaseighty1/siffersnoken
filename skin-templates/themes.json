@@ -107,5 +107,17 @@
     "palette": { "base": "#34324c", "light": "#747491", "shade": "#211f36", "edge": "#19182a", "ink": "#101020", "detail": "#e9defc" },
     "patternPalette": { "base": "#8c71bd", "light": "#d9c9f1", "shade": "#524576", "edge": "#342c50", "ink": "#101020", "detail": "#e9defc" },
     "pixelPalette": { "base": "#46415f", "light": "#9382b7", "shade": "#302b47", "edge": "#211e34", "ink": "#101020", "detail": "#ddcbf3" }
+  },
+  {
+    "id": "blackpink", "label": "Night Rose", "pattern": "rosePetals", "bodyOrientation": "fixed",
+    "palette": { "base": "#583049", "light": "#925970", "shade": "#321c30", "edge": "#251623", "ink": "#190f1c", "detail": "#ffe2eb" },
+    "patternPalette": { "base": "#e1669a", "light": "#ffbdd1", "shade": "#9e365e", "edge": "#602b49", "ink": "#190f1c", "detail": "#ffe2eb" },
+    "pixelPalette": { "base": "#634057", "light": "#98617b", "shade": "#3d273c", "edge": "#ed7ba7", "ink": "#211322", "detail": "#ffcade" }
+  },
+  {
+    "id": "skog", "label": "Skog", "pattern": "forestLeaves", "bodyOrientation": "fixed",
+    "palette": { "base": "#72834d", "light": "#bcc890", "shade": "#3c5839", "edge": "#293e30", "ink": "#182c24", "detail": "#eef0b9" },
+    "patternPalette": { "base": "#acc575", "light": "#e4edb0", "shade": "#68864e", "edge": "#3a593c", "ink": "#182c24", "detail": "#eef0b9" },
+    "pixelPalette": { "base": "#768b51", "light": "#b7ca83", "shade": "#475e3f", "edge": "#324535", "ink": "#182c24", "detail": "#ecedb0" }
   }
 ]

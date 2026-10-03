@@ -50,7 +50,7 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
@@ -82,6 +82,12 @@ assert.ok(lavaGrid.filter(c=>[lava.pixelPalette.base,lava.pixelPalette.light,lav
 const obsidian=themes.find(t=>t.id==='obsidian'),obsidianGrid=pixelGrid(obsidian).flat();
 assert.ok(obsidianGrid.filter(c=>c===obsidian.pixelPalette.detail).length>15,'Obsidian has clear angular polished edges');
 assert.ok(obsidianGrid.filter(c=>[obsidian.pixelPalette.base,obsidian.pixelPalette.shade,obsidian.pixelPalette.edge].includes(c)).length>110,'Obsidian preserves its dark material volume');
+const rose=themes.find(t=>t.id==='blackpink'),roseGrid=pixelGrid(rose).flat();
+assert.ok(roseGrid.filter(c=>c===rose.pixelPalette.edge).length>60,'Night Rose has broad pink petals, not just a plum recolor');
+assert.ok(roseGrid.filter(c=>c===rose.pixelPalette.detail).length>30,'Petal edges remain readable on the native pixel grid');
+assert.ok(roseGrid.filter(c=>[rose.pixelPalette.base,rose.pixelPalette.light,rose.pixelPalette.shade].includes(c)).length>180,'Dark sculpted material remains visible between petals');
+const forest=themes.find(t=>t.id==='skog'),forestGrid=pixelGrid(forest).flat();
+assert.ok(forestGrid.filter(c=>c===forest.pixelPalette.detail).length>40,'Forest leaf veins are visible at native resolution');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

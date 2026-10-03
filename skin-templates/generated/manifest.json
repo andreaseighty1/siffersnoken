@@ -143,6 +143,20 @@
       "file": "generated/toy/obsidian-body.webp"
     },
     {
+      "style": "toy",
+      "id": "blackpink",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/blackpink-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "skog",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/skog-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -281,6 +295,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/obsidian-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "blackpink",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/blackpink-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "skog",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/skog-body.webp"
     }
   ]
 }
