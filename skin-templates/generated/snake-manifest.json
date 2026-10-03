@@ -1,0 +1,330 @@
+{
+  "version": 1,
+  "status": "templates-not-connected-to-game",
+  "outputs": [
+    {
+      "style": "toy",
+      "id": "neutral",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/neutral-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "klassisk",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/klassisk-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "jordgubbe",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/jordgubbe-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "basketboll",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/basketboll-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "neutral",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/neutral-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "klassisk",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/klassisk-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "jordgubbe",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/jordgubbe-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "basketboll",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/basketboll-body.webp"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/neutral-head-base.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/neutral-tail.webp",
+      "id": "neutral",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/klassisk-head-base.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/klassisk-tail.webp",
+      "id": "klassisk",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/jordgubbe-head-base.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/jordgubbe-tail.webp",
+      "id": "jordgubbe",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/basketboll-head-base.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/basketboll-tail.webp",
+      "id": "basketboll",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/eyes-open.webp",
+      "part": "eyes-open",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/eyes-blink.webp",
+      "part": "eyes-blink",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/neutral-head-base.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/neutral-tail.webp",
+      "id": "neutral",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/klassisk-head-base.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/klassisk-tail.webp",
+      "id": "klassisk",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/jordgubbe-head-base.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/jordgubbe-tail.webp",
+      "id": "jordgubbe",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/basketboll-head-base.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.33,
+          0.39
+        ],
+        [
+          0.67,
+          0.39
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/basketboll-tail.webp",
+      "id": "basketboll",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/eyes-open.webp",
+      "part": "eyes-open",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/eyes-blink.webp",
+      "part": "eyes-blink",
+      "assetFacing": "up"
+    }
+  ]
+}

@@ -24,9 +24,10 @@
 - Svansens fäste ska normalt vara tydligt smalare än kroppsdelen och svansen ska använda samma material, färger och mönsterspråk som kroppen.
 - Kroppens gradvisa transparens ska även omfatta svansen.
 
-## Kroppsmallar för leksaksformer och pixelretro
+## Snokmallar för leksaksformer och pixelretro
 
 - Använd `skin-templates/body-spec.json`, `themes.json` och `tools/body-templates.cjs` för låst geometri och båda stilversionerna i samma byggkörning. Läs `skin-templates/README.md` innan mallarna används eller nya stilar kopplas in.
+- Använd även `snake-spec.json` och `tools/snake-templates.cjs` för huvud, svans och separata ögonlager i båda stilarna. Svansens angivna fästpunkt är dess rotationscentrum; placera den på kroppens kord nära kanten enligt `joinGeometry`, aldrig med godtycklig centrumöverlappning.
 - Ändra inte kroppens kontur eller relativa diameter för att göra ett nytt tema. Mönstret ska ligga innanför den gemensamma masken.
 - Pixel arbetar med 32 × 32 logiska pixlar och förlustfri WebP, utan bildutjämning, mjuk omskalning eller varierande segmentstorlek.
-- Byggprover och förhandsvisning är inte kompletta skins. Befintliga modernassets ska bevaras tills nya huvud- och svansmallar har testats i spelet.
+- Byggprover och statiska sammanfogningar är inte aktiverade grafiklägen. Befintliga modernassets ska bevaras tills hela malluppsättningen har testats i spelet, inklusive rörelse, lång orm och mobil.

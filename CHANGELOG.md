@@ -2,6 +2,12 @@
 
 ## 2026-10-03
 
+### Huvud- och svansmallar i båda nya stilarna
+- Låst rundad huvudform, smal avsmalnande svans och separata öppna/blinkande ögonlager.
+- Gemensamma teman ger 28 transparenta WebP-tillgångar med fasta fästpunkter och en bakre zon för öron/horn.
+- Sammanfogade provsnokar, raka delar, svängar och konsekvent nedtonad svans i separat förhandsvisning.
+- Kontroller av exakta temamasker, hårda pixelkanter och sammanhängande fäste i fyra riktningar. Grafiklägena är fortfarande inte inkopplade i spelet.
+
 ### Produktionsmallar för nya kroppsstilar
 - Låst rund geometri, centrum och relativa mått för mjuka leksaksformer och charmig pixelretro.
 - Gemensamma temabeskrivningar bygger båda stilarna samtidigt: neutral mall samt Klassisk, Jordgubbe och Basketboll.
