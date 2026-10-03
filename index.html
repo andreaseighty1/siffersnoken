@@ -329,6 +329,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   display:flex;align-items:center;justify-content:center;gap:6px;
   margin-top:6px;font-family:'Orbitron',monospace;font-size:11px;color:var(--muted);
 }
+body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap canvas{image-rendering:pixelated;}
 .length-row span{
   color:var(--accent);font-size:16px;font-weight:900;line-height:1;
 }
@@ -884,10 +885,11 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
         <div class="menu-panel">
           <div class="panel-title" id="graphicsModeTitle">🖼️ Grafikläge</div>
           <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
-            <button class="toggle-btn graphics-mode-btn sel" data-graphics="classic" id="graphicsClassicBtn">🧩 Classic</button>
-            <button class="toggle-btn graphics-mode-btn" data-graphics="modern" id="graphicsModernBtn">✨ Modern</button>
+            <button class="toggle-btn graphics-mode-btn sel" data-graphics="classic" id="graphicsClassicBtn">🧩 Klassisk</button>
+            <button class="toggle-btn graphics-mode-btn" data-graphics="toy" id="graphicsModernBtn">✨ Modern</button>
+            <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Klassisk grafik är standard. Modernt läge använder de nya orm-assetsen.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare moderna utseende.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1090,7 +1092,9 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
-<script src="translations.js?v=negative-numbers-1"></script>
+<script src="translations.js?v=snake-styles-1"></script>
+<script src="snake-style-config.js?v=snake-styles-1"></script>
+<script src="snake-styles.js?v=snake-styles-1"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -1598,9 +1602,10 @@ function applyLang(){
   if($('musicStyleTitle'))$('musicStyleTitle').textContent=pickLangText('🎵 Musikstil','🎵 Music style','🎵 Musikstil');
   if($('musicStyleDesc'))$('musicStyleDesc').textContent=pickLangText('Välj soundtrack för meny och spel.','Choose the soundtrack for menu and gameplay.','Wähle den Soundtrack für Menü und Spiel.');
   if($('graphicsModeTitle'))$('graphicsModeTitle').textContent=tOr('panelGraphicsMode','🖼️ Grafikläge','🖼️ Graphics mode','🖼️ Grafikmodus');
-  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc','Klassisk grafik är standard. Modernt läge använder de nya orm-assetsen.','Classic graphics is the default. Modern mode uses the new snake assets.','Klassische Grafik ist der Standard. Der moderne Modus verwendet die neuen Schlangen-Assets.');
-  if($('graphicsClassicBtn'))$('graphicsClassicBtn').textContent=tOr('graphicsClassic','🧩 Classic','🧩 Classic','🧩 Klassisch');
+  updateGraphicsModeDescription();
+  if($('graphicsClassicBtn'))$('graphicsClassicBtn').textContent=tOr('graphicsClassic','🧩 Klassisk','🧩 Classic','🧩 Klassisch');
   if($('graphicsModernBtn'))$('graphicsModernBtn').textContent=tOr('graphicsModern','✨ Modern','✨ Modern','✨ Modern');
+  if($('graphicsPixelBtn'))$('graphicsPixelBtn').textContent=tOr('graphicsPixel','👾 Pixelretro','👾 Pixel retro','👾 Pixelretro');
   document.querySelectorAll('.graphics-mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.graphics===graphicsMode));
   buildGradeRow();
   // Speed description (uppdatera med nuvarande speedMode)
@@ -2907,7 +2912,11 @@ function loadSettings(){
     if(typeof s.mysteryEventsEnabled==='boolean')mysteryEventsEnabled=s.mysteryEventsEnabled;
     if(typeof s.portalEventsEnabled==='boolean')portalEventsEnabled=s.portalEventsEnabled;
     if(typeof s.bonusLivesEnabled==='boolean')bonusLivesEnabled=s.bonusLivesEnabled;
-    if(s.graphicsMode==='classic'||s.graphicsMode==='modern')graphicsMode=s.graphicsMode;
+    graphicsMode=SnakeStyles.normalizeMode(s.graphicsMode);
+    if(s.graphicsMode==='modern'){
+      s.graphicsMode=graphicsMode;
+      localStorage.setItem(SETTINGS_KEY,JSON.stringify(s));
+    }
   }catch(e){}
 }
 let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
@@ -3478,7 +3487,8 @@ function getModernSkinAssetDef(skin){
   const assets=MODERN_BASIC_ASSETS[skin&&skin.id];
   return assets?{...skin,eyesOpenAsset:MODERN_EYES_OPEN_ASSET,eyesBlinkAsset:MODERN_EYES_BLINK_ASSET,assetFacing:'up',headAssetScale:1.75,bodyAssetScale:1.26,tailAssetScale:1.26,assetShadowBlur:5,assetBodyShadowBlur:3,tailAssetOffset:MODERN_TAIL_EDGE_OFFSET,...assets}:null;
 }
-function isModernGraphics(){return graphicsMode==='modern';}
+function isModernGraphics(){return graphicsMode!=='classic';}
+const snakeStyleRenderer=SnakeStyles.createRenderer();
 function skinHasModernAssets(skin){return !!getModernSkinAssetDef(skin);}
 let modernEyeBlinkUntil=0,modernEyeBlinkNextAt=0;
 function isModernEyeBlinking(now=_renderNow||performance.now()){
@@ -3640,7 +3650,7 @@ function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   return true;
 }
 function modernBodyVisualScale(index){
-  if(!isModernGraphics()||index<=1||index>=snake.length-2)return 1;
+  if(!isModernGraphics()||graphicsMode==='pixel'||index<=1||index>=snake.length-2)return 1;
   return 1+Math.sin(index*2.2)*0.018;
 }
 function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
@@ -3711,6 +3721,7 @@ function saveActiveSkin(id){
   localStorage.setItem(ACTIVE_SKIN_KEY,next);
   _activeSkinCache=next;
   invalidateSkinCaches();
+  snakeStyleRenderer.preload(graphicsMode,next);
 }
 function isSkinUnlocked(id){
   const def=SKINS_DEF.find(s=>s.id===id);
@@ -3876,6 +3887,42 @@ function drawSkinPreviewCanvas(canvas,skin){
   // Background
   ctx.fillStyle='rgba(0,0,0,0.35)';
   ctx.fillRect(0,0,W,H);
+
+  if(SnakeStyles.supports(graphicsMode,skin.id)){
+    const mode=graphicsMode,cell=Math.min(26,W/8),cols=W/cell,rows=H/cell;
+    const points=Array.from({length:6},(_,i)=>({x:cols/2+2-i,y:rows/2-.5}));
+    const drawn=snakeStyleRenderer.draw(ctx,{mode,id:skin.id,cell,cols,rows,points,
+      heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false});
+    if(!drawn)snakeStyleRenderer.preload(mode,skin.id).then(ok=>{
+      if(ok&&canvas.isConnected&&canvas.offsetWidth>0&&mode===graphicsMode)drawSkinPreviewCanvas(canvas,skin);
+    });
+    return;
+  }
+
+  // Transitional skins show their existing WebPs, not the old vector card art.
+  const legacy=graphicsMode!=='classic'?getModernSkinAssetDef(skin):null;
+  if(legacy){
+    const mode=graphicsMode,files=[legacy.headAsset,legacy.bodyAsset,legacy.tailAsset,legacy.eyesOpenAsset];
+    const images=files.map(loadModernSkinAsset);
+    if(!images.every(image=>image.complete&&image.naturalWidth)){
+      Promise.all(images.map(image=>image.decode().catch(()=>false))).then(()=>{
+        if(canvas.isConnected&&canvas.offsetWidth>0&&graphicsMode===mode&&images.every(image=>image.complete&&image.naturalWidth))drawSkinPreviewCanvas(canvas,skin);
+      });
+      return;
+    }
+    const cell=Math.min(23,W/8),cx=W/2+cell*2,cy=H/2;
+    function drawAsset(image,x,angle,size){
+      ctx.save();ctx.translate(x,cy);ctx.rotate(angle);
+      ctx.drawImage(image,-size/2,-size*image.naturalHeight/image.naturalWidth/2,size,size*image.naturalHeight/image.naturalWidth);ctx.restore();
+    }
+    drawAsset(images[2],cx-4*cell-cell*legacy.tailAssetOffset,Math.PI/2,cell*legacy.tailAssetScale*1.05);
+    for(let i=4;i>0;i--)drawAsset(images[1],cx-i*cell,legacy.bodyAssetFixedOrientation?0:(legacy.bodyAssetRotation||0),cell*legacy.bodyAssetScale*MODERN_BODY_OVERLAP);
+    drawAsset(images[0],cx,Math.PI/2,cell*legacy.headAssetScale);
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(Math.PI/2);
+    const size=cell*legacy.headAssetScale*(legacy.eyesAssetScale||1),offset=cell*legacy.headAssetScale*(legacy.eyesAssetOffsetY||0);
+    ctx.drawImage(images[3],-size/2,-size/2+offset,size,size);ctx.restore();
+    return;
+  }
 
   const segCount=8;
   const s=Math.round(H*0.72); // segment size
@@ -4052,7 +4099,9 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   }
 }
 
+let _skinPreviewObserver=null;
 function renderSkinsPage(){
+  if(_skinPreviewObserver){_skinPreviewObserver.disconnect();_skinPreviewObserver=null;}
   const syncedHeadwear=checkMuseumHeadwearUnlocks();
   syncedHeadwear.forEach(showHeadwearToast);
   const activeSkin=loadActiveSkin();
@@ -4088,7 +4137,7 @@ function renderSkinsPage(){
   headCard.addEventListener('click',cycleHeadAccessory);
   el.appendChild(headCard);
 
-  const drawJobs=[()=>drawHeadAccessoryPreviewCanvas(headCanvas,headSel)];
+  const drawJobs=[[headCanvas,()=>drawHeadAccessoryPreviewCanvas(headCanvas,headSel)]];
   SKINS_DEF.forEach(skin=>{
     const isUnlocked=isSkinUnlocked(skin.id);
     const isActive=skin.id===activeSkin;
@@ -4118,20 +4167,34 @@ function renderSkinsPage(){
     const info=document.createElement('div');
     info.className='skin-info';
     info.innerHTML=`<div class="skin-name">${name}</div><div class="skin-unlock">${unlockText}</div>`;
+    if(graphicsMode!=='classic'&&!SnakeStyles.supports(graphicsMode,skin.id)){
+      const migration=document.createElement('div');migration.className='skin-unlock';
+      migration.textContent=pickLangText('Tidigare grafik · ny stil kommer','Previous artwork · new style coming','Bisherige Grafik · neuer Stil folgt');
+      info.appendChild(migration);
+    }
     card.appendChild(info);
 
     if(isUnlocked){
       card.addEventListener('click',()=>{saveActiveSkin(skin.id);renderSkinsPage();});
     }
     el.appendChild(card);
-    drawJobs.push(()=>drawSkinPreviewCanvas(canvas,skin));
+    drawJobs.push([canvas,()=>drawSkinPreviewCanvas(canvas,skin)]);
   });
 
   // Draw previews after layout so offsetWidth is available
   requestAnimationFrame(()=>{
-    drawJobs.forEach(job=>{
-      try{job();}catch(err){console.warn('Preview draw failed',err);}
-    });
+    const run=job=>{try{job();}catch(err){console.warn('Preview draw failed',err);}};
+    if(typeof IntersectionObserver==='undefined'){drawJobs.forEach(([,job])=>run(job));return;}
+    const jobs=new Map(drawJobs);
+    const observer=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(!entry.isIntersecting)return;
+        observer.unobserve(entry.target);
+        run(jobs.get(entry.target));jobs.delete(entry.target);
+      });
+    },{rootMargin:'160px'});
+    _skinPreviewObserver=observer;
+    drawJobs.forEach(([canvas])=>observer.observe(canvas));
   });
 }
 function goToSkins(){renderSkinsPage();showScreen('skinsScreen');}
@@ -5744,7 +5807,7 @@ function startGame(){
   portalBox=null;portalRun=null;portalSnapshot=null;portalOverlayMode='intro';portalSpawnCount=0;portalAnsweredCheckpoint=0;portalPityCorrect=0;
   wrongPool=[];
   sessionCorrect=0;sessionTotal=0;sessionOpStats={};sessionWrongMap={};
-  if(graphicsMode==='modern')selectModernBoardTheme();
+  if(isModernGraphics())selectModernBoardTheme();
   const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
   snake=[];for(let i=0;i<4;i++)snake.push({x:mx-i,y:my,px:mx-i,py:my});
   if(PERF_STRESS_LENGTH){
@@ -6797,7 +6860,7 @@ function drawMoonGardenAnimations(){
 }
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
-  if(graphicsMode==='modern'){
+  if(isModernGraphics()){
     if(modernBoardThemeId==='crystal'){
       ctx.drawImage(getCrystalCaveBackdrop(),0,0);
       drawCrystalCaveAnimations();
@@ -7004,7 +7067,26 @@ function draw(t,frameNow=performance.now()){
       ctx.restore();
     }
   }
-  for(let i=snake.length-1;i>=0;i--){
+  const templateDrawn=snake.length>0&&snakeStyleRenderer.draw(ctx,{
+    mode:graphicsMode,id:getActiveSkinDef().id,cell:CELL,cols:COLS,rows:ROWS,
+    points:snake.map(s=>getSnakeRenderPoint(s,t)),heading:dir,
+    tailDirection:(()=>{
+      const last=snake.length-1;
+      let d=bodyMotionDirection(last);
+      if(!d.x&&!d.y&&last>0)d=bodyDirection(snake[last],snake[last-1]);
+      return{x:-d.x,y:-d.y};
+    })(),
+    blink:isModernEyeBlinking(),wrap:wallWrap
+  });
+  if(templateDrawn){
+    const headPoint=getSnakeRenderPoint(snake[0],t);
+    const cx=(headPoint.x+.5)*CELL,cy=(headPoint.y+.5)*CELL;
+    for(const dx of wallWrap?[-COLS*CELL,0,COLS*CELL]:[0])for(const dy of wallWrap?[-ROWS*CELL,0,ROWS*CELL]:[0]){
+      if(cx+dx<-2*CELL||cy+dy<-2*CELL||cx+dx>canvas.width+2*CELL||cy+dy>canvas.height+2*CELL)continue;
+      drawModernHeadAccessory(cx+dx,cy+dy);
+    }
+  }
+  for(let i=templateDrawn?-1:snake.length-1;i>=0;i--){
     const s=snake[i],isHead=i===0;
     const dx=s.x-s.px,dy=s.y-s.py;
     if(Math.abs(dx)>1){
@@ -8391,11 +8473,21 @@ function applyUITheme(id){
   document.querySelectorAll('.theme-btn').forEach(b=>b.classList.toggle('sel',b.dataset.theme===id));
 }
 function applyGraphicsMode(mode,{persist=true}={}){
-  graphicsMode=mode==='modern'?'modern':'classic';
+  graphicsMode=SnakeStyles.normalizeMode(mode);
   document.body.dataset.graphics=graphicsMode;
   document.querySelectorAll('.graphics-mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.graphics===graphicsMode));
-  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc','Klassisk grafik är standard. Modernt läge använder de nya orm-assetsen.','Classic graphics is the default. Modern mode uses the new snake assets.','Klassische Grafik ist der Standard. Der moderne Modus verwendet die neuen Schlangen-Assets.');
+  updateGraphicsModeDescription();
+  invalidateSkinCaches();
+  snakeStyleRenderer.preload(graphicsMode,loadActiveSkin());
+  updateMenuSettingsSummary();
+  if($('skinsScreen')&&$('skinsScreen').classList.contains('active'))renderSkinsPage();
   if(persist)saveSettings();
+}
+function updateGraphicsModeDescription(){
+  if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc',
+    'Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare moderna utseende.',
+    'Modern uses soft toy shapes. Modern and Pixel retro are ready for Classic, Strawberry and Basketball; other skins temporarily keep their previous modern appearance.',
+    'Modern verwendet weiche Spielzeugformen. Modern und Pixelretro sind für Klassisch, Erdbeere und Basketball fertig; andere Skins behalten vorerst ihr bisheriges modernes Aussehen.');
 }
 
 /* ═══════════════════════════════════════
@@ -8441,7 +8533,7 @@ function updateMenuSettingsSummary(){
   const bonusStr=enabledCount===0
     ?' · '+pickLangText('🌿 Lugn runda','🌿 Calm round','🌿 Ruhige Runde')
     :enabledCount<3?' · 🎉 Bonus '+enabledCount+'/3':'';
-  const graphicsStr=graphicsMode==='modern'?' · ✨ Modern':'';
+  const graphicsStr=graphicsMode==='toy'?' · ✨ Modern':graphicsMode==='pixel'?' · 👾 '+pickLangText('Pixelretro','Pixel retro','Pixelretro'):'';
   el.textContent=opsStr+' · '+getPracticeRangeLabel(numRange,activeOps)+tStr+bonusStr+graphicsStr;
 }
 

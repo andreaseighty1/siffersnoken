@@ -1,6 +1,16 @@
 # Fasta snokmallar: leksaksformer och pixelretro
 
-Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. De är **inte inkopplade i spelet ännu**. Befintliga skins, upplåsningar, inställningar och modernbilder är oförändrade.
+Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Jordgubbe och Basketboll är nu inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
+
+## Runtimeexport och integration
+
+Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 43 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
+
+`snake-styles.js` används av både spel och skinväljare. Kropparna har fast orientering/storlek. Huvudenas fyra ljusvarianter, ögonblinkning, jordgubbsblad och pixeltunga återanvänds från mallarna. Svans och sista runda kropp ritas ihop i en cachad sprite **före** gemensam nedtoning. Leksakens mjuka slagskuggor bakas en gång i rendercachen. Pixel ritas på ett heltalsrutnät med 24 logiska pixlar mellan segmentcentrum; 32 × 32-källbilderna behåller sin fasta storlek. Det sammanhängande lagret förstoras utan bildutjämning, även vid CSS-anpassning till mobil. Ingen andning eller segmentstorleksvariation används i pixelstilen.
+
+Sparat `graphicsMode: modern` migreras till runtime-id `toy`, utan att ändra andra inställningar. Både `toy` och `pixel` använder befintliga uppifrån-bakgrunder under övergången. En saknad eller ej färdig stilversion faller tillbaka på skinnets gamla modernbilder, inte ett annat skin. Gamla filer bevaras.
+
+Test: `node tests/snake-styles.test.cjs`. Spelkontroll har genomförts med 33 segment, flera svängar, blinkning och nedtonad svans för alla tre teman i båda lägena; Basketboll också i 390 px mobilbredd. Vanlig rörelse och väggpassage kontrolleras separat från långorms-fixturen. Befintliga mall- och mattetester ska också fortsätta passera.
 
 ## Arbetsmodell
 
@@ -70,10 +80,10 @@ node tests/snake-templates.test.cjs --sharp "C:\sökväg\node_modules\sharp"
 4. Testa raka delar, svängar, lång orm och mobil i båda lägena. Märk temat klart först när båda är godkända.
 5. Visa även tillgångarna bredvid konceptmålen. En geometriskt korrekt men visuellt platt/felproportionerad mall är inte färdig.
 
-## Före inkoppling i spelet
+## Integrationsregler för fortsatta skins
 
 - Pixel behöver `imageSmoothingEnabled=false` och pixelanpassad skalning. Att bara lägga till en tredje inställningsknapp räcker inte.
 - Pixel ska inte använda den nuvarande lilla variationen i kroppsdelarnas storlek. Det fasta pixelrutnätet måste hållas stabilt genom animationen.
-- Huvud-, svans- och ögonmallarna är kontrollerade som bildtillgångar och statiska sammanfogningar. Rörelse, svansvickning, långa snokar och mobilspelets pixelrutnät behöver fortfarande testas i faktisk spelrendering innan grafiklägena aktiveras.
+- Mallkontrollen ersätter inte ett speltest av varje nytt tema. Rörelse, svansvickning för framtida djurskins, långa snokar och mobilspelets pixelrutnät behöver testas i faktisk spelrendering.
 - Förhandsvisningen använder spelets nuvarande standardvärden 1,26 i kroppsskala och 1,08 i överlappning. Denna geometrikontroll ersätter inte ett speltest.
 - Bevara ursprungliga modernassets under hela migreringen. Inga upplåsningskrav ska ändras när grafiklägena kopplas in.

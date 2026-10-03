@@ -20,6 +20,7 @@ const element=id=>{
 };
 const storage=new Map();
 const context=vm.createContext({
+  SnakeStyles:require('../snake-styles.js'),
   Math:math, window:{}, currentLang:'sv',
   localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)},
   document:{getElementById:element,querySelectorAll:()=>[]},

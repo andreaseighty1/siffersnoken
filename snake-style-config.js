@@ -1,0 +1,2 @@
+// Generated from the approved template specs. Run tools/export-snake-styles.cjs.
+(function(root){const config={"skins":["klassisk","jordgubbe","basketboll"],"styles":{"toy":{"frame":512,"headScale":1.12,"bodyScale":1.3608,"pivot":[256,64],"chord":188.76501370751944},"pixel":{"frame":32,"headScale":1.03,"bodyScale":1.3608,"pivot":[16,4],"chord":11}}};if(typeof module!=="undefined"&&module.exports)module.exports=config;else root.SnakeStyleConfig=config;})(typeof globalThis!=="undefined"?globalThis:this);
