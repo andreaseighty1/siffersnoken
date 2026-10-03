@@ -48,5 +48,17 @@
     "id": "guld", "label": "Guld", "pattern": "none", "material": "gold", "bodyOrientation": "fixed",
     "palette": { "base": "#eabc38", "light": "#fff2ac", "shade": "#98611e", "edge": "#6c471e", "ink": "#443214", "detail": "#fff8d2" },
     "pixelPalette": { "base": "#e4b92e", "light": "#ffe076", "shade": "#aa7720", "edge": "#74501a", "ink": "#3d2b14", "detail": "#fff6c6" }
+  },
+  {
+    "id": "polkagris", "label": "Polkagris", "pattern": "candyBands", "bodyOrientation": "fixed",
+    "palette": { "base": "#f4eee2", "light": "#fffdf2", "shade": "#bfc5cc", "edge": "#a1a8b1", "ink": "#672036", "detail": "#ffffff" },
+    "patternPalette": { "base": "#e72e4a", "light": "#ff7783", "shade": "#a51937", "edge": "#78162e", "ink": "#672036", "detail": "#ffd5d9" },
+    "pixelPalette": { "base": "#f1e9dc", "light": "#fffaf1", "shade": "#c8d0d8", "edge": "#b92a45", "ink": "#672036", "detail": "#ed4a5d" }
+  },
+  {
+    "id": "galax", "label": "Galax", "pattern": "galaxyClouds", "bodyOrientation": "fixed",
+    "palette": { "base": "#343565", "light": "#717fca", "shade": "#1f234f", "edge": "#151936", "ink": "#101828", "detail": "#e5f6ff" },
+    "patternPalette": { "base": "#b765cf", "light": "#79e0ed", "shade": "#493575", "edge": "#202c56", "ink": "#101828", "detail": "#e5f6ff" },
+    "pixelPalette": { "base": "#555299", "light": "#7e9cda", "shade": "#303359", "edge": "#1b2544", "ink": "#101828", "detail": "#e5f6ff" }
   }
 ]

@@ -73,6 +73,20 @@
       "file": "generated/toy/guld-body.webp"
     },
     {
+      "style": "toy",
+      "id": "polkagris",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/polkagris-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "galax",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/galax-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -141,6 +155,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/guld-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "polkagris",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/polkagris-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "galax",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/galax-body.webp"
     }
   ]
 }

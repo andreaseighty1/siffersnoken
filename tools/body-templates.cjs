@@ -6,7 +6,7 @@ const spec=require('../skin-templates/body-spec.json');
 const themes=require('../skin-templates/themes.json');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -20,7 +20,7 @@ function validateTheme(theme){
   if(theme.colorCycle&&(!Array.isArray(theme.colorCycle.hues)||theme.colorCycle.hues.length!==7||
     new Set(theme.colorCycle.hues).size!==7||theme.colorCycle.hues.some(h=>!Number.isInteger(h)||h<0||h>=360)||
     !Number.isFinite(theme.colorCycle.intervalMs)||theme.colorCycle.intervalMs<500))throw new Error('Invalid color cycle');
-  for(const palette of [theme.palette,...(theme.pixelPalette?[theme.pixelPalette]:[])])for(const key of ['base','light','shade','edge','ink','detail']){
+  for(const palette of [theme.palette,...(theme.pixelPalette?[theme.pixelPalette]:[]),...(theme.patternPalette?[theme.patternPalette]:[])])for(const key of ['base','light','shade','edge','ink','detail']){
     if(!/^#[0-9a-f]{6}$/i.test(palette?.[key]||''))throw new Error('Invalid palette color: '+key);
   }
 }
@@ -58,6 +58,54 @@ function emeraldPixel(x,y,size,part){
   const {cx,cy,rx,ry}=emeraldMark(part),dx=Math.abs((x+.5)/size-cx)/rx,dy=Math.abs((y+.5)/size-cy)/ry;
   return Math.abs(dx+dy-1)<.13||(dx<.10&&dy<.85)||(dy<.08&&dx<.85);
 }
+// These are surface designs, always composited before the common outer mask.
+// Candy uses a shaded red material rather than opaque flat red strokes.
+function candyBand(nx,ny){return (((nx-ny+.11)%.48)+.48)%.48<.21;}
+function galaxyMarks(part){
+  return part==='tail'?[[.50,.30,.018]]:part==='head-base'?[[.26,.64,.032],[.67,.74,.023],[.47,.84,.015]]:
+    [[.28,.30,.042],[.69,.49,.027],[.39,.73,.020]];
+}
+function galaxyCloud(nx,ny,part){
+  const cy=part==='tail'?.29:part==='head-base'?.70:.52;
+  const rx=part==='tail'?.12:.38,ry=part==='tail'?.22:.20;
+  const dx=nx-.5,dy=ny-cy;
+  return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
+}
+function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(!['candyBands','galaxyClouds'].includes(theme.pattern))return {defs:'',paint:''};
+  const id=`${theme.id}-${part}-surface`,p=theme.patternPalette||theme.palette;
+  if(theme.pattern==='candyBands'){
+    const red=toyMaterial(p,id,size,{tail:part==='tail',lightCenter});
+    const bands=Array.from({length:8},(_,i)=>{
+      const offset=(i-3)*.48-.005;
+      return `<path d="M ${(offset-.2)*size} ${-.2*size} L ${(offset+1.2)*size} ${1.2*size}" stroke="white" stroke-width="${size*.21/Math.SQRT2}"/>`;
+    }).join('');
+    return {defs:red.defs+`<mask id="${id}-bands" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${bands}</mask>`,paint:`<g mask="url(#${id}-bands)">${red.paint}</g>`};
+  }
+  const cy=part==='tail'?.29:part==='head-base'?.70:.52,rx=part==='tail'?.12:.38,ry=part==='tail'?.22:.20;
+  const defs=`<radialGradient id="${id}-violet"><stop stop-color="${p.base}" stop-opacity=".95"/><stop offset=".45" stop-color="${p.base}" stop-opacity=".65"/><stop offset="1" stop-color="${p.base}" stop-opacity="0"/></radialGradient><radialGradient id="${id}-cyan"><stop stop-color="${p.light}" stop-opacity=".85"/><stop offset="1" stop-color="${p.light}" stop-opacity="0"/></radialGradient>`;
+  const cloud=`<ellipse cx="${size*.5}" cy="${size*cy}" rx="${size*rx}" ry="${size*ry}" transform="rotate(-35 ${size*.5} ${size*cy})" fill="url(#${id}-violet)"/><ellipse cx="${size*.55}" cy="${size*(cy-.06)}" rx="${size*rx*.75}" ry="${size*ry*.7}" transform="rotate(-35 ${size*.55} ${size*(cy-.06)})" fill="url(#${id}-cyan)"/>`;
+  const stars=galaxyMarks(part).map(([x,y,r])=>`<path d="M ${x*size} ${(y-r)*size} L ${(x+r*.28)*size} ${(y-r*.28)*size} L ${(x+r)*size} ${y*size} L ${(x+r*.28)*size} ${(y+r*.28)*size} L ${x*size} ${(y+r)*size} L ${(x-r*.28)*size} ${(y+r*.28)*size} L ${(x-r)*size} ${y*size} L ${(x-r*.28)*size} ${(y-r*.28)*size} Z" fill="${theme.palette.detail}"/>`).join('');
+  return {defs,paint:cloud+stars};
+}
+function surfacePixel(theme,x,y,size,part,color){
+  const p=theme.pixelPalette||theme.palette,nx=(x+.5)/size,ny=(y+.5)/size;
+  if(color===p.ink)return color;
+  if(theme.pattern==='candyBands'){
+    if(candyBand(nx,ny))return color===p.light||color===p.detail?p.detail:color===p.base?p.edge:p.ink;
+    // White underside stays white; red lower shading is reserved for red bands.
+    return color===p.edge?p.shade:color===p.detail?p.light:color;
+  }
+  if(theme.pattern==='galaxyClouds'){
+    const cloud=galaxyCloud(nx,ny,part);
+    if(cloud<.45)color=p.light;else if(cloud<1&&color!==p.edge)color=p.base;
+    if(galaxyMarks(part).some(([sx,sy,r])=>{
+      const dx=Math.abs(nx-sx)*size,dy=Math.abs(ny-sy)*size;
+      return dx+dy<Math.max(1,r*size*1.7);
+    }))color=p.detail;
+  }
+  return color;
+}
 function toyBody(theme){
   const size=spec.styles.toy.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.palette;
   const maskId='toy-'+theme.id+'-body',material=toyMaterial(p,'toy-'+theme.id,size,{finish:theme.material});
@@ -69,7 +117,8 @@ function toyBody(theme){
   // One diffuse sculpted material; no shiny circular spot or grain texture.
   // Composite one complete opaque material, then apply the outer alpha mask ONCE.
   // Clipping each stroke separately would change alpha at antialiased seam ends.
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}<mask id="${maskId}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><circle cx="${c}" cy="${c}" r="${r}" fill="white"/></mask></defs><g mask="url(#${maskId})">${material.paint}${pattern}</g></svg>`;
+  const surface=surfaceSvg(theme,size,'body');
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}${surface.defs}<mask id="${maskId}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><circle cx="${c}" cy="${c}" r="${r}" fill="white"/></mask></defs><g mask="url(#${maskId})">${material.paint}${pattern}${surface.paint}</g></svg>`;
 }
 function pixelGrid(theme){
   const size=spec.styles.pixel.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.pixelPalette||theme.palette;
@@ -82,7 +131,7 @@ function pixelGrid(theme){
       Math.abs(dx-sx*r)<1.05&&Math.abs(dy-sy*r)<1.20))color=p.detail;
     if(theme.pattern==='basketballSeams'&&(x===16||y===16))color=p.ink;
     if(theme.pattern==='emeraldInlay'&&emeraldPixel(x,y,size,'body'))color=p.detail;
-    return color;
+    return surfacePixel(theme,x,y,size,'body',color);
   }));
 }
 function pixelBody(theme){
@@ -141,7 +190,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

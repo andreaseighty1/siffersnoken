@@ -33,6 +33,7 @@ assert.throws(()=>validateTheme({...neutral,id:'../escape'}));
 assert.throws(()=>validateTheme({...neutral,pattern:'unknown'}));
 assert.throws(()=>validateTheme({...neutral,palette:{...neutral.palette,base:'url(other.svg)'}}));
 assert.throws(()=>validateTheme({...neutral,pixelPalette:{...neutral.palette,base:'url(other.svg)'}}));
+assert.throws(()=>validateTheme({...neutral,patternPalette:{...neutral.palette,base:'url(other.svg)'}}));
 assert.throws(()=>validateTheme({...neutral,material:'unknown'}));
 for(const colorCycle of [{hues:[0],intervalMs:1400},{hues:[0,30,55,115,175,220,220],intervalMs:1400},
   {hues:[0,30,55,115,175,220,360],intervalMs:1400},{hues:[0,30,55,115,175,220,275],intervalMs:100}]){
@@ -48,6 +49,13 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
+for(const id of ['polkagris','galax']){
+  const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
+  assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
+  assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
+}
+const candy=themes.find(t=>t.id==='polkagris'),candyColors=pixelGrid(candy).flat();
+assert.ok(candyColors.includes(candy.pixelPalette.detail)&&candyColors.includes(candy.pixelPalette.light),'Candy contains both red and white');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

@@ -43,7 +43,8 @@ function toyPart(theme,part,facing='up'){
   const pattern=theme.pattern==='strawberrySeeds'?seeds.filter(([,y])=>y<spec.tail.tipY||part!=='tail').map(([x,y])=>`<ellipse cx="${x*size}" cy="${y*size}" rx="${size*.024}" ry="${size*.030}" fill="${p.detail}"/>`).join('')
     :theme.pattern==='basketballSeams'?`<path d="M ${size*.5} 0 V ${size} M 0 ${size*.58} H ${size}" fill="none" stroke="${p.ink}" stroke-width="${size*.018}"/>`
     :theme.pattern==='emeraldInlay'?body.emeraldSvg(p,size,part):'';
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}<mask id="${id}-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${contour(part,size)}</g></mask></defs><g mask="url(#${id}-mask)">${material.paint}${pattern}</g></svg>`;
+  const surface=body.surfaceSvg(theme,size,part,lightCenter(facing));
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}${surface.defs}<mask id="${id}-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${contour(part,size)}</g></mask></defs><g mask="url(#${id}-mask)">${material.paint}${pattern}${surface.paint}</g></svg>`;
 }
 function partGrid(theme,part,facing='up'){
   const size=body.spec.styles.pixel.frame,p=theme.pixelPalette||theme.palette;
@@ -58,7 +59,7 @@ function partGrid(theme,part,facing='up'){
     if(theme.pattern==='strawberrySeeds'&&(part==='tail'?tailSeeds:headSeeds).some(([sx,sy])=>Math.abs(nx-sx)<.038&&Math.abs(ny-sy)<.038))color=p.detail;
     if(theme.pattern==='basketballSeams'&&(x===16||y===18))color=p.ink;
     if(theme.pattern==='emeraldInlay'&&body.emeraldPixel(x,y,size,part))color=p.detail;
-    return color;
+    return body.surfacePixel(theme,x,y,size,part,color);
   }));
 }
 function gridSvg(grid){
