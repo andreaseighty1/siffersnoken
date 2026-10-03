@@ -4,7 +4,9 @@ const body=require('./body-templates.cjs'),snake=require('./snake-templates.cjs'
 const root=path.resolve(__dirname,'..');
 const ids=body.themes.filter(t=>t.id!=='neutral').map(t=>t.id);
 function config(){
-  return {skins:ids,styles:Object.fromEntries(Object.entries(body.spec.styles).map(([id,s])=>{
+  return {skins:ids,rendering:body.spec.rendering,
+    outlineColors:Object.fromEntries(body.themes.filter(t=>ids.includes(t.id)).map(t=>[t.id,t.palette.ink])),
+    styles:Object.fromEntries(Object.entries(body.spec.styles).map(([id,s])=>{
     const join=snake.joinGeometry(id);
     return [id,{frame:s.frame,headScale:s.headRenderScale,bodyScale:1.26*1.08,
       pivot:join.pivot,chord:join.bodyChord}];

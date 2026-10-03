@@ -13,6 +13,18 @@
     "headWidthRelativeToBody": 1.15,
     "tailAttachmentWidthRelativeToBody": 0.42
   },
+  "rendering": {
+    "minimumOpacity": 0.75,
+    "fadePerSegment": 0.0125,
+    "toyOutlineWidth": 0.025,
+    "toyOutlineOpacity": 0.62,
+    "toyShadowBlur": 0.16,
+    "toyShadowOffset": 0.14,
+    "shadowOpacity": 0.48,
+    "pixelShadowBlur": 0.7,
+    "pixelShadowOffset": 1,
+    "pixelFinalSmoothing": true
+  },
   "preview": {
     "cell": 48,
     "assetScale": 1.26,

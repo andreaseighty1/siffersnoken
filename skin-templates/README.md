@@ -1,16 +1,16 @@
 # Fasta snokmallar: leksaksformer och pixelretro
 
-Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Jordgubbe och Basketboll är nu inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
+Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Jordgubbe och Basketboll är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
 
 ## Runtimeexport och integration
 
-Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 43 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
+Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 67 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri, paletter och kontrastinställningar. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
 
-`snake-styles.js` används av både spel och skinväljare. Kropparna har fast orientering/storlek. Huvudenas fyra ljusvarianter, ögonblinkning, jordgubbsblad och pixeltunga återanvänds från mallarna. Svans och sista runda kropp ritas ihop i en cachad sprite **före** gemensam nedtoning. Leksakens mjuka slagskuggor bakas en gång i rendercachen. Pixel ritas på ett heltalsrutnät med 24 logiska pixlar mellan segmentcentrum; 32 × 32-källbilderna behåller sin fasta storlek. Det sammanhängande lagret förstoras utan bildutjämning, även vid CSS-anpassning till mobil. Ingen andning eller segmentstorleksvariation används i pixelstilen.
+`snake-styles.js` används av både spel och skinväljare. Kropparna har fast orientering/storlek. Huvudenas fyra ljusvarianter, ögonblinkning, jordgubbsblad och pixeltunga återanvänds från mallarna. Svans och sista runda kropp ritas ihop i en cachad sprite **före** gemensam nedtoning, som aldrig går under 75 procent opacitet. Leksaksformen får en tunn inre kontur utan ändrad silhuett. Kontur och slagskuggor bakas en gång i rendercachen, inte varje bildruta. Pixel ritas på ett heltalsrutnät med 24 logiska pixlar mellan segmentcentrum; 32 × 32-källbilderna behåller sin fasta storlek. Bara snoklagrets sista förstoring använder lätt bildutjämning. CSS pixelering av hela spelduken används inte: sifferbrickor, text och banbakgrund ska behålla sin vanliga grafik. Ingen andning eller segmentstorleksvariation används i pixelstilen.
 
 Sparat `graphicsMode: modern` migreras till runtime-id `toy`, utan att ändra andra inställningar. Både `toy` och `pixel` använder befintliga uppifrån-bakgrunder under övergången. En saknad eller ej färdig stilversion faller tillbaka på skinnets gamla modernbilder, inte ett annat skin. Gamla filer bevaras.
 
-Test: `node tests/snake-styles.test.cjs`. Spelkontroll har genomförts med 33 segment, flera svängar, blinkning och nedtonad svans för alla tre teman i båda lägena; Basketboll också i 390 px mobilbredd. Vanlig rörelse och väggpassage kontrolleras separat från långorms-fixturen. Befintliga mall- och mattetester ska också fortsätta passera.
+Test: `node tests/snake-styles.test.cjs`. Spelkontroll har genomförts med 33 segment, flera svängar, blinkning och nedtonad svans. Isblå och Rosa är kontrollerade i båda lägena på desktop och i 390 px mobilbredd; Klassisk är kontrollerad mot den gröna skogsbanan efter kontraständringen. Tidigare integrationstest täcker även Jordgubbe och Basketboll. Vanlig rörelse kontrolleras separat från långorms-fixturen. Befintliga mall- och mattetester ska också fortsätta passera. Testerna säkrar att snokrenderingen återställer kontexten för sifferbrickor och andra spelobjekt.
 
 ## Arbetsmodell
 
@@ -22,10 +22,10 @@ Ett nytt skin beskrivs en gång i `themes.json`: id, tema, färger, mönster och
 - Pixel: 32 × 32 logiska pixlar, cirkulär trappstegskontur med diameter 26 px, mörk kontur, rundade nedre färgsteg och litet ljusblänk. Högst sex färger per bildtillgång och hårda pixelkanter; ingen stor diagonal halvcirkelskugga.
 - Samma centrum, relativa bildmarginaler och relativa diameter i båda stilarna.
 - Mönster ligger innanför masken. Alla segment för ett tema har identisk kontur, storlek och ljusriktning.
-- WebP med riktig alfakanal. Pixelbilden ska inte skalas om med mjuk filtrering eller sparas som JPEG.
+- WebP med riktig alfakanal. Pixelkällbilden ska inte skalas om med mjuk filtrering eller sparas som JPEG; lätt slutskalning i spelrenderingen är tillåten.
 - Alpha-nedtoning på en lång orm ska ske i spelrenderingen, inte bakas in i kroppsmallen.
 
-Neutral, Klassisk, Jordgubbe och Basketboll är inkluderade. De enkla mönstren ritas i kod: glesa jordgubbsfrön och fasta basketsömmar. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
+Neutral, Klassisk, Isblå, Rosa, Jordgubbe och Basketboll är inkluderade. De enkla mönstren ritas i kod: glesa jordgubbsfrön och fasta basketsömmar. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
 
 `pixelPalette` är ett valfritt stil-specifikt färgval i samma temabeskrivning. Det behövs för pixelkonceptets tydligare färgsteg; temat, geometri och byggkörning är fortfarande gemensamma. Basketbollens riktiga böjda sömmar är en noterad senare uppgift och har inte ändrats i denna stilkorrigering.
 
@@ -62,7 +62,7 @@ Huvudenas ljus och pixelblänk behöver behålla samma riktning som kroppen när
 
 Mjuka slagskuggor är ett renderingslager (som CSS `drop-shadow` i jämförelsevyn), inte inbakade i bildalfan. Samma riktning och proportionerliga skuggor ska användas i spelet vid integration.
 
-Bygg och testa samtliga 55 tillgångar (inklusive huvudenas ljusriktningsvarianter) med:
+Bygg och testa samtliga 79 tillgångar (inklusive neutralprover och huvudenas ljusriktningsvarianter) med:
 
 ```powershell
 node tools/snake-templates.cjs --sharp "C:\sökväg\node_modules\sharp"
@@ -82,7 +82,7 @@ node tests/snake-templates.test.cjs --sharp "C:\sökväg\node_modules\sharp"
 
 ## Integrationsregler för fortsatta skins
 
-- Pixel behöver `imageSmoothingEnabled=false` och pixelanpassad skalning. Att bara lägga till en tredje inställningsknapp räcker inte.
+- Pixel behöver `imageSmoothingEnabled=false` i käll-/snoklagret och pixelanpassade positioner. Slutskalningen till spelytan använder lätt utjämning med sparad/återställd kontext, så andra spelobjekt inte påverkas.
 - Pixel ska inte använda den nuvarande lilla variationen i kroppsdelarnas storlek. Det fasta pixelrutnätet måste hållas stabilt genom animationen.
 - Mallkontrollen ersätter inte ett speltest av varje nytt tema. Rörelse, svansvickning för framtida djurskins, långa snokar och mobilspelets pixelrutnät behöver testas i faktisk spelrendering.
 - Förhandsvisningen använder spelets nuvarande standardvärden 1,26 i kroppsskala och 1,08 i överlappning. Denna geometrikontroll ersätter inte ett speltest.

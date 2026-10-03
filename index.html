@@ -329,7 +329,7 @@ canvas{border:1px solid var(--line);border-radius:12px;touch-action:none;
   display:flex;align-items:center;justify-content:center;gap:6px;
   margin-top:6px;font-family:'Orbitron',monospace;font-size:11px;color:var(--muted);
 }
-body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap canvas{image-rendering:pixelated;}
+body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap canvas{image-rendering:auto;}
 .length-row span{
   color:var(--accent);font-size:16px;font-weight:900;line-height:1;
 }
@@ -889,7 +889,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
             <button class="toggle-btn graphics-mode-btn" data-graphics="toy" id="graphicsModernBtn">✨ Modern</button>
             <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare moderna utseende.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1092,9 +1092,9 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
-<script src="translations.js?v=snake-styles-1"></script>
-<script src="snake-style-config.js?v=snake-styles-1"></script>
-<script src="snake-styles.js?v=snake-styles-1"></script>
+<script src="translations.js?v=snake-styles-2"></script>
+<script src="snake-style-config.js?v=snake-styles-2"></script>
+<script src="snake-styles.js?v=snake-styles-2"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -3677,7 +3677,7 @@ function drawModernSkinBody(drawCtx,skin,rx,ry,index,cell){
   const assetScale=isTail?(skin.tailAssetScale||skin.bodyAssetScale||1.26):(skin.bodyAssetScale||1.26);
   const size=cell*assetScale*overlapScale*modernBodyVisualScale(index);
   // Samma gradvisa nedtoning används genom hela kroppen, inklusive svansen.
-  drawCtx.save();drawCtx.globalAlpha=Math.max(0.35,1-index*0.035);
+  drawCtx.save();drawCtx.globalAlpha=SnakeStyles.alpha(index);
   const galaxyTime=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||0);
   const galaxyGlow=skin.galaxyTwinkles?`hsl(${235+45*Math.sin(galaxyTime/2800+index*.5)},100%,62%)`:null;
   const magmaGlow=skin.magmaPulse?`hsl(${16+5*Math.sin(galaxyTime/1050+index*.42)},100%,${54+8*Math.sin(galaxyTime/780+index*.42)}%)`:null;
@@ -7412,7 +7412,7 @@ function drawSeg(rx,ry,i,isHead,progress=moveProgress){
   const isBeeWingSeg=!isHead&&i===beeWingIndex;
   // Fix 1: Ta bort 1px gap — segment ritas flush mot varandra
   const px=rx*CELL,py=ry*CELL,s=CELL;
-  const alpha=isHead?1:Math.max(0.15,1-i*.04);
+  const alpha=isHead?1:graphicsMode==='classic'?Math.max(0.15,1-i*.04):SnakeStyles.alpha(i);
   // Svansspets — lite större för mjukare tillväxtkänsla
   const ts=isTail?s*0.72:s;
   let tpx=isTail?px+(s-ts)/2:px;
@@ -8485,9 +8485,9 @@ function applyGraphicsMode(mode,{persist=true}={}){
 }
 function updateGraphicsModeDescription(){
   if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc',
-    'Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare moderna utseende.',
-    'Modern uses soft toy shapes. Modern and Pixel retro are ready for Classic, Strawberry and Basketball; other skins temporarily keep their previous modern appearance.',
-    'Modern verwendet weiche Spielzeugformen. Modern und Pixelretro sind für Klassisch, Erdbeere und Basketball fertig; andere Skins behalten vorerst ihr bisheriges modernes Aussehen.');
+    'Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.',
+    'Modern uses soft toy shapes. Modern and Pixel retro are ready for Classic, Ice Blue, Pink, Strawberry and Basketball; other skins temporarily keep their previous appearance.',
+    'Modern verwendet weiche Spielzeugformen. Modern und Pixelretro sind für Klassisch, Eisblau, Rosa, Erdbeere und Basketball fertig; andere Skins behalten vorerst ihr bisheriges Aussehen.');
 }
 
 /* ═══════════════════════════════════════

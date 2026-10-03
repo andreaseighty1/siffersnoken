@@ -6,7 +6,7 @@
   const supports=(mode,id)=>!!config.styles[normalizeMode(mode)]&&config.skins.includes(id);
   const facing=d=>d.x===1?'right':d.x===-1?'left':d.y===1?'down':'up';
   const angles={up:0,right:Math.PI/2,down:Math.PI,left:-Math.PI/2};
-  const alpha=index=>Math.max(.35,1-index*.035);
+  const alpha=index=>Math.max(config.rendering.minimumOpacity,Math.min(1,1-index*config.rendering.fadePerSegment));
   function paths(mode,id){
     if(!supports(mode,id))return [];
     const dir=`skins/styles/${normalizeMode(mode)}/`;
@@ -30,6 +30,20 @@
     }
     function ready(mode,id){return paths(mode,id).every(src=>images.get(src)?.ready);}
     function image(mode,name){return images.get(`skins/styles/${mode}/${name}.webp`).image;}
+    function insetOutline(out,color,radius,opacity){
+      const eroded=createCanvas();eroded.width=out.width;eroded.height=out.height;
+      const ec=eroded.getContext('2d');ec.drawImage(out,0,0);
+      ec.globalCompositeOperation='destination-in';
+      for(const [dx,dy] of [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]])ec.drawImage(out,dx*radius,dy*radius);
+      const ring=createCanvas();ring.width=out.width;ring.height=out.height;
+      const rc=ring.getContext('2d');rc.drawImage(out,0,0);
+      rc.globalCompositeOperation='source-in';rc.fillStyle=color;rc.fillRect(0,0,ring.width,ring.height);
+      rc.globalCompositeOperation='destination-out';rc.drawImage(eroded,0,0);
+      const oc=out.getContext('2d');oc.save();
+      // Inset: no enlarged mask, no seam across the pre-joined tail attachment.
+      oc.setTransform(1,0,0,1,0,0);oc.globalCompositeOperation='source-atop';oc.globalAlpha=opacity;
+      oc.drawImage(ring,0,0);oc.restore();
+    }
     // A joined tail/body is composited BEFORE opacity. Its overlap cannot darken
     // or shine through a faded end segment. Cached in four cardinal directions.
     function sprite(mode,id,part,cell,direction='up',blink=false){
@@ -58,13 +72,14 @@
         c.drawImage(image(mode,'eyes-'+(blink?'blink':'open')),start,start,size,size);
         c.restore();
       }else c.drawImage(image(mode,id+'-body'),center-size/2,center-size/2,size,size);
-      if(!pixel){
-        // Bake soft world-down shadows once per sprite, not once per frame/segment.
-        const shaded=createCanvas();shaded.width=shaded.height=out.width;
-        const sc=shaded.getContext('2d');sc.shadowColor='rgba(22,30,12,.38)';
-        sc.shadowBlur=cell*.12*res;sc.shadowOffsetY=cell*.12*res;sc.drawImage(out,0,0);
-        sprites.set(key,{canvas:shaded,extent});
-      }else sprites.set(key,{canvas:out,extent});
+      const r=config.rendering;
+      if(!pixel)insetOutline(out,config.outlineColors[id],Math.max(1,Math.round(cell*r.toyOutlineWidth*res)),r.toyOutlineOpacity);
+      // Cache contrast/shadows once. Never run morphology/blur per game frame.
+      const shaded=createCanvas();shaded.width=shaded.height=out.width;
+      const sc=shaded.getContext('2d');sc.shadowColor=`rgba(12,23,18,${r.shadowOpacity})`;
+      sc.shadowBlur=pixel?r.pixelShadowBlur:cell*r.toyShadowBlur*res;
+      sc.shadowOffsetY=pixel?r.pixelShadowOffset:cell*r.toyShadowOffset*res;
+      sc.drawImage(out,0,0);sprites.set(key,{canvas:shaded,extent});
       return sprites.get(key);
     }
     function draw(context,{mode,id,cell,cols,rows,points,heading,tailDirection,blink=false,wrap=false,fade=true}){
@@ -93,7 +108,13 @@
         }
       }
       target.restore();
-      if(pixel){context.save();context.shadowBlur=0;context.imageSmoothingEnabled=false;context.drawImage(layer,0,0,cols*cell,rows*cell);context.restore();}
+      if(pixel){
+        context.save();context.shadowBlur=0;
+        // Soften only the final scaling, never the native sprites/logical grid.
+        context.imageSmoothingEnabled=config.rendering.pixelFinalSmoothing;
+        context.imageSmoothingQuality='low';
+        context.drawImage(layer,0,0,cols*cell,rows*cell);context.restore();
+      }
       return true;
     }
     return {preload,draw};

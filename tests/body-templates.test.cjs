@@ -35,7 +35,7 @@ assert.throws(()=>validateTheme({...neutral,palette:{...neutral.palette,base:'ur
 assert.throws(()=>validateTheme({...neutral,pixelPalette:{...neutral.palette,base:'url(other.svg)'}}));
 assert.throws(()=>bodySvg('unknown',neutral));
 async function main(){
-  const outputs=await build({check:true});assert.equal(outputs.length,8);
+  const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');
   if(index!==-1){
     const sharp=require(path.resolve(process.argv[index+1]));
@@ -59,9 +59,9 @@ async function main(){
     }
   }
   const html=fs.readFileSync(path.join(root,'preview.html'),'utf8');
-  assert.equal((html.match(/<article class="card">/g)||[]).length,8);
+  assert.equal((html.match(/<article class="card">/g)||[]).length,themes.length*2);
   assert.ok(html.includes('image-rendering:pixelated'));
-  assert.equal((html.match(/<img src="generated\//g)||[]).length,64,'All single and corner samples show the actual WebP assets');
+  assert.equal((html.match(/<img src="generated\//g)||[]).length,themes.length*16,'All single and corner samples show the actual WebP assets');
   assert.ok(!html.includes('<svg'),'Pixel corner preview must not introduce fractional SVG row seams');
   const ids=[...html.matchAll(/ id="([^"]+)"/g)].map(match=>match[1]);
   assert.equal(new Set(ids).size,ids.length,'Inline preview paint/mask ids must not collide');

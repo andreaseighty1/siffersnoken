@@ -17,5 +17,15 @@
     "id": "basketboll", "label": "Basketboll", "pattern": "basketballSeams", "bodyOrientation": "fixed",
     "palette": { "base": "#ff891a", "light": "#ffb757", "shade": "#b94b08", "edge": "#773611", "ink": "#43240f", "detail": "#fff1c4" },
     "pixelPalette": { "base": "#f9891c", "light": "#ffa329", "shade": "#c7610b", "edge": "#85360c", "ink": "#3f190b", "detail": "#ffda8e" }
+  },
+  {
+    "id": "isbla", "label": "Isblå", "pattern": "none", "bodyOrientation": "fixed",
+    "palette": { "base": "#48bde7", "light": "#a4e9f4", "shade": "#197eaf", "edge": "#165674", "ink": "#103747", "detail": "#f0fdff" },
+    "pixelPalette": { "base": "#38a9dd", "light": "#83d8f0", "shade": "#217aa9", "edge": "#165377", "ink": "#0c2e49", "detail": "#effcff" }
+  },
+  {
+    "id": "rosa", "label": "Rosa", "pattern": "none", "bodyOrientation": "fixed",
+    "palette": { "base": "#ed75aa", "light": "#ffb7d3", "shade": "#b83f7e", "edge": "#7c315b", "ink": "#47233a", "detail": "#fff0f8" },
+    "pixelPalette": { "base": "#e66ba6", "light": "#ffa6cc", "shade": "#b44581", "edge": "#792d60", "ink": "#3e1b39", "detail": "#fff0fb" }
   }
 ]

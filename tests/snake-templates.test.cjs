@@ -62,7 +62,7 @@ for(const style of ['toy','pixel'])for(const variant of ['straight','corner']){
   }
 }
 async function main(){
-  const outputs=await snake.build({check:true});assert.equal(outputs.length,55);
+  const outputs=await snake.build({check:true});assert.equal(outputs.length,body.themes.length*12+7);
   const index=process.argv.indexOf('--sharp');
   if(index!==-1){
     const sharp=require(path.resolve(process.argv[index+1])),masks={};
@@ -89,7 +89,7 @@ async function main(){
     }
   }
   const html=fs.readFileSync(path.join(root,'parts-preview.html'),'utf8');
-  assert.equal((html.match(/<article class="card">/g)||[]).length,8);
+  assert.equal((html.match(/<article class="card">/g)||[]).length,body.themes.length*2);
   assert.ok(html.includes('eyes-open.webp')&&html.includes('eyes-blink.webp'));
   assert.ok(html.includes('image-rendering:pixelated'));
   assert.ok(html.includes('opacity:0.35'),'Same last-body and tail fade');
@@ -99,6 +99,6 @@ async function main(){
   assert.ok(targetHtml.includes('head-decoration.webp')&&targetHtml.includes('tongue.webp'));
   assert.ok(targetHtml.includes('drop-shadow'),'Sculpted toys have rendering-stage soft shadows, not baked alpha');
   for(const style of ['toy','pixel'])assert.ok(fs.existsSync(path.join(root,'references',style+'-concept.webp')));
-  console.log('PASS: deterministic dual-style heads/tails/eyes, fixed world-space key light in four directions, rear decoration anchors, exact masks, short taper, connected cardinal joins, shared fade, original concept comparison'+(index!==-1?', 55 transparent lossless WebP assets and pixel palettes':'')+'.');
+  console.log('PASS: deterministic dual-style heads/tails/eyes, fixed world-space key light in four directions, rear decoration anchors, exact masks, short taper, connected cardinal joins, shared fade, original concept comparison'+(index!==-1?`, ${outputs.length} transparent lossless WebP assets and pixel palettes`:'')+'.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});
