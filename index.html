@@ -804,7 +804,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
             <button class="op-btn" data-op="/">÷</button>
             <button class="op-btn signed-op-btn" data-op="signed" id="signedOpBtn" aria-pressed="false" aria-describedby="signedOpDesc">Negativa tal (+/−)</button>
           </div>
-          <div class="panel-desc signed-op-desc" id="signedOpDesc">Plus och minus med negativa tal. Välj bara denna eller blanda med andra räknesätt.</div>
+          <div class="panel-desc signed-op-desc" id="signedOpDesc">Öva negativa starttal och svar, utan dubbla tecken. Välj bara denna eller blanda med andra räknesätt.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="rangePanelTitle"></div>
@@ -889,7 +889,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
             <button class="toggle-btn graphics-mode-btn" data-graphics="toy" id="graphicsModernBtn">✨ Modern</button>
             <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1092,9 +1092,9 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
-<script src="translations.js?v=snake-styles-2"></script>
-<script src="snake-style-config.js?v=snake-styles-2"></script>
-<script src="snake-styles.js?v=snake-styles-2"></script>
+<script src="translations.js?v=signed-basics-1"></script>
+<script src="snake-style-config.js?v=snake-styles-3"></script>
+<script src="snake-styles.js?v=snake-styles-3"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -5049,21 +5049,21 @@ function genFreshProblem(){
   }
   return{expr:'2 + 3',answer:5,op:'+'};
 }
-function formatSignedOperand(value,parenthesize=false){
-  const text=value<0?`−${Math.abs(value)}`:String(value);
-  return value<0&&parenthesize?`(${text})`:text;
+function formatSignedOperand(value){
+  return value<0?`−${Math.abs(value)}`:String(value);
 }
 function genSignedProblem(max){
   const op=Math.random()<.5?'+':'-';
-  // Tal och svar stannar inom valt intervall. Negativ operand eller svar krävs.
+  // Introduktion på tallinjen: börja negativt eller passera noll, men lägg
+  // alltid till/ta bort ett positivt antal steg. Inga + (−b) eller − (−b).
+  // Starttal, förändring och svar stannar inom det valda intervallet.
   for(let att=0;att<120;att++){
-    const a=R(-max,max),b=R(-max,max);
-    if(b===0)continue;
+    const a=R(-max,max),b=R(1,max);
     const answer=op==='+'?a+b:a-b;
-    if((a>=0&&b>=0&&answer>=0)||Math.abs(answer)>max)continue;
-    return{expr:`${formatSignedOperand(a)} ${op==='+'?'+':'−'} ${formatSignedOperand(b,true)}`,answer,op,category:'signed'};
+    if((a>=0&&answer>=0)||Math.abs(answer)>max)continue;
+    return{expr:`${formatSignedOperand(a)} ${op==='+'?'+':'−'} ${b}`,answer,op,category:'signed'};
   }
-  return{expr:op==='+'?'−1 + 1':'−1 − (−1)',answer:0,op,category:'signed'};
+  return{expr:op==='+'?'−1 + 1':'0 − 1',answer:op==='+'?0:-1,op,category:'signed'};
 }
 function genWrongs(correct,allowNegative=correct<0){
   const spread=numRange>=1000?60:numRange>=100?15:numRange>=20?6:3;
@@ -8485,9 +8485,9 @@ function applyGraphicsMode(mode,{persist=true}={}){
 }
 function updateGraphicsModeDescription(){
   if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc',
-    'Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.',
-    'Modern uses soft toy shapes. Modern and Pixel retro are ready for Classic, Ice Blue, Pink, Strawberry and Basketball; other skins temporarily keep their previous appearance.',
-    'Modern verwendet weiche Spielzeugformen. Modern und Pixelretro sind für Klassisch, Eisblau, Rosa, Erdbeere und Basketball fertig; andere Skins behalten vorerst ihr bisheriges Aussehen.');
+    'Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.',
+    'Modern uses soft toy shapes. Modern and Pixel retro are ready for Classic, Ice Blue, Pink, Purple, Emerald, Strawberry and Basketball; other skins temporarily keep their previous appearance.',
+    'Modern verwendet weiche Spielzeugformen. Modern und Pixelretro sind für Klassisch, Eisblau, Rosa, Lila, Smaragd, Erdbeere und Basketball fertig; andere Skins behalten vorerst ihr bisheriges Aussehen.');
 }
 
 /* ═══════════════════════════════════════

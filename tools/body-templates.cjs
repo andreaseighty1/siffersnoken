@@ -6,7 +6,7 @@ const spec=require('../skin-templates/body-spec.json');
 const themes=require('../skin-templates/themes.json');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -38,6 +38,19 @@ function pixelMaterial(p,dx,dy,rx,ry){
   if((nx-.40)**2+(ny+.49)**2<.023&&d<.8)color=p.detail;
   return color;
 }
+// Small engraved gem motif, not a faceted/reshaped body silhouette.
+function emeraldMark(part='body'){
+  return part==='tail'?{cx:.5,cy:.30,rx:.075,ry:.105}:
+    part==='head-base'?{cx:.5,cy:.70,rx:.16,ry:.16}:{cx:.5,cy:.5,rx:.21,ry:.25};
+}
+function emeraldSvg(p,size,part){
+  const {cx,cy,rx,ry}=emeraldMark(part);
+  return `<path d="M ${cx*size} ${(cy-ry)*size} L ${(cx+rx)*size} ${cy*size} L ${cx*size} ${(cy+ry)*size} L ${(cx-rx)*size} ${cy*size} Z M ${(cx-rx)*size} ${cy*size} H ${(cx+rx)*size} M ${cx*size} ${(cy-ry)*size} V ${(cy+ry)*size}" fill="none" stroke="${p.detail}" stroke-opacity=".32" stroke-width="${size*.011}" stroke-linejoin="round"/>`;
+}
+function emeraldPixel(x,y,size,part){
+  const {cx,cy,rx,ry}=emeraldMark(part),dx=Math.abs((x+.5)/size-cx)/rx,dy=Math.abs((y+.5)/size-cy)/ry;
+  return Math.abs(dx+dy-1)<.13||(dx<.10&&dy<.85)||(dy<.08&&dx<.85);
+}
 function toyBody(theme){
   const size=spec.styles.toy.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.palette;
   const maskId='toy-'+theme.id+'-body',material=toyMaterial(p,'toy-'+theme.id,size);
@@ -45,7 +58,7 @@ function toyBody(theme){
     ?seeds.map(([x,y])=>`<ellipse cx="${c+x*r}" cy="${c+y*r}" rx="${r*.06}" ry="${r*.074}" fill="${p.detail}"/>`).join('')
     :theme.pattern==='basketballSeams'
       ?`<path d="M ${c} ${c-r} V ${c+r} M ${c-r} ${c} H ${c+r}" fill="none" stroke="${p.ink}" stroke-width="${r*.035}"/>`
-      :'';
+      :theme.pattern==='emeraldInlay'?emeraldSvg(p,size,'body'):'';
   // One diffuse sculpted material; no shiny circular spot or grain texture.
   // Composite one complete opaque material, then apply the outer alpha mask ONCE.
   // Clipping each stroke separately would change alpha at antialiased seam ends.
@@ -61,6 +74,7 @@ function pixelGrid(theme){
     if(theme.pattern==='strawberrySeeds'&&seeds.some(([sx,sy])=>
       Math.abs(dx-sx*r)<1.05&&Math.abs(dy-sy*r)<1.20))color=p.detail;
     if(theme.pattern==='basketballSeams'&&(x===16||y===16))color=p.ink;
+    if(theme.pattern==='emeraldInlay'&&emeraldPixel(x,y,size,'body'))color=p.detail;
     return color;
   }));
 }
@@ -120,7 +134,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

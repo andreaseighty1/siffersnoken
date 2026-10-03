@@ -27,5 +27,15 @@
     "id": "rosa", "label": "Rosa", "pattern": "none", "bodyOrientation": "fixed",
     "palette": { "base": "#ed75aa", "light": "#ffb7d3", "shade": "#b83f7e", "edge": "#7c315b", "ink": "#47233a", "detail": "#fff0f8" },
     "pixelPalette": { "base": "#e66ba6", "light": "#ffa6cc", "shade": "#b44581", "edge": "#792d60", "ink": "#3e1b39", "detail": "#fff0fb" }
+  },
+  {
+    "id": "lila", "label": "Lila", "pattern": "none", "bodyOrientation": "fixed",
+    "palette": { "base": "#a278e6", "light": "#d5baf9", "shade": "#7041b2", "edge": "#4c2c7a", "ink": "#302046", "detail": "#f4edff" },
+    "pixelPalette": { "base": "#9767da", "light": "#c7a2f2", "shade": "#6c40a5", "edge": "#45266f", "ink": "#29183f", "detail": "#f3eaff" }
+  },
+  {
+    "id": "smaragd", "label": "Smaragd", "pattern": "emeraldInlay", "bodyOrientation": "fixed",
+    "palette": { "base": "#20ad7d", "light": "#88e8bf", "shade": "#137256", "edge": "#125442", "ink": "#12392e", "detail": "#c7f8de" },
+    "pixelPalette": { "base": "#1d9d70", "light": "#6dd8a2", "shade": "#1b7051", "edge": "#124c39", "ink": "#0c3026", "detail": "#baf3ce" }
   }
 ]

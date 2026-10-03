@@ -40,14 +40,15 @@ const seen=new Set();
 function verify(p,max){
   assert.equal(p.category,'signed');
   assert.ok(['+','-'].includes(p.op));
-  const match=p.expr.replaceAll('−','-').match(/^(-?\d+) ([+-]) (\(-\d+\)|\d+)$/);
+  const match=p.expr.replaceAll('−','-').match(/^(-?\d+) ([+-]) (\d+)$/);
   assert.ok(match,`Clear signed expression: ${p.expr}`);
-  const a=Number(match[1]),b=Number(match[3].replace(/[()]/g,''));
+  const a=Number(match[1]),b=Number(match[3]);
   assert.equal(match[2],p.op);
   assert.equal(p.answer,p.op==='+'?a+b:a-b);
   assert.ok(Math.abs(a)<=max&&Math.abs(b)<=max&&Math.abs(p.answer)<=max);
-  assert.ok(a<0||b<0||p.answer<0,'Negative operand or answer required');
-  assert.notEqual(b,0);
+  assert.ok(a<0||p.answer<0,'Negative starting number or answer required');
+  assert.ok(b>0,'Beginner category only adds or subtracts a positive second operand');
+  assert.ok(!/[()]/.test(p.expr),'No parenthesized negative operands');
   seen.add(`${p.op}:${Math.sign(a)}:${Math.sign(b)}`);
   seen.add(`answer:${Math.sign(p.answer)}`);
   return {a,b};
@@ -70,9 +71,10 @@ for(const max of [10,20,100,1000]){
   }
 }
 for(const op of ['+','-']){
-  for(const signs of [[-1,-1],[-1,1],[1,-1]])assert.ok(seen.has(`${op}:${signs.join(':')}`));
+  assert.ok(seen.has(`${op}:-1:1`),'Both warmer and colder changes from a negative starting number');
 }
 assert.ok(seen.has('-:1:1'),'Subtraction crossing zero is included');
+assert.ok(seen.has('-:0:1'),'Subtraction from zero is included');
 for(const sign of [-1,0,1])assert.ok(seen.has(`answer:${sign}`));
 context.numRange=20;context.activeOps=new Set(['+','-','*','/','signed']);
 const categories=new Set();
@@ -90,6 +92,14 @@ const savedRandom=math.random;math.random=()=>.99;
 verify(context.genSignedProblem(10),10);math.random=()=>0;
 verify(context.genSignedProblem(10),10);
 assert.equal(context.genWrongs(-10,true).length,3,'Bounded fallback returns three distinct choices');
+math.random=savedRandom;
+// The user's temperature/tallinje examples, through the actual generator.
+for(const [a,op,b,answer,expr] of [[-8,'+',8,0,'−8 + 8'],[-8,'-',8,-16,'−8 − 8'],[3,'-',8,-5,'3 − 8']]){
+  const draws=[op==='+'?.25:.75,(a+20+.5)/41,(b-.5)/20];
+  math.random=()=>draws.length?draws.shift():savedRandom();
+  const p=context.genSignedProblem(20);verify(p,20);
+  assert.equal(p.expr,expr);assert.equal(p.answer,answer);
+}
 math.random=savedRandom;
 context.wrongPool=[];const repeat=context.genSignedProblem(20);
 context.addToWrongPool(repeat);context.addToWrongPool(repeat);assert.equal(context.wrongPool.length,1);
@@ -110,6 +120,7 @@ for(const lang of ['sv','en','de']){
   assert.ok(context.getHSDesc({ops:['signed'],range:20}).includes('−20 … 20'));
   assert.ok(!context.getHSDesc({ops:['+','-'],range:20}).includes('−20'));
   context.updateRangeHint();assert.ok(element('rangeHint').textContent.includes('−20'));
+  assert.ok(!element('rangeHint').textContent.includes('(−'),'Translated beginner examples have no double signs');
   assert.ok(!/[{}]/.test(element('rangeHint').textContent));
   context.updateMenuSettingsSummary();assert.ok(!element('menuSettingsSummary').textContent.includes('undefined'));
 }
@@ -138,4 +149,4 @@ assert.equal(history[0].wrongMap['3 − 8'],1);
 assert.equal(history[0].numRange,20);
 assert.ok(html.includes("['+','-','*','/'].every(op=>activeOps.has(op))"),'Genius medal requires all four ordinary operations, not any four categories');
 new vm.Script(html.match(/<script>([^]*?)<\/script>/)[1]);
-console.log('PASS: 20,000 bounded signed questions; sign combinations and zero-crossing; mixed/ordinary selection; unique distractors and fallback; bonus/museum questions; wrong-pool metadata; saved/legacy settings; three languages; HUD/history/stats; medal guard; app syntax.');
+console.log('PASS: 20,000 bounded beginner signed questions; positive second operands only; temperature examples and zero-crossing; mixed/ordinary selection; unique distractors and fallback; bonus/museum questions; wrong-pool metadata; saved/legacy settings; three languages; HUD/history/stats; medal guard; app syntax.');
