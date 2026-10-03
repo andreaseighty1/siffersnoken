@@ -1,0 +1,18 @@
+[
+  {
+    "id": "neutral", "label": "Neutral kroppsmall", "pattern": "none", "bodyOrientation": "fixed",
+    "palette": { "base": "#b7bab7", "light": "#dce0da", "shade": "#838c87", "edge": "#737d77", "ink": "#444f49", "detail": "#f4f2df" }
+  },
+  {
+    "id": "klassisk", "label": "Klassisk", "pattern": "none", "bodyOrientation": "fixed",
+    "palette": { "base": "#88c936", "light": "#b6e55c", "shade": "#5a982b", "edge": "#4c852d", "ink": "#244b27", "detail": "#f8efbc" }
+  },
+  {
+    "id": "jordgubbe", "label": "Jordgubbe", "pattern": "strawberrySeeds", "bodyOrientation": "fixed",
+    "palette": { "base": "#ee3c4b", "light": "#ff7470", "shade": "#bc2639", "edge": "#a22338", "ink": "#611e31", "detail": "#ffe3a0" }
+  },
+  {
+    "id": "basketboll", "label": "Basketboll", "pattern": "basketballSeams", "bodyOrientation": "fixed",
+    "palette": { "base": "#f99328", "light": "#ffc363", "shade": "#cf6521", "edge": "#b75c22", "ink": "#4e3324", "detail": "#ffe3ac" }
+  }
+]

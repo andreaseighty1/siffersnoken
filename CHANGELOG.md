@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-03
+
+### Produktionsmallar för nya kroppsstilar
+- Låst rund geometri, centrum och relativa mått för mjuka leksaksformer och charmig pixelretro.
+- Gemensamma temabeskrivningar bygger båda stilarna samtidigt: neutral mall samt Klassisk, Jordgubbe och Basketboll.
+- Reproducerbara SVG-källor, transparenta WebP-byggprover, förhandsvisning och tester för kontur, alpha, palett och storlek.
+- Förberett arbetsflödet utan att koppla in grafiklägena eller ersätta befintliga modernbilder. Huvud- och svansmallar återstår.
+
 ## 2026-10-02
 
 ### Uppdaterad nyhetsticker

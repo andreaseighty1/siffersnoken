@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "status": "prototype-not-connected-to-game",
+  "outputs": [
+    {
+      "style": "toy",
+      "id": "neutral",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/neutral-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "klassisk",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/klassisk-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "jordgubbe",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/jordgubbe-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "basketboll",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/basketboll-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "neutral",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/neutral-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "klassisk",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/klassisk-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "jordgubbe",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/jordgubbe-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "basketboll",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/basketboll-body.webp"
+    }
+  ]
+}

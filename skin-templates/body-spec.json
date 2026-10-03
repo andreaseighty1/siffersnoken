@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "status": "prototype-not-connected-to-game",
+  "styles": {
+    "toy": { "label": "Mjuka leksaksformer", "frame": 512, "imageSmoothing": true },
+    "pixel": { "label": "Charmig pixelretro", "frame": 32, "imageSmoothing": false }
+  },
+  "geometry": {
+    "center": [0.5, 0.5],
+    "outerRadius": 0.40625,
+    "visibleDiameter": 0.8125,
+    "sourceMargins": 0.09375,
+    "headWidthRelativeToBody": 1.15,
+    "tailAttachmentWidthRelativeToBody": 0.42
+  },
+  "preview": {
+    "cell": 48,
+    "assetScale": 1.26,
+    "overlap": 1.08,
+    "coordinates": [[0, 2], [0, 1], [0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]
+  },
+  "rules": {
+    "patternsStayInsideBodyMask": true,
+    "lightingFixedToUpperLeft": true,
+    "noLargeCentralDotRow": true,
+    "noIndividualBreathingScaleForPixel": true,
+    "bodyAlphaHandledByGameNotBakedIntoSprite": true,
+    "preserveOldModernAssets": true
+  }
+}
