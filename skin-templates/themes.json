@@ -72,5 +72,17 @@
     "palette": { "base": "#eee9df", "light": "#fffdf4", "shade": "#b7bec6", "edge": "#858f9d", "ink": "#252931", "detail": "#ffffff" },
     "patternPalette": { "base": "#252931", "light": "#626975", "shade": "#151920", "edge": "#10141a", "ink": "#252931", "detail": "#89909b" },
     "pixelPalette": { "base": "#ece9df", "light": "#fffaf0", "shade": "#b4bbc2", "edge": "#555c65", "ink": "#252931", "detail": "#fffdf4" }
+  },
+  {
+    "id": "miamisunset", "label": "Miami Sunset", "pattern": "sunsetWaves", "bodyOrientation": "fixed",
+    "palette": { "base": "#ef65ab", "light": "#ffb4d3", "shade": "#993e87", "edge": "#62365f", "ink": "#26314d", "detail": "#ffb35a" },
+    "patternPalette": { "base": "#39cbd0", "light": "#a1f1df", "shade": "#20869b", "edge": "#235b77", "ink": "#26314d", "detail": "#ffb35a" },
+    "pixelPalette": { "base": "#e762a7", "light": "#ffa7c9", "shade": "#974887", "edge": "#3bbec4", "ink": "#26314d", "detail": "#ffbb65" }
+  },
+  {
+    "id": "inferno", "label": "Blixt", "pattern": "lightningBolt", "bodyOrientation": "fixed",
+    "palette": { "base": "#405487", "light": "#809acc", "shade": "#26315b", "edge": "#1e2547", "ink": "#131d36", "detail": "#ffe665" },
+    "patternPalette": { "base": "#ffce35", "light": "#fff5a2", "shade": "#d58b18", "edge": "#936121", "ink": "#131d36", "detail": "#fffacb" },
+    "pixelPalette": { "base": "#496293", "light": "#849fcb", "shade": "#2e3d68", "edge": "#d5982e", "ink": "#131d36", "detail": "#ffe86b" }
   }
 ]

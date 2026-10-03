@@ -101,6 +101,20 @@
       "file": "generated/toy/fotboll-body.webp"
     },
     {
+      "style": "toy",
+      "id": "miamisunset",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/miamisunset-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "inferno",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/inferno-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -197,6 +211,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/fotboll-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "miamisunset",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/miamisunset-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "inferno",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/inferno-body.webp"
     },
     {
       "style": "toy",
@@ -625,6 +653,68 @@
       "frame": 512,
       "file": "generated/toy/fotboll-tail.webp",
       "id": "fotboll",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/miamisunset-head-base.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/miamisunset-tail.webp",
+      "id": "miamisunset",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/inferno-head-base.webp",
+      "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/inferno-tail.webp",
+      "id": "inferno",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -1537,6 +1627,132 @@
       ]
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/miamisunset-head-base-right.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/miamisunset-head-base-down.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/miamisunset-head-base-left.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/inferno-head-base-right.webp",
+      "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/inferno-head-base-down.webp",
+      "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/inferno-head-base-left.webp",
+      "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -1963,6 +2179,68 @@
       "frame": 32,
       "file": "generated/pixel/fotboll-tail.webp",
       "id": "fotboll",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/miamisunset-head-base.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/miamisunset-tail.webp",
+      "id": "miamisunset",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/inferno-head-base.webp",
+      "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/inferno-tail.webp",
+      "id": "inferno",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -2858,6 +3136,132 @@
       "frame": 32,
       "file": "generated/pixel/fotboll-head-base-left.webp",
       "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/miamisunset-head-base-right.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/miamisunset-head-base-down.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/miamisunset-head-base-left.webp",
+      "id": "miamisunset",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/inferno-head-base-right.webp",
+      "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/inferno-head-base-down.webp",
+      "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/inferno-head-base-left.webp",
+      "id": "inferno",
       "part": "head-base",
       "assetFacing": "up",
       "renderFacing": "left",

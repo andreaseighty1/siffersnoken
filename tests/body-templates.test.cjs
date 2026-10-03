@@ -49,7 +49,7 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
@@ -62,6 +62,12 @@ assert.equal(melonGrid[16][26],melon.pixelPalette.detail,'Pale rind between peel
 assert.equal(melonGrid[16][16],melon.pixelPalette.light,'Red center keeps its light tone');
 assert.equal(melonGrid[25][16],melon.pixelPalette.shade,'Red underside keeps its rounded shading inside the rind');
 assert.ok(melonGrid.flat().filter(color=>color===melon.pixelPalette.edge).length>40,'Peel is not a hairline');
+const miami=themes.find(t=>t.id==='miamisunset'),miamiGrid=pixelGrid(miami);
+assert.ok(miamiGrid.flat().filter(c=>c===miami.pixelPalette.detail).length>65,'Miami sun remains readable at native size');
+assert.ok(miamiGrid.flat().filter(c=>c===miami.pixelPalette.edge).length>65,'Miami ocean is a broad turquoise region');
+const lightning=themes.find(t=>t.id==='inferno'),lightningGrid=pixelGrid(lightning);
+assert.ok(lightningGrid.flat().filter(c=>c===lightning.pixelPalette.detail||c===lightning.pixelPalette.edge).length>90,'Lightning is a large bolt, not tiny sparks');
+assert.equal(lightningGrid[16][16],lightning.pixelPalette.detail,'Main bolt occupies body center');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

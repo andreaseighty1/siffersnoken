@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','lightningBolt']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -73,6 +73,8 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(theme.pattern==='sunsetWaves')return sunsetSvg(theme,size,part,lightCenter);
+  if(theme.pattern==='lightningBolt')return lightningSvg(theme,size,part,lightCenter);
   if(theme.pattern==='melonRind')return melonSvg(theme,size,part,lightCenter);
   if(theme.pattern==='footballPanels')return footballSvg(theme,size,part,lightCenter);
   if(!['candyBands','galaxyClouds'].includes(theme.pattern))return {defs:'',paint:''};
@@ -106,6 +108,15 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='sunsetWaves'){
+    const [u,v]=motifCoordinates(nx,ny,part);
+    if(v>waveY(u))return v>.83?p.shade:p.edge;
+    if(sunsetSun(u,v)&&!sunsetCut(v))return p.detail;
+  }
+  if(theme.pattern==='lightningBolt'){
+    const [u,v]=motifCoordinates(nx,ny,part);
+    if(football.contains(boltPoints,u,v))return v>.61||color===p.edge||color===p.shade?p.edge:p.detail;
+  }
   if(theme.pattern==='footballPanels'){
     const {cx,cy,rx,ry}=panelFrame(part),px=(nx-cx)/rx,py=(ny-cy)/ry;
     if(football.panels.some(panel=>panel.black&&football.contains(panel.points,px,py)))return color===p.light||color===p.detail?p.edge:p.ink;
@@ -125,6 +136,38 @@ function surfacePixel(theme,x,y,size,part,color){
     }))color=p.detail;
   }
   return color;
+}
+// Theme-local coordinates: head motifs are in the rear zone, behind the eyes;
+// tail motifs shrink with the existing narrow attachment. No geometry changes.
+function motifCoordinates(nx,ny,part){
+  return part==='head-base'?[(nx-.5)/.82+.5,(ny-.60)/.36]:
+    part==='tail'?[(nx-.5)/.32+.5,(ny-.125)/.40]:[nx,ny];
+}
+function motifFrame(part){return part==='head-base'?{x:.09,y:.60,w:.82,h:.36}:part==='tail'?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};}
+function waveY(u){return .65+.045*Math.sin((u-.12)*Math.PI*2);}
+function sunsetSun(u,v){return Math.hypot(u-.44,v-.35)<.19;}
+function sunsetCut(v){return v>.36&&v<.385||v>.435&&v<.46;}
+function sunsetSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,f=motifFrame(part);
+  const ocean=toyMaterial(theme.patternPalette,id+'-ocean',size,{tail:part==='tail',lightCenter});
+  const sun=toyMaterial({base:'#ffad55',light:'#ffe9a2',shade:'#e57546',edge:'#ba5550'},id+'-sun',size,{tail:part==='tail',lightCenter});
+  const pt=(u,v)=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`;
+  const wave=Array.from({length:65},(_,i)=>pt(i/64,waveY(i/64))).join(' L ');
+  const waveShape=`<path d="M ${wave} L ${pt(1,1.5)} L ${pt(0,1.5)} Z" fill="white"/>`;
+  const sunShape=`<ellipse cx="${size*(f.x+.44*f.w)}" cy="${size*(f.y+.35*f.h)}" rx="${size*.19*f.w}" ry="${size*.19*f.h}" fill="white"/>`;
+  const cuts=[[.36,.385],[.435,.46]].map(([a,b])=>`<rect x="0" y="${size*(f.y+a*f.h)}" width="${size}" height="${size*(b-a)*f.h}" fill="black"/>`).join('');
+  const mask=(name,shape)=>`<mask id="${id}-${name}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${shape}</mask>`;
+  const crest=`<path d="M ${wave}" fill="none" stroke="${theme.patternPalette.light}" stroke-opacity=".48" stroke-width="${size*.012}"/>`;
+  return {defs:ocean.defs+sun.defs+mask('sun',sunShape+cuts)+mask('wave',waveShape),paint:`<g mask="url(#${id}-sun)">${sun.paint}</g><g mask="url(#${id}-wave)">${ocean.paint}</g>`+crest};
+}
+// A broad six-point bolt dominates each body, rather than tiny scattered sparks.
+const boltPoints=[[.57,.14],[.25,.55],[.46,.52],[.39,.86],[.76,.40],[.54,.44]];
+function lightningSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,f=motifFrame(part),gold=toyMaterial(theme.patternPalette,id,size,{tail:part==='tail',lightCenter});
+  const shape=`<polygon points="${boltPoints.map(([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`).join(' ')}" fill="white"/>`;
+  // Soft illumination stays inside the shared mask; no runtime glow or animation.
+  const halo=`<radialGradient id="${id}-halo"><stop stop-color="${theme.palette.detail}" stop-opacity=".26"/><stop offset="1" stop-color="${theme.palette.detail}" stop-opacity="0"/></radialGradient>`;
+  return {defs:gold.defs+halo+`<mask id="${id}-bolt" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${shape}</mask>`,paint:`<ellipse cx="${size*.5}" cy="${size*(f.y+.5*f.h)}" rx="${size*f.w*.42}" ry="${size*f.h*.47}" fill="url(#${id}-halo)"/><g mask="url(#${id}-bolt)">${gold.paint}</g>`};
 }
 function melonSeeds(part){
   return part==='tail'?[[.5,.28]]:part==='head-base'?[[.34,.60],[.65,.64],[.48,.75]]:
@@ -251,7 +294,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,boltPoints,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');
