@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -74,6 +74,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['magmaCracks','obsidianSheen'].includes(theme.pattern))return stoneSvg(theme,size,part,lightCenter);
   if(theme.pattern==='sunsetWaves')return sunsetSvg(theme,size,part,lightCenter);
   if(theme.pattern==='electricCurrent')return lightningSvg(theme,size,part);
   if(['auroraRibbons','oceanFoam'].includes(theme.pattern))return ribbonSvg(theme,size,part,lightCenter);
@@ -110,6 +111,16 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='magmaCracks'){
+    const [u,v]=surfaceCoordinates(nx,ny,part),distance=Math.min(...magmaPaths.map(points=>openPathDistance(points,u,v)));
+    if(distance<.023)return p.detail;
+    if(distance<.061)return p.edge;
+  }
+  if(theme.pattern==='obsidianSheen'){
+    const [u,v]=surfaceCoordinates(nx,ny,part);
+    if(obsidianFaces.some(face=>football.contains(face,u,v)))return p.light;
+    if(obsidianGlints.some(points=>openPathDistance(points,u,v)<.021))return p.detail;
+  }
   if(theme.pattern==='sunsetWaves'){
     const [u,v]=motifCoordinates(nx,ny,part);
     if(v>waveY(u))return v>.83?p.shade:p.edge;
@@ -203,6 +214,27 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+// Surface-only geology: the same round masks remain underneath both materials.
+// Lava is an open branching crack network; Obsidian has broad polished slivers.
+const magmaPaths=[[[.03,.35],[.23,.39],[.36,.55],[.56,.46],[.72,.64],[.98,.69]],
+  [[.36,.55],[.31,.75],[.17,.98]],[[.56,.46],[.61,.28],[.77,.06]],
+  [[.23,.39],[.18,.18],[.07,.03]],[[.72,.64],[.68,.84],[.79,1.03]]];
+const obsidianFaces=[[[.02,.20],[.38,.18],[.64,.42],[.51,.41],[.31,.29],[.02,.31]],
+  [[.36,.48],[.75,.60],[.91,.83],[.73,.75],[.54,.62],[.27,.56]]];
+const obsidianGlints=[[[.08,.20],[.38,.18],[.64,.42]],[[.36,.48],[.75,.60],[.88,.79]]];
+function stoneSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,p=theme.patternPalette,f=part==='tail'?motifFrame(part):{x:0,y:0,w:1,h:1};
+  const points=path=>path.map(([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`).join(' L ');
+  const stroke=(path,width,color,opacity)=>`<path d="M ${points(path)}" fill="none" stroke="${color}" stroke-width="${size*width*f.w}" stroke-opacity="${opacity}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  if(theme.pattern==='magmaCracks'){
+    const paint=magmaPaths.map(path=>stroke(path,.16,p.shade,.24)+stroke(path,.098,p.base,.28)+stroke(path,.051,p.base,1)+stroke(path,.019,p.light,1)+stroke(path,.006,p.detail,.85)).join('');
+    return {defs:`<!-- ${id}: baked molten fissures -->`,paint};
+  }
+  const material=toyMaterial(p,id,size,{tail:part==='tail',lightCenter});
+  const faces=obsidianFaces.map(face=>`<path d="M ${points(face)} Z" fill="white"/>`).join('');
+  const glints=obsidianGlints.map(path=>stroke(path,.009,p.detail,.68)).join('');
+  return {defs:material.defs+`<mask id="${id}-slivers" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${faces}</mask>`,paint:`<g mask="url(#${id}-slivers)" opacity=".70">${material.paint}</g>`+glints};
+}
 function ribbonY(u,i,aurora){
   return aurora?.24+i*.24+.11*Math.sin((u+.08+i*.20)*Math.PI*2):
     .24+i*.25+.066*Math.sin((u+i*.18)*Math.PI*2)+.055*(u-.5);
@@ -349,7 +381,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,electricPaths,openPathDistance,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,electricPaths,openPathDistance,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

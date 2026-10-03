@@ -95,5 +95,17 @@
     "palette": { "base": "#269cc2", "light": "#8ee8df", "shade": "#176589", "edge": "#15445f", "ink": "#0d3149", "detail": "#edfff5" },
     "patternPalette": { "base": "#54cdb9", "light": "#c7fff0", "shade": "#248eab", "edge": "#165773", "ink": "#0d3149", "detail": "#edfff5" },
     "pixelPalette": { "base": "#258ab8", "light": "#70d5d7", "shade": "#1d6087", "edge": "#174663", "ink": "#0d3149", "detail": "#edfff5" }
+  },
+  {
+    "id": "lava", "label": "Lava", "pattern": "magmaCracks", "bodyOrientation": "fixed",
+    "palette": { "base": "#57353c", "light": "#947079", "shade": "#32232e", "edge": "#211b25", "ink": "#17131e", "detail": "#fff2b0" },
+    "patternPalette": { "base": "#ff7430", "light": "#ffd472", "shade": "#c92e28", "edge": "#8a252c", "ink": "#17131e", "detail": "#fff2b0" },
+    "pixelPalette": { "base": "#61404a", "light": "#98717b", "shade": "#342633", "edge": "#ff7833", "ink": "#17131e", "detail": "#ffda77" }
+  },
+  {
+    "id": "obsidian", "label": "Obsidian", "pattern": "obsidianSheen", "bodyOrientation": "fixed",
+    "palette": { "base": "#34324c", "light": "#747491", "shade": "#211f36", "edge": "#19182a", "ink": "#101020", "detail": "#e9defc" },
+    "patternPalette": { "base": "#8c71bd", "light": "#d9c9f1", "shade": "#524576", "edge": "#342c50", "ink": "#101020", "detail": "#e9defc" },
+    "pixelPalette": { "base": "#46415f", "light": "#9382b7", "shade": "#302b47", "edge": "#211e34", "ink": "#101020", "detail": "#ddcbf3" }
   }
 ]

@@ -50,7 +50,7 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
@@ -75,6 +75,13 @@ for(const id of ['aurora','hav']){
   const theme=themes.find(t=>t.id===id),grid=pixelGrid(theme);
   assert.ok(grid.flat().filter(c=>c===theme.pixelPalette.detail).length>60,id+' has readable full-width ribbons/foam');
 }
+const lava=themes.find(t=>t.id==='lava'),lavaGrid=pixelGrid(lava).flat();
+assert.ok(lavaGrid.filter(c=>c===lava.pixelPalette.edge).length>50,'Molten orange cracks remain readable at native resolution');
+assert.ok(lavaGrid.filter(c=>c===lava.pixelPalette.detail).length>35,'Cracks have hot cores, not only a red recolor');
+assert.ok(lavaGrid.filter(c=>[lava.pixelPalette.base,lava.pixelPalette.light,lava.pixelPalette.shade].includes(c)).length>220,'Dark rounded crust remains visible around the lava');
+const obsidian=themes.find(t=>t.id==='obsidian'),obsidianGrid=pixelGrid(obsidian).flat();
+assert.ok(obsidianGrid.filter(c=>c===obsidian.pixelPalette.detail).length>15,'Obsidian has clear angular polished edges');
+assert.ok(obsidianGrid.filter(c=>[obsidian.pixelPalette.base,obsidian.pixelPalette.shade,obsidian.pixelPalette.edge].includes(c)).length>110,'Obsidian preserves its dark material volume');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');
