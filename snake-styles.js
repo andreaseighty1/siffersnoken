@@ -2,18 +2,25 @@
 (function(root){
   'use strict';
   const config=typeof module!=='undefined'&&module.exports?require('./snake-style-config.js'):root.SnakeStyleConfig;
+  const colors=typeof module!=='undefined'&&module.exports?require('./snake-colors.js'):root.SnakeColors;
   const normalizeMode=mode=>mode==='modern'?'toy':config.styles[mode]?mode:'classic';
   const supports=(mode,id)=>!!config.styles[normalizeMode(mode)]&&config.skins.includes(id);
   const facing=d=>d.x===1?'right':d.x===-1?'left':d.y===1?'down':'up';
   const angles={up:0,right:Math.PI/2,down:Math.PI,left:-Math.PI/2};
   const alpha=index=>Math.max(config.rendering.minimumOpacity,Math.min(1,1-index*config.rendering.fadePerSegment));
+  function colorHue(id,index,time=0,reducedMotion=false){
+    const cycle=config.colorCycles[id];
+    if(!cycle)return 0;
+    const phase=reducedMotion?0:Math.floor(Math.max(0,time)/cycle.intervalMs);
+    return cycle.hues[(index+phase)%cycle.hues.length];
+  }
   function paths(mode,id){
     if(!supports(mode,id))return [];
     const dir=`skins/styles/${normalizeMode(mode)}/`;
     return ['body','tail','head-base','head-base-right','head-base-down','head-base-left'].map(p=>dir+id+'-'+p+'.webp')
       .concat([dir+'eyes-open.webp',dir+'eyes-blink.webp'],id==='jordgubbe'?[dir+'jordgubbe-head-decoration.webp']:[],normalizeMode(mode)==='pixel'?[dir+'tongue.webp']:[]);
   }
-  function createRenderer({createCanvas=()=>document.createElement('canvas'),createImage=()=>new Image()}={}){
+  function createRenderer({createCanvas=()=>document.createElement('canvas'),createImage=()=>new Image(),assetPrefix=''}={}){
     const images=new Map(),sprites=new Map();
     let layer=null;
     function preload(mode,id){
@@ -25,7 +32,7 @@
           image.onload=()=>{entry.ready=!!image.naturalWidth;resolve(entry.ready);};
           image.onerror=()=>resolve(false);
         });
-        images.set(src,entry);image.src=src;return entry.promise;
+        images.set(src,entry);image.src=assetPrefix+src;return entry.promise;
       })).then(results=>results.length>0&&results.every(Boolean));
     }
     function ready(mode,id){return paths(mode,id).every(src=>images.get(src)?.ready);}
@@ -46,8 +53,15 @@
     }
     // A joined tail/body is composited BEFORE opacity. Its overlap cannot darken
     // or shine through a faded end segment. Cached in four cardinal directions.
-    function sprite(mode,id,part,cell,direction='up',blink=false){
-      const key=[mode,id,part,cell,direction,blink].join('|');
+    function recolorMaterial(out,hue){
+      if(!hue)return;
+      const c=out.getContext('2d'),pixels=c.getImageData(0,0,out.width,out.height);
+      colors.recolorPixels(pixels.data,hue);c.putImageData(pixels,0,0);
+    }
+    function sprite(mode,id,part,cell,direction='up',blink=false,hue=0){
+      if(part==='body')direction='up';
+      if(part!=='head')blink=false;
+      const key=[mode,id,part,cell,direction,blink,hue].join('|');
       if(sprites.has(key))return sprites.get(key);
       const pixel=mode==='pixel',s=config.styles[mode];
       const bodySize=pixel?32:cell*s.bodyScale;
@@ -67,13 +81,18 @@
         const base=id+'-head-base'+(direction==='up'?'':'-'+direction);
         const start=pixel?-Math.floor(size/2):-size/2;
         c.drawImage(image(mode,base),start,start,size,size);
+        // Color the material BEFORE painting eyes/tongue/decorations.
+        recolorMaterial(out,hue);
         if(mode==='pixel')c.drawImage(image(mode,'tongue'),start,start+Math.round(-.13*size),size,size);
         if(id==='jordgubbe')c.drawImage(image(mode,'jordgubbe-head-decoration'),start,start,size,size);
         c.drawImage(image(mode,'eyes-'+(blink?'blink':'open')),start,start,size,size);
         c.restore();
-      }else c.drawImage(image(mode,id+'-body'),center-size/2,center-size/2,size,size);
+      }else{
+        c.drawImage(image(mode,id+'-body'),center-size/2,center-size/2,size,size);
+        recolorMaterial(out,hue); // Joined tail and final body share one color.
+      }
       const r=config.rendering;
-      if(!pixel)insetOutline(out,config.outlineColors[id],Math.max(1,Math.round(cell*r.toyOutlineWidth*res)),r.toyOutlineOpacity);
+      if(!pixel)insetOutline(out,colors.rotateHex(config.outlineColors[id],hue),Math.max(1,Math.round(cell*r.toyOutlineWidth*res)),r.toyOutlineOpacity);
       // Cache contrast/shadows once. Never run morphology/blur per game frame.
       const shaded=createCanvas();shaded.width=shaded.height=out.width;
       const sc=shaded.getContext('2d');sc.shadowColor=`rgba(12,23,18,${r.shadowOpacity})`;
@@ -82,7 +101,7 @@
       sc.drawImage(out,0,0);sprites.set(key,{canvas:shaded,extent});
       return sprites.get(key);
     }
-    function draw(context,{mode,id,cell,cols,rows,points,heading,tailDirection,blink=false,wrap=false,fade=true}){
+    function draw(context,{mode,id,cell,cols,rows,points,heading,tailDirection,blink=false,wrap=false,fade=true,time=0,reducedMotion=false}){
       mode=normalizeMode(mode);
       if(!supports(mode,id))return false;
       if(!ready(mode,id)){preload(mode,id);return false;}
@@ -98,7 +117,7 @@
       for(let i=points.length-1;i>=0;i--){
         const part=i===0?'head':i===points.length-1?'tail':'body';
         const direction=facing(i===0?heading:tailDirection);
-        const cached=sprite(mode,id,part,pitch,direction,i===0&&blink);
+        const cached=sprite(mode,id,part,pitch,direction,i===0&&blink,colorHue(id,i,time,reducedMotion));
         const x=(points[i].x+.5)*pitch,y=(points[i].y+.5)*pitch;
         target.globalAlpha=fade&&i?alpha(i):1;
         for(const dx of wrap?[-w,0,w]:[0])for(const dy of wrap?[-h,0,h]:[0]){
@@ -119,6 +138,6 @@
     }
     return {preload,draw};
   }
-  const api={config,normalizeMode,supports,paths,alpha,facing,createRenderer};
+  const api={config,normalizeMode,supports,paths,alpha,colorHue,facing,createRenderer};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.SnakeStyles=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

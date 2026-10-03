@@ -16,17 +16,24 @@ function validateTheme(theme){
   if(!/^[a-z][a-z0-9-]*$/.test(theme.id))throw new Error('Invalid theme id');
   if(!patterns.has(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
+  if(theme.material!==undefined&&theme.material!=='gold')throw new Error('Unsupported material');
+  if(theme.colorCycle&&(!Array.isArray(theme.colorCycle.hues)||theme.colorCycle.hues.length!==7||
+    new Set(theme.colorCycle.hues).size!==7||theme.colorCycle.hues.some(h=>!Number.isInteger(h)||h<0||h>=360)||
+    !Number.isFinite(theme.colorCycle.intervalMs)||theme.colorCycle.intervalMs<500))throw new Error('Invalid color cycle');
   for(const palette of [theme.palette,...(theme.pixelPalette?[theme.pixelPalette]:[])])for(const key of ['base','light','shade','edge','ink','detail']){
     if(!/^#[0-9a-f]{6}$/i.test(palette?.[key]||''))throw new Error('Invalid palette color: '+key);
   }
 }
 // Soft sculpted material: a diffuse key light plus a separate curved rim.
 // Shadows belong to rendering/preview, never to the silhouette's alpha mask.
-function toyMaterial(p,id,size,{rx=spec.geometry.outerRadius,ry=rx,tail=false,lightCenter=[.38,.30]}={}){
+function toyMaterial(p,id,size,{rx=spec.geometry.outerRadius,ry=rx,tail=false,lightCenter=[.38,.30],finish}={}){
   const defs=`<radialGradient id="${id}-matte" cx="${lightCenter[0]*100}%" cy="${lightCenter[1]*100}%" r="65%"><stop offset="0" stop-color="${p.light}"/><stop offset=".45" stop-color="${p.base}"/><stop offset=".85" stop-color="${p.shade}"/><stop offset="1" stop-color="${p.shade}"/></radialGradient><radialGradient id="${id}-rim" gradientUnits="userSpaceOnUse" cx="${size*.5}" cy="${size*.5}" r="${size*rx}" gradientTransform="translate(0 ${size*.5*(1-ry/rx)}) scale(1 ${ry/rx})"><stop offset=".50" stop-color="${p.shade}" stop-opacity="0"/><stop offset=".82" stop-color="${p.shade}" stop-opacity=".10"/><stop offset="1" stop-color="${p.shade}" stop-opacity=".36"/></radialGradient>`;
   const tailDefs=`<radialGradient id="${id}-tail-light" gradientUnits="userSpaceOnUse" cx="${size*.47}" cy="${size*.16}" r="${size*.43}"><stop offset="0" stop-color="${p.light}"/><stop offset=".42" stop-color="${p.base}"/><stop offset="1" stop-color="${p.shade}"/></radialGradient><linearGradient id="${id}-tail-rim"><stop offset=".29" stop-color="${p.edge}" stop-opacity=".6"/><stop offset=".46" stop-color="${p.edge}" stop-opacity="0"/><stop offset=".53" stop-color="${p.edge}" stop-opacity="0"/><stop offset=".71" stop-color="${p.edge}" stop-opacity=".6"/></linearGradient>`;
   const rect=fill=>`<rect width="${size}" height="${size}" fill="url(#${fill})"/>`;
-  return {defs:tail?tailDefs:defs,paint:tail?rect(id+'-tail-light')+rect(id+'-tail-rim'):rect(id+'-matte')+rect(id+'-rim')};
+  // Broad satin reflections, not a bright circular dot or a changed silhouette.
+  const dx=(.5-lightCenter[0])*2,dy=(.5-lightCenter[1])*2;
+  const satin=finish==='gold'?`<linearGradient id="${id}-satin" x1="${(.5-dx)*100}%" y1="${(.5-dy)*100}%" x2="${(.5+dx)*100}%" y2="${(.5+dy)*100}%"><stop offset=".12" stop-color="${p.detail}" stop-opacity=".10"/><stop offset=".25" stop-color="${p.detail}" stop-opacity=".48"/><stop offset=".43" stop-color="${p.detail}" stop-opacity="0"/><stop offset=".62" stop-color="${p.edge}" stop-opacity=".24"/><stop offset=".80" stop-color="${p.light}" stop-opacity=".22"/><stop offset="1" stop-color="${p.edge}" stop-opacity=".32"/></linearGradient>`:'';
+  return {defs:(tail?tailDefs:defs)+satin,paint:(tail?rect(id+'-tail-light')+rect(id+'-tail-rim'):rect(id+'-matte')+rect(id+'-rim'))+(satin?rect(id+'-satin'):'')};
 }
 function pixelMaterial(p,dx,dy,rx,ry){
   const nx=dx/rx,ny=dy/ry,d=Math.hypot(nx,ny);
@@ -53,7 +60,7 @@ function emeraldPixel(x,y,size,part){
 }
 function toyBody(theme){
   const size=spec.styles.toy.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.palette;
-  const maskId='toy-'+theme.id+'-body',material=toyMaterial(p,'toy-'+theme.id,size);
+  const maskId='toy-'+theme.id+'-body',material=toyMaterial(p,'toy-'+theme.id,size,{finish:theme.material});
   const pattern=theme.pattern==='strawberrySeeds'
     ?seeds.map(([x,y])=>`<ellipse cx="${c+x*r}" cy="${c+y*r}" rx="${r*.06}" ry="${r*.074}" fill="${p.detail}"/>`).join('')
     :theme.pattern==='basketballSeams'

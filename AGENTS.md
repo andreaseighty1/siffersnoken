@@ -23,6 +23,7 @@
 - Svansens plana fästkant ska möta sista kroppsdelen utan synlig glipa eller onödigt stor överlappning.
 - Svansens fäste ska normalt vara tydligt smalare än kroppsdelen och svansen ska använda samma material, färger och mönsterspråk som kroppen.
 - Kroppens gradvisa transparens ska även omfatta svansen.
+- Visa en preview av varje nytt skin i både Modern och Pixelretro vid leverans, så användaren direkt kan bedöma eventuella korrigeringar.
 
 ## Snokmallar för leksaksformer och pixelretro
 

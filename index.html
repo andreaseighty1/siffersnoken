@@ -889,7 +889,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
             <button class="toggle-btn graphics-mode-btn" data-graphics="toy" id="graphicsModernBtn">✨ Modern</button>
             <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. 9 skins är klara i både Modern och Pixelretro; övriga behåller tills vidare sitt tidigare utseende.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1092,9 +1092,10 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
-<script src="translations.js?v=signed-basics-1"></script>
-<script src="snake-style-config.js?v=snake-styles-3"></script>
-<script src="snake-styles.js?v=snake-styles-3"></script>
+<script src="translations.js?v=snake-styles-4"></script>
+<script src="snake-style-config.js?v=snake-styles-4"></script>
+<script src="snake-colors.js?v=snake-styles-4"></script>
+<script src="snake-styles.js?v=snake-styles-4"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -7076,7 +7077,8 @@ function draw(t,frameNow=performance.now()){
       if(!d.x&&!d.y&&last>0)d=bodyDirection(snake[last],snake[last-1]);
       return{x:-d.x,y:-d.y};
     })(),
-    blink:isModernEyeBlinking(),wrap:wallWrap
+    blink:isModernEyeBlinking(),wrap:wallWrap,time:_renderNow,
+    reducedMotion:!!(MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches)
   });
   if(templateDrawn){
     const headPoint=getSnakeRenderPoint(snake[0],t);
@@ -8485,9 +8487,9 @@ function applyGraphicsMode(mode,{persist=true}={}){
 }
 function updateGraphicsModeDescription(){
   if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc',
-    'Modern har mjuka leksaksformer. Modern och Pixelretro är klara för Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe och Basketboll; övriga skins behåller tills vidare sitt tidigare utseende.',
-    'Modern uses soft toy shapes. Modern and Pixel retro are ready for Classic, Ice Blue, Pink, Purple, Emerald, Strawberry and Basketball; other skins temporarily keep their previous appearance.',
-    'Modern verwendet weiche Spielzeugformen. Modern und Pixelretro sind für Klassisch, Eisblau, Rosa, Lila, Smaragd, Erdbeere und Basketball fertig; andere Skins behalten vorerst ihr bisheriges Aussehen.');
+    'Modern har mjuka leksaksformer. {n} skins är klara i både Modern och Pixelretro; övriga behåller tills vidare sitt tidigare utseende.',
+    'Modern uses soft toy shapes. {n} skins are ready in both Modern and Pixel retro; other skins temporarily keep their previous appearance.',
+    'Modern verwendet weiche Spielzeugformen. {n} Skins sind in Modern und Pixelretro fertig; andere behalten vorerst ihr bisheriges Aussehen.').replace('{n}',SnakeStyles.config.skins.length);
 }
 
 /* ═══════════════════════════════════════

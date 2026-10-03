@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SifferSnoken · skinpreview</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#f5f0e4;color:#183b35;font:16px system-ui,sans-serif}main{max-width:1160px;margin:auto}h1{margin:0 0 8px;font-size:26px}p{line-height:1.5}button{font:inherit;padding:8px 14px;border:1px solid #789184;border-radius:10px;background:#fffaf0;color:inherit;cursor:pointer}article{margin:22px 0;padding:20px;border:1px solid #cdd6c9;border-radius:18px;background:#fffaf0}h2{margin:0 0 12px;font-size:23px}.styles{display:grid;grid-template-columns:1fr 1fr;gap:22px}h3{margin:0 0 8px;font-size:16px}canvas{display:block;width:100%;height:auto;background:#e4edde;border-radius:12px;image-rendering:auto}.note{margin:12px 0 0;font-size:13px;color:#456057}@media(max-width:650px){body{padding:12px}.styles{grid-template-columns:1fr}article{padding:14px}}
+</style>
+<main><h1>SifferSnoken · riktiga skinpreviews</h1><p>Samma WebP-filer, former, ögon och svansfästen som i spelet. Previewn visar full opacitet.</p><button id="pause">Pausa färgerna</button><div id="previews"></div><p id="status" role="status">Laddar tillgångar…</p></main>
+<script src="../snake-style-config.js?v=snake-styles-4"></script>
+<script src="../snake-colors.js?v=snake-styles-4"></script>
+<script src="../snake-styles.js?v=snake-styles-4"></script>
+<script>
+const renderer=SnakeStyles.createRenderer({assetPrefix:'../'});
+let paused=false,frozenTime=0,lastPhase=-1;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)'),cards=[];
+const points=Array.from({length:11},(_,i)=>({x:11-i,y:2}));
+const opts={cell:34,cols:14,rows:5,points,heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false};
+document.getElementById('pause').onclick=()=>{paused=!paused;frozenTime=performance.now();lastPhase=-1;document.getElementById('pause').textContent=paused?'Starta färgerna':'Pausa färgerna';};
+(async()=>{
+  const themes=await (await fetch('themes.json')).json();
+  const requested=(new URLSearchParams(location.search).get('skins')||'regnbage,guld').split(',');
+  const chosen=themes.filter(t=>requested.includes(t.id)&&SnakeStyles.config.skins.includes(t.id));
+  const animated=chosen.some(t=>t.colorCycle);
+  document.getElementById('pause').hidden=!animated;
+  for(const theme of chosen){
+    const article=document.createElement('article');article.id='preview-'+theme.id;
+    const heading=document.createElement('h2');heading.textContent=theme.label;article.append(heading);
+    const group=document.createElement('div');group.className='styles';article.append(group);
+    for(const [mode,label] of [['toy','Modern · mjuk leksaksform'],['pixel','Pixelretro']]){
+      const section=document.createElement('section'),title=document.createElement('h3'),canvas=document.createElement('canvas');
+      title.textContent=label;canvas.width=476;canvas.height=170;canvas.setAttribute('aria-label',theme.label+' i '+label);
+      section.append(title,canvas);group.append(section);
+      if(!await renderer.preload(mode,theme.id))throw Error('Kunde inte ladda '+theme.label+' '+mode);
+      cards.push({canvas,mode,id:theme.id});
+    }
+    const note=document.createElement('p');note.className='note';note.textContent=theme.colorCycle?'Sju färger längs kroppen. Färgerna växlar lugnt i spelet; svans och sista kroppsdel har samma färg.':'Fast orientering på kroppen, samma material på huvud och svans.';article.append(note);
+    document.getElementById('previews').append(article);
+  }
+  document.getElementById('status').textContent='Tillgångarna är laddade.';
+  function frame(now){
+    const time=paused?frozenTime:now,phase=!animated||reduced.matches?0:Math.floor(time/1400);
+    if(phase!==lastPhase){lastPhase=phase;for(const card of cards){const c=card.canvas.getContext('2d');c.clearRect(0,0,476,170);renderer.draw(c,{...opts,mode:card.mode,id:card.id,time,reducedMotion:reduced.matches});}}
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})().catch(error=>{document.getElementById('status').textContent=error.message;});
+</script>
+</html>

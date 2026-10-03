@@ -33,6 +33,15 @@ assert.throws(()=>validateTheme({...neutral,id:'../escape'}));
 assert.throws(()=>validateTheme({...neutral,pattern:'unknown'}));
 assert.throws(()=>validateTheme({...neutral,palette:{...neutral.palette,base:'url(other.svg)'}}));
 assert.throws(()=>validateTheme({...neutral,pixelPalette:{...neutral.palette,base:'url(other.svg)'}}));
+assert.throws(()=>validateTheme({...neutral,material:'unknown'}));
+for(const colorCycle of [{hues:[0],intervalMs:1400},{hues:[0,30,55,115,175,220,220],intervalMs:1400},
+  {hues:[0,30,55,115,175,220,360],intervalMs:1400},{hues:[0,30,55,115,175,220,275],intervalMs:100}]){
+  assert.throws(()=>validateTheme({...neutral,colorCycle}));
+}
+const gold=themes.find(t=>t.id==='guld');
+assert.equal(gold.material,'gold');assert.ok(bodySvg('toy',gold).includes('-satin'));
+assert.ok(!bodySvg('toy',{...gold,material:undefined}).includes('-satin'));
+assert.deepEqual(pixelGrid(gold),pixelGrid({...gold,material:undefined}),'Gold finish does not blur the pixel palette');
 assert.throws(()=>bodySvg('unknown',neutral));
 const emerald=themes.find(t=>t.id==='smaragd');
 assert.equal(emerald.pattern,'emeraldInlay');

@@ -37,5 +37,16 @@
     "id": "smaragd", "label": "Smaragd", "pattern": "emeraldInlay", "bodyOrientation": "fixed",
     "palette": { "base": "#20ad7d", "light": "#88e8bf", "shade": "#137256", "edge": "#125442", "ink": "#12392e", "detail": "#c7f8de" },
     "pixelPalette": { "base": "#1d9d70", "light": "#6dd8a2", "shade": "#1b7051", "edge": "#124c39", "ink": "#0c3026", "detail": "#baf3ce" }
+  },
+  {
+    "id": "regnbage", "label": "Regnbåge", "pattern": "none", "bodyOrientation": "fixed",
+    "colorCycle": { "hues": [0, 30, 55, 115, 175, 220, 275], "intervalMs": 1400 },
+    "palette": { "base": "#ea4848", "light": "#ff9292", "shade": "#ad2727", "edge": "#782020", "ink": "#431919", "detail": "#ffe3e3" },
+    "pixelPalette": { "base": "#e24141", "light": "#ff8585", "shade": "#a82b2b", "edge": "#732222", "ink": "#3b1414", "detail": "#ffe4e4" }
+  },
+  {
+    "id": "guld", "label": "Guld", "pattern": "none", "material": "gold", "bodyOrientation": "fixed",
+    "palette": { "base": "#eabc38", "light": "#fff2ac", "shade": "#98611e", "edge": "#6c471e", "ink": "#443214", "detail": "#fff8d2" },
+    "pixelPalette": { "base": "#e4b92e", "light": "#ffe076", "shade": "#aa7720", "edge": "#74501a", "ink": "#3d2b14", "detail": "#fff6c6" }
   }
 ]

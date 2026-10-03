@@ -38,7 +38,7 @@ function contour(part,size){
 }
 function toyPart(theme,part,facing='up'){
   const size=body.spec.styles.toy.frame,p=theme.palette,id=`toy-${theme.id}-${part}`;
-  const material=body.toyMaterial(p,id,size,{rx:spec.head.radiusX,ry:spec.head.radiusY,tail:part==='tail',lightCenter:lightCenter(facing)});
+  const material=body.toyMaterial(p,id,size,{rx:spec.head.radiusX,ry:spec.head.radiusY,tail:part==='tail',lightCenter:lightCenter(facing),finish:theme.material});
   const seeds=part==='tail'?tailSeeds:headSeeds;
   const pattern=theme.pattern==='strawberrySeeds'?seeds.filter(([,y])=>y<spec.tail.tipY||part!=='tail').map(([x,y])=>`<ellipse cx="${x*size}" cy="${y*size}" rx="${size*.024}" ry="${size*.030}" fill="${p.detail}"/>`).join('')
     :theme.pattern==='basketballSeams'?`<path d="M ${size*.5} 0 V ${size} M 0 ${size*.58} H ${size}" fill="none" stroke="${p.ink}" stroke-width="${size*.018}"/>`
