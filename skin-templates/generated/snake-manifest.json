@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "templates-not-connected-to-game",
   "outputs": [
     {
@@ -67,14 +67,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.29
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.29
         ]
-      ]
+      ],
+      "renderScale": 1.12
     },
     {
       "style": "toy",
@@ -97,14 +98,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.29
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.29
         ]
-      ]
+      ],
+      "renderScale": 1.12
     },
     {
       "style": "toy",
@@ -127,14 +129,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.29
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.29
         ]
-      ]
+      ],
+      "renderScale": 1.12
     },
     {
       "style": "toy",
@@ -157,14 +160,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.29
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.29
         ]
-      ]
+      ],
+      "renderScale": 1.12
     },
     {
       "style": "toy",
@@ -193,6 +197,266 @@
       "assetFacing": "up"
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/jordgubbe-head-decoration.webp",
+      "id": "jordgubbe",
+      "part": "head-decoration",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/neutral-head-base-right.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/neutral-head-base-down.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/neutral-head-base-left.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/klassisk-head-base-right.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/klassisk-head-base-down.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/klassisk-head-base-left.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/jordgubbe-head-base-right.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/jordgubbe-head-base-down.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/jordgubbe-head-base-left.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/basketboll-head-base-right.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/basketboll-head-base-down.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/basketboll-head-base-left.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -201,14 +465,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.34
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.34
         ]
-      ]
+      ],
+      "renderScale": 1.03
     },
     {
       "style": "pixel",
@@ -231,14 +496,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.34
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.34
         ]
-      ]
+      ],
+      "renderScale": 1.03
     },
     {
       "style": "pixel",
@@ -261,14 +527,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.34
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.34
         ]
-      ]
+      ],
+      "renderScale": 1.03
     },
     {
       "style": "pixel",
@@ -291,14 +558,15 @@
       "assetFacing": "up",
       "eyes": [
         [
-          0.33,
-          0.39
+          0.3,
+          0.34
         ],
         [
-          0.67,
-          0.39
+          0.7,
+          0.34
         ]
-      ]
+      ],
+      "renderScale": 1.03
     },
     {
       "style": "pixel",
@@ -325,6 +593,282 @@
       "file": "generated/pixel/eyes-blink.webp",
       "part": "eyes-blink",
       "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/jordgubbe-head-decoration.webp",
+      "id": "jordgubbe",
+      "part": "head-decoration",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/neutral-head-base-right.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/neutral-head-base-down.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/neutral-head-base-left.webp",
+      "id": "neutral",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/klassisk-head-base-right.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/klassisk-head-base-down.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/klassisk-head-base-left.webp",
+      "id": "klassisk",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/jordgubbe-head-base-right.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/jordgubbe-head-base-down.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/jordgubbe-head-base-left.webp",
+      "id": "jordgubbe",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/basketboll-head-base-right.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/basketboll-head-base-down.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/basketboll-head-base-left.webp",
+      "id": "basketboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tongue.webp",
+      "part": "tongue",
+      "assetFacing": "up",
+      "attachment": [
+        0.5,
+        0.2
+      ],
+      "headAnchor": [
+        0.5,
+        0.07
+      ],
+      "offsetY": -0.13
     }
   ]
 }

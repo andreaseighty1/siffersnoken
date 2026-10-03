@@ -5,14 +5,17 @@
   },
   {
     "id": "klassisk", "label": "Klassisk", "pattern": "none", "bodyOrientation": "fixed",
-    "palette": { "base": "#88c936", "light": "#b6e55c", "shade": "#5a982b", "edge": "#4c852d", "ink": "#244b27", "detail": "#f8efbc" }
+    "palette": { "base": "#92cc25", "light": "#b1e83c", "shade": "#4d9123", "edge": "#286322", "ink": "#10361d", "detail": "#f5ffd8" },
+    "pixelPalette": { "base": "#82c122", "light": "#a1dc26", "shade": "#478e25", "edge": "#1c5a27", "ink": "#092a17", "detail": "#f3ffd5" }
   },
   {
     "id": "jordgubbe", "label": "Jordgubbe", "pattern": "strawberrySeeds", "bodyOrientation": "fixed",
-    "palette": { "base": "#ee3c4b", "light": "#ff7470", "shade": "#bc2639", "edge": "#a22338", "ink": "#611e31", "detail": "#ffe3a0" }
+    "palette": { "base": "#ef2835", "light": "#ff5147", "shade": "#ab1325", "edge": "#800e20", "ink": "#390d15", "detail": "#ffe5a4" },
+    "pixelPalette": { "base": "#e92631", "light": "#ff3f37", "shade": "#b01722", "edge": "#75121b", "ink": "#290b11", "detail": "#ffdf86" }
   },
   {
     "id": "basketboll", "label": "Basketboll", "pattern": "basketballSeams", "bodyOrientation": "fixed",
-    "palette": { "base": "#f99328", "light": "#ffc363", "shade": "#cf6521", "edge": "#b75c22", "ink": "#4e3324", "detail": "#ffe3ac" }
+    "palette": { "base": "#ff891a", "light": "#ffb757", "shade": "#b94b08", "edge": "#773611", "ink": "#43240f", "detail": "#fff1c4" },
+    "pixelPalette": { "base": "#f9891c", "light": "#ffa329", "shade": "#c7610b", "edge": "#85360c", "ink": "#3f190b", "detail": "#ffda8e" }
   }
 ]

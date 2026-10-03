@@ -5,6 +5,8 @@ assert.equal(snake.spec.assetFacing,'up');
 assert.equal(snake.spec.head.radiusX*2/body.spec.geometry.visibleDiameter,body.spec.geometry.headWidthRelativeToBody);
 assert.equal(snake.spec.tail.widthRelativeToBody,body.spec.geometry.tailAttachmentWidthRelativeToBody);
 assert.ok(snake.spec.tail.widthRelativeToBody<.5,'Tail is clearly narrower than the body');
+assert.ok((snake.spec.tail.tipY-snake.spec.tail.attachment[1])/body.spec.geometry.visibleDiameter<.55,'Short rounded concept tail, not a long spike');
+assert.ok(snake.spec.head.eyes[0][1]<.32,'Eyes toward the face, not small central eyes');
 for(const [x,y] of snake.spec.head.eyes)assert.ok(snake.inside('head-base',x,y));
 for(const [x,y] of snake.spec.head.rearDecorationAnchors){assert.ok(snake.inside('head-base',x,y));assert.ok(y>=snake.spec.head.decorationMinimumY&&y>snake.spec.head.eyes[0][1]);}
 for(const part of snake.parts){
@@ -36,6 +38,14 @@ for(const part of snake.parts){
 }
 assert.throws(()=>snake.partSvg('toy',neutral,'wrong'));
 assert.throws(()=>snake.partSvg('wrong',neutral,'tail'));
+assert.throws(()=>snake.partSvg('toy',neutral,'head-base',{facing:'diagonal'}));
+assert.throws(()=>snake.partSvg('toy',neutral,'head-base',{facing:'__proto__'}));
+for(const facing of ['up','right','down','left']){
+  const [x,y]=snake.lightCenter(facing),angle=snake.facingAngles[facing]*Math.PI/180;
+  assert.ok(Math.abs((x-.5)*Math.cos(angle)-(y-.5)*Math.sin(angle)+.5-.38)<1e-12);
+  assert.ok(Math.abs((x-.5)*Math.sin(angle)+(y-.5)*Math.cos(angle)+.5-.30)<1e-12,'Key light stays in the same world-space position');
+  for(const theme of body.themes)assert.deepEqual(snake.partGrid(theme,'head-base',facing).map(row=>row.map(Boolean)),snake.partGrid(theme,'head-base').map(row=>row.map(Boolean)),'Lighting variants do not deform the head');
+}
 assert.notEqual(snake.eyesSvg('toy',false),snake.eyesSvg('toy',true));
 assert.notEqual(snake.eyesSvg('pixel',false),snake.eyesSvg('pixel',true));
 const toyJoin=snake.joinGeometry('toy'),r=512*body.spec.geometry.outerRadius;
@@ -52,7 +62,7 @@ for(const style of ['toy','pixel'])for(const variant of ['straight','corner']){
   }
 }
 async function main(){
-  const outputs=await snake.build({check:true});assert.equal(outputs.length,28);
+  const outputs=await snake.build({check:true});assert.equal(outputs.length,55);
   const index=process.argv.indexOf('--sharp');
   if(index!==-1){
     const sharp=require(path.resolve(process.argv[index+1])),masks={};
@@ -69,6 +79,9 @@ async function main(){
         const colors=new Set();for(let i=0;i<alpha.length;i++)if(alpha[i])colors.add(data.subarray(i*info.channels,i*info.channels+3).toString('hex'));
         assert.ok(colors.size<=6);assert.ok(fs.statSync(file).size<2000);
       }
+      if(output.part==='head-decoration'){
+        for(let y=0;y<info.height;y++)for(let x=0;x<info.width;x++)if(alpha[y*info.width+x])assert.ok(y/info.height>=snake.spec.head.decorationMinimumY,'Actual leaves stay behind the eye zone');
+      }
     }
     for(const style of ['toy','pixel'])for(const state of ['open','blink']){
       const head=masks[style+':head-base'],eyes=masks[style+':eyes-'+state];
@@ -81,6 +94,11 @@ async function main(){
   assert.ok(html.includes('image-rendering:pixelated'));
   assert.ok(html.includes('opacity:0.35'),'Same last-body and tail fade');
   assert.ok(!html.includes('<svg'),'Preview shows actual bitmap assets');
-  console.log('PASS: deterministic dual-style heads/tails/eyes, rear decoration anchors, exact masks, narrow taper, connected cardinal joins, shared fade'+(index!==-1?', 28 transparent lossless WebP assets and pixel palettes':'')+'.');
+  const targetHtml=fs.readFileSync(path.join(root,'style-targets.html'),'utf8');
+  assert.ok(targetHtml.includes('references/toy-concept.webp')&&targetHtml.includes('references/pixel-concept.webp'));
+  assert.ok(targetHtml.includes('head-decoration.webp')&&targetHtml.includes('tongue.webp'));
+  assert.ok(targetHtml.includes('drop-shadow'),'Sculpted toys have rendering-stage soft shadows, not baked alpha');
+  for(const style of ['toy','pixel'])assert.ok(fs.existsSync(path.join(root,'references',style+'-concept.webp')));
+  console.log('PASS: deterministic dual-style heads/tails/eyes, fixed world-space key light in four directions, rear decoration anchors, exact masks, short taper, connected cardinal joins, shared fade, original concept comparison'+(index!==-1?', 55 transparent lossless WebP assets and pixel palettes':'')+'.');
 }
 main().catch(error=>{console.error(error);process.exitCode=1;});

@@ -1,0 +1,22 @@
+{
+  "references": [
+    {
+      "style": "toy",
+      "file": "toy-concept.webp",
+      "sourceFile": "ChatGPT-bild 3 okt. 2026 15_06_07.png",
+      "sourceSha256": "114daef6f7216f5bf08ada3673a9d37c682a8aec4676418b56e6583155b19b08",
+      "width": 1672,
+      "height": 941,
+      "role": "concept-target-not-runtime"
+    },
+    {
+      "style": "pixel",
+      "file": "pixel-concept.webp",
+      "sourceFile": "03-charmig-pixelretro.png",
+      "sourceSha256": "a3e5db2793437356be2f6a36b5a1314bd424e763e19542ec3823261531a50915",
+      "width": 1672,
+      "height": 941,
+      "role": "concept-target-not-runtime"
+    }
+  ]
+}

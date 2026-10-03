@@ -16,34 +16,50 @@ function validateTheme(theme){
   if(!/^[a-z][a-z0-9-]*$/.test(theme.id))throw new Error('Invalid theme id');
   if(!patterns.has(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
-  for(const key of ['base','light','shade','edge','ink','detail']){
-    if(!/^#[0-9a-f]{6}$/i.test(theme.palette?.[key]||''))throw new Error('Invalid palette color: '+key);
+  for(const palette of [theme.palette,...(theme.pixelPalette?[theme.pixelPalette]:[])])for(const key of ['base','light','shade','edge','ink','detail']){
+    if(!/^#[0-9a-f]{6}$/i.test(palette?.[key]||''))throw new Error('Invalid palette color: '+key);
   }
+}
+// Soft sculpted material: a diffuse key light plus a separate curved rim.
+// Shadows belong to rendering/preview, never to the silhouette's alpha mask.
+function toyMaterial(p,id,size,{rx=spec.geometry.outerRadius,ry=rx,tail=false,lightCenter=[.38,.30]}={}){
+  const defs=`<radialGradient id="${id}-matte" cx="${lightCenter[0]*100}%" cy="${lightCenter[1]*100}%" r="65%"><stop offset="0" stop-color="${p.light}"/><stop offset=".45" stop-color="${p.base}"/><stop offset=".85" stop-color="${p.shade}"/><stop offset="1" stop-color="${p.shade}"/></radialGradient><radialGradient id="${id}-rim" gradientUnits="userSpaceOnUse" cx="${size*.5}" cy="${size*.5}" r="${size*rx}" gradientTransform="translate(0 ${size*.5*(1-ry/rx)}) scale(1 ${ry/rx})"><stop offset=".50" stop-color="${p.shade}" stop-opacity="0"/><stop offset=".82" stop-color="${p.shade}" stop-opacity=".10"/><stop offset="1" stop-color="${p.shade}" stop-opacity=".36"/></radialGradient>`;
+  const tailDefs=`<radialGradient id="${id}-tail-light" gradientUnits="userSpaceOnUse" cx="${size*.47}" cy="${size*.16}" r="${size*.43}"><stop offset="0" stop-color="${p.light}"/><stop offset=".42" stop-color="${p.base}"/><stop offset="1" stop-color="${p.shade}"/></radialGradient><linearGradient id="${id}-tail-rim"><stop offset=".29" stop-color="${p.edge}" stop-opacity=".6"/><stop offset=".46" stop-color="${p.edge}" stop-opacity="0"/><stop offset=".53" stop-color="${p.edge}" stop-opacity="0"/><stop offset=".71" stop-color="${p.edge}" stop-opacity=".6"/></linearGradient>`;
+  const rect=fill=>`<rect width="${size}" height="${size}" fill="url(#${fill})"/>`;
+  return {defs:tail?tailDefs:defs,paint:tail?rect(id+'-tail-light')+rect(id+'-tail-rim'):rect(id+'-matte')+rect(id+'-rim')};
+}
+function pixelMaterial(p,dx,dy,rx,ry){
+  const nx=dx/rx,ny=dy/ry,d=Math.hypot(nx,ny);
+  if(d>1-1.1/Math.min(rx,ry))return p.ink;
+  // Concentric lower-edge steps give volume, not a diagonal half-disk split.
+  const lightDisk=Math.hypot(nx,ny+.22);
+  let color=lightDisk<.76?p.light:lightDisk<.94?p.base:ny>.34?p.edge:p.shade;
+  if(ny>.68&&lightDisk>=.76&&lightDisk<.97)color=p.shade;
+  if((nx-.40)**2+(ny+.49)**2<.023&&d<.8)color=p.detail;
+  return color;
 }
 function toyBody(theme){
   const size=spec.styles.toy.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.palette;
-  const lightId='toy-'+theme.id+'-matte',maskId='toy-'+theme.id+'-body';
+  const maskId='toy-'+theme.id+'-body',material=toyMaterial(p,'toy-'+theme.id,size);
   const pattern=theme.pattern==='strawberrySeeds'
-    ?seeds.map(([x,y])=>`<ellipse cx="${c+x*r}" cy="${c+y*r}" rx="${r*.025}" ry="${r*.04}" fill="${p.detail}"/>`).join('')
+    ?seeds.map(([x,y])=>`<ellipse cx="${c+x*r}" cy="${c+y*r}" rx="${r*.06}" ry="${r*.074}" fill="${p.detail}"/>`).join('')
     :theme.pattern==='basketballSeams'
       ?`<path d="M ${c} ${c-r} V ${c+r} M ${c-r} ${c} H ${c+r}" fill="none" stroke="${p.ink}" stroke-width="${r*.035}"/>`
       :'';
-  // One diffuse matte light field; no shiny circular spot or grain texture.
+  // One diffuse sculpted material; no shiny circular spot or grain texture.
   // Composite one complete opaque material, then apply the outer alpha mask ONCE.
   // Clipping each stroke separately would change alpha at antialiased seam ends.
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs><radialGradient id="${lightId}" cx="29%" cy="24%" r="85%"><stop offset="0" stop-color="${p.light}"/><stop offset=".48" stop-color="${p.base}"/><stop offset="1" stop-color="${p.shade}"/></radialGradient><mask id="${maskId}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><circle cx="${c}" cy="${c}" r="${r}" fill="white"/></mask></defs><g mask="url(#${maskId})"><rect width="${size}" height="${size}" fill="url(#${lightId})"/>${pattern}<circle cx="${c}" cy="${c}" r="${r-2}" fill="none" stroke="${p.edge}" stroke-opacity=".42" stroke-width="4"/></g></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}<mask id="${maskId}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><circle cx="${c}" cy="${c}" r="${r}" fill="white"/></mask></defs><g mask="url(#${maskId})">${material.paint}${pattern}</g></svg>`;
 }
 function pixelGrid(theme){
-  const size=spec.styles.pixel.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.palette;
+  const size=spec.styles.pixel.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.pixelPalette||theme.palette;
   return Array.from({length:size},(_,y)=>Array.from({length:size},(_,x)=>{
     const dx=x+.5-c,dy=y+.5-c,distance=Math.hypot(dx,dy);
     if(distance>r)return null;
-    if(distance>r-1.1)return p.ink;
-    let color=(dx+dy)/r>.4?p.shade:p.base;
-    // A stepped, off-center upper-left highlight, not a dot on the middle row.
-    if(dx>-r*.65&&dx<-r*.1&&dy>-r*.65&&dy<-r*.2&&dx+dy<-r*.55)color=p.light;
+    let color=pixelMaterial(p,dx,dy,r,r);
+    if(color===p.ink)return color;
     if(theme.pattern==='strawberrySeeds'&&seeds.some(([sx,sy])=>
-      Math.abs(dx-sx*r)<.55&&Math.abs(dy-sy*r)<.95))color=p.detail;
+      Math.abs(dx-sx*r)<1.05&&Math.abs(dy-sy*r)<1.20))color=p.detail;
     if(theme.pattern==='basketballSeams'&&(x===16||y===16))color=p.ink;
     return color;
   }));
@@ -104,7 +120,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

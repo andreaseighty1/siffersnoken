@@ -26,8 +26,10 @@
 
 ## Snokmallar för leksaksformer och pixelretro
 
+- Konceptförlagorna i `skin-templates/references` är visuella mål. Jämför faktiska tillgångar i `style-targets.html` före leverans; geometri- och alpha-tester räcker inte som stilgodkännande. Leksak ska ha skulpterad matt volym, stora mörka pupiller och kort rundad svans. Pixel ska ha mörk kontur, rundade färgsteg och små ljusblänk, inte platt diagonal skuggning.
 - Använd `skin-templates/body-spec.json`, `themes.json` och `tools/body-templates.cjs` för låst geometri och båda stilversionerna i samma byggkörning. Läs `skin-templates/README.md` innan mallarna används eller nya stilar kopplas in.
 - Använd även `snake-spec.json` och `tools/snake-templates.cjs` för huvud, svans och separata ögonlager i båda stilarna. Svansens angivna fästpunkt är dess rotationscentrum; placera den på kroppens kord nära kanten enligt `joinGeometry`, aldrig med godtycklig centrumöverlappning.
+- Använd låsta huvudskalor och rätt huvudvariant för ljusriktningen. Alla källmasker är uppåtvända; högervarianten roteras 90 grader. Jordgubbens blad och pixelstilens tunga är separata lager. Slagskuggor läggs i renderingen, inte i spritealfan. Läs manifestet och README före integration.
 - Ändra inte kroppens kontur eller relativa diameter för att göra ett nytt tema. Mönstret ska ligga innanför den gemensamma masken.
 - Pixel arbetar med 32 × 32 logiska pixlar och förlustfri WebP, utan bildutjämning, mjuk omskalning eller varierande segmentstorlek.
 - Byggprover och statiska sammanfogningar är inte aktiverade grafiklägen. Befintliga modernassets ska bevaras tills hela malluppsättningen har testats i spelet, inklusive rörelse, lång orm och mobil.

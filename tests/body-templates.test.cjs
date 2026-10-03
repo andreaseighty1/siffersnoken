@@ -32,6 +32,7 @@ for(const theme of themes){
 assert.throws(()=>validateTheme({...neutral,id:'../escape'}));
 assert.throws(()=>validateTheme({...neutral,pattern:'unknown'}));
 assert.throws(()=>validateTheme({...neutral,palette:{...neutral.palette,base:'url(other.svg)'}}));
+assert.throws(()=>validateTheme({...neutral,pixelPalette:{...neutral.palette,base:'url(other.svg)'}}));
 assert.throws(()=>bodySvg('unknown',neutral));
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,8);

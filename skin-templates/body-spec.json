@@ -1,9 +1,9 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "prototype-not-connected-to-game",
   "styles": {
-    "toy": { "label": "Mjuka leksaksformer", "frame": 512, "imageSmoothing": true },
-    "pixel": { "label": "Charmig pixelretro", "frame": 32, "imageSmoothing": false }
+    "toy": { "label": "Mjuka leksaksformer", "frame": 512, "imageSmoothing": true, "headRenderScale": 1.12 },
+    "pixel": { "label": "Charmig pixelretro", "frame": 32, "imageSmoothing": false, "headRenderScale": 1.03 }
   },
   "geometry": {
     "center": [0.5, 0.5],
@@ -21,7 +21,9 @@
   },
   "rules": {
     "patternsStayInsideBodyMask": true,
-    "lightingFixedToUpperLeft": true,
+    "lightingFixedInWorldSpace": true,
+    "toyLightDirection": "upper-left",
+    "pixelHighlightPosition": "upper-right",
     "noLargeCentralDotRow": true,
     "noIndividualBreathingScaleForPixel": true,
     "bodyAlphaHandledByGameNotBakedIntoSprite": true,

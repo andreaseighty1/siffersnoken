@@ -2,6 +2,13 @@
 
 ## 2026-10-03
 
+### Mallarnas uttryck korrigerat mot konceptmålen
+- Konceptförlagorna sparade som utvecklingsreferenser och jämförs direkt med de faktiska WebP-tillgångarna.
+- Leksak: skulpterad matt volym, större mörka pupiller, kortare rundad svans och tydligare jordgubbsfrön.
+- Pixel: mörk kontur, rundade färgsteg vid nederkanten, mindre ljusblänk och konceptanpassad palett/ögonplacering.
+- Jordgubbsblad i bakre huvudzon och separat pixeltunga. Huvudvarianter för fyra ljusriktningar behåller samma mask.
+- Ursprungliga modernskins och grafiklägen är orörda. Basketbollens korrekta böjda sömmar kvarstår som senare uppgift.
+
 ### Huvud- och svansmallar i båda nya stilarna
 - Låst rundad huvudform, smal avsmalnande svans och separata öppna/blinkande ögonlager.
 - Gemensamma teman ger 28 transparenta WebP-tillgångar med fasta fästpunkter och en bakre zon för öron/horn.
