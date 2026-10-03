@@ -60,5 +60,17 @@
     "palette": { "base": "#343565", "light": "#717fca", "shade": "#1f234f", "edge": "#151936", "ink": "#101828", "detail": "#e5f6ff" },
     "patternPalette": { "base": "#b765cf", "light": "#79e0ed", "shade": "#493575", "edge": "#202c56", "ink": "#101828", "detail": "#e5f6ff" },
     "pixelPalette": { "base": "#555299", "light": "#7e9cda", "shade": "#303359", "edge": "#1b2544", "ink": "#101828", "detail": "#e5f6ff" }
+  },
+  {
+    "id": "vattenmelon", "label": "Vattenmelon", "pattern": "melonRind", "bodyOrientation": "fixed",
+    "palette": { "base": "#ed4355", "light": "#ff8c88", "shade": "#b32443", "edge": "#761e35", "ink": "#26352a", "detail": "#d5ef94" },
+    "patternPalette": { "base": "#4c9d3b", "light": "#a2d464", "shade": "#27652c", "edge": "#174b25", "ink": "#26352a", "detail": "#d5ef94" },
+    "pixelPalette": { "base": "#eb4856", "light": "#ff8a85", "shade": "#b62943", "edge": "#519b3c", "ink": "#26352a", "detail": "#d5ef94" }
+  },
+  {
+    "id": "fotboll", "label": "Fotboll", "pattern": "footballPanels", "bodyOrientation": "fixed",
+    "palette": { "base": "#eee9df", "light": "#fffdf4", "shade": "#b7bec6", "edge": "#858f9d", "ink": "#252931", "detail": "#ffffff" },
+    "patternPalette": { "base": "#252931", "light": "#626975", "shade": "#151920", "edge": "#10141a", "ink": "#252931", "detail": "#89909b" },
+    "pixelPalette": { "base": "#ece9df", "light": "#fffaf0", "shade": "#b4bbc2", "edge": "#555c65", "ink": "#252931", "detail": "#fffdf4" }
   }
 ]

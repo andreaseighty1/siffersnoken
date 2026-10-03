@@ -40,7 +40,7 @@ assert.throws(()=>snake.partSvg('toy',neutral,'wrong'));
 assert.throws(()=>snake.partSvg('wrong',neutral,'tail'));
 assert.throws(()=>snake.partSvg('toy',neutral,'head-base',{facing:'diagonal'}));
 assert.throws(()=>snake.partSvg('toy',neutral,'head-base',{facing:'__proto__'}));
-for(const id of ['polkagris','galax'])for(const part of snake.parts){
+for(const id of ['polkagris','galax','vattenmelon','fotboll'])for(const part of snake.parts){
   const theme=body.themes.find(t=>t.id===id),patterned=snake.partGrid(theme,part).flat(),plain=snake.partGrid({...theme,pattern:'none'},part).flat();
   assert.ok(patterned.some((color,i)=>color!==plain[i]),id+' keeps its surface design on '+part);
   assert.ok(snake.partSvg('toy',theme,part).includes(id+'-'+part+'-surface'));

@@ -87,6 +87,20 @@
       "file": "generated/toy/galax-body.webp"
     },
     {
+      "style": "toy",
+      "id": "vattenmelon",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/vattenmelon-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "fotboll",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/fotboll-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -169,6 +183,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/galax-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "vattenmelon",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/vattenmelon-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "fotboll",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/fotboll-body.webp"
     },
     {
       "style": "toy",
@@ -535,6 +563,68 @@
       "frame": 512,
       "file": "generated/toy/galax-tail.webp",
       "id": "galax",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/vattenmelon-head-base.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/vattenmelon-tail.webp",
+      "id": "vattenmelon",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/fotboll-head-base.webp",
+      "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/fotboll-tail.webp",
+      "id": "fotboll",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -1321,6 +1411,132 @@
       ]
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/vattenmelon-head-base-right.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/vattenmelon-head-base-down.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/vattenmelon-head-base-left.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/fotboll-head-base-right.webp",
+      "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/fotboll-head-base-down.webp",
+      "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/fotboll-head-base-left.webp",
+      "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -1685,6 +1901,68 @@
       "frame": 32,
       "file": "generated/pixel/galax-tail.webp",
       "id": "galax",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/vattenmelon-head-base.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/vattenmelon-tail.webp",
+      "id": "vattenmelon",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/fotboll-head-base.webp",
+      "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/fotboll-tail.webp",
+      "id": "fotboll",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -2454,6 +2732,132 @@
       "frame": 32,
       "file": "generated/pixel/galax-head-base-left.webp",
       "id": "galax",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/vattenmelon-head-base-right.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/vattenmelon-head-base-down.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/vattenmelon-head-base-left.webp",
+      "id": "vattenmelon",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/fotboll-head-base-right.webp",
+      "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/fotboll-head-base-down.webp",
+      "id": "fotboll",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/fotboll-head-base-left.webp",
+      "id": "fotboll",
       "part": "head-base",
       "assetFacing": "up",
       "renderFacing": "left",

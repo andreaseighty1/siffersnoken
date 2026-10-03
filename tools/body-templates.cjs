@@ -4,9 +4,10 @@ const fs=require('node:fs');
 const path=require('node:path');
 const spec=require('../skin-templates/body-spec.json');
 const themes=require('../skin-templates/themes.json');
+const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -72,6 +73,8 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(theme.pattern==='melonRind')return melonSvg(theme,size,part,lightCenter);
+  if(theme.pattern==='footballPanels')return footballSvg(theme,size,part,lightCenter);
   if(!['candyBands','galaxyClouds'].includes(theme.pattern))return {defs:'',paint:''};
   const id=`${theme.id}-${part}-surface`,p=theme.patternPalette||theme.palette;
   if(theme.pattern==='candyBands'){
@@ -90,7 +93,24 @@ function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
 }
 function surfacePixel(theme,x,y,size,part,color){
   const p=theme.pixelPalette||theme.palette,nx=(x+.5)/size,ny=(y+.5)/size;
+  if(theme.pattern==='melonRind'){
+    const radius=melonRadius(nx,ny,part);
+    if(color===p.ink)return color;
+    if(radius>.85)return p.edge;
+    if(radius>.76)return p.detail;
+    if(melonSeeds(part).some(([sx,sy])=>Math.hypot(nx-sx,ny-sy)<(part==='tail'?.027:.037)))return p.ink;
+    // The red disk is smaller than the full body. Keep its own rounded steps
+    // instead of letting the green rind replace all of the original shading.
+    if(radius>.66)return color===p.light||color===p.detail?p.base:p.shade;
+    if(radius>.50&&color===p.light)return p.base;
+    return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
+  }
   if(color===p.ink)return color;
+  if(theme.pattern==='footballPanels'){
+    const {cx,cy,rx,ry}=panelFrame(part),px=(nx-cx)/rx,py=(ny-cy)/ry;
+    if(football.panels.some(panel=>panel.black&&football.contains(panel.points,px,py)))return color===p.light||color===p.detail?p.edge:p.ink;
+    if(football.panels.some(panel=>football.distance(panel.points,px,py)<.030))return p.shade;
+  }
   if(theme.pattern==='candyBands'){
     if(candyBand(nx,ny))return color===p.light||color===p.detail?p.detail:color===p.base?p.edge:p.ink;
     // White underside stays white; red lower shading is reserved for red bands.
@@ -105,6 +125,47 @@ function surfacePixel(theme,x,y,size,part,color){
     }))color=p.detail;
   }
   return color;
+}
+function melonSeeds(part){
+  return part==='tail'?[[.5,.28]]:part==='head-base'?[[.34,.60],[.65,.64],[.48,.75]]:
+    [[.29,.33],[.67,.30],[.43,.54],[.31,.67],[.67,.65]];
+}
+function melonRadius(nx,ny,part){
+  if(part==='tail'){
+    const t=(ny-snakeSpec.tail.attachment[1])/(snakeSpec.tail.tipY-snakeSpec.tail.attachment[1]);
+    const half=spec.geometry.visibleDiameter*snakeSpec.tail.widthRelativeToBody/2*Math.pow(Math.max(0,1-t),snakeSpec.tail.taperExponent);
+    return Math.max(Math.abs(nx-.5)/Math.max(half,1e-8),t);
+  }
+  const rx=part==='body'?spec.geometry.outerRadius:snakeSpec.head.radiusX,ry=part==='body'?rx:snakeSpec.head.radiusY;
+  return Math.hypot((nx-.5)/rx,(ny-.5)/ry);
+}
+function melonShape(size,part,fraction){
+  if(part!=='tail'){
+    const rx=part==='body'?spec.geometry.outerRadius:snakeSpec.head.radiusX,ry=part==='body'?rx:snakeSpec.head.radiusY;
+    return `<ellipse cx="${size*.5}" cy="${size*.5}" rx="${size*rx*fraction}" ry="${size*ry*fraction}"/>`;
+  }
+  const left=[],right=[];
+  for(let i=0;i<=48;i++){
+    const t=fraction*i/48,y=snakeSpec.tail.attachment[1]+(snakeSpec.tail.tipY-snakeSpec.tail.attachment[1])*t;
+    const half=spec.geometry.visibleDiameter*snakeSpec.tail.widthRelativeToBody/2*Math.pow(1-t,snakeSpec.tail.taperExponent)*fraction;
+    left.push(`${size*(.5-half)},${size*y}`);right.unshift(`${size*(.5+half)},${size*y}`);
+  }
+  return `<polygon points="${left.concat(right).join(' ')}"/>`;
+}
+function melonSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,green=toyMaterial(theme.patternPalette,id,size,{tail:part==='tail',lightCenter});
+  const mask=(name,shape)=>`<mask id="${id}-${name}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><rect width="${size}" height="${size}" fill="white"/><g fill="black">${shape}</g></mask>`;
+  const ring=`<g mask="url(#${id}-outer)">${green.paint}</g><g mask="url(#${id}-inner)"><g fill="${theme.palette.detail}">${melonShape(size,part,.85)}</g></g>`;
+  const seeds=melonSeeds(part).map(([x,y],i)=>`<ellipse cx="${x*size}" cy="${y*size}" rx="${size*(part==='tail'?.013:.018)}" ry="${size*(part==='tail'?.022:.032)}" transform="rotate(${[-25,23,4,25,-20][i]} ${x*size} ${y*size})" fill="${theme.palette.ink}"/>`).join('');
+  return {defs:green.defs+mask('outer',melonShape(size,part,.85))+mask('inner',melonShape(size,part,.76)),paint:ring+seeds};
+}
+function panelFrame(part){return part==='tail'?{cx:.5,cy:.30,rx:.17,ry:.245}:part==='head-base'?{cx:.5,cy:.5,rx:snakeSpec.head.radiusX,ry:snakeSpec.head.radiusY}:{cx:.5,cy:.5,rx:spec.geometry.outerRadius,ry:spec.geometry.outerRadius};}
+function footballSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,black=toyMaterial(theme.patternPalette,id,size,{tail:part==='tail',lightCenter}),frame=panelFrame(part);
+  const path=panel=>'M '+panel.points.map(([x,y])=>`${size*(frame.cx+x*frame.rx)},${size*(frame.cy+y*frame.ry)}`).join(' L ')+' Z';
+  const patches=football.panels.filter(panel=>panel.black).map(panel=>`<path d="${path(panel)}" fill="white"/>`).join('');
+  const seams=football.panels.map(panel=>`<path d="${path(panel)}" fill="none" stroke="${theme.palette.ink}" stroke-opacity=".32" stroke-width="${size*.007}" stroke-linejoin="round"/>`).join('');
+  return {defs:black.defs+`<mask id="${id}-patches" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${patches}</mask>`,paint:`<g mask="url(#${id}-patches)">${black.paint}</g>`+seams};
 }
 function toyBody(theme){
   const size=spec.styles.toy.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.palette;
@@ -190,7 +251,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

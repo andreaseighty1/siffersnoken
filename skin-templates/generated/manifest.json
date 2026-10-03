@@ -87,6 +87,20 @@
       "file": "generated/toy/galax-body.webp"
     },
     {
+      "style": "toy",
+      "id": "vattenmelon",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/vattenmelon-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "fotboll",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/fotboll-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -169,6 +183,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/galax-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "vattenmelon",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/vattenmelon-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "fotboll",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/fotboll-body.webp"
     }
   ]
 }

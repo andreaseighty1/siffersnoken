@@ -49,13 +49,19 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
 }
 const candy=themes.find(t=>t.id==='polkagris'),candyColors=pixelGrid(candy).flat();
 assert.ok(candyColors.includes(candy.pixelPalette.detail)&&candyColors.includes(candy.pixelPalette.light),'Candy contains both red and white');
+const melon=themes.find(t=>t.id==='vattenmelon'),melonGrid=pixelGrid(melon);
+assert.equal(melonGrid[16][27],melon.pixelPalette.edge,'Visible green peel near body edge');
+assert.equal(melonGrid[16][26],melon.pixelPalette.detail,'Pale rind between peel and fruit');
+assert.equal(melonGrid[16][16],melon.pixelPalette.light,'Red center keeps its light tone');
+assert.equal(melonGrid[25][16],melon.pixelPalette.shade,'Red underside keeps its rounded shading inside the rind');
+assert.ok(melonGrid.flat().filter(color=>color===melon.pixelPalette.edge).length>40,'Peel is not a hairline');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

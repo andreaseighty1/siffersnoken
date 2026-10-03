@@ -1,10 +1,10 @@
 # Fasta snokmallar: leksaksformer och pixelretro
 
-Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe, Basketboll, Regnbåge, Guld, Polkagris och Galax är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
+Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe, Basketboll, Regnbåge, Guld, Polkagris, Galax, Vattenmelon och Fotboll är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
 
 ## Runtimeexport och integration
 
-Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 139 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri, paletter och kontrastinställningar. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
+Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 163 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri, paletter och kontrastinställningar. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
 
 `snake-styles.js` används av både spel och skinväljare. Kropparna har fast orientering/storlek. Huvudenas fyra ljusvarianter, ögonblinkning, jordgubbsblad och pixeltunga återanvänds från mallarna. Svans och sista runda kropp ritas ihop i en cachad sprite **före** gemensam nedtoning, som aldrig går under 75 procent opacitet. Leksaksformen får en tunn inre kontur utan ändrad silhuett. Kontur och slagskuggor bakas en gång i rendercachen, inte varje bildruta. Pixel ritas på ett heltalsrutnät med 24 logiska pixlar mellan segmentcentrum; 32 × 32-källbilderna behåller sin fasta storlek. Bara snoklagrets sista förstoring använder lätt bildutjämning. CSS pixelering av hela spelduken används inte: sifferbrickor, text och banbakgrund ska behålla sin vanliga grafik. Ingen andning eller segmentstorleksvariation används i pixelstilen.
 
@@ -27,7 +27,7 @@ Ett nytt skin beskrivs en gång i `themes.json`: id, tema, färger, mönster och
 - WebP med riktig alfakanal. Pixelkällbilden ska inte skalas om med mjuk filtrering eller sparas som JPEG; lätt slutskalning i spelrenderingen är tillåten.
 - Alpha-nedtoning på en lång orm ska ske i spelrenderingen, inte bakas in i kroppsmallen.
 
-Neutral och de elva spelbara temana ovan är inkluderade. Mönstren ritas i kod: glesa jordgubbsfrön, fasta basketsömmar, Smaragds diskreta ädelstensgravyr, Polkagrisens breda band och Galaxens nebulosa/stjärnor. Smaragd använder samma motiv på kropp, huvudets bakre del och en mindre variant på svansen; inga fasetter ändrar den runda silhuetten. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
+Neutral och de tretton spelbara temana ovan är inkluderade. Mönstren ritas i kod: glesa jordgubbsfrön, fasta basketsömmar, Smaragds diskreta ädelstensgravyr, Polkagrisens breda band, Galaxens nebulosa/stjärnor, Vattenmelons skal/frön och Fotbolls paneler. Smaragd använder samma motiv på kropp, huvudets bakre del och en mindre variant på svansen; inga fasetter ändrar den runda silhuetten. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
 
 Regnbåge använder en röd WebP-bas och sju färglägen i `colorCycle`. `snake-colors.js` skiftar endast materialets nyans, med bevarad skuggvolym och oförändrad alpha. Ögon och andra separata lager ritas efter färgskiftningen. Spritevarianterna cachas: inga extra nedladdningar, shaders eller pixelavläsningar varje bildruta. Färgserien följer segmentindex och flyttas ett steg var 1,4 sekund; `prefers-reduced-motion` stoppar tidsväxlingen. Svans och sista kropp har samma färg och gemensam alpha. Skinväljaren visar en stilla färgserie.
 
@@ -36,6 +36,10 @@ Guld har ett brett, mjukt satinreflexlager på Moderns befintliga skulpterade ma
 Polkagris använder ett separat skuggat rött material (`patternPalette`) över varmvit grund. De breda diagonala banden ligger helt inom den låsta masken, även på huvud och svans. Galax använder mjuka blåvioletta nebulosafält och tre asymmetriskt placerade små stjärnor; huvudets stjärnor ligger bakom ögonen och svansen får en mindre variant. Pixelretro förenklar båda motiven till högst sex färger. Kroppsmönstren har fast orientering och ingen tidsanimation: all detaljrikedom är bakad i de små WebP-tillgångarna, inte ritad varje bildruta.
 
 `pixelPalette` är ett valfritt stil-specifikt färgval i samma temabeskrivning. Det behövs för pixelkonceptets tydligare färgsteg; temat, geometri och byggkörning är fortfarande gemensamma. Basketbollens riktiga böjda sömmar är en noterad senare uppgift och har inte ändrats i denna stilkorrigering.
+
+Vattenmelon har grönt, skuggat skal och en ljus rindkant runt rött fruktkött. Skalets bredd följer den låsta kroppscirkeln, huvudovalen och svansens avsmalning; svansen har också skal, fruktkött och ett litet frö. Pixelretro behåller tre röda volymsteg innanför skalet. Fröna är asymmetriska, inte en rad stora kroppsprickar.
+
+Fotbolls panelyta byggs av `tools/football-panels.cjs`: 12 svarta femhörningar och 20 ljusa sexhörningar projiceras från en sfär. Panelernas kanter samplas längs sfärytan, men den gemensamma silhuetten är oförändrad. Modern har skuggade svarta paneler och diskreta sömmar; Pixelretro förenklar ytan till den gemensamma sexfärgspaletten. Kroppen har fast orientering. Alla beräkningar sker vid bygget, aldrig varje spelbildruta. Test: `node tests/football-panels.test.cjs`.
 
 ## Bygga och kontrollera
 
@@ -70,7 +74,7 @@ Huvudenas ljus och pixelblänk behöver behålla samma riktning som kroppen när
 
 Mjuka slagskuggor är ett renderingslager (som CSS `drop-shadow` i jämförelsevyn), inte inbakade i bildalfan. Samma riktning och proportionerliga skuggor ska användas i spelet vid integration.
 
-Bygg och testa samtliga 151 tillgångar (inklusive neutralprover och huvudenas ljusriktningsvarianter) med:
+Bygg och testa samtliga 175 tillgångar (inklusive neutralprover och huvudenas ljusriktningsvarianter) med:
 
 ```powershell
 node tools/snake-templates.cjs --sharp "C:\sökväg\node_modules\sharp"
@@ -83,6 +87,8 @@ node tests/snake-templates.test.cjs --sharp "C:\sökväg\node_modules\sharp"
 `runtime-preview.html?skins=regnbage,guld` visar de faktiska spelbara WebP-filerna i Modern och Pixelretro sida vid sida, med spelets delade renderer. Öppna via en lokal webbserver. Ändra `skins` till andra tema-id:n för nästa leverans. Regnbåges tidsväxling kan pausas; de statiska byggförhandsvisningarna visar bara dess röda basmaterial. Visa en sådan runtime-preview för **varje nytt skin i båda stilarna** vid leverans.
 
 ## När ett nytt skin görs
+
+Vattenmelon och Fotboll är kontrollerade i båda stilarna på desktop och vid 390 px mobilbredd: 33 kroppsdelar, flera svängar och nedtonad svans, samt normal spelrörelse. Skalet behåller sin bredd och fotbollskroppens paneler roterar inte vid svängar. Runtime-previews finns via `runtime-preview.html?skins=vattenmelon` respektive `runtime-preview.html?skins=fotboll`.
 
 1. Definiera temat en gång och skapa båda kroppsversionerna.
 2. Behåll konturen; ändra färg och mönster. Komplexa motiv som päls, drakfjäll och galax behöver stil-specifik mönsterdesign, inte bara en färgändring.
