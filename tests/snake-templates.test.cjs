@@ -40,16 +40,15 @@ assert.throws(()=>snake.partSvg('toy',neutral,'wrong'));
 assert.throws(()=>snake.partSvg('wrong',neutral,'tail'));
 assert.throws(()=>snake.partSvg('toy',neutral,'head-base',{facing:'diagonal'}));
 assert.throws(()=>snake.partSvg('toy',neutral,'head-base',{facing:'__proto__'}));
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno'])for(const part of snake.parts){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav'])for(const part of snake.parts){
   const theme=body.themes.find(t=>t.id===id),patterned=snake.partGrid(theme,part).flat(),plain=snake.partGrid({...theme,pattern:'none'},part).flat();
   assert.ok(patterned.some((color,i)=>color!==plain[i]),id+' keeps its surface design on '+part);
   assert.ok(snake.partSvg('toy',theme,part).includes(id+'-'+part+'-surface'));
 }
 assert.ok(body.galaxyMarks('head-base').every(([,y])=>y>=snake.spec.head.decorationMinimumY),'Head stars are behind the eyes');
-for(const [,v] of body.boltPoints){
-  const y=.60+v*.36;
-  assert.ok(y>=snake.spec.head.decorationMinimumY,'Head lightning is behind eyes');
-}
+assert.equal(body.openPathDistance([[0,0],[1,0],[1,1]],.5,.5),.5,'Electric paths are open, with no implicit closing edge');
+for(const part of ['body',...snake.parts])assert.ok(body.electricPaths(part).every(path=>path.length>=3&&path.flat().every(Number.isFinite)));
+assert.ok(body.electricPaths('head-base')[0][0][1]>1&&body.electricPaths('head-base')[0].at(-1)[1]<0,'Head energy crosses the whole surface, not only a rear badge');
 assert.equal(body.motifCoordinates(.5,.60,'head-base')[1],0,'Rear motifs begin at the agreed rear zone');
 for(const facing of ['up','right','down','left']){
   const [x,y]=snake.lightCenter(facing),angle=snake.facingAngles[facing]*Math.PI/180;

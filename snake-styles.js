@@ -32,7 +32,10 @@
           image.onload=()=>{entry.ready=!!image.naturalWidth;resolve(entry.ready);};
           image.onerror=()=>resolve(false);
         });
-        images.set(src,entry);image.src=assetPrefix+src;return entry.promise;
+        images.set(src,entry);
+        const revision=config.assetRevisions?.[id],themed=src.includes('/'+id+'-');
+        image.src=assetPrefix+src+(revision&&themed?'?v='+revision:'');
+        return entry.promise;
       })).then(results=>results.length>0&&results.every(Boolean));
     }
     function ready(mode,id){return paths(mode,id).every(src=>images.get(src)?.ready);}

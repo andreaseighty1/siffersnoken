@@ -18,7 +18,7 @@ const modes=[...html.matchAll(/class="toggle-btn graphics-mode-btn[^]*?data-grap
 assert.deepEqual(modes,['classic','toy','pixel']);
 assert.ok(html.includes('image-rendering:auto;'));
 assert.ok(!html.includes('image-rendering:pixelated'),'Do not pixelate the whole board, number tiles or text');
-for(const id of ['isbla','rosa','lila','smaragd','regnbage','guld','polkagris','galax','vattenmelon','fotboll','miamisunset','inferno'])assert.ok(styles.supports('toy',id)&&styles.supports('pixel',id));
+for(const id of ['isbla','rosa','lila','smaragd','regnbage','guld','polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav'])assert.ok(styles.supports('toy',id)&&styles.supports('pixel',id));
 assert.equal(styles.alpha(0),1);assert.equal(styles.alpha(20),.75);assert.equal(styles.alpha(200),.75);
 for(let i=1;i<=336;i++){assert.ok(styles.alpha(i)<=styles.alpha(i-1));assert.ok(styles.alpha(i)>=.75);}
 assert.ok(html.includes('drawCtx.globalAlpha=SnakeStyles.alpha(index)'),'Legacy Modern uses the same readable opacity');
@@ -58,9 +58,9 @@ function fakeCanvas(){
   c.getContext=()=>ctx;return c;
 }
 async function run(){
-  const canvases=[];let requests=0;
+  const canvases=[],requestedUrls=[];let requests=0;
   const renderer=styles.createRenderer({createCanvas(){const c=fakeCanvas();canvases.push(c);return c;},
-    createImage(){return {naturalWidth:32,set src(value){this.source=value;requests++;queueMicrotask(()=>this.onload());}};}});
+    createImage(){return {naturalWidth:32,set src(value){this.source=value;requests++;requestedUrls.push(value);queueMicrotask(()=>this.onload());}};}});
   assert.equal(renderer.draw(fakeCanvas().getContext(),{mode:'pixel',id:'tiger'}),false);
   for(const mode of ['toy','pixel'])for(const id of styles.config.skins){
     await renderer.preload(mode,id);
@@ -93,6 +93,8 @@ async function run(){
     }
   }
   // End sprite has both tail and body painted at full opacity, before frame fade.
+  assert.equal(requestedUrls.filter(url=>url.includes('/inferno-')&&url.endsWith('?v=2')).length,12,'Corrected Lightning fetches revised WebPs in both modes');
+  assert.ok(requestedUrls.filter(url=>!url.includes('/inferno-')).every(url=>!url.includes('?v=')),'Shared eyes and unchanged themes keep their existing cache');
   const joined=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-tail.webp')));
   assert.ok(joined.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-body.webp')));
   console.log('PASS: three modes, legacy migration, only runtime WebPs, all themes/facings/blink, fixed pixel grid, joined tail alpha, wrapping, reused caches and app syntax.');

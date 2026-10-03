@@ -35,6 +35,7 @@ assert.throws(()=>validateTheme({...neutral,palette:{...neutral.palette,base:'ur
 assert.throws(()=>validateTheme({...neutral,pixelPalette:{...neutral.palette,base:'url(other.svg)'}}));
 assert.throws(()=>validateTheme({...neutral,patternPalette:{...neutral.palette,base:'url(other.svg)'}}));
 assert.throws(()=>validateTheme({...neutral,material:'unknown'}));
+for(const assetRevision of [0,-1,1.5,'2'])assert.throws(()=>validateTheme({...neutral,assetRevision}));
 for(const colorCycle of [{hues:[0],intervalMs:1400},{hues:[0,30,55,115,175,220,220],intervalMs:1400},
   {hues:[0,30,55,115,175,220,360],intervalMs:1400},{hues:[0,30,55,115,175,220,275],intervalMs:100}]){
   assert.throws(()=>validateTheme({...neutral,colorCycle}));
@@ -49,7 +50,7 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
@@ -66,8 +67,14 @@ const miami=themes.find(t=>t.id==='miamisunset'),miamiGrid=pixelGrid(miami);
 assert.ok(miamiGrid.flat().filter(c=>c===miami.pixelPalette.detail).length>65,'Miami sun remains readable at native size');
 assert.ok(miamiGrid.flat().filter(c=>c===miami.pixelPalette.edge).length>65,'Miami ocean is a broad turquoise region');
 const lightning=themes.find(t=>t.id==='inferno'),lightningGrid=pixelGrid(lightning);
-assert.ok(lightningGrid.flat().filter(c=>c===lightning.pixelPalette.detail||c===lightning.pixelPalette.edge).length>90,'Lightning is a large bolt, not tiny sparks');
-assert.equal(lightningGrid[16][16],lightning.pixelPalette.detail,'Main bolt occupies body center');
+assert.equal(lightning.pattern,'electricCurrent');
+assert.ok(lightningGrid.flat().filter(c=>c===lightning.pixelPalette.detail||c===lightning.pixelPalette.light).length>340,'Most of the body is white-hot/yellow energy, not a badge on blue');
+for(const x of [4,27])assert.equal(lightningGrid[15][x],lightning.pixelPalette.detail,'Electric flow reaches both sides of the body');
+assert.ok(!bodySvg('toy',lightning).includes('<polygon'),'No enclosed lightning emblem remains');
+for(const id of ['aurora','hav']){
+  const theme=themes.find(t=>t.id===id),grid=pixelGrid(theme);
+  assert.ok(grid.flat().filter(c=>c===theme.pixelPalette.detail).length>60,id+' has readable full-width ribbons/foam');
+}
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

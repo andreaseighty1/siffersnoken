@@ -80,9 +80,20 @@
     "pixelPalette": { "base": "#e762a7", "light": "#ffa7c9", "shade": "#974887", "edge": "#3bbec4", "ink": "#26314d", "detail": "#ffbb65" }
   },
   {
-    "id": "inferno", "label": "Blixt", "pattern": "lightningBolt", "bodyOrientation": "fixed",
-    "palette": { "base": "#405487", "light": "#809acc", "shade": "#26315b", "edge": "#1e2547", "ink": "#131d36", "detail": "#ffe665" },
-    "patternPalette": { "base": "#ffce35", "light": "#fff5a2", "shade": "#d58b18", "edge": "#936121", "ink": "#131d36", "detail": "#fffacb" },
-    "pixelPalette": { "base": "#496293", "light": "#849fcb", "shade": "#2e3d68", "edge": "#d5982e", "ink": "#131d36", "detail": "#ffe86b" }
+    "id": "inferno", "label": "Blixt", "pattern": "electricCurrent", "assetRevision": 2, "bodyOrientation": "fixed",
+    "palette": { "base": "#ffcf29", "light": "#fff39b", "shade": "#dc971a", "edge": "#a56514", "ink": "#683b12", "detail": "#fffef0" },
+    "pixelPalette": { "base": "#ffcf2e", "light": "#fff17a", "shade": "#d89217", "edge": "#9c5e13", "ink": "#683b12", "detail": "#fffced" }
+  },
+  {
+    "id": "aurora", "label": "Aurora", "pattern": "auroraRibbons", "bodyOrientation": "fixed",
+    "palette": { "base": "#49477f", "light": "#a38cc9", "shade": "#262953", "edge": "#19203d", "ink": "#11192d", "detail": "#d7ffdc" },
+    "patternPalette": { "base": "#36c6ac", "light": "#bcffb9", "shade": "#188c9d", "edge": "#18505d", "ink": "#11192d", "detail": "#d7ffdc" },
+    "pixelPalette": { "base": "#514c86", "light": "#ac87c7", "shade": "#303156", "edge": "#3ac7bb", "ink": "#11192d", "detail": "#d7ffd0" }
+  },
+  {
+    "id": "hav", "label": "Hav", "pattern": "oceanFoam", "bodyOrientation": "fixed",
+    "palette": { "base": "#269cc2", "light": "#8ee8df", "shade": "#176589", "edge": "#15445f", "ink": "#0d3149", "detail": "#edfff5" },
+    "patternPalette": { "base": "#54cdb9", "light": "#c7fff0", "shade": "#248eab", "edge": "#165773", "ink": "#0d3149", "detail": "#edfff5" },
+    "pixelPalette": { "base": "#258ab8", "light": "#70d5d7", "shade": "#1d6087", "edge": "#174663", "ink": "#0d3149", "detail": "#edfff5" }
   }
 ]

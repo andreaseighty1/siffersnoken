@@ -115,6 +115,20 @@
       "file": "generated/toy/inferno-body.webp"
     },
     {
+      "style": "toy",
+      "id": "aurora",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/aurora-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "hav",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/hav-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -225,6 +239,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/inferno-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "aurora",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/aurora-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "hav",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/hav-body.webp"
     },
     {
       "style": "toy",
@@ -715,6 +743,68 @@
       "frame": 512,
       "file": "generated/toy/inferno-tail.webp",
       "id": "inferno",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/aurora-head-base.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/aurora-tail.webp",
+      "id": "aurora",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hav-head-base.webp",
+      "id": "hav",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hav-tail.webp",
+      "id": "hav",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -1753,6 +1843,132 @@
       ]
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/aurora-head-base-right.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/aurora-head-base-down.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/aurora-head-base-left.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hav-head-base-right.webp",
+      "id": "hav",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hav-head-base-down.webp",
+      "id": "hav",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hav-head-base-left.webp",
+      "id": "hav",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -2241,6 +2457,68 @@
       "frame": 32,
       "file": "generated/pixel/inferno-tail.webp",
       "id": "inferno",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/aurora-head-base.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/aurora-tail.webp",
+      "id": "aurora",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hav-head-base.webp",
+      "id": "hav",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hav-tail.webp",
+      "id": "hav",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -3262,6 +3540,132 @@
       "frame": 32,
       "file": "generated/pixel/inferno-head-base-left.webp",
       "id": "inferno",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/aurora-head-base-right.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/aurora-head-base-down.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/aurora-head-base-left.webp",
+      "id": "aurora",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hav-head-base-right.webp",
+      "id": "hav",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hav-head-base-down.webp",
+      "id": "hav",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hav-head-base-left.webp",
+      "id": "hav",
       "part": "head-base",
       "assetFacing": "up",
       "renderFacing": "left",

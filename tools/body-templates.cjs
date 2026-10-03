@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','lightningBolt']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -17,6 +17,7 @@ function validateTheme(theme){
   if(!/^[a-z][a-z0-9-]*$/.test(theme.id))throw new Error('Invalid theme id');
   if(!patterns.has(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
+  if(theme.assetRevision!==undefined&&(!Number.isSafeInteger(theme.assetRevision)||theme.assetRevision<1))throw new Error('Invalid asset revision');
   if(theme.material!==undefined&&theme.material!=='gold')throw new Error('Unsupported material');
   if(theme.colorCycle&&(!Array.isArray(theme.colorCycle.hues)||theme.colorCycle.hues.length!==7||
     new Set(theme.colorCycle.hues).size!==7||theme.colorCycle.hues.some(h=>!Number.isInteger(h)||h<0||h>=360)||
@@ -74,7 +75,8 @@ function galaxyCloud(nx,ny,part){
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
   if(theme.pattern==='sunsetWaves')return sunsetSvg(theme,size,part,lightCenter);
-  if(theme.pattern==='lightningBolt')return lightningSvg(theme,size,part,lightCenter);
+  if(theme.pattern==='electricCurrent')return lightningSvg(theme,size,part);
+  if(['auroraRibbons','oceanFoam'].includes(theme.pattern))return ribbonSvg(theme,size,part,lightCenter);
   if(theme.pattern==='melonRind')return melonSvg(theme,size,part,lightCenter);
   if(theme.pattern==='footballPanels')return footballSvg(theme,size,part,lightCenter);
   if(!['candyBands','galaxyClouds'].includes(theme.pattern))return {defs:'',paint:''};
@@ -113,9 +115,22 @@ function surfacePixel(theme,x,y,size,part,color){
     if(v>waveY(u))return v>.83?p.shade:p.edge;
     if(sunsetSun(u,v)&&!sunsetCut(v))return p.detail;
   }
-  if(theme.pattern==='lightningBolt'){
-    const [u,v]=motifCoordinates(nx,ny,part);
-    if(football.contains(boltPoints,u,v))return v>.61||color===p.edge||color===p.shade?p.edge:p.detail;
+  if(theme.pattern==='electricCurrent'){
+    const distance=Math.min(...electricPaths(part).map(points=>openPathDistance(points,nx,ny)));
+    if(distance<.034)return p.detail;
+    if(distance<.095&&color!==p.edge&&color!==p.shade)return p.light;
+  }
+  if(theme.pattern==='auroraRibbons'||theme.pattern==='oceanFoam'){
+    const [u,v]=surfaceCoordinates(nx,ny,part),aurora=theme.pattern==='auroraRibbons';
+    const distances=[0,1,2].map(i=>Math.abs(v-ribbonY(u,i,aurora)));
+    if(aurora){
+      if(distances[1]<.047)return p.detail;
+      if(distances[0]<.055||distances[2]<.045)return p.edge;
+      if(distances[0]<.10&&color!==p.edge&&color!==p.shade)return p.light;
+    }else{
+      if(Math.min(...distances)<.026)return p.detail;
+      if(Math.min(...distances)<.073&&color!==p.edge&&color!==p.shade)return p.light;
+    }
   }
   if(theme.pattern==='footballPanels'){
     const {cx,cy,rx,ry}=panelFrame(part),px=(nx-cx)/rx,py=(ny-cy)/ry;
@@ -160,14 +175,54 @@ function sunsetSvg(theme,size,part,lightCenter){
   const crest=`<path d="M ${wave}" fill="none" stroke="${theme.patternPalette.light}" stroke-opacity=".48" stroke-width="${size*.012}"/>`;
   return {defs:ocean.defs+sun.defs+mask('sun',sunShape+cuts)+mask('wave',waveShape),paint:`<g mask="url(#${id}-sun)">${sun.paint}</g><g mask="url(#${id}-wave)">${ocean.paint}</g>`+crest};
 }
-// A broad six-point bolt dominates each body, rather than tiny scattered sparks.
-const boltPoints=[[.57,.14],[.25,.55],[.46,.52],[.39,.86],[.76,.40],[.54,.44]];
-function lightningSvg(theme,size,part,lightCenter){
-  const id=`${theme.id}-${part}-surface`,f=motifFrame(part),gold=toyMaterial(theme.patternPalette,id,size,{tail:part==='tail',lightCenter});
-  const shape=`<polygon points="${boltPoints.map(([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`).join(' ')}" fill="white"/>`;
-  // Soft illumination stays inside the shared mask; no runtime glow or animation.
-  const halo=`<radialGradient id="${id}-halo"><stop stop-color="${theme.palette.detail}" stop-opacity=".26"/><stop offset="1" stop-color="${theme.palette.detail}" stop-opacity="0"/></radialGradient>`;
-  return {defs:gold.defs+halo+`<mask id="${id}-bolt" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${shape}</mask>`,paint:`<ellipse cx="${size*.5}" cy="${size*(f.y+.5*f.h)}" rx="${size*f.w*.42}" ry="${size*f.h*.47}" fill="url(#${id}-halo)"/><g mask="url(#${id}-bolt)">${gold.paint}</g>`};
+// Whole-surface lightning: the material itself is electric yellow-white.
+// Open, branched paths cross the silhouette; there is no enclosed bolt badge.
+function electricPaths(part){
+  if(part==='tail')return [[[.50,.10],[.45,.20],[.54,.27],[.48,.37],[.51,.55]],[[.54,.27],[.62,.31],[.65,.42]]];
+  const paths=[[[-.12,.49],[.18,.49],[.32,.28],[.42,.55],[.56,.40],[.68,.70],[.81,.49],[1.12,.49]],
+    [[.42,.55],[.28,.73],[.18,.84]],[[.56,.40],[.70,.18],[.84,.08]],[[.68,.70],[.76,.86],[.88,.96]]];
+  // The head source faces up. Rotate its flow so the right-facing head joins
+  // the horizontal body, while all head masks/lighting variants stay fixed.
+  return part==='head-base'?paths.map(points=>points.map(([x,y])=>[y,1-x])):paths;
+}
+function openPathDistance(points,x,y){
+  let distance=Infinity;
+  for(let i=1;i<points.length;i++){
+    const [ax,ay]=points[i-1],[bx,by]=points[i],dx=bx-ax,dy=by-ay;
+    const t=Math.max(0,Math.min(1,((x-ax)*dx+(y-ay)*dy)/(dx*dx+dy*dy)));
+    distance=Math.min(distance,Math.hypot(x-ax-t*dx,y-ay-t*dy));
+  }
+  return distance;
+}
+function lightningSvg(theme,size,part){
+  const id=`${theme.id}-${part}-surface`,p=theme.palette;
+  const paths=electricPaths(part).map(points=>'M '+points.map(([x,y])=>`${size*x},${size*y}`).join(' L '));
+  const strokes=(width,color,opacity)=>paths.map(d=>`<path d="${d}" fill="none" stroke="${color}" stroke-opacity="${opacity}" stroke-width="${size*width}" stroke-linejoin="miter" stroke-linecap="round"/>`).join('');
+  // These nested broad strokes create a baked, soft energy halo. The common
+  // alpha mask clips it, and the shared sculpted material remains underneath.
+  return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
+}
+function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+function ribbonY(u,i,aurora){
+  return aurora?.24+i*.24+.11*Math.sin((u+.08+i*.20)*Math.PI*2):
+    .24+i*.25+.066*Math.sin((u+i*.18)*Math.PI*2)+.055*(u-.5);
+}
+function ribbonSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,p=theme.patternPalette,f=part==='tail'?motifFrame(part):{x:0,y:0,w:1,h:1},aurora=theme.pattern==='auroraRibbons';
+  const material=toyMaterial(p,id,size,{tail:part==='tail',lightCenter});
+  const paths=[0,1,2].map(i=>'M '+Array.from({length:81},(_,n)=>{
+    const u=-.1+n/80*1.2;return `${size*(f.x+u*f.w)},${size*(f.y+ribbonY(u,i,aurora)*f.h)}`;
+  }).join(' L '));
+  const stroke=(d,width,color,opacity)=>`<path d="${d}" fill="none" stroke="${color}" stroke-width="${size*width*f.h}" stroke-opacity="${opacity}" stroke-linecap="round"/>`;
+  if(aurora){
+    const mask=paths.map(d=>stroke(d,.09,'white',1)).join('');
+    const glow=paths.map(d=>stroke(d,.27,p.light,.12)+stroke(d,.17,p.base,.20)).join('');
+    const cores=paths.map((d,i)=>stroke(d,.030,i===1?p.light:p.base,.62)).join('');
+    return {defs:material.defs+`<mask id="${id}-curtains" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${mask}</mask>`,paint:glow+`<g mask="url(#${id}-curtains)">${material.paint}</g>`+cores};
+  }
+  const waveGlow=paths.map(d=>stroke(d,.10,p.base,.22)+stroke(d,.059,p.light,.30)).join('');
+  const foam=paths.map((d,i)=>stroke(d,.022,theme.palette.detail,i===1?.83:.62)).join('');
+  return {defs:`<!-- ${id}: baked wave crests -->`,paint:waveGlow+foam};
 }
 function melonSeeds(part){
   return part==='tail'?[[.5,.28]]:part==='head-base'?[[.34,.60],[.65,.64],[.48,.75]]:
@@ -294,7 +349,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,boltPoints,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,electricPaths,openPathDistance,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');
