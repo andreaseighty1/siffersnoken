@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -74,6 +74,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['candyPrism','shadowVeils'].includes(theme.pattern))return mysteryCandySvg(theme,size,part,lightCenter);
   if(['brassMechanism','runestone'].includes(theme.pattern))return relicSvg(theme,size,part,lightCenter);
   if(['nuclearFlux','plasmaStreams'].includes(theme.pattern))return energySvg(theme,size,part,lightCenter);
   if(['rosePetals','forestLeaves'].includes(theme.pattern))return botanicalSvg(theme,size,part,lightCenter);
@@ -114,6 +115,21 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='candyPrism'||theme.pattern==='shadowVeils'){
+    const [u,v]=surfaceCoordinates(nx,ny,part);
+    if(theme.pattern==='candyPrism'){
+      const face=prismFaces.findIndex(points=>football.contains(points,u,v));
+      if(prismGlints.some(line=>openPathDistance(line,u,v)<.014))return p.detail;
+      // Six colors, including the shared outline. The lower arc preserves
+      // rounded volume rather than presenting a flat tessellated disk.
+      if(part==='body'&&Math.hypot(u-.5,v-.42)>.38&&v>.64)return p.shade;
+      return face<0?p.shade:[p.light,p.base,p.edge,p.light,p.base,p.shade][face];
+    }
+    const veil=shadowVeils.findIndex(points=>football.contains(points,u,v));
+    if(shadowEdges.some(line=>openPathDistance(line,u,v)<.018))return p.detail;
+    if(veil>=0)return color===p.edge||color===p.shade?p.base:veil===0?p.light:p.edge;
+    return color===p.detail?p.light:color===p.light?p.base:color;
+  }
   if(theme.pattern==='brassMechanism'||theme.pattern==='runestone'){
     const [u,v]=relicCoordinates(nx,ny,part);
     if(theme.pattern==='brassMechanism'){
@@ -309,6 +325,52 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+// Large candy facets are surface patches, not a changed polygonal silhouette.
+// The off-center junction avoids a repeated central jewel/emblem row.
+const prismFaces=[
+  [[-.2,-.2],[.68,-.2],[.42,.46],[-.2,.66]],
+  [[.68,-.2],[1.2,-.2],[1.2,.48]],
+  [[1.2,.48],[1.2,1.2],[.77,1.2],[.42,.46]],
+  [[.42,.46],[.77,1.2],[.17,1.2]],
+  [[-.2,.66],[.42,.46],[.17,1.2],[-.2,1.2]],
+  [[.42,.46],[.68,-.2],[1.2,.48]]
+];
+const prismGlints=[[[.18,.24],[.39,.18],[.53,.12]],[[.68,.65],[.78,.79]]];
+const shadowEdges=[
+  cubicPoints([-.15,.28],[.37,-.06],[.64,.22],[.43,.48]),
+  cubicPoints([.43,.48],[.22,.75],[.67,1.05],[1.15,.68]),
+  cubicPoints([.24,1.10],[.30,.64],[1.05,.70],[1.10,.26])
+];
+const shadowVeils=[
+  [...shadowEdges[0],...shadowEdges[1].slice(1),...cubicPoints([1.15,.68],[.65,1.30],[.03,.72],[.32,.40]).slice(1),...cubicPoints([.32,.40],[.58,.10],[.16,.14],[-.15,.28]).slice(1)],
+  [...shadowEdges[2],...cubicPoints([1.10,.26],[1.06,.98],[.50,.80],[.24,1.10]).slice(1)]
+];
+function mysteryCandySvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,tail=part==='tail',f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};
+  const point=([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`;
+  const data=points=>'M '+points.map(point).join(' L ');
+  const path=(points,color,width,opacity)=>`<path d="${data(points)}" fill="none" stroke="${color}" stroke-width="${size*width*f.w}" stroke-opacity="${opacity}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const candy=theme.pattern==='candyPrism',shapes=candy?prismFaces:shadowVeils;
+  const candyPalettes=[
+    {base:'#66dce0',light:'#c5fff3',shade:'#278da8',edge:'#286b89'},
+    {base:'#f886c4',light:'#ffd4e5',shade:'#b3458d',edge:'#7e386e'},
+    {base:'#ffce79',light:'#fff2c1',shade:'#d7904b',edge:'#93613b'},
+    {base:'#85d5ec',light:'#defbf9',shade:'#4d8eb3',edge:'#48658f'},
+    {base:'#ed91ca',light:'#ffdeec',shade:'#a45a9d',edge:'#70466d'},
+    theme.palette
+  ];
+  let defs='',paint='';
+  shapes.forEach((points,i)=>{
+    const name=`${id}-${i}`,material=toyMaterial(candy?candyPalettes[i]:theme.patternPalette,name,size,{tail,lightCenter});
+    defs+=material.defs+`<mask id="${name}-patch" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><path d="${data(points)} Z" fill="white"/></mask>`;
+    paint+=`<g mask="url(#${name}-patch)">${material.paint}</g>`;
+  });
+  const edges=candy?prismGlints:shadowEdges;
+  // Broad translucent seams provide a soft bevel; no sharp new contour,
+  // microtexture, central symbols or runtime glow/animation are introduced.
+  for(const line of edges)paint+=path(line,theme.palette.detail,candy ? .040 : .070,.12)+path(line,theme.palette.detail,.010,candy ? .70 : .72);
+  return {defs,paint};
+}
 // Relic themes have their own surface details, never their own silhouettes.
 // The rear head motif is compact; it cannot drift into the eye zone.
 function relicFrame(part){return part==='head-base'?{x:.20,y:.60,w:.60,h:.34}:motifFrame(part);}

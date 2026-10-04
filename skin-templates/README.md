@@ -1,10 +1,10 @@
 # Fasta snokmallar: leksaksformer och pixelretro
 
-Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe, Basketboll, Regnbåge, Guld, Polkagris, Galax, Vattenmelon, Fotboll, Miami Sunset, Blixt, Aurora, Hav, Lava, Obsidian, Night Rose, Skog, Radioaktiv, Plasma, Clockwork och Runorm är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
+Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe, Basketboll, Regnbåge, Guld, Polkagris, Galax, Vattenmelon, Fotboll, Miami Sunset, Blixt, Aurora, Hav, Lava, Obsidian, Night Rose, Skog, Radioaktiv, Plasma, Clockwork, Runorm, Prismagodis och Skuggmysterium är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
 
 ## Runtimeexport och integration
 
-Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 307 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri, paletter och kontrastinställningar. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
+Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 331 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri, paletter och kontrastinställningar. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
 
 `snake-styles.js` används av både spel och skinväljare. Kropparna har fast orientering/storlek. Huvudenas fyra ljusvarianter, ögonblinkning, jordgubbsblad och pixeltunga återanvänds från mallarna. Svans och sista runda kropp ritas ihop i en cachad sprite **före** gemensam nedtoning, som aldrig går under 75 procent opacitet. Leksaksformen får en tunn inre kontur utan ändrad silhuett. Kontur och slagskuggor bakas en gång i rendercachen, inte varje bildruta. Pixel ritas på ett heltalsrutnät med 24 logiska pixlar mellan segmentcentrum; 32 × 32-källbilderna behåller sin fasta storlek. Bara snoklagrets sista förstoring använder lätt bildutjämning. CSS pixelering av hela spelduken används inte: sifferbrickor, text och banbakgrund ska behålla sin vanliga grafik. Ingen andning eller segmentstorleksvariation används i pixelstilen.
 
@@ -27,7 +27,7 @@ Ett nytt skin beskrivs en gång i `themes.json`: id, tema, färger, mönster och
 - WebP med riktig alfakanal. Pixelkällbilden ska inte skalas om med mjuk filtrering eller sparas som JPEG; lätt slutskalning i spelrenderingen är tillåten.
 - Alpha-nedtoning på en lång orm ska ske i spelrenderingen, inte bakas in i kroppsmallen.
 
-Neutral och de tjugofem spelbara temana ovan är inkluderade. Mönstren ritas i kod: glesa jordgubbsfrön, fasta basketsömmar, Smaragds diskreta ädelstensgravyr, Polkagrisens breda band, Galaxens nebulosa/stjärnor, Vattenmelons skal/frön, Fotbolls paneler, Miamis sol/vågor, Blixts elektriska material, Auroras norrskensband, Havs skumstråk, Lavas sprickor, Obsidians slipade reflexer, Night Roses kronblad, Skogs bladnerver, Radioaktivs reaktionskanaler, Plasmas energiflöden, Clockworks kuggar och Runorms inhuggna runor. Smaragd använder samma motiv på kropp, huvudets bakre del och en mindre variant på svansen; inga fasetter ändrar den runda silhuetten. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
+Neutral och de tjugosju spelbara temana ovan är inkluderade. Mönstren ritas i kod: glesa jordgubbsfrön, fasta basketsömmar, Smaragds diskreta ädelstensgravyr, Polkagrisens breda band, Galaxens nebulosa/stjärnor, Vattenmelons skal/frön, Fotbolls paneler, Miamis sol/vågor, Blixts elektriska material, Auroras norrskensband, Havs skumstråk, Lavas sprickor, Obsidians slipade reflexer, Night Roses kronblad, Skogs bladnerver, Radioaktivs reaktionskanaler, Plasmas energiflöden, Clockworks kuggar, Runorms inhuggna runor, Prismagodis prismaytor och Skuggmysteriums slöjveck. Smaragd använder samma motiv på kropp, huvudets bakre del och en mindre variant på svansen; inga fasetter ändrar den runda silhuetten. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
 
 Regnbåge använder en röd WebP-bas och sju färglägen i `colorCycle`. `snake-colors.js` skiftar endast materialets nyans, med bevarad skuggvolym och oförändrad alpha. Ögon och andra separata lager ritas efter färgskiftningen. Spritevarianterna cachas: inga extra nedladdningar, shaders eller pixelavläsningar varje bildruta. Färgserien följer segmentindex och flyttas ett steg var 1,4 sekund; `prefers-reduced-motion` stoppar tidsväxlingen. Svans och sista kropp har samma färg och gemensam alpha. Skinväljaren visar en stilla färgserie.
 
@@ -56,6 +56,8 @@ Radioaktiv (revision 2) ersätter de jämna varningsbanden med mörkt grönskulp
 Clockwork har mörkt skulpterat metallmaterial, två förskjutna mässingskuggar vid kanten, sex ekrar per kugge, en mässingsbrygga och en smal turkos ledning. Inga kuggar ändrar kroppens cirkel eller ligger i en stor rund emblemrad längs mitten. Runorm har en stor lysande kantig R-runa, mörka inhuggna kanter och två asymmetriska sprickor i varmgrå runsten. Huvudens motiv ligger helt bakom ögonen. Svansarna använder samma material i mindre skala. Pixelretro förenklar båda till sex färger; kroppsmönstren är fasta och allt ljus/relief bakas vid bygget. Upplåsningen är fortsatt multiplikationssetet för Clockwork och de fyra episka relikerna för Runorm.
 
 ## Bygga och kontrollera
+
+Prismagodis har stora asymmetriska cyan-, rosa-, honungs- och violetta prismaytor med mjukt skulpterat material och två korta bevelreflexer. Skuggmysterium har två svepande silvervioletta slöjveck över mörkt material, med smala ljusa vikkanter. Motiven täcker kropp, huvud och svans inom samma masker; inga bokstavsemblem eller stora runda mittprickar används. Pixelretro använder högst sex färger och fasta kroppsmönster. Materialen bakas vid export utan nya runtimeeffekter. Upplåsningen är fortsatt additionssetet respektive subtraktionssetet.
 
 SVG-källor, förhandsvisning och manifest kan byggas med enbart Node:
 
@@ -88,7 +90,7 @@ Huvudenas ljus och pixelblänk behöver behålla samma riktning som kroppen när
 
 Mjuka slagskuggor är ett renderingslager (som CSS `drop-shadow` i jämförelsevyn), inte inbakade i bildalfan. Samma riktning och proportionerliga skuggor ska användas i spelet vid integration.
 
-Bygg och testa samtliga 319 tillgångar (inklusive neutralprover och huvudenas ljusriktningsvarianter) med:
+Bygg och testa samtliga 343 tillgångar (inklusive neutralprover och huvudenas ljusriktningsvarianter) med:
 
 ```powershell
 node tools/snake-templates.cjs --sharp "C:\sökväg\node_modules\sharp"
@@ -116,7 +118,15 @@ Radioaktiv och Plasma, inklusive de kraftigare revision 2-materialen, är kontro
 
 Clockwork och Runorm är kontrollerade i båda stilarna på desktop och vid 390 px mobilbredd, med 33 segment, flera svängar och gemensam nedtoning av kropp/svans. Vanlig rörelse och huvudrotation är separat kontrollerade. De faktiska WebP-mallarna är jämförda med konceptmålen i `style-targets.html`; kuggar, runor och sprickor ligger inom samma runda masker och huvudmotiven bakom ögonen. Runtime-previews finns via `runtime-preview.html?skins=clockwork` och `runtime-preview.html?skins=runorm`.
 
-Status: 25 av spelets 41 teman är färdiga i båda stilarna; 16 återstår: Hund, Katt, Ko, Prismagodis, Skuggmysterium, Tidvatten, Museiväktaren, Stjärnarkiv, Solregent, Kunglig, HV71, Blodmåne, Tiger, Drake, Stjärnhimmel och Ghost. Blodmånes noterade omarbetning ingår bland de återstående, inte som ett extra tema.
+Status: 27 av spelets 41 teman är färdiga i båda stilarna; 14 återstår: Hund, Katt, Ko, Tidvatten, Museiväktaren, Stjärnarkiv, Solregent, Kunglig, HV71, Blodmåne, Tiger, Drake, Stjärnhimmel och Ghost. Blodmånes noterade omarbetning ingår bland de återstående, inte som ett extra tema.
+
+Prismagodis och Skuggmysterium är kontrollerade i båda stilarna på desktop och vid 390 px mobilbredd, med 33 segment, flera svängar och gemensam nedtoning av kropp/svans. Vanlig rörelse och huvudrotation är separat kontrollerade. De faktiska WebP-mallarna är jämförda med konceptmålen i `style-targets.html`; runda former och korta smala svansar bevaras. Inga konsolfel eller varningar noterades. Runtime-previews finns via `runtime-preview.html?skins=prismagodis` och `runtime-preview.html?skins=skuggmysterium`.
+
+### Sparad prioritering och senare revideringar
+
+- Hund, Katt och Drake sparas till sist enligt användarens önskemål. De ska få genomarbetade specialutseenden inom de låsta proportionerna; djursvansarnas vickning behöver också hanteras. Tiger är en möjlig ytterligare kandidat, inte beslutad ännu.
+- Runorm ska revideras senare: den identiska stora R-runan på varje kroppsdel blir för upprepande. Gör ett sammanhängande runstensmaterial med mer varierat mönsterspråk, inte ännu en rad upprepade bokstavsemblem. Nuvarande version lämnas oförändrad tills den revideringen görs.
+- Basketbollens böjda sömmar och Blodmånes omarbetning är fortsatt noterade senare uppgifter.
 
 1. Definiera temat en gång och skapa båda kroppsversionerna.
 2. Behåll konturen; ändra färg och mönster. Komplexa motiv som päls, drakfjäll och galax behöver stil-specifik mönsterdesign, inte bara en färgändring.

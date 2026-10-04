@@ -50,12 +50,18 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
 }
 const candy=themes.find(t=>t.id==='polkagris'),candyColors=pixelGrid(candy).flat();
+const prism=themes.find(t=>t.id==='prismagodis'),prismColors=pixelGrid(prism).flat();
+for(const key of ['base','light','edge'])assert.ok(prismColors.filter(c=>c===prism.pixelPalette[key]).length>35,'Candy has broad pink, cyan and honey facets, not tiny confetti');
+assert.ok(prismColors.filter(c=>c===prism.pixelPalette.shade).length>80,'Candy preserves rounded violet shading');
+const mystery=themes.find(t=>t.id==='skuggmysterium'),mysteryColors=pixelGrid(mystery).flat();
+assert.ok(mysteryColors.filter(c=>c===mystery.pixelPalette.detail).length>25,'Silver veil edges remain legible');
+assert.ok(mysteryColors.filter(c=>[mystery.pixelPalette.base,mystery.pixelPalette.shade].includes(c)).length>170,'Mystery keeps a broad dark sculpted base between the veils');
 assert.ok(candyColors.includes(candy.pixelPalette.detail)&&candyColors.includes(candy.pixelPalette.light),'Candy contains both red and white');
 const melon=themes.find(t=>t.id==='vattenmelon'),melonGrid=pixelGrid(melon);
 assert.equal(melonGrid[16][27],melon.pixelPalette.edge,'Visible green peel near body edge');

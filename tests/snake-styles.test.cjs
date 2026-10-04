@@ -18,7 +18,7 @@ const modes=[...html.matchAll(/class="toggle-btn graphics-mode-btn[^]*?data-grap
 assert.deepEqual(modes,['classic','toy','pixel']);
 assert.ok(html.includes('image-rendering:auto;'));
 assert.ok(!html.includes('image-rendering:pixelated'),'Do not pixelate the whole board, number tiles or text');
-for(const id of ['isbla','rosa','lila','smaragd','regnbage','guld','polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm'])assert.ok(styles.supports('toy',id)&&styles.supports('pixel',id));
+for(const id of ['isbla','rosa','lila','smaragd','regnbage','guld','polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium'])assert.ok(styles.supports('toy',id)&&styles.supports('pixel',id));
 assert.equal(styles.alpha(0),1);assert.equal(styles.alpha(20),.75);assert.equal(styles.alpha(200),.75);
 for(let i=1;i<=336;i++){assert.ok(styles.alpha(i)<=styles.alpha(i-1));assert.ok(styles.alpha(i)>=.75);}
 assert.ok(html.includes('drawCtx.globalAlpha=SnakeStyles.alpha(index)'),'Legacy Modern uses the same readable opacity');

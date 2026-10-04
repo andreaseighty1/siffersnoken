@@ -143,5 +143,16 @@
     "palette": { "base": "#625c4e", "light": "#aba28a", "shade": "#393e36", "edge": "#222e2b", "ink": "#192624", "detail": "#e8fff1" },
     "patternPalette": { "base": "#4ccabb", "light": "#bafbe7", "shade": "#267d80", "edge": "#19484b", "ink": "#192624", "detail": "#e8fff1" },
     "pixelPalette": { "base": "#837862", "light": "#b8ac91", "shade": "#4b5548", "edge": "#59d7c2", "ink": "#23332f", "detail": "#e7fff0" }
+  },
+  {
+    "id": "prismagodis", "label": "Prismagodis", "pattern": "candyPrism", "bodyOrientation": "fixed",
+    "palette": { "base": "#b074d3", "light": "#eab5ed", "shade": "#65447f", "edge": "#483258", "ink": "#392742", "detail": "#fff6e8" },
+    "pixelPalette": { "base": "#f584c4", "light": "#78e7e9", "shade": "#825da5", "edge": "#ffcf73", "ink": "#392742", "detail": "#fff6e8" }
+  },
+  {
+    "id": "skuggmysterium", "label": "Skuggmysterium", "pattern": "shadowVeils", "bodyOrientation": "fixed",
+    "palette": { "base": "#33314c", "light": "#777493", "shade": "#1c1e30", "edge": "#141927", "ink": "#111622", "detail": "#e9ebfa" },
+    "patternPalette": { "base": "#8773b5", "light": "#d8d3ef", "shade": "#43375d", "edge": "#2b2841", "ink": "#111622", "detail": "#e9ebfa" },
+    "pixelPalette": { "base": "#514566", "light": "#a998ca", "shade": "#2d2c43", "edge": "#737994", "ink": "#141b2a", "detail": "#e4e7f7" }
   }
 ]
