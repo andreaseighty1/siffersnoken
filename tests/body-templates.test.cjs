@@ -50,7 +50,7 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
@@ -103,6 +103,17 @@ const {radiationMark,surfaceSvg}=require('../tools/body-templates.cjs');
 assert.ok(radiationMark.flat().every(([,y])=>y>=.60),'Radiation symbol stays in the agreed rear decoration zone');
 assert.ok(surfaceSvg(radioactive,512,'head-base').paint.includes('stroke-linejoin="round"'));
 assert.ok(!surfaceSvg(radioactive,512,'body').paint.includes('stroke-linejoin="round"'),'No repeated trefoil badges on the body');
+const {clockGears,clockTrace,runeStrokes,relicFrame}=require('../tools/body-templates.cjs');
+const clockwork=themes.find(t=>t.id==='clockwork'),clockGrid=pixelGrid(clockwork).flat();
+assert.ok(clockGears.every(g=>Math.hypot(g.x-.5,g.y-.5)>.3),'Gears are staggered toward the rim, not a central round badge row');
+assert.ok(clockGrid.filter(c=>c===clockwork.pixelPalette.light||c===clockwork.pixelPalette.detail).length>130,'Brass teeth and spokes remain legible on the native grid');
+assert.ok(clockGrid.filter(c=>c===clockwork.pixelPalette.edge).length>35,'Clockwork has an exposed turquoise power track');
+const runorm=themes.find(t=>t.id==='runorm'),runeGrid=pixelGrid(runorm).flat();
+assert.ok(runeGrid.filter(c=>c===runorm.pixelPalette.edge||c===runorm.pixelPalette.detail).length>160,'Rune is large and luminous, not microtexture');
+assert.ok(runeGrid.filter(c=>c===runorm.pixelPalette.light||c===runorm.pixelPalette.base).length>160,'Runestone preserves sculpted stone material around the carving');
+assert.equal(runeStrokes.length,3);
+assert.ok(clockTrace.flat().every(Number.isFinite));
+assert.equal(relicFrame('head-base').y,.60,'Relic engravings stay in the rear decoration zone');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

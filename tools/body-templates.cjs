@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -74,6 +74,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['brassMechanism','runestone'].includes(theme.pattern))return relicSvg(theme,size,part,lightCenter);
   if(['nuclearFlux','plasmaStreams'].includes(theme.pattern))return energySvg(theme,size,part,lightCenter);
   if(['rosePetals','forestLeaves'].includes(theme.pattern))return botanicalSvg(theme,size,part,lightCenter);
   if(['magmaCracks','obsidianSheen'].includes(theme.pattern))return stoneSvg(theme,size,part,lightCenter);
@@ -113,6 +114,28 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='brassMechanism'||theme.pattern==='runestone'){
+    const [u,v]=relicCoordinates(nx,ny,part);
+    if(theme.pattern==='brassMechanism'){
+      if(openPathDistance(clockTrace,u,v)<.023)return p.edge;
+      for(const gear of clockGears){
+        const r=Math.hypot(u-gear.x,v-gear.y),angle=Math.atan2(v-gear.y,u-gear.x);
+        if(football.contains(gear.points,u,v)){
+          if(r<gear.r*.30)return p.ink;
+          if(r<gear.r*.58&&Math.abs(Math.sin(angle*3))>.28)return p.shade;
+          return r>gear.r*.76?p.detail:p.light;
+        }
+      }
+      if(openPathDistance(clockBridge,u,v)<.048)return color===p.shade||color===p.edge?p.base:p.light;
+      return color===p.edge?p.shade:color===p.light||color===p.detail?p.base:color;
+    }
+    const rune=Math.min(...runeStrokes.map(line=>openPathDistance(line,u,v)));
+    if(rune<.017)return p.detail;
+    if(rune<.043)return p.edge;
+    if(rune<.068)return p.ink;
+    if(runeCracks.some(line=>openPathDistance(line,u,v)<.018))return p.ink;
+    if(runeChips.some(shape=>football.contains(shape,u,v)))return p.shade;
+  }
   if(theme.pattern==='nuclearFlux'||theme.pattern==='plasmaStreams'){
     const [u,v]=surfaceCoordinates(nx,ny,part),nuclear=theme.pattern==='nuclearFlux';
     const paths=nuclear?nuclearPaths:plasmaPaths;
@@ -286,6 +309,49 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+// Relic themes have their own surface details, never their own silhouettes.
+// The rear head motif is compact; it cannot drift into the eye zone.
+function relicFrame(part){return part==='head-base'?{x:.20,y:.60,w:.60,h:.34}:motifFrame(part);}
+function relicCoordinates(nx,ny,part){const f=relicFrame(part);return [(nx-f.x)/f.w,(ny-f.y)/f.h];}
+function gearShape(x,y,r,teeth=10){
+  const points=Array.from({length:teeth*4},(_,i)=>{
+    const a=i/(teeth*4)*Math.PI*2,outer=i%4===1||i%4===2,rad=r*(outer?1:.80);
+    return [x+Math.cos(a)*rad,y+Math.sin(a)*rad];
+  });
+  return {x,y,r,points};
+}
+const clockGears=[gearShape(.21,.27,.235,10),gearShape(.79,.73,.245,11)];
+const clockBridge=[[.13,.62],[.28,.69],[.70,.30],[.86,.37]];
+const clockTrace=[[.36,.14],[.54,.22],[.62,.40],[.43,.60],[.48,.78],[.64,.88]];
+const runeStrokes=[[[.36,.23],[.36,.79]],[[.36,.23],[.67,.40],[.36,.52]],[[.36,.52],[.68,.78]]];
+const runeCracks=[[[.05,.35],[.19,.43],[.13,.59],[.23,.70],[.16,.96]],[[.88,.10],[.78,.25],[.89,.37],[.80,.50],[1.04,.58]]];
+const runeChips=[[[.09,.57],[.24,.68],[.16,.89],[.05,.79]],[[.78,.23],[.91,.14],[.94,.34],[.85,.41]]];
+function relicSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,f=relicFrame(part),p=theme.patternPalette,clock=theme.pattern==='brassMechanism';
+  const point=([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`;
+  const data=points=>'M '+points.map(point).join(' L ');
+  const stroke=(points,width,color,opacity=1)=>`<path d="${data(points)}" fill="none" stroke="${color}" stroke-width="${size*width*f.w}" stroke-opacity="${opacity}" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const mask=shape=>`<mask id="${id}-relief" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${shape}</mask>`;
+  const material=toyMaterial(p,id,size,{tail:part==='tail',lightCenter});
+  if(clock){
+    const gears=clockGears.map(g=>`<path d="${data(g.points)} Z" fill="white"/>`).join('');
+    const bridge=stroke(clockBridge,.082,'white');
+    const gearDetails=clockGears.map(g=>{
+      const ellipse=(r,fill,strokeColor,width)=>`<ellipse cx="${size*(f.x+g.x*f.w)}" cy="${size*(f.y+g.y*f.h)}" rx="${size*r*f.w}" ry="${size*r*f.h}" fill="${fill}" stroke="${strokeColor}" stroke-width="${size*width*f.w}"/>`;
+      const spokes=Array.from({length:6},(_,i)=>{const a=i*Math.PI/3;return stroke([[g.x,g.y],[g.x+Math.cos(a)*g.r*.68,g.y+Math.sin(a)*g.r*.68]],.022,p.base);}).join('');
+      return ellipse(g.r*.59,theme.palette.shade,p.edge,.015)+spokes+ellipse(g.r*.23,theme.palette.ink,p.light,.013)+`<path d="${data(g.points)} Z" fill="none" stroke="${p.light}" stroke-opacity=".76" stroke-width="${size*.008*f.w}"/>`;
+    }).join('');
+    const power=stroke(clockTrace,.085,p.detail,.12)+stroke(clockTrace,.030,theme.palette.ink)+stroke(clockTrace,.015,p.detail,.94);
+    return {defs:material.defs+mask(gears+bridge),paint:`<g mask="url(#${id}-relief)">${material.paint}</g>`+gearDetails+power};
+  }
+  const grooves=runeStrokes.map(line=>stroke(line,.104,theme.palette.edge,.95)).join('');
+  const glow=runeStrokes.map(line=>stroke(line,.14,p.base,.15)).join('');
+  const relief=runeStrokes.map(line=>stroke(line,.073,'white')).join('');
+  const cores=runeStrokes.map(line=>stroke(line,.020,p.detail,.90)).join('');
+  const cracks=runeCracks.map(line=>stroke(line,.013,theme.palette.ink,.82)).join('');
+  const chips=runeChips.map(shape=>`<path d="${data(shape)} Z" fill="${theme.palette.shade}" fill-opacity=".48"/>`+stroke(shape.slice(0,2),.007,theme.palette.light,.56)).join('');
+  return {defs:material.defs+mask(relief),paint:chips+cracks+glow+grooves+`<g mask="url(#${id}-relief)">${material.paint}</g>`+cores};
+}
 // Open, asymmetric curves are sampled only during the asset build. No rings,
 // central round badges, silhouette changes or per-frame glow calculations.
 const nuclearPaths=[
@@ -494,7 +560,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,nuclearPaths,plasmaPaths,radiationMark,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,nuclearPaths,plasmaPaths,radiationMark,clockGears,clockTrace,runeStrokes,runeCracks,relicFrame,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

@@ -131,5 +131,17 @@
     "palette": { "base": "#343064", "light": "#8075b5", "shade": "#1c2046", "edge": "#11162e", "ink": "#080f24", "detail": "#d9feff" },
     "patternPalette": { "base": "#f12dcc", "light": "#ffa6ed", "shade": "#9e168c", "edge": "#54134c", "ink": "#080f24", "detail": "#d9feff" },
     "pixelPalette": { "base": "#464375", "light": "#26cfea", "shade": "#202445", "edge": "#f03dce", "ink": "#0a1129", "detail": "#d9feff" }
+  },
+  {
+    "id": "clockwork", "label": "Clockwork", "pattern": "brassMechanism", "bodyOrientation": "fixed",
+    "palette": { "base": "#51463a", "light": "#a29176", "shade": "#303331", "edge": "#1b2727", "ink": "#142022", "detail": "#fff1b9" },
+    "patternPalette": { "base": "#cf9343", "light": "#ffe3a0", "shade": "#865329", "edge": "#583b27", "ink": "#142022", "detail": "#98f8e2" },
+    "pixelPalette": { "base": "#937044", "light": "#dfb464", "shade": "#48473b", "edge": "#53dbc9", "ink": "#1b292a", "detail": "#fff0b0" }
+  },
+  {
+    "id": "runorm", "label": "Runorm", "pattern": "runestone", "bodyOrientation": "fixed",
+    "palette": { "base": "#625c4e", "light": "#aba28a", "shade": "#393e36", "edge": "#222e2b", "ink": "#192624", "detail": "#e8fff1" },
+    "patternPalette": { "base": "#4ccabb", "light": "#bafbe7", "shade": "#267d80", "edge": "#19484b", "ink": "#192624", "detail": "#e8fff1" },
+    "pixelPalette": { "base": "#837862", "light": "#b8ac91", "shade": "#4b5548", "edge": "#59d7c2", "ink": "#23332f", "detail": "#e7fff0" }
   }
 ]
