@@ -50,7 +50,7 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
@@ -88,6 +88,12 @@ assert.ok(roseGrid.filter(c=>c===rose.pixelPalette.detail).length>30,'Petal edge
 assert.ok(roseGrid.filter(c=>[rose.pixelPalette.base,rose.pixelPalette.light,rose.pixelPalette.shade].includes(c)).length>180,'Dark sculpted material remains visible between petals');
 const forest=themes.find(t=>t.id==='skog'),forestGrid=pixelGrid(forest).flat();
 assert.ok(forestGrid.filter(c=>c===forest.pixelPalette.detail).length>40,'Forest leaf veins are visible at native resolution');
+const radioactive=themes.find(t=>t.id==='radioaktiv'),radioactiveGrid=pixelGrid(radioactive).flat();
+assert.ok(radioactiveGrid.filter(c=>c===radioactive.pixelPalette.edge).length>100,'Radioactive has broad dark hazard bands, not a lime recolor');
+assert.ok(radioactiveGrid.filter(c=>c===radioactive.pixelPalette.base||c===radioactive.pixelPalette.light).length>220,'Lime material remains clearly visible between dark bands');
+const plasma=themes.find(t=>t.id==='plasma'),plasmaGrid=pixelGrid(plasma).flat();
+assert.ok(plasmaGrid.filter(c=>c===plasma.pixelPalette.edge).length>60,'Plasma has readable magenta streams');
+assert.ok(plasmaGrid.filter(c=>c===plasma.pixelPalette.detail).length>40,'Plasma has bright energy cores at native resolution');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

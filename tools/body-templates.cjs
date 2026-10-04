@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','hazardBands','plasmaStreams']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -74,6 +74,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['hazardBands','plasmaStreams'].includes(theme.pattern))return energySvg(theme,size,part,lightCenter);
   if(['rosePetals','forestLeaves'].includes(theme.pattern))return botanicalSvg(theme,size,part,lightCenter);
   if(['magmaCracks','obsidianSheen'].includes(theme.pattern))return stoneSvg(theme,size,part,lightCenter);
   if(theme.pattern==='sunsetWaves')return sunsetSvg(theme,size,part,lightCenter);
@@ -112,6 +113,17 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='hazardBands'){
+    const [u,v]=surfaceCoordinates(nx,ny,part);
+    if(hazardBand(u,v))return color===p.light||color===p.detail?p.edge:p.ink;
+  }
+  if(theme.pattern==='plasmaStreams'){
+    const [u,v]=surfaceCoordinates(nx,ny,part),cyan=Math.abs(v-plasmaY(u,0)),pink=Math.abs(v-plasmaY(u,1));
+    if(cyan<.022||pink<.019)return p.detail;
+    if(pink<.082)return color===p.shade||color===p.edge?p.shade:p.edge;
+    if(cyan<.072&&color!==p.shade&&color!==p.edge)return p.light;
+    return color===p.edge?p.shade:color;
+  }
   if(theme.pattern==='rosePetals'||theme.pattern==='forestLeaves'){
     const [u,v]=motifCoordinates(nx,ny,part),rose=theme.pattern==='rosePetals';
     if(rose){
@@ -270,6 +282,29 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+function hazardOffset(v){return .72*v-.04*Math.sin(v*Math.PI*2);}
+function hazardBand(u,v){return (((u-hazardOffset(v))%.46)+.46)%.46<.18;}
+function plasmaY(u,stream){return .50+(stream===0?1:-1)*.22*Math.sin((u-.08)*Math.PI*2);}
+function energySvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,f=part==='tail'?motifFrame(part):{x:0,y:0,w:1,h:1},p=theme.patternPalette;
+  const point=(u,v)=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`;
+  const material=toyMaterial(p,id,size,{tail:part==='tail',lightCenter});
+  const mask=shape=>`<mask id="${id}-pattern" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${shape}</mask>`;
+  if(theme.pattern==='hazardBands'){
+    const bands=Array.from({length:7},(_,i)=>{
+      const offset=(i-3)*.46;
+      const edge=width=>Array.from({length:65},(_,j)=>{const v=-.2+j/64*1.4;return point(hazardOffset(v)+offset+width,v);});
+      return `<path d="M ${edge(0).join(' L ')} L ${edge(.18).reverse().join(' L ')} Z" fill="white"/>`;
+    }).join('');
+    return {defs:material.defs+mask(bands),paint:`<g mask="url(#${id}-pattern)">${material.paint}</g>`};
+  }
+  const paths=[0,1].map(stream=>'M '+Array.from({length:81},(_,i)=>{const u=-.1+i/80*1.2;return point(u,plasmaY(u,stream));}).join(' L '));
+  const stroke=(d,width,color,opacity)=>`<path d="${d}" fill="none" stroke="${color}" stroke-width="${size*width*f.h}" stroke-opacity="${opacity}" stroke-linecap="round"/>`;
+  const pinkMask=stroke(paths[1],.14,'white',1);
+  const glow=stroke(paths[0],.17,theme.palette.light,.20)+stroke(paths[1],.24,p.base,.17);
+  const cores=stroke(paths[0],.033,theme.palette.detail,.86)+stroke(paths[1],.013,p.light,.88);
+  return {defs:material.defs+mask(pinkMask),paint:glow+`<g mask="url(#${id}-pattern)">${material.paint}</g>`+cores};
+}
 // Surface-only geology: the same round masks remain underneath both materials.
 // Lava is an open branching crack network; Obsidian has broad polished slivers.
 const magmaPaths=[[[.03,.35],[.23,.39],[.36,.55],[.56,.46],[.72,.64],[.98,.69]],
@@ -437,7 +472,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,hazardBand,plasmaY,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

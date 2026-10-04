@@ -1,10 +1,10 @@
 # Fasta snokmallar: leksaksformer och pixelretro
 
-Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe, Basketboll, Regnbåge, Guld, Polkagris, Galax, Vattenmelon, Fotboll, Miami Sunset, Blixt, Aurora, Hav, Lava, Obsidian, Night Rose och Skog är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
+Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe, Basketboll, Regnbåge, Guld, Polkagris, Galax, Vattenmelon, Fotboll, Miami Sunset, Blixt, Aurora, Hav, Lava, Obsidian, Night Rose, Skog, Radioaktiv och Plasma är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Pixelretro är tredje grafikvalet, bredvid Klassisk och Modern. Övriga skins behåller tills vidare sina befintliga modernbilder och märks i skinväljaren. Upplåsningskraven är oförändrade.
 
 ## Runtimeexport och integration
 
-Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 259 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri, paletter och kontrastinställningar. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
+Efter mallbygget körs `node tools/export-snake-styles.cjs`. Verktyget kopierar endast de 283 spelbara WebP-tillgångarna till `skins/styles/{toy,pixel}` och bygger `snake-style-config.js` från specifikationernas geometri, paletter och kontrastinställningar. Neutralprover, SVG och konceptförlagor exporteras inte. Kontrollera reproducerbarhet med `node tools/export-snake-styles.cjs --check`.
 
 `snake-styles.js` används av både spel och skinväljare. Kropparna har fast orientering/storlek. Huvudenas fyra ljusvarianter, ögonblinkning, jordgubbsblad och pixeltunga återanvänds från mallarna. Svans och sista runda kropp ritas ihop i en cachad sprite **före** gemensam nedtoning, som aldrig går under 75 procent opacitet. Leksaksformen får en tunn inre kontur utan ändrad silhuett. Kontur och slagskuggor bakas en gång i rendercachen, inte varje bildruta. Pixel ritas på ett heltalsrutnät med 24 logiska pixlar mellan segmentcentrum; 32 × 32-källbilderna behåller sin fasta storlek. Bara snoklagrets sista förstoring använder lätt bildutjämning. CSS pixelering av hela spelduken används inte: sifferbrickor, text och banbakgrund ska behålla sin vanliga grafik. Ingen andning eller segmentstorleksvariation används i pixelstilen.
 
@@ -27,7 +27,7 @@ Ett nytt skin beskrivs en gång i `themes.json`: id, tema, färger, mönster och
 - WebP med riktig alfakanal. Pixelkällbilden ska inte skalas om med mjuk filtrering eller sparas som JPEG; lätt slutskalning i spelrenderingen är tillåten.
 - Alpha-nedtoning på en lång orm ska ske i spelrenderingen, inte bakas in i kroppsmallen.
 
-Neutral och de tjugoen spelbara temana ovan är inkluderade. Mönstren ritas i kod: glesa jordgubbsfrön, fasta basketsömmar, Smaragds diskreta ädelstensgravyr, Polkagrisens breda band, Galaxens nebulosa/stjärnor, Vattenmelons skal/frön, Fotbolls paneler, Miamis sol/vågor, Blixts elektriska material, Auroras norrskensband, Havs skumstråk, Lavas sprickor, Obsidians slipade reflexer, Night Roses kronblad och Skogs bladnerver. Smaragd använder samma motiv på kropp, huvudets bakre del och en mindre variant på svansen; inga fasetter ändrar den runda silhuetten. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
+Neutral och de tjugotre spelbara temana ovan är inkluderade. Mönstren ritas i kod: glesa jordgubbsfrön, fasta basketsömmar, Smaragds diskreta ädelstensgravyr, Polkagrisens breda band, Galaxens nebulosa/stjärnor, Vattenmelons skal/frön, Fotbolls paneler, Miamis sol/vågor, Blixts elektriska material, Auroras norrskensband, Havs skumstråk, Lavas sprickor, Obsidians slipade reflexer, Night Roses kronblad, Skogs bladnerver, Radioaktivs varningsband och Plasmas energistråk. Smaragd använder samma motiv på kropp, huvudets bakre del och en mindre variant på svansen; inga fasetter ändrar den runda silhuetten. Inga nya rasterbilder eller API-anrop behövs för att ändra färgerna i dessa teman.
 
 Regnbåge använder en röd WebP-bas och sju färglägen i `colorCycle`. `snake-colors.js` skiftar endast materialets nyans, med bevarad skuggvolym och oförändrad alpha. Ögon och andra separata lager ritas efter färgskiftningen. Spritevarianterna cachas: inga extra nedladdningar, shaders eller pixelavläsningar varje bildruta. Färgserien följer segmentindex och flyttas ett steg var 1,4 sekund; `prefers-reduced-motion` stoppar tidsväxlingen. Svans och sista kropp har samma färg och gemensam alpha. Skinväljaren visar en stilla färgserie.
 
@@ -50,6 +50,8 @@ Aurora har mjukt böljande mint-/turkosa norrskensband och diffus färgbelysning
 Lava har varm, mörk stenyta med ett förgrenat nät av orange sprickor och gula glödkärnor. Obsidian har mörkt violett material med två breda slipade reflexfält och smala ljusa kanter. Båda är ytmaterial på de oförändrade runda maskerna, inte nya kantiga silhuetter. Svansens motiv skalas inom samma smala fäste. Pixelretro använder sex färger; Modern bakar ljus/material vid export, utan extra runtimeeffekter.
 
 Night Rose behåller sitt befintliga id `blackpink`. Fyra böjda rosa kronblad ligger över plommonfärgad grund; Modern har separat skuggat kronbladsmaterial, Pixelretro breda rosa ytor med ljusa vikkanter. Skog har mossgrön volym med fem spetsiga blad och ljusa bladnerver längs en diagonal stjälk. Båda motiven ligger inom den låsta masken, på huvudet bakom ögonen och i en mindre variant på svansen. Kurvorna samplas bara vid bygget, inte under spelet. Pixelretro behåller sex färger och fast orientering.
+
+Radioaktiv har limegrönt skulpterat material med breda mörka varningsband. Bandens mjuka böjning är en ytdetalj, inte en ny kontur. Plasma har cyan grund med två korsande energistråk: en ljus cyanvit kärna och ett skuggat magentaband. Båda har oförändrad huvudform och samma material på kroppen och den smala svansen. Pixelretro förenklar motiven till sex färger med bibehållna nedre volymsteg. Kroppsmönstren är fasta och alla effekter bakas i WebP vid export; inga extra tidsanimationer eller shaders tillkommer.
 
 ## Bygga och kontrollera
 
@@ -84,7 +86,7 @@ Huvudenas ljus och pixelblänk behöver behålla samma riktning som kroppen när
 
 Mjuka slagskuggor är ett renderingslager (som CSS `drop-shadow` i jämförelsevyn), inte inbakade i bildalfan. Samma riktning och proportionerliga skuggor ska användas i spelet vid integration.
 
-Bygg och testa samtliga 271 tillgångar (inklusive neutralprover och huvudenas ljusriktningsvarianter) med:
+Bygg och testa samtliga 295 tillgångar (inklusive neutralprover och huvudenas ljusriktningsvarianter) med:
 
 ```powershell
 node tools/snake-templates.cjs --sharp "C:\sökväg\node_modules\sharp"
@@ -107,6 +109,8 @@ Blixts elektriska helhetsmaterial (revision 2), Aurora och Hav är kontrollerade
 Lava och Obsidian är kontrollerade i båda stilarna på desktop och vid 390 px mobilbredd. Speltesterna täcker 33 segment, flera svängar och gemensam nedtoning av kropp/svans, samt separat normal rörelse och huvudrotation. De faktiska WebP-mallarna är jämförda med koncepten i `style-targets.html`. Runtime-previews finns via `runtime-preview.html?skins=lava` och `runtime-preview.html?skins=obsidian`.
 
 Night Rose och Skog är kontrollerade i båda stilarna på desktop och vid 390 px mobilbredd, med 33 segment, flera svängar och gemensam nedtoning av kropp/svans. Vanlig rörelse och huvudrotation är separat kontrollerade. Den slutliga rosytan har breda, svepande kronblad som når kroppens kanter, inte en avgränsad rund emblemrad. Faktiska WebP-mallar är jämförda med koncepten i `style-targets.html`. Runtime-previews finns via `runtime-preview.html?skins=blackpink` och `runtime-preview.html?skins=skog`.
+
+Radioaktiv och Plasma är kontrollerade i båda stilarna på desktop och vid 390 px mobilbredd, med 33 segment, flera svängar och gemensam nedtoning av kropp/svans. Vanlig rörelse och huvudrotation är separat kontrollerade. De faktiska WebP-mallarna är jämförda med konceptmålen i `style-targets.html`; båda behåller mallarnas runda huvud/kropp och smala svansfäste. Runtime-previews finns via `runtime-preview.html?skins=radioaktiv` och `runtime-preview.html?skins=plasma`.
 
 1. Definiera temat en gång och skapa båda kroppsversionerna.
 2. Behåll konturen; ändra färg och mönster. Komplexa motiv som päls, drakfjäll och galax behöver stil-specifik mönsterdesign, inte bara en färgändring.
