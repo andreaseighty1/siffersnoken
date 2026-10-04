@@ -154,5 +154,17 @@
     "palette": { "base": "#33314c", "light": "#777493", "shade": "#1c1e30", "edge": "#141927", "ink": "#111622", "detail": "#e9ebfa" },
     "patternPalette": { "base": "#8773b5", "light": "#d8d3ef", "shade": "#43375d", "edge": "#2b2841", "ink": "#111622", "detail": "#e9ebfa" },
     "pixelPalette": { "base": "#514566", "light": "#a998ca", "shade": "#2d2c43", "edge": "#737994", "ink": "#141b2a", "detail": "#e4e7f7" }
+  },
+  {
+    "id": "tidvatten", "label": "Tidvatten", "pattern": "tidalGlass", "bodyOrientation": "fixed",
+    "palette": { "base": "#207e90", "light": "#87d5d1", "shade": "#124756", "edge": "#123544", "ink": "#102c37", "detail": "#effff0" },
+    "patternPalette": { "base": "#66d6cb", "light": "#d5ffdf", "shade": "#279baf", "edge": "#186273", "ink": "#102c37", "detail": "#effff0" },
+    "pixelPalette": { "base": "#238b9b", "light": "#81e6d5", "shade": "#175667", "edge": "#c4f9d9", "ink": "#102e3b", "detail": "#f3fff1" }
+  },
+  {
+    "id": "museumvaktaren", "label": "Museiväktaren", "pattern": "keeperInlay", "bodyOrientation": "fixed",
+    "palette": { "base": "#314e83", "light": "#8eabc7", "shade": "#1d3157", "edge": "#162440", "ink": "#111c30", "detail": "#fff3ce" },
+    "patternPalette": { "base": "#d9a652", "light": "#ffdf94", "shade": "#97642f", "edge": "#684726", "ink": "#111c30", "detail": "#65ded8" },
+    "pixelPalette": { "base": "#46669b", "light": "#e1b25f", "shade": "#263e68", "edge": "#fff0c7", "ink": "#172338", "detail": "#65ded8" }
   }
 ]

@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -74,6 +74,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['tidalGlass','keeperInlay'].includes(theme.pattern))return tideKeeperSvg(theme,size,part,lightCenter);
   if(['candyPrism','shadowVeils'].includes(theme.pattern))return mysteryCandySvg(theme,size,part,lightCenter);
   if(['brassMechanism','runestone'].includes(theme.pattern))return relicSvg(theme,size,part,lightCenter);
   if(['nuclearFlux','plasmaStreams'].includes(theme.pattern))return energySvg(theme,size,part,lightCenter);
@@ -115,6 +116,23 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='tidalGlass'||theme.pattern==='keeperInlay'){
+    const tide=theme.pattern==='tidalGlass',[u,v]=tide?surfaceCoordinates(nx,ny,part):motifCoordinates(nx,ny,part);
+    if(!tide&&part==='head-base'&&ny<snakeSpec.head.decorationMinimumY)return color;
+    if(tide){
+      const distance=Math.min(...tidePaths.map(line=>openPathDistance(line,u,v)));
+      if(distance<.015)return p.detail;
+      if(distance<.038)return p.edge;
+      if(distance<.103)return color===p.shade||color===p.edge?p.base:p.light;
+      return color===p.detail?p.light:color;
+    }
+    if(part==='head-base'&&keeperGem.some(shape=>football.contains(shape,u,v)))return p.detail;
+    if(keeperIvory.some(shape=>football.contains(shape,u,v)))return color===p.shade||color===p.edge?p.light:p.edge;
+    const distance=Math.min(...keeperRails.map(line=>openPathDistance(line,u,v)));
+    if(distance<.018)return p.edge;
+    if(distance<.048)return p.light;
+    return color===p.light||color===p.detail?p.base:color===p.edge?p.shade:color;
+  }
   if(theme.pattern==='candyPrism'||theme.pattern==='shadowVeils'){
     const [u,v]=surfaceCoordinates(nx,ny,part);
     if(theme.pattern==='candyPrism'){
@@ -325,6 +343,45 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+// Tideglass uses large curling currents, not Hav's straight foam bands.
+// Museum Keeper has open brass inlays and off-center porcelain fans: neither
+// theme introduces a central badge or changes any body/head/tail contour.
+const tidePaths=[
+  cubicPoints([-.12,.18],[.48,-.02],[.15,.64],[1.12,.45]),
+  cubicPoints([-.12,.65],[.26,1.02],[.75,.12],[1.12,.79])
+];
+const keeperRails=[
+  [[-.12,.82],[.26,.66],[.40,.25],[.81,.10],[1.12,.29]],
+  [[.03,1.08],[.51,.88],[.68,.43],[1.12,.28]],
+  [[.14,.31],[.26,.19],[.42,.15]],
+  [[.69,.85],[.86,.75],[.93,.61]]
+];
+const keeperIvory=[
+  [[.16,.50],[.19,.30],[.35,.21],[.29,.39]],
+  [[.08,.35],[.16,.20],[.26,.15],[.21,.27]],
+  [[.72,.57],[.86,.49],[.88,.69],[.70,.78]]
+];
+const keeperGem=[[[.45,.34],[.56,.47],[.45,.60],[.34,.47]]];
+function tideKeeperSvg(theme,size,part,lightCenter){
+  const tide=theme.pattern==='tidalGlass',tail=part==='tail',id=`${theme.id}-${part}-surface`;
+  const f=tide?(tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1}):motifFrame(part);
+  const point=([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`,data=points=>'M '+points.map(point).join(' L ');
+  const stroke=(points,width,color,opacity=1)=>`<path d="${data(points)}" fill="none" stroke="${color}" stroke-width="${size*width*f.w}" stroke-opacity="${opacity}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const mask=(name,shape)=>`<mask id="${id}-${name}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${shape}</mask>`;
+  const material=toyMaterial(theme.patternPalette,id,size,{tail,lightCenter});
+  if(tide){
+    const shape=tidePaths.map(line=>stroke(line,.195,'white')).join('');
+    const crests=tidePaths.map(line=>stroke(line,.045,theme.patternPalette.light,.60)+stroke(line,.012,theme.palette.detail,.78)).join('');
+    return {defs:material.defs+mask('currents',shape),paint:`<g mask="url(#${id}-currents)">${material.paint}</g>`+crests};
+  }
+  const rails=keeperRails.map(line=>stroke(line,.089,'white')).join('');
+  const ivory=toyMaterial({base:'#efdfb8',light:'#fff8e6',shade:'#b4976b',edge:'#7f6f52'},id+'-ivory',size,{tail,lightCenter});
+  const porcelain=keeperIvory.map(shape=>`<path d="${data(shape)} Z" fill="white"/>`).join('');
+  const grooves=keeperRails.map(line=>stroke(line,.11,theme.palette.edge,.65)).join('');
+  const relief=keeperRails.map(line=>stroke(line,.016,theme.palette.detail,.82)).join('');
+  const gem=part==='head-base'?keeperGem.map(shape=>`<path d="${data(shape)} Z" fill="${theme.patternPalette.detail}" stroke="${theme.palette.detail}" stroke-width="${size*.010*f.w}"/>`).join(''):'';
+  return {defs:material.defs+ivory.defs+mask('rails',rails)+mask('porcelain',porcelain),paint:grooves+`<g mask="url(#${id}-rails)">${material.paint}</g>`+relief+`<g mask="url(#${id}-porcelain)">${ivory.paint}</g>`+gem};
+}
 // Large candy facets are surface patches, not a changed polygonal silhouette.
 // The off-center junction avoids a repeated central jewel/emblem row.
 const prismFaces=[

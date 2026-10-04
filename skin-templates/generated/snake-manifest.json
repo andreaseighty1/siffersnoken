@@ -199,6 +199,20 @@
       "file": "generated/toy/skuggmysterium-body.webp"
     },
     {
+      "style": "toy",
+      "id": "tidvatten",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/tidvatten-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "museumvaktaren",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/museumvaktaren-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -393,6 +407,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/skuggmysterium-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "tidvatten",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/tidvatten-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "museumvaktaren",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/museumvaktaren-body.webp"
     },
     {
       "style": "toy",
@@ -1255,6 +1283,68 @@
       "frame": 512,
       "file": "generated/toy/skuggmysterium-tail.webp",
       "id": "skuggmysterium",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tidvatten-head-base.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tidvatten-tail.webp",
+      "id": "tidvatten",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/museumvaktaren-head-base.webp",
+      "id": "museumvaktaren",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/museumvaktaren-tail.webp",
+      "id": "museumvaktaren",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -3049,6 +3139,132 @@
       ]
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tidvatten-head-base-right.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tidvatten-head-base-down.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tidvatten-head-base-left.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/museumvaktaren-head-base-right.webp",
+      "id": "museumvaktaren",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/museumvaktaren-head-base-down.webp",
+      "id": "museumvaktaren",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/museumvaktaren-head-base-left.webp",
+      "id": "museumvaktaren",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -3909,6 +4125,68 @@
       "frame": 32,
       "file": "generated/pixel/skuggmysterium-tail.webp",
       "id": "skuggmysterium",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tidvatten-head-base.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tidvatten-tail.webp",
+      "id": "tidvatten",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/museumvaktaren-head-base.webp",
+      "id": "museumvaktaren",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/museumvaktaren-tail.webp",
+      "id": "museumvaktaren",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -5686,6 +5964,132 @@
       "frame": 32,
       "file": "generated/pixel/skuggmysterium-head-base-left.webp",
       "id": "skuggmysterium",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tidvatten-head-base-right.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tidvatten-head-base-down.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tidvatten-head-base-left.webp",
+      "id": "tidvatten",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/museumvaktaren-head-base-right.webp",
+      "id": "museumvaktaren",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/museumvaktaren-head-base-down.webp",
+      "id": "museumvaktaren",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/museumvaktaren-head-base-left.webp",
+      "id": "museumvaktaren",
       "part": "head-base",
       "assetFacing": "up",
       "renderFacing": "left",

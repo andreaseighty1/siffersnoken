@@ -50,12 +50,22 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium','tidvatten','museumvaktaren']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
 }
 const candy=themes.find(t=>t.id==='polkagris'),candyColors=pixelGrid(candy).flat();
+const tide=themes.find(t=>t.id==='tidvatten'),tideColors=pixelGrid(tide).flat();
+assert.equal(tide.pattern,'tidalGlass');
+assert.ok(tideColors.filter(c=>c===tide.pixelPalette.light).length>160,'Tideglass has broad mint currents, not only tiny wave strokes');
+assert.ok(tideColors.filter(c=>c===tide.pixelPalette.detail).length>40,'Pearl crests remain visible at native resolution');
+assert.ok(tideColors.filter(c=>[tide.pixelPalette.base,tide.pixelPalette.shade].includes(c)).length>60,'Deep glass remains between the open currents');
+const keeper=themes.find(t=>t.id==='museumvaktaren'),keeperColors=pixelGrid(keeper).flat();
+assert.ok(keeperColors.filter(c=>c===keeper.pixelPalette.light).length>80,'Keeper has broad brass inlays, not a blue recolor');
+assert.ok(keeperColors.filter(c=>c===keeper.pixelPalette.edge).length>75,'Ivory fans and bevels are readable');
+assert.ok(keeperColors.filter(c=>[keeper.pixelPalette.base,keeper.pixelPalette.shade].includes(c)).length>200,'Keeper retains sculpted blue material between inlays');
+assert.ok(!keeperColors.includes(keeper.pixelPalette.detail),'Turquoise relic belongs on the head, not a repeated body badge');
 const prism=themes.find(t=>t.id==='prismagodis'),prismColors=pixelGrid(prism).flat();
 for(const key of ['base','light','edge'])assert.ok(prismColors.filter(c=>c===prism.pixelPalette[key]).length>35,'Candy has broad pink, cyan and honey facets, not tiny confetti');
 assert.ok(prismColors.filter(c=>c===prism.pixelPalette.shade).length>80,'Candy preserves rounded violet shading');
