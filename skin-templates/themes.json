@@ -121,15 +121,15 @@
     "pixelPalette": { "base": "#768b51", "light": "#b7ca83", "shade": "#475e3f", "edge": "#324535", "ink": "#182c24", "detail": "#ecedb0" }
   },
   {
-    "id": "radioaktiv", "label": "Radioaktiv", "pattern": "hazardBands", "bodyOrientation": "fixed",
-    "palette": { "base": "#b4d93f", "light": "#e9f99b", "shade": "#637e22", "edge": "#3f5520", "ink": "#182d1d", "detail": "#f8ffc4" },
-    "patternPalette": { "base": "#263b25", "light": "#596c37", "shade": "#122816", "edge": "#0b1e14", "ink": "#182d1d", "detail": "#f8ffc4" },
-    "pixelPalette": { "base": "#9cc831", "light": "#d9f079", "shade": "#638422", "edge": "#253b24", "ink": "#132719", "detail": "#efffc1" }
+    "id": "radioaktiv", "label": "Radioaktiv", "pattern": "nuclearFlux", "assetRevision": 2, "bodyOrientation": "fixed",
+    "palette": { "base": "#23462c", "light": "#6b9141", "shade": "#102b20", "edge": "#091c14", "ink": "#06190f", "detail": "#f2ffc1" },
+    "patternPalette": { "base": "#83f20e", "light": "#d9ff46", "shade": "#399e1e", "edge": "#1c641d", "ink": "#06190f", "detail": "#f2ffc1" },
+    "pixelPalette": { "base": "#31543a", "light": "#84ed16", "shade": "#183023", "edge": "#d2ff4b", "ink": "#081b12", "detail": "#f2ffc1" }
   },
   {
-    "id": "plasma", "label": "Plasma", "pattern": "plasmaStreams", "bodyOrientation": "fixed",
-    "palette": { "base": "#2796c5", "light": "#7fe8eb", "shade": "#21618a", "edge": "#25395d", "ink": "#182644", "detail": "#f0feff" },
-    "patternPalette": { "base": "#ed65c5", "light": "#ffbbe9", "shade": "#aa398f", "edge": "#67336c", "ink": "#182644", "detail": "#f0feff" },
-    "pixelPalette": { "base": "#268cbb", "light": "#70dae0", "shade": "#235779", "edge": "#d868c5", "ink": "#142440", "detail": "#f0fbff" }
+    "id": "plasma", "label": "Plasma", "pattern": "plasmaStreams", "assetRevision": 2, "bodyOrientation": "fixed",
+    "palette": { "base": "#343064", "light": "#8075b5", "shade": "#1c2046", "edge": "#11162e", "ink": "#080f24", "detail": "#d9feff" },
+    "patternPalette": { "base": "#f12dcc", "light": "#ffa6ed", "shade": "#9e168c", "edge": "#54134c", "ink": "#080f24", "detail": "#d9feff" },
+    "pixelPalette": { "base": "#464375", "light": "#26cfea", "shade": "#202445", "edge": "#f03dce", "ink": "#0a1129", "detail": "#d9feff" }
   }
 ]

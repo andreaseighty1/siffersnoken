@@ -89,11 +89,20 @@ assert.ok(roseGrid.filter(c=>[rose.pixelPalette.base,rose.pixelPalette.light,ros
 const forest=themes.find(t=>t.id==='skog'),forestGrid=pixelGrid(forest).flat();
 assert.ok(forestGrid.filter(c=>c===forest.pixelPalette.detail).length>40,'Forest leaf veins are visible at native resolution');
 const radioactive=themes.find(t=>t.id==='radioaktiv'),radioactiveGrid=pixelGrid(radioactive).flat();
-assert.ok(radioactiveGrid.filter(c=>c===radioactive.pixelPalette.edge).length>100,'Radioactive has broad dark hazard bands, not a lime recolor');
-assert.ok(radioactiveGrid.filter(c=>c===radioactive.pixelPalette.base||c===radioactive.pixelPalette.light).length>220,'Lime material remains clearly visible between dark bands');
+assert.equal(radioactive.pattern,'nuclearFlux');
+assert.equal(radioactive.assetRevision,2);
+assert.ok(radioactiveGrid.filter(c=>c===radioactive.pixelPalette.light||c===radioactive.pixelPalette.edge).length>200,'Radioactive has broad toxic green channels, not muted warning stripes');
+assert.ok(radioactiveGrid.filter(c=>c===radioactive.pixelPalette.detail).length>70,'Nuclear channels have bright cores at native size');
+assert.ok(radioactiveGrid.filter(c=>c===radioactive.pixelPalette.base||c===radioactive.pixelPalette.shade).length>120,'Dark rounded material remains between luminous channels');
 const plasma=themes.find(t=>t.id==='plasma'),plasmaGrid=pixelGrid(plasma).flat();
-assert.ok(plasmaGrid.filter(c=>c===plasma.pixelPalette.edge).length>60,'Plasma has readable magenta streams');
-assert.ok(plasmaGrid.filter(c=>c===plasma.pixelPalette.detail).length>40,'Plasma has bright energy cores at native resolution');
+assert.equal(plasma.assetRevision,2);
+assert.ok(plasmaGrid.filter(c=>c===plasma.pixelPalette.edge).length>110,'Plasma has broad magenta flows');
+assert.ok(plasmaGrid.filter(c=>c===plasma.pixelPalette.light).length>110,'Plasma has equally readable cyan flows');
+assert.ok(plasmaGrid.filter(c=>c===plasma.pixelPalette.detail).length>80,'Plasma has bright energy cores at native resolution');
+const {radiationMark,surfaceSvg}=require('../tools/body-templates.cjs');
+assert.ok(radiationMark.flat().every(([,y])=>y>=.60),'Radiation symbol stays in the agreed rear decoration zone');
+assert.ok(surfaceSvg(radioactive,512,'head-base').paint.includes('stroke-linejoin="round"'));
+assert.ok(!surfaceSvg(radioactive,512,'body').paint.includes('stroke-linejoin="round"'),'No repeated trefoil badges on the body');
 async function main(){
   const outputs=await build({check:true});assert.equal(outputs.length,themes.length*2);
   const index=process.argv.indexOf('--sharp');

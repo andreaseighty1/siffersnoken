@@ -93,8 +93,8 @@ async function run(){
     }
   }
   // End sprite has both tail and body painted at full opacity, before frame fade.
-  assert.equal(requestedUrls.filter(url=>url.includes('/inferno-')&&url.endsWith('?v=2')).length,12,'Corrected Lightning fetches revised WebPs in both modes');
-  assert.ok(requestedUrls.filter(url=>!url.includes('/inferno-')).every(url=>!url.includes('?v=')),'Shared eyes and unchanged themes keep their existing cache');
+  for(const id of ['inferno','radioaktiv','plasma'])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v=2')).length,12,'Corrected '+id+' fetches revised WebPs in both modes');
+  assert.ok(requestedUrls.filter(url=>!['inferno','radioaktiv','plasma'].some(id=>url.includes('/'+id+'-'))).every(url=>!url.includes('?v=')),'Shared eyes and unchanged themes keep their existing cache');
   const joined=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-tail.webp')));
   assert.ok(joined.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-body.webp')));
   console.log('PASS: three modes, legacy migration, only runtime WebPs, all themes/facings/blink, fixed pixel grid, joined tail alpha, wrapping, reused caches and app syntax.');
