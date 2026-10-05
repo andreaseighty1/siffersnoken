@@ -42,15 +42,19 @@ for(const colorCycle of [{hues:[0],intervalMs:1400},{hues:[0,30,55,115,175,220,2
 }
 const gold=themes.find(t=>t.id==='guld');
 const hockey=themes.find(t=>t.id==='hv71'),hockeyTools=require('../tools/body-templates.cjs');
-assert.equal(hockey.pattern,'hockeyKit');assert.equal(hockey.assetRevision,2);
+assert.equal(hockey.pattern,'teamTricolor');assert.equal(hockey.assetRevision,3);
 assert.equal(hockey.patternPalette.base,'#0a2240');assert.equal(hockey.patternPalette.detail,'#ffcb01');
 assert.equal(hockey.palette.light,'#ffffff');
 const hockeyColors=pixelGrid(hockey).flat().filter(Boolean);
-assert.ok(hockeyColors.filter(c=>[hockey.pixelPalette.base,hockey.pixelPalette.light,hockey.pixelPalette.shade].includes(c)).length>hockeyColors.length*.30,'White jersey stays a substantial material, not thin pinstripes');
+assert.ok(hockeyColors.filter(c=>[hockey.pixelPalette.base,hockey.pixelPalette.light,hockey.pixelPalette.shade].includes(c)).length>hockeyColors.length*.25,'White remains a broad color field, not thin pinstripes');
+assert.ok(hockeyColors.filter(c=>c===hockey.pixelPalette.edge).length>hockeyColors.length*.20,'Yellow also has a substantial area');
 assert.ok(hockeyColors.includes('#ffcb01')&&hockeyColors.includes('#0a2240'));
-for(const line of [...hockeyTools.hockeySticks,...hockeyTools.hockeyVents])assert.ok(line.every(([,y])=>y>=.60),'Helmet motifs stay behind the eyes');
-assert.ok(hockeyTools.surfaceSvg(hockey,512,'head-base').paint.includes('stroke-linejoin="round"'));
-assert.ok(!hockeyTools.surfaceSvg(hockey,512,'body').paint.includes('logo'),'No modified club logo or repeated body badge');
+for(let i=0;i<=32;i++){const [blue,yellow]=hockeyTools.tricolorBounds(i/32);assert.ok(yellow-blue>.21&&yellow-blue<.27,'Broad white sweep separates the two colors');}
+for(const part of ['body','head-base','tail']){
+  const surface=hockeyTools.surfaceSvg(hockey,512,part);
+  assert.ok(surface.defs.includes('-tricolor-blue')&&surface.defs.includes('-tricolor-yellow'));
+  assert.ok(!/hockey|helmet|jersey|collar|sticks|vents|logo|stroke=/.test(surface.defs+surface.paint),'Only color fields, no sports objects or emblems');
+}
 assert.equal(gold.material,'gold');assert.ok(bodySvg('toy',gold).includes('-satin'));
 assert.ok(!bodySvg('toy',{...gold,material:undefined}).includes('-satin'));
 assert.deepEqual(pixelGrid(gold),pixelGrid({...gold,material:undefined}),'Gold finish does not blur the pixel palette');

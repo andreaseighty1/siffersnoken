@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist','royalBrocade','teamRibbons','hockeyKit']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist','royalBrocade','teamRibbons','teamTricolor']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -75,7 +75,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
-  if(theme.pattern==='hockeyKit')return hockeySvg(theme,size,part,lightCenter);
+  if(theme.pattern==='teamTricolor')return tricolorSvg(theme,size,part,lightCenter);
   if(['royalBrocade','teamRibbons'].includes(theme.pattern))return royalTeamSvg(theme,size,part,lightCenter);
   if(['meteorNight','spectralMist'].includes(theme.pattern))return nightGhostSvg(theme,size,part,lightCenter);
   if(['celestialChart','solarRays'].includes(theme.pattern))return celestialSvg(theme,size,part,lightCenter);
@@ -121,13 +121,10 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
-  if(theme.pattern==='hockeyKit'){
-    const [u,v]=surfaceCoordinates(nx,ny,part),head=part==='head-base';
-    const navy=hockeyPanels(part).some(shape=>football.contains(shape,u,v));
-    if(head&&hockeySticks.some(line=>openPathDistance(line,u,v)<.022))return p.edge;
-    if(head&&hockeyVents.some(line=>openPathDistance(line,u,v)<.015))return p.ink;
-    if(!head&&Math.abs(v-hockeyHem(u))<.060)return p.edge;
-    if(navy)return color===p.light||color===p.detail?p.detail:p.ink;
+  if(theme.pattern==='teamTricolor'){
+    const [u,v]=surfaceCoordinates(nx,ny,part),[blueEdge,yellowEdge]=tricolorBounds(u);
+    if(v<blueEdge)return color===p.light||color===p.detail?p.detail:p.ink;
+    if(v>yellowEdge)return p.edge;
     return color===p.edge||color===p.detail?p.base:color;
   }
   if(['royalBrocade','teamRibbons'].includes(theme.pattern)){
@@ -394,40 +391,23 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
-// White hockey jersey with navy shoulder yoke, side panels and yellow hem.
-// A padded helmet surface and crossed sticks live ONLY behind the head's eyes.
-// The official club colors are a reference, not a modified/reproduced logo.
-function hockeyHem(u){return .69+.055*(u-.5)**2;}
-function hockeyPanels(part){
-  if(part==='head-base')return [[[0,.60],[.18,.54],[.32,.58],[.38,.61],[.62,.61],[.68,.58],[.82,.54],[1,.60],[1,1],[0,1]]];
-  return [
-    [[0,0],[1,0],[1,.29],[.76,.24],[.65,.29],[.60,.34],[.40,.34],[.35,.29],[.24,.24],[0,.29]],
-    [[0,.24],[.21,.29],[.25,.44],[.18,.60],[0,.61]],
-    [[1,.24],[.79,.29],[.75,.44],[.82,.60],[1,.61]],
-    [[0,.81],[1,.81],[1,1],[0,1]]
-  ];
+// Only the three team colors: broad flowing navy/white/yellow surfaces.
+// The same color layout covers every part; no jersey, helmet or sports symbols.
+function tricolorBounds(u){
+  const blue=.35+.42*(u-.5)+.085*Math.sin(2*Math.PI*u);
+  return [blue,blue+.24+.025*Math.cos(2*Math.PI*(u-.1))];
 }
-const hockeySticks=[[[.35,.635],[.60,.83],[.68,.80]],[[.65,.635],[.40,.83],[.32,.80]]];
-const hockeyVents=[[[.22,.67],[.25,.76]],[[.78,.67],[.75,.76]]];
-function hockeySvg(theme,size,part,lightCenter){
-  const head=part==='head-base',tail=part==='tail',id=`${theme.id}-${part}-hockey`,p=theme.patternPalette;
+function tricolorSvg(theme,size,part,lightCenter){
+  const tail=part==='tail',id=`${theme.id}-${part}-tricolor`,p=theme.patternPalette;
   const f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};
   const data=line=>'M '+line.map(([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`).join(' L ');
-  const stroke=(line,w,color)=>`<path d="${data(line)}" fill="none" stroke="${color}" stroke-width="${size*f.w*w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const curve=edge=>Array.from({length:129},(_,i)=>{const u=i/128;return [u,tricolorBounds(u)[edge]];});
+  const mask=(name,points)=>`<mask id="${id}-${name}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><path d="${data(points)} Z" fill="white"/></mask>`;
   const blue=toyMaterial(p,id+'-navy',size,{tail,lightCenter});
-  const panels=hockeyPanels(part).map(s=>`<path d="${data(s)} Z" fill="white"/>`).join('');
-  const blueMask=`<mask id="${id}-panels" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${panels}</mask>`;
-  if(head){
-    const rim=stroke([[.13,.615],[.30,.585],[.38,.62],[.62,.62],[.70,.585],[.87,.615]],.027,theme.palette.detail);
-    const sticks=hockeySticks.map(line=>stroke(line,.038,p.detail)+stroke(line,.009,'#fff2a0')).join('');
-    const vents=hockeyVents.map(line=>stroke(line,.027,p.shade)+stroke(line,.008,p.light)).join('');
-    return {defs:blue.defs+blueMask,paint:`<g mask="url(#${id}-panels)">${blue.paint}</g>`+rim+sticks+vents};
-  }
-  const hem=Array.from({length:33},(_,i)=>{const u=i/32;return [u,hockeyHem(u)];});
-  const yellow=toyMaterial({base:p.detail,light:'#fff296',shade:'#b68508',edge:'#815907',ink:p.ink,detail:'#fff9c2'},id+'-gold',size,{tail,lightCenter});
-  const yellowMask=`<mask id="${id}-hem" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${stroke(hem,.13,'white')}</mask>`;
-  const collar=tail?'':stroke([[.40,.265],[.50,.32],[.60,.265]],.017,theme.palette.light);
-  return {defs:blue.defs+yellow.defs+blueMask+yellowMask,paint:`<g mask="url(#${id}-panels)">${blue.paint}</g>`+stroke(hem,.21,p.base)+`<g mask="url(#${id}-hem)">${yellow.paint}</g>`+collar};
+  const yellow=toyMaterial({base:p.detail,light:'#fff296',shade:'#c79800',edge:'#9a7404',ink:p.ink,detail:'#fff9c2'},id+'-yellow',size,{tail,lightCenter});
+  const blueMask=mask('blue',[[0,0],[1,0],...curve(0).reverse()]);
+  const yellowMask=mask('yellow',[...curve(1),[1,1],[0,1]]);
+  return {defs:blue.defs+yellow.defs+blueMask+yellowMask,paint:`<g mask="url(#${id}-blue)">${blue.paint}</g><g mask="url(#${id}-yellow)">${yellow.paint}</g>`};
 }
 const royalTrim=[cubicPoints([-.12,.25],[.48,.03],[.19,.82],[1.12,.73]),cubicPoints([-.12,.70],[.61,1.13],[.59,.19],[1.12,.25])];
 const teamTrim=[[[.00,.20],[1.0,.66]],[[.0,.42],[1.0,.88]]];
@@ -826,7 +806,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,nuclearPaths,plasmaPaths,radiationMark,clockGears,clockTrace,runeStrokes,runeCracks,relicFrame,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,hockeyHem,hockeyPanels,hockeySticks,hockeyVents,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,nuclearPaths,plasmaPaths,radiationMark,clockGears,clockTrace,runeStrokes,runeCracks,relicFrame,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,tricolorBounds,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

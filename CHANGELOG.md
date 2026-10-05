@@ -2,6 +2,12 @@
 
 ## 2026-10-05
 
+### HV71: ren trefärgsdesign
+
+- Ersätter matchtröja och hjälmmotiv med breda, mjukt svepande blå, vita och gula färgfält på huvud, kropp och svans i båda stilarna.
+- Inga hockeyklubbor, puckar, hjälmdetaljer eller logotyper. HV71:s referensfärger behålls; form, ögon, svansfäste och upplåsning är oförändrade.
+- Revision 3 versionshämtar endast HV71:s tolv WebP-tillgångar. Original och andra skins ändras inte.
+
 ### HV71: tydligare hockeykänsla
 
 - Matchtröjeinspirerade vita kroppar med mörkblå axelpartier, sidopaneler och breda gula muddar, i både Modern och Pixelretro.

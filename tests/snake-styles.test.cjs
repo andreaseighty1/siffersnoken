@@ -117,7 +117,7 @@ async function run(){
     assert.ok(layer.commands.filter(c=>c[0]==='draw').slice(-3).every(c=>c[1]===1),'Parts compose at full opacity before the single translucent blit');
   }
   // End sprite has both tail and body painted at full opacity, before frame fade.
-  for(const id of ['inferno','radioaktiv','plasma','hv71'])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v=2')).length,12,'Corrected '+id+' fetches revised WebPs in both modes');
+  for(const [id,revision] of [['inferno',2],['radioaktiv',2],['plasma',2],['hv71',3]])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v='+revision)).length,12,'Corrected '+id+' fetches revised WebPs in both modes');
   assert.ok(requestedUrls.filter(url=>!['inferno','radioaktiv','plasma','hv71'].some(id=>url.includes('/'+id+'-'))).every(url=>!url.includes('?v=')),'Shared eyes and unchanged themes keep their existing cache');
   const joined=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-tail.webp')));
   assert.ok(joined.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-body.webp')));
