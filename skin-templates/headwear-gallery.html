@@ -1,0 +1,20 @@
+<!doctype html><html lang="sv"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alla huvudbonader · Modern och Pixelretro</title>
+<style>body{margin:0;padding:24px;background:#f5f0e4;color:#183b35;font:16px system-ui}main{max-width:1120px;margin:auto}h1{font-size:26px}canvas{display:block;width:100%;height:auto;border-radius:18px;background:#e4edde}button,select{font:inherit}label{margin-right:16px}</style>
+<main><h1>SifferSnoken · alla 30 huvudbonader</h1><p>Modern och Pixelretro · samma huvud och renderer som i spelet.</p>
+<label>Skin <select id="skin"><option value="klassisk">Klassisk</option><option value="jordgubbe">Jordgubbe</option><option value="ghost">Ghost</option></select></label><label>Riktning <select id="direction"><option value="right">Höger</option><option value="up">Upp</option><option value="down">Ned</option><option value="left">Vänster</option></select></label><label><input type="checkbox" id="blink">Blinkning</label>
+<h2>Modern · mjuka leksaksformer</h2><canvas id="toy" width="1120" height="760"></canvas><h2>Pixelretro</h2><canvas id="pixel" width="1120" height="760"></canvas><p id="status">Laddar…</p></main>
+<script src="../snake-style-config.js?v=snake-styles-19"></script><script src="../snake-colors.js?v=snake-styles-4"></script>
+<script src="../snake-headwear-designs.js?v=headwear-3"></script><script src="../snake-headwear.js?v=headwear-3"></script><script src="../snake-styles.js?v=snake-styles-9"></script>
+<script>
+const renderer=SnakeStyles.createRenderer({assetPrefix:'../'});
+const ids=SnakeHeadwear.ids,headings={right:{x:1,y:0},up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0}};
+function draw(){for(const mode of ['toy','pixel']){
+  const c=document.getElementById(mode).getContext('2d');c.clearRect(0,0,1120,760);
+  ids.forEach((accessory,i)=>{const x=(i%6)*186.66+93.33,y=Math.floor(i/6)*152+61;
+    renderer.draw(c,{mode,id:document.getElementById('skin').value,cell:64,cols:1120/64,rows:760/64,points:[{x:x/64-.5,y:y/64-.5}],heading:headings[document.getElementById('direction').value],tailDirection:{x:0,y:1},fade:false,accessory,blink:document.getElementById('blink').checked});
+    c.fillStyle='#183b35';c.font='600 15px system-ui';c.textAlign='center';c.fillText(SnakeHeadwear.labels[accessory],x,y+65);
+  });
+}}
+(async()=>{for(const mode of ['toy','pixel'])for(const id of ['klassisk','jordgubbe','ghost'])await renderer.preload(mode,id);draw();document.getElementById('status').textContent='30 bonader i båda stilarna är laddade.';for(const id of ['skin','direction','blink'])document.getElementById(id).onchange=draw;})().catch(e=>document.getElementById('status').textContent=e.message);
+</script></html>

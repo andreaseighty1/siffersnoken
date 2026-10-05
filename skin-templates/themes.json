@@ -190,5 +190,17 @@
     "palette": { "base": "#d9f2ed", "light": "#ffffff", "shade": "#78b5c6", "edge": "#398aa9", "ink": "#1a526f", "detail": "#ffffff" },
     "patternPalette": { "base": "#8fe6d6", "light": "#e4fff4", "shade": "#469cc0", "edge": "#2b729b", "ink": "#1a526f", "detail": "#ffffff" },
     "pixelPalette": { "base": "#c9eee8", "light": "#ebfff6", "shade": "#80bfd0", "edge": "#44a4b3", "ink": "#235673", "detail": "#ffffff" }
+  },
+  {
+    "id": "kunglig", "label": "Kunglig", "pattern": "royalBrocade", "bodyOrientation": "fixed", "headAccessory": "crown",
+    "palette": { "base": "#813cb1", "light": "#cc8be0", "shade": "#472266", "edge": "#301b46", "ink": "#261735", "detail": "#fff1b1" },
+    "patternPalette": { "base": "#e9b74b", "light": "#fff0ad", "shade": "#a96d29", "edge": "#785022", "ink": "#261735", "detail": "#fff9d6" },
+    "pixelPalette": { "base": "#8b4db1", "light": "#c581d7", "shade": "#502f6d", "edge": "#dfb055", "ink": "#2e203c", "detail": "#fff1b1" }
+  },
+  {
+    "id": "hv71", "label": "HV71", "pattern": "teamRibbons", "bodyOrientation": "fixed",
+    "palette": { "base": "#2455a8", "light": "#7ca5ed", "shade": "#163373", "edge": "#10244e", "ink": "#0e1d3b", "detail": "#fff8dc" },
+    "patternPalette": { "base": "#ffca30", "light": "#fff18c", "shade": "#ca881a", "edge": "#9c6016", "ink": "#0e1d3b", "detail": "#fff8dc" },
+    "pixelPalette": { "base": "#356bc5", "light": "#81adf0", "shade": "#1c3b79", "edge": "#ffd149", "ink": "#142947", "detail": "#fff8dc" }
   }
 ]

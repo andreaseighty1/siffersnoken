@@ -711,8 +711,8 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 33 skins i båda nya stilarna, nu även Stjärnhimmel och genomskinliga Ghost · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 33 skins i båda nya stilarna, nu även Stjärnhimmel och genomskinliga Ghost · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 35 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig och HV71 · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 35 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig och HV71 · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -889,7 +889,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
             <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
             <button class="toggle-btn graphics-mode-btn" data-graphics="classic" id="graphicsClassicBtn">🧩 Original</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. 33 skins är klara i båda nya stilarna; övriga behåller tills vidare sitt tidigare utseende.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. 35 skins är klara i båda nya stilarna; övriga behåller tills vidare sitt tidigare utseende.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1093,10 +1093,11 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div id="medalToast"></div>
 
 <script src="translations.js?v=3.12"></script>
-<script src="snake-style-config.js?v=snake-styles-18"></script>
+<script src="snake-style-config.js?v=snake-styles-19"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
-<script src="snake-headwear.js?v=headwear-2"></script>
-<script src="snake-styles.js?v=snake-styles-8"></script>
+<script src="snake-headwear-designs.js?v=headwear-3"></script>
+<script src="snake-headwear.js?v=headwear-3"></script>
+<script src="snake-styles.js?v=snake-styles-9"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -1326,9 +1327,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 33 skins i båda nya stilarna, nu även Stjärnhimmel och genomskinliga Ghost · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!',
-    'New in 3.12! <strong>Modern</strong> is the default for new players · Also choose <strong>Pixel retro</strong> or <strong>Original</strong> in Settings · 33 skins in both new styles, now including Starry Sky and translucent Ghost · <strong>Negative numbers (+/−)</strong> – practise alone or mix!',
-    'Neu in 3.12! <strong>Modern</strong> ist Standard für neue Spieler · Auch <strong>Pixelretro</strong> oder <strong>Original</strong> in den Einstellungen wählen · 33 Skins in beiden neuen Stilen, jetzt auch Sternenhimmel und durchscheinender Geist · <strong>Negative Zahlen (+/−)</strong> – einzeln üben oder mischen!'
+    'Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 35 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig och HV71 · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!',
+    'New in 3.12! <strong>Modern</strong> is the default for new players · Also choose <strong>Pixel retro</strong> or <strong>Original</strong> in Settings · 35 skins in both new styles, now including Starry Sky, translucent Ghost, Royal and HV71 · All 30 headwear designs adapted · <strong>Negative numbers (+/−)</strong> – practise alone or mix!',
+    'Neu in 3.12! <strong>Modern</strong> ist Standard für neue Spieler · Auch <strong>Pixelretro</strong> oder <strong>Original</strong> in den Einstellungen wählen · 35 Skins in beiden neuen Stilen, jetzt auch Sternenhimmel, durchscheinender Geist, Königlich und HV71 · Alle 30 Kopfbedeckungen angepasst · <strong>Negative Zahlen (+/−)</strong> – einzeln üben oder mischen!'
   );
 }
 function getRangeLabel(range){
@@ -3565,6 +3566,33 @@ function drawModernHeadAccessory(cx,cy){
   const acc=resolveHeadAccessory();
   if(acc)drawHeadAccessory(acc,cx,cy);
 }
+// Transitional animal skins keep their old head art, but share the new hats.
+// Occlusion is confined to this reusable head layer, never the board canvas.
+let _styledLegacyHeadLayer=null;
+const _styledLegacyHatCache=new Map();
+function styledLegacyHeadLayer(outer,skin,cx,cy,size,angle,accessory){
+  if(!SnakeHeadwear.supports(graphicsMode,accessory))return null;
+  if(!_styledLegacyHeadLayer)_styledLegacyHeadLayer=document.createElement('canvas');
+  const layer=_styledLegacyHeadLayer,frame=Math.ceil(size*2.8);
+  if(layer.width!==frame){layer.width=frame;layer.height=frame;}
+  const c=layer.getContext('2d');c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,frame,frame);
+  c.save();c.scale(2,2);c.translate(frame/4-cx,frame/4-cy);
+  const direction=angle===0?'up':Math.abs(angle-Math.PI/2)<.001?'right':Math.abs(angle-Math.PI)<.001?'down':'left';
+  const e=skin.eyesAssetScale||1,oy=skin.eyesAssetOffsetY||0;
+  const eyes=[[.5-.167*e,.5-.023*e+oy],[.5+.167*e,.5-.023*e+oy]];
+  const hatSize=graphicsMode==='pixel'?33:Math.ceil(size*2),key=[graphicsMode,accessory,hatSize,direction,e,oy].join('|');
+  let hat=_styledLegacyHatCache.get(key);
+  if(!hat){hat=document.createElement('canvas');hat.width=hat.height=hatSize;
+    SnakeHeadwear.paint(hat.getContext('2d'),{mode:graphicsMode,id:accessory,size:hatSize,direction,eyes});
+    if(_styledLegacyHatCache.size>=256)_styledLegacyHatCache.clear();_styledLegacyHatCache.set(key,hat);
+  }
+  return {ctx:c,finish(){
+    c.save();c.translate(cx,cy);c.rotate(angle);c.translate(-size/2,-size/2);
+    SnakeHeadwear.occludeHead(c,{mode:graphicsMode,id:accessory,size});
+    c.imageSmoothingEnabled=graphicsMode!=='pixel';c.drawImage(hat,0,0,size,size);c.restore();c.restore();
+    outer.drawImage(layer,cx-frame/4,cy-frame/4,frame/2,frame/2);
+  }};
+}
 const MODERN_GALAXY_TWINKLES=[
   [-.23,-.12,.026,.2],[.2,-.2,.02,1.4],[-.08,.2,.023,2.6]
 ];
@@ -3619,6 +3647,8 @@ function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
   const cx=rx*CELL+cell/2,cy=ry*CELL+cell/2;
   const size=cell*(skin.headAssetScale||1.75),ratio=image.naturalHeight/image.naturalWidth;
   const angle=bodyFacingAngle(heading)+(skin.assetFacing==='up'?Math.PI/2:0);
+  const styled=styledLegacyHeadLayer(drawCtx,skin,cx,cy,size,angle,resolveHeadAccessory());
+  if(styled)drawCtx=styled.ctx;
   drawCtx.save();drawCtx.translate(cx,cy);drawCtx.rotate(angle);
   const galaxyTime=MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches?0:(_renderNow||0);
   const galaxyGlow=skin.galaxyTwinkles?`hsl(${235+45*Math.sin(galaxyTime/2800)},100%,67%)`:null;
@@ -3648,7 +3678,7 @@ function drawModernSkinHead(drawCtx,skin,rx,ry,cell,heading){
     drawCtx.save();drawCtx.translate(cx,cy);drawCtx.rotate(angle);
     drawCtx.drawImage(eyes,-eyesSize/2,-eyesSize*eyesRatio/2+eyesOffsetY,eyesSize,eyesSize*eyesRatio);drawCtx.restore();
   }
-  drawModernHeadAccessory(cx,cy);
+  if(styled)styled.finish();else drawModernHeadAccessory(cx,cy);
   return true;
 }
 function modernBodyVisualScale(index){
@@ -3919,10 +3949,14 @@ function drawSkinPreviewCanvas(canvas,skin){
     }
     drawAsset(images[2],cx-4*cell-cell*legacy.tailAssetOffset,Math.PI/2,cell*legacy.tailAssetScale*1.05);
     for(let i=4;i>0;i--)drawAsset(images[1],cx-i*cell,legacy.bodyAssetFixedOrientation?0:(legacy.bodyAssetRotation||0),cell*legacy.bodyAssetScale*MODERN_BODY_OVERLAP);
-    drawAsset(images[0],cx,Math.PI/2,cell*legacy.headAssetScale);
-    ctx.save();ctx.translate(cx,cy);ctx.rotate(Math.PI/2);
+    const styled=styledLegacyHeadLayer(ctx,legacy,cx,cy,cell*legacy.headAssetScale,Math.PI/2,resolveHeadAccessory(loadHeadAccessory(),skin.id));
+    const hc=styled?styled.ctx:ctx;
+    hc.save();hc.translate(cx,cy);hc.rotate(Math.PI/2);
+    const hs=cell*legacy.headAssetScale;hc.drawImage(images[0],-hs/2,-hs/2,hs,hs);hc.restore();
+    hc.save();hc.translate(cx,cy);hc.rotate(Math.PI/2);
     const size=cell*legacy.headAssetScale*(legacy.eyesAssetScale||1),offset=cell*legacy.headAssetScale*(legacy.eyesAssetOffsetY||0);
-    ctx.drawImage(images[3],-size/2,-size/2+offset,size,size);ctx.restore();
+    hc.drawImage(images[3],-size/2,-size/2+offset,size,size);hc.restore();
+    if(styled)styled.finish();
     return;
   }
 
@@ -4085,6 +4119,19 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
       paintHeadAccessory(ctx,previewAcc,0,0,'up');ctx.restore();
     }
     return;
+  }
+  const legacy=mode!=='classic'?getModernSkinAssetDef(skin):null;
+  if(legacy){
+    const assets=[legacy.headAsset,legacy.eyesOpenAsset].map(loadModernSkinAsset);
+    if(!assets.every(i=>i.complete&&i.naturalWidth)){
+      Promise.all(assets.map(i=>i.decode().catch(()=>false))).then(()=>{
+        if(canvas.isConnected&&graphicsMode===mode&&loadActiveSkin()===skin.id&&loadHeadAccessory()===headSel&&assets.every(i=>i.complete&&i.naturalWidth))drawHeadAccessoryPreviewCanvas(canvas,headSel);
+      });return;
+    }
+    const size=38*legacy.headAssetScale,styled=styledLegacyHeadLayer(ctx,legacy,cx,centerY,size,0,previewAcc),hc=styled?styled.ctx:ctx;
+    hc.save();hc.translate(cx,centerY);hc.drawImage(assets[0],-size/2,-size/2,size,size);
+    const es=size*(legacy.eyesAssetScale||1),oy=size*(legacy.eyesAssetOffsetY||0);
+    hc.drawImage(assets[1],-es/2,-es/2+oy,es,es);hc.restore();if(styled)styled.finish();return;
   }
   if(previewAcc&&previewAcc!=='off'){
     const faceAcc=(previewAcc==='glasses'||previewAcc==='weld_glasses'||previewAcc==='shadow_monocle');

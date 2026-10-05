@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-10-05
+
+### Kunglig, HV71 och alla huvudbonader i båda nya stilarna
+
+- Kunglig: lila skulpterat material med gyllene brokadslingor och korrekt proportionerad krona. HV71: blått material med gula sportband och ljusa kanter.
+- 35 av 41 skins är nu färdiga i Modern och Pixelretro. 427 spelbara förlustfria WebP-bilder; huvud, kropp och svans använder de låsta runda mallarna.
+- Alla 30 huvudbonader anpassade: 13 vanliga, 14 museibonader och 3 säsongsbonader. Original, upplåsningar, sparade val och säsongsprioritet är oförändrade.
+- Moderns täckande hattar döljer huvudets bakre kontur. Glasögon/monokel har öppna linser; Ghosts bonader ingår i samma genomskinliga snoklager.
+- Även äldre djurhuvuden får de nya bonaderna via en isolerad huvudkomposition och ögonankare som följer deras nuvarande passform.
+- Kodritade, cachade bonader kräver inga extra bildnedladdningar. Pixelretro använder native heltalspixlar och högst sex färger per bonad. Spritecacher begränsas till 256 poster.
+- Samlat bonadgalleri, spelprov och utökade regressionstester för alla motiv, riktningar, blinkning, linshål, äldre huvuden och cacheminne.
+
 ## 2026-10-03
 
 ### Mallarnas uttryck korrigerat mot konceptmålen

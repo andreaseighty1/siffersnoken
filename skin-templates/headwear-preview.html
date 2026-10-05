@@ -5,11 +5,12 @@
 <style>
 *{box-sizing:border-box}body{margin:0;padding:24px;background:#f5f0e4;color:#183b35;font:16px system-ui,sans-serif}main{max-width:1080px;margin:auto}h1{font-size:26px;margin:0 0 10px}p{line-height:1.5}article{background:#fffaf0;border:1px solid #cdd6c9;border-radius:18px;padding:20px;margin:22px 0}h2{margin:0 0 14px}h3{font-size:16px;margin:0 0 8px}.styles{display:grid;grid-template-columns:1fr 1fr;gap:20px}canvas{display:block;width:100%;height:auto;border-radius:12px}label{display:inline-flex;gap:6px;margin-right:14px}@media(max-width:650px){body{padding:12px}.styles{grid-template-columns:1fr}article{padding:14px}}
 </style>
-<main><h1>Huvudbonader · första passformsprovet</h1><p>Klassisk, Jordgubbe och Ghost, i alla fyra riktningar. Samma renderer och fästpunkter som i spelet. Ögon och huvudstorlekar är oförändrade.</p><label><input type="checkbox" id="blink">Visa blinkning</label><label><input type="checkbox" id="off">Utan bonad</label><div id="previews"></div><p id="status">Laddar…</p></main>
-<script src="../snake-style-config.js?v=snake-styles-18"></script>
+<main><h1>Alla 30 huvudbonader · passformsprov</h1><p>Klassisk, Jordgubbe och Ghost, i alla fyra riktningar. Samma renderer och fästpunkter som i spelet. Ögon och huvudstorlekar är oförändrade.</p><label><input type="checkbox" id="blink">Visa blinkning</label><label><input type="checkbox" id="off">Utan bonad</label><div id="previews"></div><p id="status">Laddar…</p></main>
+<script src="../snake-style-config.js?v=snake-styles-19"></script>
 <script src="../snake-colors.js?v=snake-styles-4"></script>
-<script src="../snake-headwear.js?v=headwear-2"></script>
-<script src="../snake-styles.js?v=snake-styles-8"></script>
+<script src="../snake-headwear-designs.js?v=headwear-3"></script>
+<script src="../snake-headwear.js?v=headwear-3"></script>
+<script src="../snake-styles.js?v=snake-styles-9"></script>
 <script>
 const renderer=SnakeStyles.createRenderer({assetPrefix:'../'}),cards=[];
 const skins=[['klassisk','Klassisk'],['jordgubbe','Jordgubbe'],['ghost','Ghost · genomskinlig']];
@@ -29,7 +30,7 @@ function redraw(){
 }
 (async()=>{
   const requested=new URLSearchParams(location.search).get('hat');
-  for(const [accessory,label] of [['crown','Krona'],['beanie','Mössa'],['glasses','Glasögon'],['tiara','Tiara'],['tophat','Cylinder']]){
+  for(const [accessory,label] of Object.entries(SnakeHeadwear.labels)){
     if(requested&&requested!==accessory)continue;
     const article=document.createElement('article');article.id='preview-'+accessory;
     const h=document.createElement('h2');h.textContent=label;article.append(h);

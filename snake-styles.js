@@ -114,7 +114,11 @@
       const sc=shaded.getContext('2d');sc.shadowColor=`rgba(12,23,18,${r.shadowOpacity})`;
       sc.shadowBlur=pixel?r.pixelShadowBlur:cell*r.toyShadowBlur*res;
       sc.shadowOffsetY=pixel?r.pixelShadowOffset:cell*r.toyShadowOffset*res;
-      sc.drawImage(out,0,0);sprites.set(key,{canvas:shaded,extent});
+      sc.drawImage(out,0,0);
+      // Thirty hats must not retain thousands of canvases as the picker cycles
+      // through every skin. Evict on cache misses only, never on warm frames.
+      if(sprites.size>=256)sprites.delete(sprites.keys().next().value);
+      sprites.set(key,{canvas:shaded,extent});
       return sprites.get(key);
     }
     function draw(context,{mode,id,cell,cols,rows,points,heading,tailDirection,blink=false,wrap=false,fade=true,time=0,reducedMotion=false,accessory=null}){
@@ -157,7 +161,7 @@
       }
       return true;
     }
-    return {preload,draw};
+    return {preload,draw,cacheSize:()=>sprites.size};
   }
   const api={config,normalizeMode,supports,paths,alpha,colorHue,facing,createRenderer};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.SnakeStyles=api;
