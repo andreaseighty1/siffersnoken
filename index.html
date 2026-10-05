@@ -711,8 +711,8 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 35 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig och HV71 · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 35 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig och HV71 · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 36 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig, HV71 och Blodmåne · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 36 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig, HV71 och Blodmåne · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -889,7 +889,15 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
             <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
             <button class="toggle-btn graphics-mode-btn" data-graphics="classic" id="graphicsClassicBtn">🧩 Original</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. 35 skins är klara i båda nya stilarna; övriga behåller tills vidare sitt tidigare utseende.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. 36 skins är klara i båda nya stilarna; övriga behåller tills vidare sitt tidigare utseende.</div>
+        </div>
+        <div class="menu-panel">
+          <div class="panel-title" id="boardBackgroundTitle">🌿 Banbakgrunder</div>
+          <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
+            <button class="toggle-btn board-background-btn sel" data-background="true" id="boardBackgroundOnBtn" aria-pressed="true">🌿 På</button>
+            <button class="toggle-btn board-background-btn" data-background="false" id="boardBackgroundOffBtn" aria-pressed="false">◼️ Av</button>
+          </div>
+          <div class="panel-desc" id="boardBackgroundDesc">Lugnare miljöer med en jämn mitt gör brickorna lättare att hitta. Av ger en enkel mörk spelyta utan bakgrundsdekorationer.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1092,12 +1100,13 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
-<script src="translations.js?v=3.12"></script>
-<script src="snake-style-config.js?v=snake-styles-21"></script>
+<script src="translations.js?v=3.12-boards-1"></script>
+<script src="board-backgrounds.js?v=2"></script>
+<script src="snake-style-config.js?v=snake-styles-23"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
 <script src="snake-headwear-designs.js?v=headwear-3"></script>
 <script src="snake-headwear.js?v=headwear-3"></script>
-<script src="snake-styles.js?v=snake-styles-9"></script>
+<script src="snake-styles.js?v=snake-styles-10"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -1327,9 +1336,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 35 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig och HV71 · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!',
-    'New in 3.12! <strong>Modern</strong> is the default for new players · Also choose <strong>Pixel retro</strong> or <strong>Original</strong> in Settings · 35 skins in both new styles, now including Starry Sky, translucent Ghost, Royal and HV71 · All 30 headwear designs adapted · <strong>Negative numbers (+/−)</strong> – practise alone or mix!',
-    'Neu in 3.12! <strong>Modern</strong> ist Standard für neue Spieler · Auch <strong>Pixelretro</strong> oder <strong>Original</strong> in den Einstellungen wählen · 35 Skins in beiden neuen Stilen, jetzt auch Sternenhimmel, durchscheinender Geist, Königlich und HV71 · Alle 30 Kopfbedeckungen angepasst · <strong>Negative Zahlen (+/−)</strong> – einzeln üben oder mischen!'
+    'Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 36 skins i båda nya stilarna, nu även Stjärnhimmel, genomskinliga Ghost, Kunglig, HV71 och Blodmåne · Alla 30 huvudbonader anpassade · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!',
+    'New in 3.12! <strong>Modern</strong> is the default for new players · Also choose <strong>Pixel retro</strong> or <strong>Original</strong> in Settings · 36 skins in both new styles, now including Starry Sky, translucent Ghost, Royal, HV71 and Blood Moon · All 30 headwear designs adapted · <strong>Negative numbers (+/−)</strong> – practise alone or mix!',
+    'Neu in 3.12! <strong>Modern</strong> ist Standard für neue Spieler · Auch <strong>Pixelretro</strong> oder <strong>Original</strong> in den Einstellungen wählen · 36 Skins in beiden neuen Stilen, jetzt auch Sternenhimmel, durchscheinender Geist, Königlich, HV71 und Blutmond · Alle 30 Kopfbedeckungen angepasst · <strong>Negative Zahlen (+/−)</strong> – einzeln üben oder mischen!'
   );
 }
 function getRangeLabel(range){
@@ -1581,6 +1590,7 @@ function applyLang(){
   if($('graphicsModeTitle'))$('graphicsModeTitle').textContent=tOr('panelGraphicsMode','🖼️ Grafikläge','🖼️ Graphics mode','🖼️ Grafikmodus');
   if($('musicStyleTitle'))$('musicStyleTitle').textContent=t('panelMusicStyle');
   updateBonusEventControls();
+  updateBoardBackgroundControls();
   document.querySelectorAll('.theme-btn').forEach(b=>{
     const tmap={
       natt:t('themeNight'),
@@ -2895,7 +2905,7 @@ function toggleHeadAccessory(){cycleHeadAccessory();}
 function saveSettings(){
   localStorage.setItem(SETTINGS_KEY,JSON.stringify({
     ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap,multiTableSelect,musicGenre,
-    mysteryEventsEnabled,portalEventsEnabled,bonusLivesEnabled,graphicsMode
+    mysteryEventsEnabled,portalEventsEnabled,bonusLivesEnabled,graphicsMode,boardBackgroundsEnabled
   }));
 }
 function loadSettings(){
@@ -2915,6 +2925,7 @@ function loadSettings(){
     if(typeof s.mysteryEventsEnabled==='boolean')mysteryEventsEnabled=s.mysteryEventsEnabled;
     if(typeof s.portalEventsEnabled==='boolean')portalEventsEnabled=s.portalEventsEnabled;
     if(typeof s.bonusLivesEnabled==='boolean')bonusLivesEnabled=s.bonusLivesEnabled;
+    if(typeof s.boardBackgroundsEnabled==='boolean')boardBackgroundsEnabled=s.boardBackgroundsEnabled;
     graphicsMode=SnakeStyles.normalizeMode(s.graphicsMode);
     if(s.graphicsMode==='modern'){
       s.graphicsMode=graphicsMode;
@@ -2926,6 +2937,25 @@ let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
 let speedMode='none',wallWrap=true,multiTableSelect=false,musicGenre='original';
 let mysteryEventsEnabled=true,portalEventsEnabled=true,bonusLivesEnabled=true;
 let graphicsMode='toy';
+let boardBackgroundsEnabled=true;
+function updateBoardBackgroundControls(){
+  document.querySelectorAll('.board-background-btn').forEach(btn=>{
+    const selected=(btn.dataset.background==='true')===boardBackgroundsEnabled;
+    btn.classList.toggle('sel',selected);btn.setAttribute('aria-pressed',String(selected));
+  });
+  if($('boardBackgroundTitle'))$('boardBackgroundTitle').textContent=tOr('panelBoardBackgrounds','🌿 Banbakgrunder','🌿 Board backgrounds','🌿 Spielfeldhintergründe');
+  if($('boardBackgroundOnBtn'))$('boardBackgroundOnBtn').textContent=tOr('boardBackgroundOn','🌿 På','🌿 On','🌿 An');
+  if($('boardBackgroundOffBtn'))$('boardBackgroundOffBtn').textContent=tOr('boardBackgroundOff','◼️ Av','◼️ Off','◼️ Aus');
+  if($('boardBackgroundDesc'))$('boardBackgroundDesc').textContent=tOr('boardBackgroundDesc',
+    'Lugnare miljöer med en jämn mitt gör brickorna lättare att hitta. Av ger en enkel mörk spelyta utan bakgrundsdekorationer.',
+    'Calmer scenes with an even centre make answer tiles easier to find. Off gives a plain dark board without background decorations.',
+    'Ruhigere Umgebungen mit einer gleichmäßigen Mitte machen die Antwortfelder leichter auffindbar. Aus zeigt ein schlichtes dunkles Spielfeld ohne Hintergrunddekoration.');
+}
+function applyBoardBackgrounds(enabled,{persist=true}={}){
+  boardBackgroundsEnabled=enabled===true;
+  updateBoardBackgroundControls();updateMenuSettingsSummary();
+  if(persist)saveSettings();
+}
 function isCalmRound(){return !mysteryEventsEnabled&&!portalEventsEnabled&&!bonusLivesEnabled;}
 function updateBonusEventControls(){
   const state={mystery:mysteryEventsEnabled,portals:portalEventsEnabled,lives:bonusLivesEnabled};
@@ -2972,6 +3002,7 @@ function toggleBonusEvent(type){
    ═══════════════════════════════════════ */
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 canvas.width=COLS*CELL;canvas.height=ROWS*CELL;
+const boardBackgroundRenderer=BoardBackgrounds.createRenderer();
 const _tileSpriteCache=new Map();
 const _headAccessoryCache=new Map();
 const _scaleTextureSpriteCache=new Map();
@@ -2982,6 +3013,7 @@ let _fairyForestBackdropSprite=null;
 let _fairyForestBackdropKey='';
 let _fairyForestImage=null;
 let _fairyForestImageStatus='idle';
+const _fairyForestStyles=new Map();
 let _crystalCaveBackdropSprite=null;
 let _crystalCaveBackdropKey='';
 let _crystalCaveImage=null;
@@ -3554,7 +3586,7 @@ function getSnakeRenderPoint(segment,progress){
   let dx=segment.x-px,dy=segment.y-py;
   if(Math.abs(dx)>1)dx=dx>0?dx-COLS:dx+COLS;
   if(Math.abs(dy)>1)dy=dy>0?dy-ROWS:dy+ROWS;
-  return{x:px+dx*progress,y:py+dy*progress};
+  return{x:px+dx*progress,y:py+dy*progress,wrapX:Math.abs(segment.x-px)>1,wrapY:Math.abs(segment.y-py)>1};
 }
 function resolveHeadAccessory(userPick=loadHeadAccessory(),skinId=loadActiveSkin()){
   const theme=getActiveTheme();
@@ -6388,6 +6420,11 @@ const FAIRY_FOREST_LEAVES=[
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
 const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','basketballCourt','hockeyRink','coralReef','cloudCity','volcanoIsland','enchantedLibrary','neonArcade','moonGarden'];
+const MODERN_BOARD_BACKDROPS={forest:getFairyForestBackdrop,crystal:getCrystalCaveBackdrop,
+  sunTemple:getSunTempleBackdrop,footballPitch:getFootballPitchBackdrop,basketballCourt:getBasketballCourtBackdrop,
+  hockeyRink:getHockeyRinkBackdrop,coralReef:getCoralReefBackdrop,cloudCity:getCloudCityBackdrop,
+  volcanoIsland:getVolcanoIslandBackdrop,enchantedLibrary:getEnchantedLibraryBackdrop,
+  neonArcade:getNeonArcadeBackdrop,moonGarden:getMoonGardenBackdrop};
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6450,51 +6487,24 @@ function getFairyForestPalette(){
 }
 function getFairyForestBackdrop(){
   const W=canvas.width,H=canvas.height;
-  if(_fairyForestImageStatus==='idle'){
-    _fairyForestImageStatus='loading';
-    _fairyForestImage=new Image();
-    _fairyForestImage.onload=()=>{_fairyForestImageStatus='ready';_fairyForestBackdropSprite=null;_fairyForestBackdropKey='';};
-    _fairyForestImage.onerror=()=>{_fairyForestImageStatus='failed';};
-    _fairyForestImage.src='assets/sagoskog.webp';
+  const mode=graphicsMode==='pixel'?'pixel':'toy';
+  if(!_fairyForestStyles.has(mode)){
+    const entry={image:new Image(),status:'loading'};
+    entry.image.onload=()=>{entry.status='ready';};
+    entry.image.onerror=()=>{entry.status='failed';};
+    entry.image.src=`assets/sagoskog-${mode}.webp?v=1`;
+    _fairyForestStyles.set(mode,entry);
   }
-  const key=`${W}x${H}|${_fairyForestImageStatus==='ready'?'asset':loadActiveSkin()}`;
-  if(_fairyForestBackdropSprite&&_fairyForestBackdropKey===key)return _fairyForestBackdropSprite;
-  if(_fairyForestImageStatus==='ready'){
-    const assetSprite=createSpriteCanvas(W);assetSprite.height=H;
-    const assetCtx=assetSprite.getContext('2d');
-    assetCtx.drawImage(_fairyForestImage,0,0,W,H);
-    _fairyForestBackdropSprite=assetSprite;_fairyForestBackdropKey=key;
-    return assetSprite;
-  }
-  const p=getFairyForestPalette();
-  const sprite=createSpriteCanvas(W);sprite.height=H;
-  const sctx=sprite.getContext('2d');
-  const grad=sctx.createLinearGradient(0,0,0,H);
-  grad.addColorStop(0,p.top);grad.addColorStop(.52,p.mid);grad.addColorStop(1,p.bottom);
-  sctx.fillStyle=grad;sctx.fillRect(0,0,W,H);
-  const glow=sctx.createRadialGradient(W*.5,H*.38,10,W*.5,H*.38,Math.max(W,H)*.72);
-  glow.addColorStop(0,'rgba(255,241,174,.12)');glow.addColorStop(.46,'rgba(137,232,168,.055)');glow.addColorStop(1,'rgba(0,0,0,0)');
-  sctx.fillStyle=glow;sctx.fillRect(0,0,W,H);
-  // Mjuka kullar ger banan djup utan att konkurrera med talbrickorna.
-  sctx.fillStyle=`${p.hill}aa`;sctx.beginPath();sctx.moveTo(0,H*.82);
-  sctx.bezierCurveTo(W*.16,H*.66,W*.3,H*.78,W*.47,H*.7);
-  sctx.bezierCurveTo(W*.66,H*.61,W*.8,H*.8,W,H*.68);sctx.lineTo(W,H);sctx.lineTo(0,H);sctx.closePath();sctx.fill();
-  sctx.fillStyle=`${p.hill2}66`;sctx.beginPath();sctx.moveTo(0,H*.9);
-  sctx.bezierCurveTo(W*.2,H*.75,W*.34,H*.88,W*.57,H*.79);
-  sctx.bezierCurveTo(W*.78,H*.7,W*.88,H*.9,W,H*.8);sctx.lineTo(W,H);sctx.lineTo(0,H);sctx.closePath();sctx.fill();
-  // Enkla, halvgenomskinliga sagoträd i kanterna. Allt detta ritas en gång per storlek.
-  sctx.save();sctx.globalAlpha=.24;sctx.fillStyle=p.leaf;
-  for(let i=0;i<10;i++){
-    const side=i%2===0?1:-1;
-    const x=side>0?W*(.015+(i%5)*.045):W*(.985-(i%5)*.045);
-    const base=H*(.88-(i%3)*.035),h=H*(.18+(i%4)*.035),r=W*(.055+(i%3)*.012);
-    sctx.fillStyle=i%3===0?p.hill2:p.leaf;
-    sctx.fillRect(x-W*.008,base-h*.32,W*.016,h*.45);
-    sctx.beginPath();sctx.arc(x,base-h*.55,r,0,Math.PI*2);sctx.arc(x-r*.62,base-h*.35,r*.72,0,Math.PI*2);sctx.arc(x+r*.62,base-h*.35,r*.72,0,Math.PI*2);sctx.fill();
-  }
-  sctx.restore();
-  _fairyForestBackdropSprite=sprite;_fairyForestBackdropKey=key;
-  return sprite;
+  const styled=_fairyForestStyles.get(mode);
+  _fairyForestImage=styled.image;_fairyForestImageStatus=styled.status;
+  if(styled.status==='ready')return styled.image;
+  // Quiet, flat fallback while loading; no outdated perspective or blur.
+  const fallbackKey=`${W}x${H}|${mode}|fallback`;
+  if(_fairyForestBackdropSprite&&_fairyForestBackdropKey===fallbackKey)return _fairyForestBackdropSprite;
+  const fallback=createSpriteCanvas(W);fallback.height=H;
+  const fallbackCtx=fallback.getContext('2d');fallbackCtx.fillStyle='#216a76';fallbackCtx.fillRect(0,0,W,H);
+  _fairyForestBackdropSprite=fallback;_fairyForestBackdropKey=fallbackKey;
+  return fallback;
 }
 function drawFairyForestAnimations(){
   const T=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?0:_renderNow;
@@ -6919,43 +6929,14 @@ function drawMoonGardenAnimations(){
 }
 function drawBackground(theme){
   ctx.shadowBlur=0;ctx.shadowColor='transparent';
+  if(!boardBackgroundsEnabled){
+    boardBackgroundRenderer.draw(ctx,{width:canvas.width,height:canvas.height,enabled:false});
+    return; // Do not load scene images or run decorations when disabled.
+  }
   if(isModernGraphics()){
-    if(modernBoardThemeId==='crystal'){
-      ctx.drawImage(getCrystalCaveBackdrop(),0,0);
-      drawCrystalCaveAnimations();
-    }else if(modernBoardThemeId==='sunTemple'){
-      ctx.drawImage(getSunTempleBackdrop(),0,0);
-      drawSunTempleAnimations();
-    }else if(modernBoardThemeId==='footballPitch'){
-      ctx.drawImage(getFootballPitchBackdrop(),0,0);
-      drawFootballPitchAnimations();
-    }else if(modernBoardThemeId==='hockeyRink'){
-      ctx.drawImage(getHockeyRinkBackdrop(),0,0);
-      drawHockeyRinkAnimations();
-    }else if(modernBoardThemeId==='basketballCourt'){
-      ctx.drawImage(getBasketballCourtBackdrop(),0,0);
-    }else if(modernBoardThemeId==='coralReef'){
-      ctx.drawImage(getCoralReefBackdrop(),0,0);
-      drawCoralReefAnimations();
-    }else if(modernBoardThemeId==='cloudCity'){
-      ctx.drawImage(getCloudCityBackdrop(),0,0);
-      drawCloudCityAnimations();
-    }else if(modernBoardThemeId==='volcanoIsland'){
-      ctx.drawImage(getVolcanoIslandBackdrop(),0,0);
-      drawVolcanoIslandAnimations();
-    }else if(modernBoardThemeId==='enchantedLibrary'){
-      ctx.drawImage(getEnchantedLibraryBackdrop(),0,0);
-      drawEnchantedLibraryAnimations();
-    }else if(modernBoardThemeId==='neonArcade'){
-      ctx.drawImage(getNeonArcadeBackdrop(),0,0);
-      drawNeonArcadeAnimations();
-    }else if(modernBoardThemeId==='moonGarden'){
-      ctx.drawImage(getMoonGardenBackdrop(),0,0);
-      drawMoonGardenAnimations();
-    }else{
-      ctx.drawImage(getFairyForestBackdrop(),0,0);
-      drawFairyForestAnimations();
-    }
+    const source=(MODERN_BOARD_BACKDROPS[modernBoardThemeId]||getFairyForestBackdrop)();
+    boardBackgroundRenderer.draw(ctx,{source,id:modernBoardThemeId,width:canvas.width,height:canvas.height,
+      pixel:graphicsMode==='pixel'&&modernBoardThemeId==='forest'});
     return;
   }
   ctx.fillStyle=theme.bgA||'#060c08';
@@ -6964,6 +6945,9 @@ function drawBackground(theme){
 }
 function drawPortalBackground(){
   const T=_renderNow,W=canvas.width,H=canvas.height;
+  if(!boardBackgroundsEnabled){
+    boardBackgroundRenderer.draw(ctx,{width:W,height:H,enabled:false});return;
+  }
   if(!_portalBackgroundSprite){
     _portalBackgroundSprite=createSpriteCanvas(W);
     _portalBackgroundSprite.height=H;
@@ -6980,6 +6964,9 @@ function drawPortalBackground(){
     vortex.addColorStop(1,'rgba(255,255,255,0)');
     bgCtx.fillStyle=vortex;
     bgCtx.fillRect(0,0,W,H);
+  }
+  if(isModernGraphics()){
+    boardBackgroundRenderer.draw(ctx,{source:_portalBackgroundSprite,id:'portal',width:W,height:H});return;
   }
   ctx.drawImage(_portalBackgroundSprite,0,0);
   drawParticles('shooting');
@@ -7141,7 +7128,7 @@ function draw(t,frameNow=performance.now()){
   if(templateDrawn&&!SnakeHeadwear.supports(graphicsMode,resolveHeadAccessory())){
     const headPoint=getSnakeRenderPoint(snake[0],t);
     const cx=(headPoint.x+.5)*CELL,cy=(headPoint.y+.5)*CELL;
-    for(const dx of wallWrap?[-COLS*CELL,0,COLS*CELL]:[0])for(const dy of wallWrap?[-ROWS*CELL,0,ROWS*CELL]:[0]){
+    for(const dx of wallWrap&&headPoint.wrapX?[-COLS*CELL,0,COLS*CELL]:[0])for(const dy of wallWrap&&headPoint.wrapY?[-ROWS*CELL,0,ROWS*CELL]:[0]){
       if(cx+dx<-2*CELL||cy+dy<-2*CELL||cx+dx>canvas.width+2*CELL||cy+dy>canvas.height+2*CELL)continue;
       drawModernHeadAccessory(cx+dx,cy+dy);
     }
@@ -8568,7 +8555,7 @@ function applyMode(m){
    ═══════════════════════════════════════ */
 
 /* ─── Inställningssida ─── */
-function goToSettings(){updateBonusEventControls();showScreen('settingsScreen');}
+function goToSettings(){updateBonusEventControls();updateBoardBackgroundControls();showScreen('settingsScreen');}
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
@@ -8594,7 +8581,8 @@ function updateMenuSettingsSummary(){
     ?' · '+pickLangText('🌿 Lugn runda','🌿 Calm round','🌿 Ruhige Runde')
     :enabledCount<3?' · 🎉 Bonus '+enabledCount+'/3':'';
   const graphicsStr=graphicsMode==='toy'?' · ✨ Modern':graphicsMode==='pixel'?' · 👾 '+pickLangText('Pixelretro','Pixel retro','Pixelretro'):' · 🧩 Original';
-  el.textContent=opsStr+' · '+getPracticeRangeLabel(numRange,activeOps)+tStr+bonusStr+graphicsStr;
+  const backgroundStr=boardBackgroundsEnabled?'':' · '+pickLangText('◼️ Bakgrunder av','◼️ Backgrounds off','◼️ Hintergründe aus');
+  el.textContent=opsStr+' · '+getPracticeRangeLabel(numRange,activeOps)+tStr+bonusStr+graphicsStr+backgroundStr;
 }
 
 /* ─── WebView2: exportera spelstatistik ─── */
@@ -9167,6 +9155,7 @@ if($('btnAbout')){
 document.querySelectorAll('.theme-btn').forEach(btn=>btn.addEventListener('click',()=>applyUITheme(btn.dataset.theme)));
 document.querySelectorAll('.mode-btn').forEach(btn=>btn.addEventListener('click',()=>applyMode(btn.dataset.mode)));
 document.querySelectorAll('.graphics-mode-btn').forEach(btn=>btn.addEventListener('click',()=>applyGraphicsMode(btn.dataset.graphics)));
+document.querySelectorAll('.board-background-btn').forEach(btn=>btn.addEventListener('click',()=>applyBoardBackgrounds(btn.dataset.background==='true')));
 document.querySelectorAll('.music-style-btn').forEach(btn=>btn.addEventListener('click',()=>applyMusicGenre(btn.dataset.genre)));
 $('btnGoMedals').addEventListener('click',goToMedals);
 $('btnGoHS').addEventListener('click',goToHS);

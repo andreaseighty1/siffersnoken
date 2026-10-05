@@ -142,7 +142,9 @@
         const cached=sprite(mode,id,part,pitch,direction,i===0&&blink,colorHue(id,i,time,reducedMotion),accessory);
         const x=(points[i].x+.5)*pitch,y=(points[i].y+.5)*pitch;
         target.globalAlpha=fade&&i?alpha(i):1;
-        for(const dx of wrap?[-w,0,w]:[0])for(const dy of wrap?[-h,0,h]:[0]){
+        // Only a real logical crossing may mirror a segment. Oversized sprites
+        // and their shadows must not leak onto the opposite edge while nearby.
+        for(const dx of wrap&&points[i].wrapX?[-w,0,w]:[0])for(const dy of wrap&&points[i].wrapY?[-h,0,h]:[0]){
           const left=x+dx-cached.extent/2,top=y+dy-cached.extent/2;
           if(left+cached.extent<0||top+cached.extent<0||left>w||top>h)continue;
           target.drawImage(cached.canvas,pixel?Math.round(left):left,pixel?Math.round(top):top,cached.extent,cached.extent);

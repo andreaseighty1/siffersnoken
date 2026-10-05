@@ -2,6 +2,16 @@
 
 ## 2026-10-05
 
+### Ny Sagoskog, Blodmåne och korrekta kantpassager
+
+- Sagoskogen följer godkänt koncept i separata Modern/Pixelretro-bilder: skarpa former, blågrön lugn mitt och detaljer längs ytterkanterna. Opak WebP 1536 × 1024, ungefär 76/97 KiB. Övriga banor väntar på omritning.
+- Tar bort det suddiga mellansteget och mattningen. Bakgrundscachen är begränsad; sifferbrickor och text påverkas inte. Modern/Pixelretro har inga animerade bakgrundsdekorationer.
+- Sparat På/Av-val för banbakgrunder på tre språk, även för portal och Original. Av ger enkel mörk yta och hämtar inga nya banbilder.
+- Blodmåne i båda stilarna med blodrött månmaterial, kopparljus och kraterrelief, på låsta runda former och smal kort svans. Befintligt ID `eld` och upplåsningskrav bevaras. 36 av 41 skins är klara; Hund, Katt, Ko, Tiger och Drake sparas som specialskins med vickande djursvansar.
+- Fixar att stora snokbilder/skuggor syns på motsatt kant för tidigt. Kopior ritas endast under faktisk logisk kantpassage, inklusive äldre bonad-overlay.
+- HV71 revision 4: tunn vit ytterlinje, blå kant, gul kärna, utan hockeyföremål. Bara dess tolv WebP-filer versionshämtas.
+- Kontrollerat i spel: båda stilar, lång orm, mobil 390 px, rörelse/svängar och kantpassager. Befintliga matte-/grafiktester samt nya kant-/bakgrundstester ingår.
+
 ### HV71: ren trefärgsdesign
 
 - Ersätter matchtröja och hjälmmotiv med breda, mjukt svepande blå, vita och gula färgfält på huvud, kropp och svans i båda stilarna.

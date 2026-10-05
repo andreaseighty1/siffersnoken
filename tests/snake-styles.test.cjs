@@ -13,6 +13,7 @@ for(const mode of ['toy','pixel'])for(const id of styles.config.skins){
 assert.ok(!styles.supports('pixel','tiger'));assert.ok(!styles.supports('classic','klassisk'));
 assert.deepEqual(styles.config,exporter.config());exporter.exportAssets({check:true});
 const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
+for(const id of styles.config.skins)assert.ok(html.includes("id:'"+id+"'"),'Every exported skin has an existing game ID, preserving unlocks');
 new vm.Script(html.match(/<script>([^]*?)<\/script>/)[1]);
 const modes=[...html.matchAll(/class="toggle-btn graphics-mode-btn[^]*?data-graphics="([^"]+)"/g)].map(m=>m[1]);
 assert.deepEqual(modes,['toy','pixel','classic']);
@@ -105,6 +106,24 @@ async function run(){
     }
   }
   // Composite Ghost as a whole before translucency, in both styles. This
+  // Edge cells do not wrap enlarged outlines/shadows; actual crossings do.
+  for(const mode of ['toy','pixel']){
+    const base={mode,id:'klassisk',cell:34,cols:21,rows:16,heading:{x:1,y:0},tailDirection:{x:-1,y:0},wrap:true};
+    for(const point of [{x:0,y:6},{x:20,y:6},{x:6,y:0},{x:6,y:15}]){
+      const main=fakeCanvas();renderer.draw(main.getContext(),{...base,points:[point]});
+      const draws=main.commands.filter(c=>c[0]==='draw');
+      const paint=mode==='pixel'?draws[0][3].commands.filter(c=>c[0]==='draw'):draws;
+      assert.equal(paint.length,1,'No opposite-edge fragment when merely adjacent to an edge');
+    }
+    const main=fakeCanvas();renderer.draw(main.getContext(),{...base,points:[{x:20.7,y:6,wrapX:true}]});
+    const draws=main.commands.filter(c=>c[0]==='draw');
+    assert.equal((mode==='pixel'?draws[0][3].commands.filter(c=>c[0]==='draw'):draws).length,2,'Actual horizontal passage still has both clipped halves');
+  }
+  const interpolation=vm.createContext({COLS:21,ROWS:16});
+  vm.runInContext(html.match(/function getSnakeRenderPoint\([^]*?\n}/)[0],interpolation);
+  assert.equal(interpolation.getSnakeRenderPoint({x:20,px:19,y:6,py:6},.5).wrapX,false);
+  assert.equal(interpolation.getSnakeRenderPoint({x:0,px:20,y:6,py:6},.5).wrapX,true);
+  assert.equal(interpolation.getSnakeRenderPoint({x:6,px:6,y:0,py:15},.5).wrapY,true);
   // prevents opaque intersections and a darker tail/body seam.
   for(const mode of ['toy','pixel']){
     const main=fakeCanvas(),opts={mode,id:'ghost',cell:34,cols:21,rows:16,points:[{x:8,y:4},{x:7,y:4},{x:6,y:4}],heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false};
@@ -117,7 +136,7 @@ async function run(){
     assert.ok(layer.commands.filter(c=>c[0]==='draw').slice(-3).every(c=>c[1]===1),'Parts compose at full opacity before the single translucent blit');
   }
   // End sprite has both tail and body painted at full opacity, before frame fade.
-  for(const [id,revision] of [['inferno',2],['radioaktiv',2],['plasma',2],['hv71',3]])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v='+revision)).length,12,'Corrected '+id+' fetches revised WebPs in both modes');
+  for(const [id,revision] of [['inferno',2],['radioaktiv',2],['plasma',2],['hv71',4]])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v='+revision)).length,12,'Corrected '+id+' fetches revised WebPs in both modes');
   assert.ok(requestedUrls.filter(url=>!['inferno','radioaktiv','plasma','hv71'].some(id=>url.includes('/'+id+'-'))).every(url=>!url.includes('?v=')),'Shared eyes and unchanged themes keep their existing cache');
   const joined=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-tail.webp')));
   assert.ok(joined.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-body.webp')));

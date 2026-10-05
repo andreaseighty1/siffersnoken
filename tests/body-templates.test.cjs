@@ -41,18 +41,26 @@ for(const colorCycle of [{hues:[0],intervalMs:1400},{hues:[0,30,55,115,175,220,2
   assert.throws(()=>validateTheme({...neutral,colorCycle}));
 }
 const gold=themes.find(t=>t.id==='guld');
+const moon=themes.find(t=>t.id==='eld');
+assert.equal(moon.pattern,'lunarCopper');
+for(const part of ['body','head-base','tail']){
+  assert.ok(require('../tools/body-templates.cjs').surfaceSvg(moon,512,part).defs.includes('eld-'+part+'-surface-rim'));
+  assert.ok(bodySvg('toy',moon).includes('#cb423d'),'Copper-red material, not a renamed solid red skin');
+}
 const hockey=themes.find(t=>t.id==='hv71'),hockeyTools=require('../tools/body-templates.cjs');
-assert.equal(hockey.pattern,'teamTricolor');assert.equal(hockey.assetRevision,3);
+assert.equal(hockey.pattern,'teamColorBands');assert.equal(hockey.assetRevision,4);
 assert.equal(hockey.patternPalette.base,'#0a2240');assert.equal(hockey.patternPalette.detail,'#ffcb01');
-assert.equal(hockey.palette.light,'#ffffff');
+assert.equal(hockey.palette.ink,'#ffffff');
 const hockeyColors=pixelGrid(hockey).flat().filter(Boolean);
-assert.ok(hockeyColors.filter(c=>[hockey.pixelPalette.base,hockey.pixelPalette.light,hockey.pixelPalette.shade].includes(c)).length>hockeyColors.length*.25,'White remains a broad color field, not thin pinstripes');
-assert.ok(hockeyColors.filter(c=>c===hockey.pixelPalette.edge).length>hockeyColors.length*.20,'Yellow also has a substantial area');
+assert.ok(hockeyColors.filter(c=>[hockey.pixelPalette.base,hockey.pixelPalette.light,hockey.pixelPalette.shade].includes(c)).length>hockeyColors.length*.40,'Yellow is the main sculpted core');
+assert.ok(hockeyColors.filter(c=>c===hockey.pixelPalette.ink).length<hockeyColors.length*.22,'White is a thin outside line, not a broad stripe');
 assert.ok(hockeyColors.includes('#ffcb01')&&hockeyColors.includes('#0a2240'));
-for(let i=0;i<=32;i++){const [blue,yellow]=hockeyTools.tricolorBounds(i/32);assert.ok(yellow-blue>.21&&yellow-blue<.27,'Broad white sweep separates the two colors');}
+assert.deepEqual(hockeyTools.teamColorBands,{whiteOuter:.97,blueInner:.74});
+assert.equal(hockeyTools.surfacePixel(hockey,16,16,32,'body',hockey.pixelPalette.base),'#ffcb01');
+assert.equal(hockeyTools.surfacePixel(hockey,27,16,32,'body',hockey.pixelPalette.base),'#0a2240');
 for(const part of ['body','head-base','tail']){
   const surface=hockeyTools.surfaceSvg(hockey,512,part);
-  assert.ok(surface.defs.includes('-tricolor-blue')&&surface.defs.includes('-tricolor-yellow'));
+  assert.ok(surface.defs.includes('-color-bands-blue')&&surface.defs.includes('-color-bands-yellow'));
   assert.ok(!/hockey|helmet|jersey|collar|sticks|vents|logo|stroke=/.test(surface.defs+surface.paint),'Only color fields, no sports objects or emblems');
 }
 assert.equal(gold.material,'gold');assert.ok(bodySvg('toy',gold).includes('-satin'));

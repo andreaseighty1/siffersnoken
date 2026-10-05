@@ -255,6 +255,13 @@
       "file": "generated/toy/hv71-body.webp"
     },
     {
+      "style": "toy",
+      "id": "eld",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/eld-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -505,6 +512,13 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/hv71-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "eld",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/eld-body.webp"
     }
   ]
 }

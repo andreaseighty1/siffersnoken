@@ -3,12 +3,15 @@
 <style>body{background:#f5f0e4;color:#183b35;font:15px system-ui;margin:16px}label{display:inline-block;margin:0 10px 10px 0}select,button{font:inherit}iframe{display:block;width:100%;max-width:1000px;height:850px;border:1px solid #789184;border-radius:12px;background:#08254a}p{max-width:1000px}</style>
 <h1>Huvudbonader · spelkontroll</h1><p>Utvecklingsprov på en lokal testprofil. Grafik, skin och bonad ändras bara i minnet. Alla nya tillgångar använder spelets riktiga renderer. Välj rörelse för att testa vanliga svängar.</p>
 <label>Grafik <select id="mode"><option value="toy">Modern</option><option value="pixel">Pixelretro</option><option value="classic">Original</option></select></label>
-<label>Skin <select id="skin"><option value="klassisk">Klassisk</option><option value="jordgubbe">Jordgubbe</option><option value="ghost">Ghost</option><option value="kunglig">Kunglig</option><option value="hv71">HV71</option><option value="hund">Hund · tidigare grafik</option><option value="katt">Katt · tidigare grafik</option><option value="bi">Ko · tidigare grafik</option><option value="tiger">Tiger · tidigare grafik</option><option value="drake">Drake · tidigare grafik</option><option value="blodmane">Blodmåne · tidigare grafik</option></select></label>
+<label>Skin <select id="skin"><option value="klassisk">Klassisk</option><option value="jordgubbe">Jordgubbe</option><option value="ghost">Ghost</option><option value="kunglig">Kunglig</option><option value="hv71">HV71</option><option value="hund">Hund · tidigare grafik</option><option value="katt">Katt · tidigare grafik</option><option value="bi">Ko · tidigare grafik</option><option value="tiger">Tiger · tidigare grafik</option><option value="drake">Drake · tidigare grafik</option><option value="eld">Blodmåne</option></select></label>
 <label>Bonad <select id="hat"><option value="crown">Krona</option><option value="off">Av</option><option value="auto">Auto</option></select></label>
 <label>Riktning <select id="direction"><option value="right">Höger</option><option value="down">Ned</option><option value="left">Vänster</option><option value="up">Upp</option></select></label>
 <label>Längd <select id="length"><option>33</option><option>4</option></select></label>
+<label>Bana <select id="board"><option value="forest">Sagoskogen</option><option value="crystal">Kristallgrotta</option><option value="sunTemple">Soltemplet</option><option value="footballPitch">Fotbollsplan</option><option value="basketballCourt">Basketplan</option><option value="hockeyRink">Hockeyrink</option><option value="coralReef">Korallrev</option><option value="cloudCity">Molnstaden</option><option value="volcanoIsland">Vulkanön</option><option value="enchantedLibrary">Magiska biblioteket</option><option value="neonArcade">Neonarkaden</option><option value="moonGarden">Månträdgården</option></select></label>
+<label>Bakgrund <select id="background"><option value="true">På</option><option value="false">Av</option></select></label>
 <label><input type="checkbox" id="mobile">Mobil 390 px</label><button id="play">Rörelse</button><button id="turn">Sväng ned</button><button id="still">Stillbild</button><button id="picker">Skinväljaren</button><span id="motionStatus"></span>
 <p id="status">Laddar spelet…</p><iframe id="game" title="SifferSnokens speltest" src="../index.html?perf=1"></iframe>
+<label>Kantprov <select id="edge"><option value="normal">Vanligt spel</option><option value="nearRight">Nära höger</option><option value="crossRight">Passage höger</option><option value="nearLeft">Nära vänster</option><option value="crossLeft">Passage vänster</option><option value="nearBottom">Nära nedre</option><option value="crossBottom">Passage nedre</option><option value="nearTop">Nära övre</option><option value="crossTop">Passage övre</option></select></label>
 <script>
 const frame=document.getElementById('game');let loaded=false,revision=0;
 async function update(view='game'){
@@ -16,12 +19,23 @@ async function update(view='game'){
   const version=++revision;
   const mode=document.getElementById('mode').value,skin=document.getElementById('skin').value,hat=document.getElementById('hat').value;
   const direction=document.getElementById('direction').value,length=Number(document.getElementById('length').value);
+  const board=document.getElementById('board').value,background=document.getElementById('background').value==='true';
+  const edge=document.getElementById('edge').value;
   frame.style.width=document.getElementById('mobile').checked?'390px':'100%';
   const w=frame.contentWindow;
   w.eval(`state='paused';musicOn=false;stopTitelMusic(true);mysteryEventsEnabled=false;portalEventsEnabled=false;bonusLivesEnabled=false;
     modernEyeBlinkUntil=0;modernEyeBlinkNextAt=performance.now()+100000;
     _activeSkinCache=${JSON.stringify(skin)};invalidateSkinCaches();_headAccessorySelectionCache=${JSON.stringify(hat)};
     applyGraphicsMode(${JSON.stringify(mode)},{persist:false});`);
+  w.eval(`modernBoardThemeId=${JSON.stringify(board)};applyBoardBackgrounds(${background},{persist:false});`);
+  if(background&&mode!=='classic')await w.eval(`new Promise(resolve=>{
+    (MODERN_BOARD_BACKDROPS[modernBoardThemeId]||getFairyForestBackdrop)();
+    const image=({forest:_fairyForestImage,crystal:_crystalCaveImage,sunTemple:_sunTempleImage,
+      footballPitch:_footballPitchImage,basketballCourt:_basketballCourtImage,hockeyRink:_hockeyRinkImage,
+      coralReef:_coralReefImage,cloudCity:_cloudCityImage,volcanoIsland:_volcanoIslandImage,
+      enchantedLibrary:_enchantedLibraryImage,neonArcade:_neonArcadeImage,moonGarden:_moonGardenImage})[modernBoardThemeId];
+    if(!image||image.complete)resolve();else{image.addEventListener('load',resolve,{once:true});image.addEventListener('error',resolve,{once:true});}
+  })`);
   if(w.SnakeStyles.supports(mode,skin))await w.eval(`snakeStyleRenderer.preload(${JSON.stringify(mode)},${JSON.stringify(skin)})`);
   if(version!==revision)return;
   w.eval(`dir=({right:{x:1,y:0},down:{x:0,y:1},left:{x:-1,y:0},up:{x:0,y:-1}})[${JSON.stringify(direction)}];nextDir={...dir};pendingDirs.length=0;
@@ -30,7 +44,16 @@ async function update(view='game'){
     score=120;lives=3;combo=0;problem=genProblem();placeTiles();updateHUD();hideOverlays();
     showScreen(${JSON.stringify(view==='picker'?'skinsScreen':'gameScreen')});
     ${view==='picker'?'renderSkinsPage();':'draw(1);'}`);
-  document.getElementById('status').textContent=[mode,skin,hat,direction,length+' segment',document.getElementById('mobile').checked?'mobil':'desktop'].join(' · ');
+  if(edge!=='normal'&&view!=='picker')w.eval(`
+    const edge=${JSON.stringify(edge)},cross=edge.startsWith('cross');
+    const horizontal=edge.endsWith('Right')||edge.endsWith('Left'),positive=edge.endsWith('Right')||edge.endsWith('Bottom');
+    dir=horizontal?{x:positive?1:-1,y:0}:{x:0,y:positive?1:-1};nextDir={...dir};wallWrap=true;
+    snake=Array.from({length:4},(_,i)=>{
+      const last=horizontal?COLS-1:ROWS-1,prev=positive?last-i:i;
+      const current=i===0&&cross?(positive?0:last):prev;
+      return horizontal?{x:current,y:7,px:prev,py:7}:{x:10,y:current,px:10,py:prev};
+    });draw(cross?.35:1);`);
+  document.getElementById('status').textContent=[mode,skin,hat,direction,length+' segment',document.getElementById('mobile').checked?'mobil':'desktop',board,background?'bakgrund på':'bakgrund av',edge].join(' · ');
 }
 frame.onload=()=>{loaded=true;
   for(const id of frame.contentWindow.SnakeHeadwear.ids.filter(id=>id!=='crown')){
@@ -38,7 +61,7 @@ frame.onload=()=>{loaded=true;
   }
   update().catch(e=>document.getElementById('status').textContent=e.message);
 };
-for(const id of ['mode','skin','hat','direction','length','mobile'])document.getElementById(id).onchange=()=>update().catch(e=>document.getElementById('status').textContent=e.message);
+for(const id of ['mode','skin','hat','direction','length','mobile','board','background','edge'])document.getElementById(id).onchange=()=>update().catch(e=>document.getElementById('status').textContent=e.message);
 document.getElementById('still').onclick=()=>update();document.getElementById('picker').onclick=()=>update('picker');
 document.getElementById('play').onclick=async()=>{document.getElementById('motionStatus').textContent='';document.getElementById('length').value='4';await update();frame.contentWindow.eval("state='playing';lastTickTime=performance.now();requestAnimationFrame(gameLoop);");};
 document.getElementById('turn').onclick=()=>{

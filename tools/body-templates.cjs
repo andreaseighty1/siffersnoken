@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist','royalBrocade','teamRibbons','teamTricolor']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist','royalBrocade','teamRibbons','teamColorBands']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -15,7 +15,7 @@ const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const seeds=[[-.37,-.31],[.30,-.39],[-.27,.30],[.36,.26],[.02,-.01]];
 function validateTheme(theme){
   if(!/^[a-z][a-z0-9-]*$/.test(theme.id))throw new Error('Invalid theme id');
-  if(!patterns.has(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
+  if(!patterns.has(theme.pattern)&&theme.pattern!=='lunarCopper')throw new Error('Unsupported pattern: '+theme.pattern);
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
   if(theme.assetRevision!==undefined&&(!Number.isSafeInteger(theme.assetRevision)||theme.assetRevision<1))throw new Error('Invalid asset revision');
   if(theme.material!==undefined&&theme.material!=='gold')throw new Error('Unsupported material');
@@ -75,7 +75,8 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
-  if(theme.pattern==='teamTricolor')return tricolorSvg(theme,size,part,lightCenter);
+  if(theme.pattern==='lunarCopper')return lunarSvg(theme,size,part,lightCenter);
+  if(theme.pattern==='teamColorBands')return teamColorSvg(theme,size,part,lightCenter);
   if(['royalBrocade','teamRibbons'].includes(theme.pattern))return royalTeamSvg(theme,size,part,lightCenter);
   if(['meteorNight','spectralMist'].includes(theme.pattern))return nightGhostSvg(theme,size,part,lightCenter);
   if(['celestialChart','solarRays'].includes(theme.pattern))return celestialSvg(theme,size,part,lightCenter);
@@ -121,11 +122,19 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
-  if(theme.pattern==='teamTricolor'){
-    const [u,v]=surfaceCoordinates(nx,ny,part),[blueEdge,yellowEdge]=tricolorBounds(u);
-    if(v<blueEdge)return color===p.light||color===p.detail?p.detail:p.ink;
-    if(v>yellowEdge)return p.edge;
-    return color===p.edge||color===p.detail?p.base:color;
+  if(theme.pattern==='lunarCopper'){
+    const [u,v]=surfaceCoordinates(nx,ny,part);
+    const distance=Math.hypot((u-.66)/.53,(v-.46)/.65);
+    if(distance>.88&&distance<1.07)return p.detail;
+    if(distance>.62&&distance<=.88)return color===p.shade?p.edge:p.light;
+    if(moonGrooves.some(s=>openPathDistance(s,u,v)<.026))return p.shade;
+    return color===p.detail?p.base:color;
+  }
+  if(theme.pattern==='teamColorBands'){
+    const radius=melonRadius(nx,ny,part);
+    if(radius>teamColorBands.whiteOuter)return p.ink;
+    if(radius>teamColorBands.blueInner)return color===p.light||color===p.detail?p.edge:p.detail;
+    return color===p.edge?p.shade:color===p.detail?p.light:color;
   }
   if(['royalBrocade','teamRibbons'].includes(theme.pattern)){
     const [u,v]=surfaceCoordinates(nx,ny,part),royal=theme.pattern==='royalBrocade';
@@ -391,23 +400,29 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
-// Only the three team colors: broad flowing navy/white/yellow surfaces.
-// The same color layout covers every part; no jersey, helmet or sports symbols.
-function tricolorBounds(u){
-  const blue=.35+.42*(u-.5)+.085*Math.sin(2*Math.PI*u);
-  return [blue,blue+.24+.025*Math.cos(2*Math.PI*(u-.1))];
-}
-function tricolorSvg(theme,size,part,lightCenter){
-  const tail=part==='tail',id=`${theme.id}-${part}-tricolor`,p=theme.patternPalette;
-  const f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};
+// Copper moon rim and sparse open crater grooves, not a repeated round badge.
+const moonGrooves=[cubicPoints([.24,.56],[.16,.34],[.36,.27],[.43,.38]),
+  cubicPoints([.55,.78],[.46,.65],[.62,.57],[.70,.65])];
+function lunarSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,tail=part==='tail',f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};
   const data=line=>'M '+line.map(([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`).join(' L ');
-  const curve=edge=>Array.from({length:129},(_,i)=>{const u=i/128;return [u,tricolorBounds(u)[edge]];});
-  const mask=(name,points)=>`<mask id="${id}-${name}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><path d="${data(points)} Z" fill="white"/></mask>`;
-  const blue=toyMaterial(p,id+'-navy',size,{tail,lightCenter});
-  const yellow=toyMaterial({base:p.detail,light:'#fff296',shade:'#c79800',edge:'#9a7404',ink:p.ink,detail:'#fff9c2'},id+'-yellow',size,{tail,lightCenter});
-  const blueMask=mask('blue',[[0,0],[1,0],...curve(0).reverse()]);
-  const yellowMask=mask('yellow',[...curve(1),[1,1],[0,1]]);
-  return {defs:blue.defs+yellow.defs+blueMask+yellowMask,paint:`<g mask="url(#${id}-blue)">${blue.paint}</g><g mask="url(#${id}-yellow)">${yellow.paint}</g>`};
+  const material=toyMaterial(theme.patternPalette,id,size,{tail,lightCenter});
+  const oval=(rx,ry,fill)=>`<ellipse cx="${size*(f.x+.66*f.w)}" cy="${size*(f.y+.46*f.h)}" rx="${size*rx*f.w}" ry="${size*ry*f.h}" fill="${fill}"/>`;
+  const mask=`<mask id="${id}-rim" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${oval(.58,.70,'white')}${oval(.40,.51,'black')}</mask>`;
+  const grooves=moonGrooves.map(line=>`<path d="${data(line)}" fill="none" stroke="${theme.palette.shade}" stroke-width="${size*f.w*.041}" stroke-linecap="round"/><path d="${data(line)}" transform="translate(${size*f.w*.010} ${size*f.h*.010})" fill="none" stroke="${theme.patternPalette.light}" stroke-opacity=".45" stroke-width="${size*f.w*.009}" stroke-linecap="round"/>`).join('');
+  return {defs:material.defs+mask,paint:`<g mask="url(#${id}-rim)">${material.paint}</g>`+grooves};
+}
+// Thin white outside, navy around a sculpted yellow core. Color only, no badge.
+const teamColorBands={whiteOuter:.97,blueInner:.74};
+function teamColorSvg(theme,size,part,lightCenter){
+  const tail=part==='tail',id=`${theme.id}-${part}-color-bands`;
+  const rx=part==='head-base'?snakeSpec.head.radiusX:spec.geometry.outerRadius;
+  const ry=part==='head-base'?snakeSpec.head.radiusY:rx;
+  const blue=toyMaterial(theme.patternPalette,id+'-navy',size,{rx,ry,tail,lightCenter});
+  const yellow=toyMaterial(theme.palette,id+'-yellow',size,{rx,ry,tail,lightCenter});
+  const mask=(name,fraction)=>`<mask id="${id}-${name}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${melonShape(size,part,fraction)}</g></mask>`;
+  return {defs:blue.defs+yellow.defs+mask('blue',teamColorBands.whiteOuter)+mask('yellow',teamColorBands.blueInner),
+    paint:`<rect width="${size}" height="${size}" fill="#ffffff"/><g mask="url(#${id}-blue)">${blue.paint}</g><g mask="url(#${id}-yellow)">${yellow.paint}</g>`};
 }
 const royalTrim=[cubicPoints([-.12,.25],[.48,.03],[.19,.82],[1.12,.73]),cubicPoints([-.12,.70],[.61,1.13],[.59,.19],[1.12,.25])];
 const teamTrim=[[[.00,.20],[1.0,.66]],[[.0,.42],[1.0,.88]]];
@@ -806,7 +821,7 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,nuclearPaths,plasmaPaths,radiationMark,clockGears,clockTrace,runeStrokes,runeCracks,relicFrame,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,tricolorBounds,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
+module.exports={spec,themes,seeds,toyMaterial,pixelMaterial,emeraldMark,emeraldSvg,emeraldPixel,candyBand,galaxyMarks,galaxyCloud,melonSeeds,melonRadius,motifCoordinates,roseShapes,forestShapes,forestVeins,forestStem,electricPaths,openPathDistance,nuclearPaths,plasmaPaths,radiationMark,clockGears,clockTrace,runeStrokes,runeCracks,relicFrame,magmaPaths,obsidianFaces,obsidianGlints,ribbonY,teamColorBands,surfaceSvg,surfacePixel,bodySvg,pixelGrid,previewHtml,validateTheme,build};
 if(require.main===module){
   const args=process.argv.slice(2),sharpIndex=args.indexOf('--sharp');
   if(sharpIndex!==-1&&!args[sharpIndex+1])throw new Error('Supply the path to the installed sharp module after --sharp');

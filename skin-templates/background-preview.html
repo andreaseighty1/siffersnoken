@@ -1,0 +1,42 @@
+<!doctype html><html lang="sv"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SifferSnoken · lugnare banbakgrunder</title>
+<style>body{margin:20px;background:#f5f0e4;color:#183b35;font:15px system-ui}main{max-width:1050px;margin:auto}h1{font-size:26px}p{line-height:1.5}.boards{display:grid;grid-template-columns:1fr 1fr;gap:20px}iframe{width:100%;height:650px;border:1px solid #789184;border-radius:14px;background:#163136}label{margin-right:12px}select{font:inherit}@media(max-width:650px){.boards{grid-template-columns:1fr}}</style>
+<main><h1>SifferSnoken · lugnare bakgrunder</h1><p>Spelets riktiga grafik, samma snok och brickor i båda vyerna. Skarpa former och lugn mitt. Sagoskogen har en egen bakgrund i varje stil.</p>
+<label>Bana <select id="board"><option value="forest">Sagoskogen</option><option value="crystal">Kristallgrotta</option><option value="sunTemple">Soltemplet</option><option value="footballPitch">Fotbollsplan</option><option value="basketballCourt">Basketplan</option><option value="hockeyRink">Hockeyrink</option><option value="coralReef">Korallrev</option><option value="cloudCity">Molnstaden</option><option value="volcanoIsland">Vulkanön</option><option value="enchantedLibrary">Magiska biblioteket</option><option value="neonArcade">Neonarkaden</option><option value="moonGarden">Månträdgården</option></select></label>
+<label>Grafik <select id="mode"><option value="pair">Båda stilarna</option><option value="toy">Modern</option><option value="pixel">Pixelretro</option><option value="classic">Original</option></select></label>
+<label>Skin <select id="skin"><option value="eld">Blodmåne</option><option value="hv71">HV71</option><option value="klassisk">Klassisk</option><option value="jordgubbe">Jordgubbe</option><option value="ghost">Ghost</option></select></label>
+<div class="boards"><section><h2>Bakgrunder på</h2><iframe title="Bakgrunder på" id="on" src="../index.html"></iframe></section><section><h2>Bakgrunder av</h2><iframe title="Bakgrunder av" id="off" src="../index.html"></iframe></section></div><p id="status">Laddar…</p></main>
+<script>
+const frames=[document.getElementById('on'),document.getElementById('off')];let ready=0,revision=0;
+async function update(){
+  if(ready!==2)return;const current=++revision;
+  const choice=document.getElementById('mode').value,skin=document.getElementById('skin').value,board=document.getElementById('board').value;
+  const pair=choice==='pair';
+  document.querySelectorAll('.boards h2').forEach((h,i)=>h.textContent=pair?['Modern','Pixelretro'][i]:['Bakgrunder på','Bakgrunder av'][i]);
+  await Promise.all(frames.map(async(frame,index)=>{
+    const w=frame.contentWindow,mode=pair?['toy','pixel'][index]:choice,enabled=pair||index===0;
+    w.eval(`state='paused';musicOn=false;stopTitelMusic(true);mysteryEventsEnabled=false;portalEventsEnabled=false;bonusLivesEnabled=false;
+      _activeSkinCache=${JSON.stringify(skin)};invalidateSkinCaches();_headAccessorySelectionCache='off';
+      modernEyeBlinkUntil=0;modernEyeBlinkNextAt=performance.now()+100000;
+      applyGraphicsMode(${JSON.stringify(mode)},{persist:false});modernBoardThemeId=${JSON.stringify(board)};
+      applyBoardBackgrounds(${enabled},{persist:false});`);
+    if(w.SnakeStyles.supports(mode,skin))await w.eval(`snakeStyleRenderer.preload(${JSON.stringify(mode)},${JSON.stringify(skin)})`);
+    if(enabled&&mode!=='classic')await w.eval(`new Promise(resolve=>{
+      (MODERN_BOARD_BACKDROPS[modernBoardThemeId]||getFairyForestBackdrop)();
+      const image=({forest:_fairyForestImage,crystal:_crystalCaveImage,sunTemple:_sunTempleImage,footballPitch:_footballPitchImage,
+        basketballCourt:_basketballCourtImage,hockeyRink:_hockeyRinkImage,coralReef:_coralReefImage,cloudCity:_cloudCityImage,
+        volcanoIsland:_volcanoIslandImage,enchantedLibrary:_enchantedLibraryImage,neonArcade:_neonArcadeImage,moonGarden:_moonGardenImage})[modernBoardThemeId];
+      if(!image||image.complete)resolve();else{image.addEventListener('load',resolve,{once:true});image.addEventListener('error',resolve,{once:true});}
+    })`);
+    if(current!==revision)return;
+    w.eval(`dir={x:1,y:0};nextDir={...dir};pendingDirs.length=0;
+      snake=Array.from({length:9},(_,i)=>{const x=13-i,y=8;return{x,y,px:x,py:y};});
+      score=120;lives=3;combo=0;problem={expr:'8 + 5',answer:13,op:'+'};
+      tiles=[{x:3,y:3,value:13,correct:true},{x:16,y:3,value:11,correct:false},{x:3,y:12,value:15,correct:false},{x:16,y:12,value:9,correct:false}];
+      updateHUD();hideOverlays();showScreen('gameScreen');draw(1);`);
+  }));
+  if(current===revision)document.getElementById('status').textContent=`${choice} · ${skin} · ${board} · klara`;
+}
+for(const frame of frames)frame.onload=()=>{ready++;update().catch(e=>document.getElementById('status').textContent=e.message);};
+for(const id of ['board','mode','skin'])document.getElementById(id).onchange=()=>update().catch(e=>document.getElementById('status').textContent=e.message);
+</script></html>

@@ -26,7 +26,7 @@ const context=vm.createContext({
   document:{getElementById:element,querySelectorAll:()=>[]},
   activeOps:new Set(['+','-']), numRange:20, tables:new Set([2,5,10]), wrongPool:[],
   speedMode:'none', wallWrap:true, multiTableSelect:false, musicGenre:'original',
-  mysteryEventsEnabled:true, portalEventsEnabled:true, bonusLivesEnabled:true,graphicsMode:'classic',
+  mysteryEventsEnabled:true, portalEventsEnabled:true, bonusLivesEnabled:true,graphicsMode:'classic',boardBackgroundsEnabled:true,
   SETTINGS_KEY:'settings',MAX_WRONG_POOL:20,MYSTERY_RANGE_BOOST:{common:.8,uncommon:.92,rare:1.04,epic:1.14,legendary:1.24},
   loadPlayer:()=> 'Test',loadHistory:()=>[],getTotalGamesPlayed:()=>0,saveHistory(){},loadStats:()=>({}),saveStats(){},checkGameCountMedals(){},
   getPlayer:()=> 'Test',loadHS:()=>[],saveHS(){},score:0,snake:[],practiceMode:false,sessionTotal:0,sessionCorrect:0,sessionOpStats:{},sessionWrongMap:{},
