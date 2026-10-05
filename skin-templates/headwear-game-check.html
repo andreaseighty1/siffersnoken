@@ -1,0 +1,46 @@
+<!doctype html><html lang="sv"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Huvudbonader · spelkontroll</title>
+<style>body{background:#f5f0e4;color:#183b35;font:15px system-ui;margin:16px}label{display:inline-block;margin:0 10px 10px 0}select,button{font:inherit}iframe{display:block;width:100%;max-width:1000px;height:850px;border:1px solid #789184;border-radius:12px;background:#08254a}p{max-width:1000px}</style>
+<h1>Huvudbonader · spelkontroll</h1><p>Utvecklingsprov på en lokal testprofil. Grafik, skin och bonad ändras bara i minnet. Alla nya tillgångar använder spelets riktiga renderer. Välj rörelse för att testa vanliga svängar.</p>
+<label>Grafik <select id="mode"><option value="toy">Modern</option><option value="pixel">Pixelretro</option><option value="classic">Original</option></select></label>
+<label>Skin <select id="skin"><option value="klassisk">Klassisk</option><option value="jordgubbe">Jordgubbe</option><option value="ghost">Ghost</option><option value="hund">Hund · tidigare grafik</option></select></label>
+<label>Bonad <select id="hat"><option value="crown">Krona</option><option value="beanie">Mössa</option><option value="glasses">Glasögon</option><option value="off">Av</option><option value="auto">Auto</option><option value="pirate">Pirathatt · tidigare grafik</option></select></label>
+<label>Riktning <select id="direction"><option value="right">Höger</option><option value="down">Ned</option><option value="left">Vänster</option><option value="up">Upp</option></select></label>
+<label>Längd <select id="length"><option>33</option><option>4</option></select></label>
+<label><input type="checkbox" id="mobile">Mobil 390 px</label><button id="play">Rörelse</button><button id="turn">Sväng ned</button><button id="still">Stillbild</button><button id="picker">Skinväljaren</button><span id="motionStatus"></span>
+<p id="status">Laddar spelet…</p><iframe id="game" title="SifferSnokens speltest" src="../index.html?perf=1"></iframe>
+<script>
+const frame=document.getElementById('game');let loaded=false,revision=0;
+async function update(view='game'){
+  if(!loaded)return;
+  const version=++revision;
+  const mode=document.getElementById('mode').value,skin=document.getElementById('skin').value,hat=document.getElementById('hat').value;
+  const direction=document.getElementById('direction').value,length=Number(document.getElementById('length').value);
+  frame.style.width=document.getElementById('mobile').checked?'390px':'100%';
+  const w=frame.contentWindow;
+  w.eval(`state='paused';musicOn=false;stopTitelMusic(true);mysteryEventsEnabled=false;portalEventsEnabled=false;bonusLivesEnabled=false;
+    _activeSkinCache=${JSON.stringify(skin)};invalidateSkinCaches();_headAccessorySelectionCache=${JSON.stringify(hat)};
+    applyGraphicsMode(${JSON.stringify(mode)},{persist:false});`);
+  if(w.SnakeStyles.supports(mode,skin))await w.eval(`snakeStyleRenderer.preload(${JSON.stringify(mode)},${JSON.stringify(skin)})`);
+  if(version!==revision)return;
+  w.eval(`dir=({right:{x:1,y:0},down:{x:0,y:1},left:{x:-1,y:0},up:{x:0,y:-1}})[${JSON.stringify(direction)}];nextDir={...dir};pendingDirs.length=0;
+    snake=Array.from({length:${length}},(_,i)=>{const row=Math.floor(i/8),col=i%8;const x=row%2?4+col:11-col,y=6+row;return{x,y,px:x,py:y};});
+    if(${length}===4)snake=Array.from({length:4},(_,i)=>({x:11-dir.x*i,y:7-dir.y*i,px:11-dir.x*i,py:7-dir.y*i}));
+    score=120;lives=3;combo=0;problem=genProblem();placeTiles();updateHUD();hideOverlays();
+    showScreen(${JSON.stringify(view==='picker'?'skinsScreen':'gameScreen')});
+    ${view==='picker'?'renderSkinsPage();':'draw(1);'}`);
+  document.getElementById('status').textContent=[mode,skin,hat,direction,length+' segment',document.getElementById('mobile').checked?'mobil':'desktop'].join(' · ');
+}
+frame.onload=()=>{loaded=true;update().catch(e=>document.getElementById('status').textContent=e.message);};
+for(const id of ['mode','skin','hat','direction','length','mobile'])document.getElementById(id).onchange=()=>update().catch(e=>document.getElementById('status').textContent=e.message);
+document.getElementById('still').onclick=()=>update();document.getElementById('picker').onclick=()=>update('picker');
+document.getElementById('play').onclick=async()=>{document.getElementById('motionStatus').textContent='';document.getElementById('length').value='4';await update();frame.contentWindow.eval("state='playing';lastTickTime=performance.now();requestAnimationFrame(gameLoop);");};
+document.getElementById('turn').onclick=()=>{
+  const w=frame.contentWindow,start=performance.now();w.applyDir({x:0,y:1});
+  function check(){
+    if(w.eval('dir.y===1'))document.getElementById('motionStatus').textContent='Svängen har genomförts i spelmotorn.';
+    else if(performance.now()-start<3000)requestAnimationFrame(check);
+    else document.getElementById('motionStatus').textContent='Svängen väntar: starta rörelse först.';
+  }check();
+};
+</script></html>

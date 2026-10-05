@@ -14,6 +14,18 @@ Test: `node tests/snake-styles.test.cjs` och `node tests/snake-colors.test.cjs`.
 
 Polkagris och Galax har också kontrollerats i båda lägena på desktop och i 390 px mobilbredd, med 33 segment, flera svängar och nedtonad svans, samt separat i vanlig spelrörelse. Båda behåller fast kroppsmönster. Slutpreviews finns via `runtime-preview.html?skins=polkagris` respektive `runtime-preview.html?skins=galax`.
 
+## Huvudbonader: passformsmall och första pilotomgången
+
+`snake-headwear.js` innehåller gemensamma huvudbonadsmallar och separata Modern-/Pixelretro-motiv för **Krona, Mössa och Glasögon**. Ögonankare och den bakre utsmyckningszonen exporteras direkt från `snake-spec.json` till `snake-style-config.js`; huvudets storlek och mask ändras inte. Krona och mössa ligger bakom ögonen. Glasögon har öppna linsytor över de vanliga ögon- och blinklagren. Jordgubbens blad ligger under bonaden; framtida djuröron/horn behöver passformsgranskas när respektive specialskin görs.
+
+Bonaderna är kodritade och bakas bara när en huvud-sprite cachas, inte varje spelbildruta. Nyckeln innehåller stil, skin, storlek, riktning, blinkning, materialnyans och bonad. Modern har mjukt skuggade material med ljuset kvar i världsrymden. Pixelretro använder heltalspixlar och högst sex färger per bonad, utan vektorutjämning. Inga nya bildnedladdningar krävs. Glasögonens öppningar görs på ett separat transparent lager så att ögonen aldrig raderas. Bonaden ritas efter materialets färgväxling: Regnbåge färgskiftar inte mössan eller glasögonen.
+
+Spelet skickar vald bonad till `snake-styles.js`. Pilotbonaderna ingår i samma cachade huvud och, för Ghost, samma sammansatta genomskinliga snoklager. Ingen separat andra bonad ritas ovanpå. Samma passform används på bonadkortets riktiga valda huvud och på skin-korten. Auto, Av, sparade val, museiupplåsning och nuvarande säsongsprioritet är oförändrade. Original och ännu ej migrerade skins behåller sina gamla bonader; övriga bonadmotiv använder också tidigare grafik. Ghost-integrationen gäller de tre pilotbonaderna, inte de gamla motiv som återstår att anpassa.
+
+`headwear-preview.html` visar båda stilarna på Klassisk, Jordgubbe och Ghost i fyra riktningar; `?hat=crown`, `?hat=beanie` och `?hat=glasses` väljer ett motiv. Blinkning och jämförelse utan bonad finns som reglage. `headwear-game-check.html` är ett separat utvecklingsprov med spelets riktiga vy, 33/4 segment, mobilbredd 390 px, skinväljare och normal spelrörelse. Det är inte en spelmeny eller runtime-resurs. Kör det på en lokal testprofil.
+
+Kontroll: `node tests/snake-headwear.test.cjs` samt befintliga sju tester och mallarnas två `--check`-körningar. Visuell kontroll är gjord av pilotmotiven i båda stilarna på desktop/mobil med 33 segment, samt vanlig rörelse och svängar med fyra segment. Förhandsprovet täcker alla riktningar på de tre testskinsen och blinkning. Bonadkortet har kontrollerats i spelets skinväljare. Original har kontrollerats separat med sin oförändrade krona. Nästa steg är användarens passformsbedömning före nästa bonadomgång; musei- och säsongsbonader är inte omgjorda ännu.
+
 ## Arbetsmodell
 
 De godkända konceptbilderna är **visuella mål**, inte bara lös inspiration. `references/toy-concept.webp` och `references/pixel-concept.webp` är förlustfria formatkopior av originalen; inga referensbilder laddas av spelet. Börja visuell kontroll i `style-targets.html`, där konceptens skin-exempel jämförs med de faktiska WebP-tillgångarna. Matematiskt korrekt geometri och godkända alpha-tester betyder inte i sig att stilen har nått målbilden.

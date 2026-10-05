@@ -1093,9 +1093,10 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div id="medalToast"></div>
 
 <script src="translations.js?v=3.12"></script>
-<script src="snake-style-config.js?v=snake-styles-17"></script>
+<script src="snake-style-config.js?v=snake-styles-18"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
-<script src="snake-styles.js?v=snake-styles-6"></script>
+<script src="snake-headwear.js?v=headwear-1"></script>
+<script src="snake-styles.js?v=snake-styles-7"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -3554,14 +3555,14 @@ function getSnakeRenderPoint(segment,progress){
   if(Math.abs(dy)>1)dy=dy>0?dy-ROWS:dy+ROWS;
   return{x:px+dx*progress,y:py+dy*progress};
 }
+function resolveHeadAccessory(userPick=loadHeadAccessory(),skinId=loadActiveSkin()){
+  const theme=getActiveTheme();
+  if(theme.isSeasonal&&theme.headAcc)return theme.headAcc;
+  if(userPick==='off')return null;
+  return userPick==='auto'?(SKIN_THEMES[skinId]||{}).headAcc||null:userPick;
+}
 function drawModernHeadAccessory(cx,cy){
-  const theme=getActiveTheme(),userPick=loadHeadAccessory();
-  const skinAcc=(SKIN_THEMES[loadActiveSkin()]||{}).headAcc;
-  let acc=null;
-  if(theme.isSeasonal&&theme.headAcc)acc=theme.headAcc;
-  else if(userPick==='off')acc=null;
-  else if(userPick==='auto')acc=skinAcc;
-  else acc=userPick;
+  const acc=resolveHeadAccessory();
   if(acc)drawHeadAccessory(acc,cx,cy);
 }
 const MODERN_GALAXY_TWINKLES=[
@@ -3893,7 +3894,7 @@ function drawSkinPreviewCanvas(canvas,skin){
     const mode=graphicsMode,cell=Math.min(26,W/8),cols=W/cell,rows=H/cell;
     const points=Array.from({length:6},(_,i)=>({x:cols/2+2-i,y:rows/2-.5}));
     const drawn=snakeStyleRenderer.draw(ctx,{mode,id:skin.id,cell,cols,rows,points,
-      heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false});
+      heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false,accessory:resolveHeadAccessory(loadHeadAccessory(),skin.id)});
     if(!drawn)snakeStyleRenderer.preload(mode,skin.id).then(ok=>{
       if(ok&&canvas.isConnected&&canvas.offsetWidth>0&&mode===graphicsMode)drawSkinPreviewCanvas(canvas,skin);
     });
@@ -4070,10 +4071,20 @@ function drawHeadAccessoryPreviewCanvas(canvas,headSel){
   ctx.moveTo(12,H-12);ctx.lineTo(W-12,H-12);
   ctx.stroke();
 
-  let previewAcc=headSel;
-  if(previewAcc==='auto'){
-    const th=getActiveTheme();
-    previewAcc=th.headAcc||null;
+  const previewAcc=resolveHeadAccessory(headSel),skin=getActiveSkinDef(),mode=graphicsMode;
+  if(SnakeStyles.supports(mode,skin.id)){
+    const cell=38,cols=W/cell,rows=H/cell;
+    const drawn=snakeStyleRenderer.draw(ctx,{mode,id:skin.id,cell,cols,rows,
+      points:[{x:cols/2-.5,y:rows/2-.5}],heading:{x:0,y:-1},tailDirection:{x:0,y:1},
+      fade:false,accessory:previewAcc});
+    if(!drawn)snakeStyleRenderer.preload(mode,skin.id).then(ok=>{
+      if(ok&&canvas.isConnected&&canvas.offsetWidth>0&&graphicsMode===mode&&loadActiveSkin()===skin.id&&loadHeadAccessory()===headSel)drawHeadAccessoryPreviewCanvas(canvas,headSel);
+    });
+    else if(previewAcc&&!SnakeHeadwear.supports(mode,previewAcc)){
+      ctx.save();ctx.translate(cx,centerY);ctx.scale(cell/CELL,cell/CELL);
+      paintHeadAccessory(ctx,previewAcc,0,0,'up');ctx.restore();
+    }
+    return;
   }
   if(previewAcc&&previewAcc!=='off'){
     const faceAcc=(previewAcc==='glasses'||previewAcc==='weld_glasses'||previewAcc==='shadow_monocle');
@@ -7069,7 +7080,7 @@ function draw(t,frameNow=performance.now()){
     }
   }
   const templateDrawn=snake.length>0&&snakeStyleRenderer.draw(ctx,{
-    mode:graphicsMode,id:getActiveSkinDef().id,cell:CELL,cols:COLS,rows:ROWS,
+    mode:graphicsMode,id:getActiveSkinDef().id,cell:CELL,cols:COLS,rows:ROWS,accessory:resolveHeadAccessory(),
     points:snake.map(s=>getSnakeRenderPoint(s,t)),heading:dir,
     tailDirection:(()=>{
       const last=snake.length-1;
@@ -7080,7 +7091,7 @@ function draw(t,frameNow=performance.now()){
     blink:isModernEyeBlinking(),wrap:wallWrap,time:_renderNow,
     reducedMotion:!!(MODERN_REDUCED_MOTION_QUERY&&MODERN_REDUCED_MOTION_QUERY.matches)
   });
-  if(templateDrawn){
+  if(templateDrawn&&!SnakeHeadwear.supports(graphicsMode,resolveHeadAccessory())){
     const headPoint=getSnakeRenderPoint(snake[0],t);
     const cx=(headPoint.x+.5)*CELL,cy=(headPoint.y+.5)*CELL;
     for(const dx of wallWrap?[-COLS*CELL,0,COLS*CELL]:[0])for(const dy of wallWrap?[-ROWS*CELL,0,ROWS*CELL]:[0]){

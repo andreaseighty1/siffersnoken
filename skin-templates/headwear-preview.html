@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="sv">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SifferSnoken · huvudbonader</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:24px;background:#f5f0e4;color:#183b35;font:16px system-ui,sans-serif}main{max-width:1080px;margin:auto}h1{font-size:26px;margin:0 0 10px}p{line-height:1.5}article{background:#fffaf0;border:1px solid #cdd6c9;border-radius:18px;padding:20px;margin:22px 0}h2{margin:0 0 14px}h3{font-size:16px;margin:0 0 8px}.styles{display:grid;grid-template-columns:1fr 1fr;gap:20px}canvas{display:block;width:100%;height:auto;border-radius:12px}label{display:inline-flex;gap:6px;margin-right:14px}@media(max-width:650px){body{padding:12px}.styles{grid-template-columns:1fr}article{padding:14px}}
+</style>
+<main><h1>Huvudbonader · första passformsprovet</h1><p>Klassisk, Jordgubbe och Ghost, i alla fyra riktningar. Samma renderer och fästpunkter som i spelet. Ögon och huvudstorlekar är oförändrade.</p><label><input type="checkbox" id="blink">Visa blinkning</label><label><input type="checkbox" id="off">Utan bonad</label><div id="previews"></div><p id="status">Laddar…</p></main>
+<script src="../snake-style-config.js?v=snake-styles-18"></script>
+<script src="../snake-colors.js?v=snake-styles-4"></script>
+<script src="../snake-headwear.js?v=headwear-1"></script>
+<script src="../snake-styles.js?v=snake-styles-7"></script>
+<script>
+const renderer=SnakeStyles.createRenderer({assetPrefix:'../'}),cards=[];
+const skins=[['klassisk','Klassisk'],['jordgubbe','Jordgubbe'],['ghost','Ghost · genomskinlig']];
+const headings=[{x:0,y:-1},{x:1,y:0},{x:0,y:1},{x:-1,y:0}];
+function redraw(){
+  for(const {canvas,mode,accessory} of cards){
+    const c=canvas.getContext('2d');c.clearRect(0,0,480,348);c.fillStyle='#e4edde';c.fillRect(0,0,480,348);
+    c.strokeStyle='rgba(46,95,59,.18)';c.lineWidth=1;c.beginPath();
+    for(let x=0;x<480;x+=24){c.moveTo(x,0);c.lineTo(x,348);}for(let y=0;y<348;y+=24){c.moveTo(0,y);c.lineTo(480,y);}c.stroke();
+    for(let row=0;row<skins.length;row++){
+      c.fillStyle='#183b35';c.font='600 15px system-ui';c.fillText(skins[row][1],14,row*116+23);
+      for(let d=0;d<4;d++)renderer.draw(c,{mode,id:skins[row][0],cell:42,cols:480/42,rows:348/42,
+        points:[{x:(60+d*120)/42-.5,y:(row*116+72)/42-.5}],heading:headings[d],tailDirection:headings[d],
+        fade:false,blink:document.getElementById('blink').checked,accessory:document.getElementById('off').checked?null:accessory});
+    }
+  }
+}
+(async()=>{
+  const requested=new URLSearchParams(location.search).get('hat');
+  for(const [accessory,label] of [['crown','Krona'],['beanie','Mössa'],['glasses','Glasögon']]){
+    if(requested&&requested!==accessory)continue;
+    const article=document.createElement('article');article.id='preview-'+accessory;
+    const h=document.createElement('h2');h.textContent=label;article.append(h);
+    const group=document.createElement('div');group.className='styles';article.append(group);
+    for(const [mode,label] of [['toy','Modern · mjuk leksaksform'],['pixel','Pixelretro']]){
+      const section=document.createElement('section'),h=document.createElement('h3'),canvas=document.createElement('canvas');
+      h.textContent=label;canvas.width=480;canvas.height=348;canvas.setAttribute('aria-label',accessory+' '+mode+' fyra riktningar');section.append(h,canvas);group.append(section);
+      for(const [id] of skins)if(!await renderer.preload(mode,id))throw Error('Tillgång saknas: '+id);
+      cards.push({canvas,mode,accessory});
+    }
+    document.getElementById('previews').append(article);
+  }
+  redraw();document.getElementById('status').textContent='Passformsprovet är laddat.';
+  document.getElementById('blink').onchange=redraw;document.getElementById('off').onchange=redraw;
+})().catch(e=>document.getElementById('status').textContent=e.message);
+</script></html>
