@@ -41,6 +41,16 @@ for(const colorCycle of [{hues:[0],intervalMs:1400},{hues:[0,30,55,115,175,220,2
   assert.throws(()=>validateTheme({...neutral,colorCycle}));
 }
 const gold=themes.find(t=>t.id==='guld');
+const hockey=themes.find(t=>t.id==='hv71'),hockeyTools=require('../tools/body-templates.cjs');
+assert.equal(hockey.pattern,'hockeyKit');assert.equal(hockey.assetRevision,2);
+assert.equal(hockey.patternPalette.base,'#0a2240');assert.equal(hockey.patternPalette.detail,'#ffcb01');
+assert.equal(hockey.palette.light,'#ffffff');
+const hockeyColors=pixelGrid(hockey).flat().filter(Boolean);
+assert.ok(hockeyColors.filter(c=>[hockey.pixelPalette.base,hockey.pixelPalette.light,hockey.pixelPalette.shade].includes(c)).length>hockeyColors.length*.30,'White jersey stays a substantial material, not thin pinstripes');
+assert.ok(hockeyColors.includes('#ffcb01')&&hockeyColors.includes('#0a2240'));
+for(const line of [...hockeyTools.hockeySticks,...hockeyTools.hockeyVents])assert.ok(line.every(([,y])=>y>=.60),'Helmet motifs stay behind the eyes');
+assert.ok(hockeyTools.surfaceSvg(hockey,512,'head-base').paint.includes('stroke-linejoin="round"'));
+assert.ok(!hockeyTools.surfaceSvg(hockey,512,'body').paint.includes('logo'),'No modified club logo or repeated body badge');
 assert.equal(gold.material,'gold');assert.ok(bodySvg('toy',gold).includes('-satin'));
 assert.ok(!bodySvg('toy',{...gold,material:undefined}).includes('-satin'));
 assert.deepEqual(pixelGrid(gold),pixelGrid({...gold,material:undefined}),'Gold finish does not blur the pixel palette');

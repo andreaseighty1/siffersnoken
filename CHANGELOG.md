@@ -2,6 +2,13 @@
 
 ## 2026-10-05
 
+### HV71: tydligare hockeykänsla
+
+- Matchtröjeinspirerade vita kroppar med mörkblå axelpartier, sidopaneler och breda gula muddar, i både Modern och Pixelretro.
+- Officiella referensfärger: blå `#0a2240` och gul `#ffcb01` enligt HV71:s grafiska riktlinjer, tillsammans med vitt. Ingen klubb-logotyp kopieras eller ändras.
+- Hjälminspirerad blå bakdel på huvudet med två korsade hockeyklubbor och små ventilationsspår bakom ögonen. Låsta former, svansfäste och kroppsmönstrets fasta orientering bevaras.
+- Revision 2 uppdaterar bara HV71:s tolv runtime-WebP-adresser; ögon, huvudbonader, andra skins och Original behåller sina tillgångar.
+
 ### Kunglig, HV71 och alla huvudbonader i båda nya stilarna
 
 - Kunglig: lila skulpterat material med gyllene brokadslingor och korrekt proportionerad krona. HV71: blått material med gula sportband och ljusa kanter.
