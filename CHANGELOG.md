@@ -2,6 +2,13 @@
 
 ## 2026-10-05
 
+### Tiger: pälsmönster efter användarens fotografiska förlaga
+
+- Ersätter de korta spegelvända kantmarkeringarna med fem långa, ojämnt böjda ränder och två korta anslutande förgreningar. Olika bredd, längd och invändiga avsmalnande spetsar ger ett mer naturligt tigerpälsmönster.
+- Samma motiv byggs som skulpterat material i Modern och native sexfärgspixelgrafik i Pixelretro. Kroppens cirkelmask, huvud/öron, svansbilder och den förstärkta svansvickningen är oförändrade.
+- Tiger revision 3 och ny konfigurationsadress hämtar rätt WebP-version. Katt, andra skins, Original och upplåsningar ändras inte. Inga nya shaders, per-bildruta-mönster eller extra kroppsbilder tillkommer.
+- Kontrollerat i båda lägena på desktop/390 px mobil, med 33 segment och separat verklig rörelse/sväng. Alla tio testsviter och rasterkontrollen av 499 WebP-tillgångar passerar; långrandig native pixelgrafik har ett eget regressionstest.
+
 ### Tiger: tätare ränder och tydligare svansvickning
 
 - Tiger har tio böjda, avsmalnande och förskjutna kroppsränder i stället för sex. Huvud, öron, rund kroppskontur och svansfäste är oförändrade.

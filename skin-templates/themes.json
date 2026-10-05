@@ -210,7 +210,7 @@
     "pixelPalette": { "base": "#a93647", "light": "#e65755", "shade": "#542739", "edge": "#ef8c66", "ink": "#22172b", "detail": "#ffd59d" }
   },
   {
-    "id": "tiger", "label": "Tiger", "pattern": "tigerStripes", "animalProfile": "feline", "bodyOrientation": "fixed", "assetRevision": 2,
+    "id": "tiger", "label": "Tiger", "pattern": "tigerStripes", "animalProfile": "feline", "bodyOrientation": "fixed", "assetRevision": 3,
     "palette": { "base": "#ee941e", "light": "#ffd373", "shade": "#a95310", "edge": "#78401d", "ink": "#30241d", "detail": "#fff1d1" },
     "patternPalette": { "base": "#30241d", "light": "#5e4531", "shade": "#191c1a", "edge": "#201c18", "ink": "#241e18", "detail": "#fff1d1" },
     "pixelPalette": { "base": "#ee9828", "light": "#ffbf50", "shade": "#a45b20", "edge": "#79502b", "ink": "#30241d", "detail": "#ffe5af" }

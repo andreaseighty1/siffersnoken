@@ -420,14 +420,39 @@ function felinePoint(poly,x,y){
     const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit;
   }return hit;
 }
+// Long, irregular fur ribbons inspired by the user's tiger photograph.
+// Unequal curves and two joining branches replace the mirrored edge combs.
+const tigerFurRibbons=[
+  {curve:[[.08,-.06],[.29,.27],[.02,.64],[-.07,.83]],widths:[.019,.037,.025,.004]},
+  {curve:[[.26,-.06],[.46,.38],[.22,.63],[.28,.82]],widths:[.027,.045,.030,0]},
+  {curve:[[.49,-.08],[.36,.38],[.61,.67],[.37,1.06]],widths:[.036,.026,.047,.015]},
+  {curve:[[.75,.14],[.57,.30],[.88,.71],[.66,1.04]],widths:[0,.043,.029,.009]},
+  {curve:[[1.01,.03],[.75,.31],[1.05,.62],[.87,1.06]],widths:[.017,.035,.040,.008]},
+  {curve:[[.316,.506],[.34,.58],[.40,.62],[.405,.69]],widths:[.034,.028,.016,0]},
+  {curve:[[.484,.487],[.56,.56],[.57,.66],[.60,.76]],widths:[.037,.026,.013,0]}
+];
+function tigerRibbon({curve,widths}){
+  const points=cubicPoints(...curve),left=[],right=[];
+  for(let i=0;i<points.length;i++){
+    const t=i/(points.length-1),s=1-t;
+    const half=s**3*widths[0]+3*s*s*t*widths[1]+3*s*t*t*widths[2]+t**3*widths[3];
+    const before=points[Math.max(0,i-1)],after=points[Math.min(points.length-1,i+1)];
+    const dx=after[0]-before[0],dy=after[1]-before[1],length=Math.hypot(dx,dy);
+    const [x,y]=points[i],nx=-dy/length*half,ny=dx/length*half;
+    left.push([x+nx,y+ny]);right.unshift([x-nx,y-ny]);
+  }
+  return [...left,...right];
+}
+const tigerBodyStripes=tigerFurRibbons.map(tigerRibbon);
 function felineStripes(part){
-  // Ten tapered, staggered fur stripes; keep the face's rear markings unchanged.
-  const head=part==='head-base',bands=head?[.61,.81]:[.09,.24,.41,.59,.76];
+  if(part==='body')return tigerBodyStripes;
+  // Keep the existing rear face markings and every animal silhouette unchanged.
+  const bands=[.61,.81];
   return bands.flatMap((y,i)=>{
-    const tip=head?.35:[.48,.39,.46,.37,.46][i],width=head?.145:.105;
+    const tip=.35,width=.145;
     const one=[...cubicPoints([-.08,y],[.10,y-.07],[.25,y+.075],[tip,y+.015]),
-      ...cubicPoints([tip,y+.015],[.24,y+(head?.105:width*.72)],[.10,y+(head?.075:width*.52)],[-.08,y+width])];
-    return [one,one.map(([x,v])=>[1-x,v+(head?.065:[.065,.035,.075,.045,.065][i])])];
+      ...cubicPoints([tip,y+.015],[.24,y+.105],[.10,y+.075],[-.08,y+width])];
+    return [one,one.map(([x,v])=>[1-x,v+.065])];
   });
 }
 function catPatch(x,y,part){
