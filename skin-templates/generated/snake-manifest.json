@@ -1804,7 +1804,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.1,
+      "bend": -0.24,
       "attachment": [
         256,
         64
@@ -1818,7 +1818,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.05,
+      "bend": -0.12,
       "attachment": [
         256,
         64
@@ -1832,7 +1832,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.05,
+      "bend": 0.12,
       "attachment": [
         256,
         64
@@ -1846,7 +1846,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.1,
+      "bend": 0.24,
       "attachment": [
         256,
         64
@@ -1878,7 +1878,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.1,
+      "bend": -0.24,
       "attachment": [
         256,
         64
@@ -1892,7 +1892,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.05,
+      "bend": -0.12,
       "attachment": [
         256,
         64
@@ -1906,7 +1906,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.05,
+      "bend": 0.12,
       "attachment": [
         256,
         64
@@ -1920,7 +1920,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.1,
+      "bend": 0.24,
       "attachment": [
         256,
         64
@@ -5640,7 +5640,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.1,
+      "bend": -0.24,
       "attachment": [
         16,
         4
@@ -5654,7 +5654,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.05,
+      "bend": -0.12,
       "attachment": [
         16,
         4
@@ -5668,7 +5668,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.05,
+      "bend": 0.12,
       "attachment": [
         16,
         4
@@ -5682,7 +5682,7 @@
       "id": "tiger",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.1,
+      "bend": 0.24,
       "attachment": [
         16,
         4
@@ -5714,7 +5714,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.1,
+      "bend": -0.24,
       "attachment": [
         16,
         4
@@ -5728,7 +5728,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": -0.05,
+      "bend": -0.12,
       "attachment": [
         16,
         4
@@ -5742,7 +5742,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.05,
+      "bend": 0.12,
       "attachment": [
         16,
         4
@@ -5756,7 +5756,7 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
-      "bend": 0.1,
+      "bend": 0.24,
       "attachment": [
         16,
         4

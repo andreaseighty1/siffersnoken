@@ -10,6 +10,11 @@ for(const theme of [tiger,cat]){
   assert.deepEqual(body.pixelGrid(theme).map(row=>row.map(Boolean)),bodyMask,'Body remains rounded and identical');
 }
 for(const bend of snake.spec.feline.tailBends){
+  for(let i=0;i<=128;i++){
+    const y=snake.spec.tail.attachment[1]+(snake.spec.feline.tailTipY-snake.spec.tail.attachment[1])*i/128;
+    const section=feline.tailSection(y,bend);
+    assert.ok(section.center-section.half>=0&&section.center+section.half<=1,'Stronger wag never clips the source image');
+  }
   const mask=snake.partGrid(tiger,'tail','up',bend).map(row=>row.map(Boolean));
   assert.deepEqual(mask,snake.partGrid(cat,'tail','up',bend).map(row=>row.map(Boolean)),'Cat and Tiger use exactly the same tail');
   const neutral=snake.partGrid(body.themes[0],'tail').map(row=>row.map(Boolean)),join=snake.joinGeometry('pixel');
@@ -25,6 +30,11 @@ for(const bend of snake.spec.feline.tailBends){
   assert.equal(visited.size,pixels.size,'Animated tail and last body stay connected, without a gap');
   function bodyMaskAt(x,y){return Math.hypot(x+.5-16,y+.5-16)<=13;}
 }
-assert.notDeepEqual(snake.partGrid(tiger,'tail','up',-.1).map(row=>row.map(Boolean)),snake.partGrid(tiger,'tail','up',.1).map(row=>row.map(Boolean)),'Tail actually moves');
+const [left,,,,right]=snake.spec.feline.tailBends;
+assert.ok(feline.tailSection(snake.spec.feline.tailTipY,right).center-feline.tailSection(snake.spec.feline.tailTipY,left).center>=.45,'Pronounced tip excursion, not the old subtle wag');
+assert.deepEqual(feline.tailSection(snake.spec.tail.attachment[1]+.02,left),feline.tailSection(snake.spec.tail.attachment[1]+.02,right),'The entire attachment collar remains fixed');
+assert.notDeepEqual(snake.partGrid(tiger,'tail','up',left).map(row=>row.map(Boolean)),snake.partGrid(tiger,'tail','up',right).map(row=>row.map(Boolean)),'Tail actually moves');
+const stripes=body.surfaceSvg(tiger,512,'body').defs.match(/<polygon /g)||[];
+assert.equal(stripes.length,10,'Classic tiger body has five tapered stripes on each side');
 for(const theme of [tiger,cat])assert.ok(body.pixelGrid(theme).flat().filter(Boolean).some(c=>c===theme.pixelPalette.ink));
 console.log('PASS: shared rear ears, fixed animal head/body masks, five narrow connected feline tail poses and stable original pivot.');

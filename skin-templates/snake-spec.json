@@ -20,9 +20,9 @@
   },
   "feline": {
     "tailTipY": 0.735,
-    "tailBends": [-0.10, -0.05, 0, 0.05, 0.10],
+    "tailBends": [-0.24, -0.12, 0, 0.12, 0.24],
     "tailFrames": ["tail-left", "tail-left-soft", "tail", "tail-right-soft", "tail-right"],
-    "tailPeriodMs": 1800,
+    "tailPeriodMs": 1400,
     "earMinimumY": 0.63
   },
   "eyesPalette": { "white": "#fffdf3", "ink": "#171512", "pupilShade": "#352317", "whiteShade": "#d7d9c8" },

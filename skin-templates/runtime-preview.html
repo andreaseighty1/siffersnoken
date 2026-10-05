@@ -6,8 +6,8 @@
 <style>
 *{box-sizing:border-box}body{margin:0;padding:24px;background:#f5f0e4;color:#183b35;font:16px system-ui,sans-serif}main{max-width:1160px;margin:auto}h1{margin:0 0 8px;font-size:26px}p{line-height:1.5}button{font:inherit;padding:8px 14px;border:1px solid #789184;border-radius:10px;background:#fffaf0;color:inherit;cursor:pointer}article{margin:22px 0;padding:20px;border:1px solid #cdd6c9;border-radius:18px;background:#fffaf0}h2{margin:0 0 12px;font-size:23px}.styles{display:grid;grid-template-columns:1fr 1fr;gap:22px}h3{margin:0 0 8px;font-size:16px}canvas{display:block;width:100%;height:auto;background:#e4edde;border-radius:12px;image-rendering:auto}.note{margin:12px 0 0;font-size:13px;color:#456057}@media(max-width:650px){body{padding:12px}.styles{grid-template-columns:1fr}article{padding:14px}}
 </style>
-<main><h1>SifferSnoken · riktiga skinpreviews</h1><p>Samma WebP-filer, former, ögon och svansfästen som i spelet. Utan längdnedtoning; Ghost behåller sin genomskinlighet.</p><button id="pause">Pausa animationen</button><div id="previews"></div><p id="status" role="status">Laddar tillgångar…</p></main>
-<script src="../snake-style-config.js?v=snake-styles-24"></script>
+<main><h1>SifferSnoken · riktiga skinpreviews</h1><p>Samma WebP-filer, former, ögon och svansfästen som i spelet. Utan längdnedtoning; Ghost behåller sin genomskinlighet.</p><button id="pause">Pausa animationen</button> <label id="tailControl" hidden>Svansläge <select id="tailPose"><option value="animated">Animation</option><option value="left">Vänster</option><option value="left-soft">Lite vänster</option><option value="center">Mittläge</option><option value="right-soft">Lite höger</option><option value="right">Höger</option></select></label><div id="previews"></div><p id="status" role="status">Laddar tillgångar…</p></main>
+<script src="../snake-style-config.js?v=snake-styles-25"></script>
 <script src="../snake-colors.js?v=snake-styles-4"></script>
 <script src="../snake-headwear-designs.js?v=headwear-3"></script>
 <script src="../snake-headwear.js?v=headwear-3"></script>
@@ -15,6 +15,8 @@
 <script>
 const renderer=SnakeStyles.createRenderer({assetPrefix:'../'});
 let paused=false,frozenTime=0,lastPhase=-1;
+const tailPose=document.getElementById('tailPose'),tailPhases={left:.75,'left-soft':7/12,center:0,'right-soft':1/12,right:.25};
+tailPose.onchange=()=>{lastPhase=-1;};
 const reduced=matchMedia('(prefers-reduced-motion: reduce)'),cards=[];
 const points=Array.from({length:11},(_,i)=>({x:11-i,y:2}));
 const opts={cell:34,cols:14,rows:5,points,heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false};
@@ -26,6 +28,8 @@ document.getElementById('pause').onclick=()=>{paused=!paused;frozenTime=performa
   const chosen=themes.filter(t=>requested.includes(t.id)&&SnakeStyles.config.skins.includes(t.id));
   const animated=chosen.some(t=>t.colorCycle||t.animalProfile);
   document.getElementById('pause').hidden=!animated;
+  const animal=chosen.find(t=>t.animalProfile);
+  document.getElementById('tailControl').hidden=!animal;
   for(const theme of chosen){
     const article=document.createElement('article');article.id='preview-'+theme.id;
     const heading=document.createElement('h2');heading.textContent=theme.label;article.append(heading);
@@ -42,7 +46,9 @@ document.getElementById('pause').onclick=()=>{paused=!paused;frozenTime=performa
   }
   document.getElementById('status').textContent='Tillgångarna är laddade.';
   function frame(now){
-    const time=paused?frozenTime:now,phase=chosen.map(t=>t.colorCycle?Math.floor((reduced.matches?0:time)/1400):SnakeStyles.tailFrame(t.id,time,reduced.matches)).join('|');
+    const fixedPose=animal&&Object.hasOwn(tailPhases,tailPose.value);
+    const time=fixedPose?tailPhases[tailPose.value]*SnakeStyles.config.tailAnimations[animal.id].periodMs:paused?frozenTime:now;
+    const phase=chosen.map(t=>t.colorCycle?Math.floor((reduced.matches?0:time)/1400):SnakeStyles.tailFrame(t.id,time,reduced.matches)).join('|');
     if(phase!==lastPhase){lastPhase=phase;for(const card of cards){const c=card.canvas.getContext('2d');c.clearRect(0,0,476,170);
       if(SnakeStyles.config.materialOpacities[card.id]<1){
         c.fillStyle='#d5e4cc';c.fillRect(0,0,476,170);c.strokeStyle='rgba(46,95,59,.28)';c.lineWidth=1;

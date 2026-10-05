@@ -421,12 +421,13 @@ function felinePoint(poly,x,y){
   }return hit;
 }
 function felineStripes(part){
-  const bands=part==='head-base'?[.61,.81]:[.16,.42,.69];
+  // Ten tapered, staggered fur stripes; keep the face's rear markings unchanged.
+  const head=part==='head-base',bands=head?[.61,.81]:[.09,.24,.41,.59,.76];
   return bands.flatMap((y,i)=>{
-    const tip=part==='head-base'?.35:.44-(i%2)*.035;
+    const tip=head?.35:[.48,.39,.46,.37,.46][i],width=head?.145:.105;
     const one=[...cubicPoints([-.08,y],[.10,y-.07],[.25,y+.075],[tip,y+.015]),
-      ...cubicPoints([tip,y+.015],[.24,y+.105],[.10,y+.075],[-.08,y+.145])];
-    return [one,one.map(([x,v])=>[1-x,v+.065])];
+      ...cubicPoints([tip,y+.015],[.24,y+(head?.105:width*.72)],[.10,y+(head?.075:width*.52)],[-.08,y+width])];
+    return [one,one.map(([x,v])=>[1-x,v+(head?.065:[.065,.035,.075,.045,.065][i])])];
   });
 }
 function catPatch(x,y,part){

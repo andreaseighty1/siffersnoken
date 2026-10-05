@@ -2,6 +2,14 @@
 
 ## 2026-10-05
 
+### Tiger: tätare ränder och tydligare svansvickning
+
+- Tiger har tio böjda, avsmalnande och förskjutna kroppsränder i stället för sex. Huvud, öron, rund kroppskontur och svansfäste är oförändrade.
+- Tiger och Katt delar ett 2,4 gånger större svansutslag och en något raskare 1,4-sekunders cykel. Samma fem förformade WebP-poser används; hela fästkragen förblir stilla och reducerad rörelse visar mittläget.
+- Båda grafiklägena byggs samtidigt. Revision 2 för dessa två teman och ny konfigurationsadress undviker gamla cachebilder; gemensamma ögon och andra skins behåller sina adresser.
+- Tester kontrollerar det större utslaget, oförändrad fästkrage, sammanhängande pixelfäste, tio kroppsränder och fortsatt återanvändning av rendercachen.
+- Visuellt verifierat i båda lägena på desktop och 390 px mobil med 33 segment, nedtonad svans och separat verklig rörelse/sväng. Alla tio testsviter och rasterkontrollen av 499 WebP-tillgångar passerar.
+
 ### Tiger och Katt: gemensamma specialformer
 
 - Båda skins färdiga i Modern och Pixelretro. Tiger har skulpterad orange päls och böjda mörka ränder; Katt har crème-/sandfärgad päls med asymmetriska bruna fält. Kroppar och huvudbaser behåller de låsta runda maskerna och skalorna.
