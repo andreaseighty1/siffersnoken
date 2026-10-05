@@ -166,5 +166,17 @@
     "palette": { "base": "#314e83", "light": "#8eabc7", "shade": "#1d3157", "edge": "#162440", "ink": "#111c30", "detail": "#fff3ce" },
     "patternPalette": { "base": "#d9a652", "light": "#ffdf94", "shade": "#97642f", "edge": "#684726", "ink": "#111c30", "detail": "#65ded8" },
     "pixelPalette": { "base": "#46669b", "light": "#e1b25f", "shade": "#263e68", "edge": "#fff0c7", "ink": "#172338", "detail": "#65ded8" }
+  },
+  {
+    "id": "stjarnarkiv", "label": "Stjärnarkiv", "pattern": "celestialChart", "bodyOrientation": "fixed",
+    "palette": { "base": "#294a83", "light": "#7fa5d7", "shade": "#192e59", "edge": "#13233f", "ink": "#101d34", "detail": "#fff4da" },
+    "patternPalette": { "base": "#70cddd", "light": "#d3f9ef", "shade": "#317aac", "edge": "#244d7a", "ink": "#101d34", "detail": "#fff4da" },
+    "pixelPalette": { "base": "#3c6099", "light": "#7aaad9", "shade": "#233961", "edge": "#79d8e4", "ink": "#13213a", "detail": "#fff2d7" }
+  },
+  {
+    "id": "solregent", "label": "Solregent", "pattern": "solarRays", "bodyOrientation": "fixed",
+    "palette": { "base": "#ed8528", "light": "#ffd474", "shade": "#ac4520", "edge": "#81321b", "ink": "#552518", "detail": "#fffad0" },
+    "patternPalette": { "base": "#ffd148", "light": "#fff3ae", "shade": "#d08a23", "edge": "#a45d21", "ink": "#552518", "detail": "#fffad0" },
+    "pixelPalette": { "base": "#ed922d", "light": "#ffdf72", "shade": "#b65622", "edge": "#8b3b1d", "ink": "#59291b", "detail": "#fff9cd" }
   }
 ]

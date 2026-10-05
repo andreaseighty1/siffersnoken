@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -74,6 +74,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['celestialChart','solarRays'].includes(theme.pattern))return celestialSvg(theme,size,part,lightCenter);
   if(['tidalGlass','keeperInlay'].includes(theme.pattern))return tideKeeperSvg(theme,size,part,lightCenter);
   if(['candyPrism','shadowVeils'].includes(theme.pattern))return mysteryCandySvg(theme,size,part,lightCenter);
   if(['brassMechanism','runestone'].includes(theme.pattern))return relicSvg(theme,size,part,lightCenter);
@@ -116,6 +117,20 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='celestialChart'||theme.pattern==='solarRays'){
+    const [u,v]=surfaceCoordinates(nx,ny,part);
+    if(theme.pattern==='solarRays'){
+      if(solarEdges.some(line=>openPathDistance(line,u,v)<.016))return p.detail;
+      if(solarFans.some(shape=>football.contains(shape,u,v)))return color===p.shade||color===p.edge?p.base:p.light;
+      return color===p.light?p.base:color===p.detail?p.light:color;
+    }
+    const [mu,mv]=motifCoordinates(nx,ny,part);
+    if(chartStars.some(shape=>football.contains(shape,mu,mv)))return p.detail;
+    if(chartLinks.some(line=>openPathDistance(line,mu,mv)<.013))return p.detail;
+    if(openPathDistance(chartArc,u,v)<.023)return p.detail;
+    if(openPathDistance(chartArc,u,v)<.084)return p.edge;
+    return color===p.light||color===p.detail?p.base:color===p.edge?p.shade:color;
+  }
   if(theme.pattern==='tidalGlass'||theme.pattern==='keeperInlay'){
     const tide=theme.pattern==='tidalGlass',[u,v]=tide?surfaceCoordinates(nx,ny,part):motifCoordinates(nx,ny,part);
     if(!tide&&part==='head-base'&&ny<snakeSpec.head.decorationMinimumY)return color;
@@ -343,6 +358,34 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+// A star map and a radiating sun material, not repeated central emblems.
+// All curves, stars and ray bevels are baked inside the common part masks.
+const chartArc=cubicPoints([-.12,.60],[.38,1.01],[.67,.02],[1.12,.34]);
+const chartLinks=[[[.18,.32],[.40,.22],[.66,.40]],[[.29,.71],[.55,.79],[.76,.62]]];
+function chartStar(x,y,r){return [[x,y-r],[x+r*.27,y-r*.27],[x+r,y],[x+r*.27,y+r*.27],[x,y+r],[x-r*.27,y+r*.27],[x-r,y],[x-r*.27,y-r*.27]];}
+const chartStars=[chartStar(.18,.32,.068),chartStar(.66,.40,.045),chartStar(.55,.79,.048)];
+const solarFans=[
+  [[-.12,-.12],[.24,-.12],[.85,.29],[.94,.51],[.42,.21]],
+  [[-.12,-.12],[.33,.28],[1.15,.66],[1.15,.94],[.40,.47]],
+  [[-.12,-.12],[.25,.48],[.57,1.15],[.27,1.15],[.07,.44]]
+];
+const solarEdges=[[[.24,-.12],[.85,.29],[.94,.51]],[[.33,.28],[1.15,.66]],[[.25,.48],[.57,1.15]]];
+function celestialSvg(theme,size,part,lightCenter){
+  const solar=theme.pattern==='solarRays',tail=part==='tail',id=`${theme.id}-${part}-surface`;
+  const f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1},mf=motifFrame(part);
+  const data=(points,frame=f)=>'M '+points.map(([u,v])=>`${size*(frame.x+u*frame.w)},${size*(frame.y+v*frame.h)}`).join(' L ');
+  const stroke=(points,width,color,opacity=1,frame=f)=>`<path d="${data(points,frame)}" fill="none" stroke="${color}" stroke-width="${size*width*frame.w}" stroke-opacity="${opacity}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const material=toyMaterial(theme.patternPalette,id,size,{tail,lightCenter});
+  const mask=shape=>`<mask id="${id}-material" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${shape}</mask>`;
+  if(solar){
+    const rays=solarFans.map(shape=>`<path d="${data(shape)} Z" fill="white"/>`).join('');
+    const bevels=solarEdges.map(line=>stroke(line,.042,theme.patternPalette.light,.32)+stroke(line,.010,theme.palette.detail,.88)).join('');
+    return {defs:material.defs+mask(rays),paint:`<g mask="url(#${id}-material)">${material.paint}</g>`+bevels};
+  }
+  const stars=chartStars.map(shape=>`<path d="${data(shape,mf)} Z" fill="${theme.palette.detail}"/>`).join('');
+  const links=chartLinks.map(line=>stroke(line,.009,theme.palette.detail,.62,mf)).join('');
+  return {defs:material.defs+mask(stroke(chartArc,.16,'white')),paint:`<g mask="url(#${id}-material)">${material.paint}</g>`+stroke(chartArc,.020,theme.patternPalette.light,.8)+links+stars};
+}
 // Tideglass uses large curling currents, not Hav's straight foam bands.
 // Museum Keeper has open brass inlays and off-center porcelain fans: neither
 // theme introduces a central badge or changes any body/head/tail contour.

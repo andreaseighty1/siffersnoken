@@ -50,12 +50,21 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium','tidvatten','museumvaktaren']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium','tidvatten','museumvaktaren','stjarnarkiv','solregent']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
 }
 const candy=themes.find(t=>t.id==='polkagris'),candyColors=pixelGrid(candy).flat();
+const archive=themes.find(t=>t.id==='stjarnarkiv'),archiveColors=pixelGrid(archive).flat();
+assert.ok(archiveColors.filter(c=>c===archive.pixelPalette.edge).length>65,'Star Archive has a broad cyan sky arc');
+assert.ok(archiveColors.filter(c=>c===archive.pixelPalette.detail).length>50,'Chart links and stars remain legible');
+assert.ok(archiveColors.filter(c=>[archive.pixelPalette.base,archive.pixelPalette.shade].includes(c)).length>220,'Chart preserves dark sculpted blue material between inscriptions');
+const regent=themes.find(t=>t.id==='solregent'),regentColors=pixelGrid(regent).flat();
+assert.ok(regentColors.filter(c=>c===regent.pixelPalette.light).length>150,'Sun Regent has broad golden rays');
+assert.ok(regentColors.filter(c=>c===regent.pixelPalette.base).length>130,'Amber fields separate the raised rays');
+assert.ok(regentColors.filter(c=>c===regent.pixelPalette.detail).length>30,'Ray bevels remain legible at native resolution');
+assert.ok(!require('../tools/body-templates.cjs').surfaceSvg(regent,512,'body').paint.includes('<circle'),'Solar material is not a repeated round sun badge');
 const tide=themes.find(t=>t.id==='tidvatten'),tideColors=pixelGrid(tide).flat();
 assert.equal(tide.pattern,'tidalGlass');
 assert.ok(tideColors.filter(c=>c===tide.pixelPalette.light).length>160,'Tideglass has broad mint currents, not only tiny wave strokes');
