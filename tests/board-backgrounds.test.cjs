@@ -26,8 +26,14 @@ assert.equal(made.length,1,'No resampling, gradients or canvas allocation every 
 renderer.draw(ctx,{source:{ready:true},id:'forest',width:714,height:544});assert.equal(made.length,2,'Source replacement invalidates the styled cache');
 renderer.draw(ctx,{source:art,id:'forest',width:714,height:544,pixel:true});
 assert.equal(made.at(-1).getContext().imageSmoothingEnabled,false,'Pixel background uses native crisp scaling, foreground unchanged');
-for(const mode of ['toy','pixel'])assert.ok(fs.existsSync(path.join(__dirname,'../assets/sagoskog-'+mode+'.webp')));
-assert.ok(html.includes('assets/sagoskog-${mode}.webp?v=1'));
+for(const mode of ['toy','pixel'])for(const layout of ['wide','portrait']){
+  const asset=backgrounds.forestAsset(mode,layout==='wide'?714:476,layout==='wide'?544:680);
+  assert.equal(asset.key,`${mode}|${layout}`);
+  assert.ok(fs.existsSync(path.join(__dirname,'..',asset.src.split('?')[0])));
+  assert.equal(backgrounds.forestAsset(mode,476,782).key,`${mode}|portrait`,'Joystick reuses portrait art');
+}
+assert.equal(backgrounds.forestAsset('classic',714,544).key,'toy|wide');
+assert.ok(html.includes('BoardBackgrounds.forestAsset(mode,W,H)'));
 for(const id of Object.keys(backgrounds.palettes))renderer.draw(ctx,{source:art,id,width:714,height:544});
 assert.equal(renderer.cacheSize(),2,'Visiting every scene leaves at most two cached boards');
 const count=made.length;renderer.draw(ctx,{source:art,id:'forest',width:390,height:300,enabled:false});
@@ -35,6 +41,49 @@ assert.equal(made.length,count,'Off never composes or samples a scene');
 assert.ok(target.commands.at(-1)[0]==='fill');
 assert.deepEqual({alpha:ctx.globalAlpha,operation:ctx.globalCompositeOperation,smoothing:ctx.imageSmoothingEnabled},original,'Background state cannot leak into tiles or Pixelretro');
 renderer.clear();assert.equal(renderer.cacheSize(),0);
+
+// Corner artwork always keeps its source proportions; only an empty middle
+// strip expands. No crop, missing rows, overlapping destination bands or seam.
+for(const [sw,sh,w,h] of [[1536,1024,714,544],[1049,1499,476,680],[1049,1500,476,782],[1049,1500,336,552]]){
+  const slices=backgrounds.forestSlices(sw,sh,w,h);
+  assert.equal(slices.length,3);
+  let sy=0,dy=0;
+  for(const rect of slices){
+    assert.equal(rect[1],sy);assert.equal(rect[5],dy);
+    assert.equal(rect[0],0);assert.equal(rect[2],sw);
+    assert.equal(rect[4],0);assert.equal(rect[6],w);
+    assert.ok(rect[3]>0&&rect[7]>0);
+    sy+=rect[3];dy+=rect[7];
+  }
+  assert.equal(sy,sh);assert.equal(dy,h);
+  for(const rect of [slices[0],slices[2]])assert.ok(Math.abs(rect[7]-rect[3]*w/sw)<=.5,'Corner shapes scale uniformly, within integer rounding');
+  const c=fakeCanvas(),composed=[];
+  const r=backgrounds.createRenderer({createCanvas:()=>{const f=fakeCanvas();composed.push(f);return f;}});
+  const sourceImage={naturalWidth:sw,naturalHeight:sh};
+  r.draw(c.getContext(),{source:sourceImage,id:'forest',width:w,height:h});
+  assert.deepEqual(composed[0].commands.map(cmd=>cmd.slice(3)),slices,'Real renderer uses the three approved bands');
+  for(let i=0;i<100;i++)r.draw(c.getContext(),{source:sourceImage,id:'forest',width:w,height:h});
+  assert.equal(composed.length,1,'Adaptive composition happens once, not every frame');
+}
+assert.equal(backgrounds.forestSlices(0,0,476,680),null);
+assert.equal(backgrounds.forestSlices(1536,1024,714,1),null,'Unsupported tiny targets fail safely');
+const boardSetup=html.match(/const _perfParams=[^]*?const ROWS=[^]*?;/)[0];
+for(const [search,cols,rows] of [['',21,16],['?boardPreview=portrait',21,16],['?perf=1',21,16],['?perf=1&boardPreview=unknown',21,16],['?perf=1&boardPreview=portrait',14,20],['?perf=1&boardPreview=joystick',14,23]]){
+  const setup=vm.runInNewContext(boardSetup+'\n({COLS,ROWS})',{location:{search},URLSearchParams});
+  assert.equal(setup.COLS,cols);assert.equal(setup.ROWS,rows,'Only explicit developer previews alter board dimensions');
+}
+const downloaded=[],loading=vm.createContext({canvas:{width:714,height:544},graphicsMode:'toy',BoardBackgrounds:backgrounds,
+  _fairyForestStyles:new Map(),_fairyForestImage:null,_fairyForestImageStatus:'',_fairyForestBackdropSprite:null,_fairyForestBackdropKey:'',
+  Image:class{set src(value){this.url=value;downloaded.push(this);}},createSpriteCanvas:fakeCanvas});
+vm.runInContext(source('getFairyForestBackdrop'),loading);
+for(const [mode,w,h] of [['toy',714,544],['pixel',714,544],['toy',476,680],['pixel',476,782]]){
+  loading.graphicsMode=mode;loading.canvas.width=w;loading.canvas.height=h;
+  loading.getFairyForestBackdrop();const image=downloaded.at(-1);
+  assert.equal(image.url,backgrounds.forestAsset(mode,w,h).src);
+  image.onload();assert.equal(loading.getFairyForestBackdrop(),image);
+}
+assert.equal(downloaded.length,4,'Exactly one download for each selected style/composition');
+loading.canvas.height=680;loading.getFairyForestBackdrop();assert.equal(downloaded.length,4,'Touch and joystick share the loaded portrait');
 
 const storage=new Map(),buttons=['true','false'].map(background=>({dataset:{background},classList:{toggle(k,v){this.selected=v;}},setAttribute(k,v){this[k]=v;}}));
 const elements=new Map(),element=id=>{if(!elements.has(id))elements.set(id,{textContent:''});return elements.get(id);};

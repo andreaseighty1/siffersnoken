@@ -183,6 +183,21 @@ Kontroll: `tests/feline-templates.test.cjs`, raster-/masktester och renderercach
 
 Sagoskogen har två egna opaka WebP-bilder i 1536 × 1024: `assets/sagoskog-toy.webp` (~76 KiB) och `assets/sagoskog-pixel.webp` (~97 KiB). De följer godkänd konceptbild: strikt uppifrån, skarpa rundade leksaksformer respektive pixelgrafik, blågrön lågkontrastmitt och dekorationer främst vid hörnen. Bildgenereringens prompt finns i `references/board-prompts.md`. Bara det valda grafiklägets skog hämtas. Originalbilderna bevaras. De andra banorna har ännu inte omritats.
 
+Sagoskogen är nu också **mobilpilot**: `assets/sagoskog-toy-portrait.webp` (1049 × 1499, ~69 KiB) och `assets/sagoskog-pixel-portrait.webp` (1049 × 1500, ~102 KiB) ger totalt fyra stil-/kompositionsvarianter. De stående bilderna är nyskapade med de godkända breda bilderna som stilreferens, inte beskurna landskapsbilder. Samtliga är opaka WebP; gamla tillgångar bevaras.
+
+`BoardBackgrounds.forestAsset(mode,width,height)` väljer efter **logisk banproportion**, inte skärmens orientering. WEB förblir 21 × 16 även på mobil. Android touch 14 × 20 och joystick 14 × 23 delar den stående bilden. `forestSlices` skalar hörnens dekor jämnt och förlänger bara den tomma mittremsan; träd/stenar sträcks inte och inga källpixlar kapas. Det är bara Sagoskogen som använder denna anpassning, inte de ännu ej omritade temana.
+
+I `background-preview.html` finns tre banformat och båda stilarna eller På/Av. Android-valen aktiverar en strikt utvecklingsflagga (`perf=1&boardPreview=portrait|joystick`) i WEB-renderern, med samma snok/brickor som i spelet. Utan `perf=1` ändras aldrig produktionens rutnät. Fixturerna har musik av redan från sidladdning. Visuell kontroll omfattar alla tre proportioner i båda stilarna, grön Klassisk för läsbarhet, 390 px mobilbredd, På/Av och separat vanlig spelrörelse i den höga banan. Alla tio testsuites och runtimeexportens `--check` passerar.
+
+### Senare Android-migrering
+
+Android-appens kod/byggfiler/assets är **inte ändrade i mobilpiloten**, och inget nytt APK är testat. Vid överflytten:
+
+1. Kopiera de fyra skogs-WebP-bilderna och den delade bakgrundsmodulen, inte hela WEB-indexet över Androids separata JS-moduler.
+2. Koppla val/laddning till Androids `COLS * CELL` / `ROWS * CELL`. Använd dessa logiska mått även vid ritning; Android har redan DPR-transform och fysisk canvasstorlek får inte skalas dubbelt.
+3. Bygg cachen på nytt vid byte mellan 20 och 23 rader. Bara vald stil/komposition ska laddas; På/Av ska sparas och Av ska hoppa över bildladdning.
+4. Kontrollera båda stilarna på riktig Android/WebView: touch/joystick, DPI, UI/safe-area, appens rotation/livscykel, lång orm, svans, minne och bildtider. Proportionstestet i WEB ersätter inte denna kontroll.
+
 `board-backgrounds.js` skalar och cachar bilder i full storlek utan liten suddig mellanbild, mattning eller transparensfilter. Pixel-skogens skalning är skarp och påverkar aldrig brickor eller text. Högst två kompositioner hålls i cache. Modern/Pixelretro kör inte de tidigare animerade bakgrundsdekorationerna. Inställningar → Banbakgrunder På/Av sparas, översätts till tre språk och gäller även portal och Original; Av laddar inga nya banbilder och visar en mörk enkel yta. Original med På behåller sin tidigare rendering.
 
 Blodmåne använder sitt befintliga ID `eld` och oförändrad upplåsning. `lunarCopper` ger mörkt blodröd skulpterad volym, kopparröd månkant och glesa öppna kraterfåror på kropp, huvud och smal kort svans. Båda stilarna byggs samtidigt från låst geometri. Ingen ny kroppskontur eller tidsanimation tillkommer. Preview: `runtime-preview.html?skins=eld`.

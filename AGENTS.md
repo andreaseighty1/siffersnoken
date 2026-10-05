@@ -8,7 +8,8 @@
 - Håll minst cirka 65 procent av mitten öppen, jämn, lågkontrast och fri från stora detaljer så snoken och svaren förblir lättlästa.
 - Placera temadetaljer och de starkaste färg-/ljuskontrasterna huvudsakligen längs ytterkanterna.
 - Bakgrunder får inte innehålla snokar, figurer, siffror, läsbar text, UI eller logotyper.
-- Runtimeformat är ogenomskinlig WebP i 1536 × 1024.
+- Runtimeformat är ogenomskinlig WebP. Befintliga breda banor använder 1536 × 1024; mobilanpassade teman ska ha separat bred och stående komposition i både Modern och Pixelretro.
+- Välj komposition efter spelplanens logiska proportioner, inte skärmens orientering. Kontrollera WEB 21:16, Android touch 14:20 och joystick 14:23. Förläng bara en godkänd tom mittzon; sträck inte hörndetaljer och beskär inte viktiga motiv. Sagoskogen är pilot, övriga teman är ännu inte anpassade.
 - Kontrollera alltid den färdiga banan tillsammans med en modern snok i själva spelet innan leverans.
 
 ## Moderna snokskins

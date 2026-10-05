@@ -9,6 +9,29 @@
     neonArcade:['#514f79','#353c58'],moonGarden:['#555d76','#394754'],
     portal:['#35495f','#263348']
   };
+  // Select from the logical board, not device orientation. WEB remains 21:16;
+  // Android's 14:20 touch and 14:23 joystick boards share the portrait artwork.
+  function forestAsset(mode,width,height){
+    const style=mode==='pixel'?'pixel':'toy',layout=height>width?'portrait':'wide';
+    return {key:`${style}|${layout}`,src:`assets/sagoskog-${style}${layout==='portrait'?'-portrait':''}.webp?v=1`};
+  }
+  function forestSlices(sourceWidth,sourceHeight,width,height){
+    if(!(sourceWidth>0&&sourceHeight>0&&width>0&&height>0))return null;
+    const portrait=sourceHeight>sourceWidth;
+    // Only the empty full-width middle band may change aspect ratio. These cuts
+    // sit outside all foliage/stone shadows in the four approved forest assets.
+    const top=Math.round(sourceHeight*(portrait ? .28 : .40));
+    const bottom=Math.round(sourceHeight*(portrait ? .28 : .44));
+    const scale=width/sourceWidth;
+    const topHeight=Math.round(top*scale),bottomHeight=Math.round(bottom*scale);
+    const middleHeight=height-topHeight-bottomHeight;
+    if(middleHeight<=0)return null;
+    return [
+      [0,0,sourceWidth,top,0,0,width,topHeight],
+      [0,top,sourceWidth,sourceHeight-top-bottom,0,topHeight,width,middleHeight],
+      [0,sourceHeight-bottom,sourceWidth,bottom,0,height-bottomHeight,width,bottomHeight]
+    ];
+  }
   function createRenderer({createCanvas=()=>document.createElement('canvas')}={}){
     const cache=new Map();
     function drawPlain(ctx,width,height){
@@ -22,7 +45,9 @@
       const sprite=createCanvas();sprite.width=width;sprite.height=height;
       const c=sprite.getContext('2d');
       c.imageSmoothingEnabled=!pixel;c.globalAlpha=1;
-      c.drawImage(source,0,0,width,height);
+      const slices=id==='forest'?forestSlices(source.naturalWidth||source.width,source.naturalHeight||source.height,width,height):null;
+      if(slices)for(const rect of slices)c.drawImage(source,...rect);
+      else c.drawImage(source,0,0,width,height);
       cache.delete(key);cache.set(key,{source,canvas:sprite});
       // Two boards only: revisiting/loading themes cannot grow this cache.
       while(cache.size>2)cache.delete(cache.keys().next().value);
@@ -37,7 +62,7 @@
     }
     return {draw,clear:()=>cache.clear(),cacheSize:()=>cache.size};
   }
-  const api={palettes,createRenderer};
+  const api={palettes,forestAsset,forestSlices,createRenderer};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   else root.BoardBackgrounds=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

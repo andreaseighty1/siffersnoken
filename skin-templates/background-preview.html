@@ -1,15 +1,17 @@
 <!doctype html><html lang="sv"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SifferSnoken · lugnare banbakgrunder</title>
-<style>body{margin:20px;background:#f5f0e4;color:#183b35;font:15px system-ui}main{max-width:1050px;margin:auto}h1{font-size:26px}p{line-height:1.5}.boards{display:grid;grid-template-columns:1fr 1fr;gap:20px}iframe{width:100%;height:650px;border:1px solid #789184;border-radius:14px;background:#163136}label{margin-right:12px}select{font:inherit}@media(max-width:650px){.boards{grid-template-columns:1fr}}</style>
+<style>body{margin:20px;background:#f5f0e4;color:#183b35;font:15px system-ui}main{max-width:1050px;margin:auto}h1{font-size:26px}p{line-height:1.5}.boards{display:grid;grid-template-columns:1fr 1fr;gap:20px}iframe{width:100%;height:650px;border:1px solid #789184;border-radius:14px;background:#163136}.boards[data-format="portrait"] iframe{height:940px}.boards[data-format="joystick"] iframe{height:1040px}label{display:inline-block;margin:0 12px 10px 0}select{font:inherit}@media(max-width:650px){.boards{grid-template-columns:1fr}}</style>
 <main><h1>SifferSnoken · lugnare bakgrunder</h1><p>Spelets riktiga grafik, samma snok och brickor i båda vyerna. Skarpa former och lugn mitt. Sagoskogen har en egen bakgrund i varje stil.</p>
 <label>Bana <select id="board"><option value="forest">Sagoskogen</option><option value="crystal">Kristallgrotta</option><option value="sunTemple">Soltemplet</option><option value="footballPitch">Fotbollsplan</option><option value="basketballCourt">Basketplan</option><option value="hockeyRink">Hockeyrink</option><option value="coralReef">Korallrev</option><option value="cloudCity">Molnstaden</option><option value="volcanoIsland">Vulkanön</option><option value="enchantedLibrary">Magiska biblioteket</option><option value="neonArcade">Neonarkaden</option><option value="moonGarden">Månträdgården</option></select></label>
 <label>Grafik <select id="mode"><option value="pair">Båda stilarna</option><option value="toy">Modern</option><option value="pixel">Pixelretro</option><option value="classic">Original</option></select></label>
 <label>Skin <select id="skin"><option value="eld">Blodmåne</option><option value="hv71">HV71</option><option value="klassisk">Klassisk</option><option value="jordgubbe">Jordgubbe</option><option value="ghost">Ghost</option></select></label>
-<div class="boards"><section><h2>Bakgrunder på</h2><iframe title="Bakgrunder på" id="on" src="../index.html"></iframe></section><section><h2>Bakgrunder av</h2><iframe title="Bakgrunder av" id="off" src="../index.html"></iframe></section></div><p id="status">Laddar…</p></main>
+<label>Banformat <select id="format"><option value="web">WEB · 21 × 16</option><option value="portrait">Android touch · 14 × 20</option><option value="joystick">Android joystick · 14 × 23</option></select></label>
+<p>Android-valen provar banans proportioner med webbens renderer, inte Android-appens gränssnitt. Endast Sagoskogen har mobilanpassade bilder hittills. Musik är av i alla prov.</p>
+<div class="boards" data-format="web"><section><h2>Bakgrunder på</h2><iframe title="Bakgrunder på" id="on" src="../index.html?perf=1"></iframe></section><section><h2>Bakgrunder av</h2><iframe title="Bakgrunder av" id="off" src="../index.html?perf=1"></iframe></section></div><p id="status">Laddar…</p></main>
 <script>
-const frames=[document.getElementById('on'),document.getElementById('off')];let ready=0,revision=0;
+const frames=[document.getElementById('on'),document.getElementById('off')],ready=new Set();let revision=0;
 async function update(){
-  if(ready!==2)return;const current=++revision;
+  if(ready.size!==2)return;const current=++revision;
   const choice=document.getElementById('mode').value,skin=document.getElementById('skin').value,board=document.getElementById('board').value;
   const pair=choice==='pair';
   document.querySelectorAll('.boards h2').forEach((h,i)=>h.textContent=pair?['Modern','Pixelretro'][i]:['Bakgrunder på','Bakgrunder av'][i]);
@@ -30,13 +32,19 @@ async function update(){
     })`);
     if(current!==revision)return;
     w.eval(`dir={x:1,y:0};nextDir={...dir};pendingDirs.length=0;
-      snake=Array.from({length:9},(_,i)=>{const x=13-i,y=8;return{x,y,px:x,py:y};});
+      snake=Array.from({length:9},(_,i)=>{const x=Math.floor(COLS*.74)-i,y=Math.floor(ROWS*.5);return{x,y,px:x,py:y};});
       score=120;lives=3;combo=0;problem={expr:'8 + 5',answer:13,op:'+'};
-      tiles=[{x:3,y:3,value:13,correct:true},{x:16,y:3,value:11,correct:false},{x:3,y:12,value:15,correct:false},{x:16,y:12,value:9,correct:false}];
+      tiles=[{x:3,y:3,value:13,correct:true},{x:COLS-4,y:3,value:11,correct:false},{x:3,y:ROWS-4,value:15,correct:false},{x:COLS-4,y:ROWS-4,value:9,correct:false}];
       updateHUD();hideOverlays();showScreen('gameScreen');draw(1);`);
   }));
-  if(current===revision)document.getElementById('status').textContent=`${choice} · ${skin} · ${board} · klara`;
+  if(current===revision)document.getElementById('status').textContent=`${choice} · ${skin} · ${board} · ${document.getElementById('format').value} · klara`;
 }
-for(const frame of frames)frame.onload=()=>{ready++;update().catch(e=>document.getElementById('status').textContent=e.message);};
+for(const frame of frames)frame.onload=()=>{ready.add(frame.id);update().catch(e=>document.getElementById('status').textContent=e.message);};
 for(const id of ['board','mode','skin'])document.getElementById(id).onchange=()=>update().catch(e=>document.getElementById('status').textContent=e.message);
+document.getElementById('format').onchange=()=>{
+  const format=document.getElementById('format').value;
+  ready.clear();revision++;document.getElementById('status').textContent='Laddar banformat…';
+  document.querySelector('.boards').dataset.format=format;
+  for(const frame of frames)frame.src=`../index.html?perf=1${format==='web'?'':`&boardPreview=${format}`}`;
+};
 </script></html>

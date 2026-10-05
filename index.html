@@ -1101,7 +1101,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div id="medalToast"></div>
 
 <script src="translations.js?v=3.12-boards-1"></script>
-<script src="board-backgrounds.js?v=2"></script>
+<script src="board-backgrounds.js?v=3"></script>
 <script src="snake-style-config.js?v=snake-styles-26"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
 <script src="snake-headwear-designs.js?v=headwear-3"></script>
@@ -1111,9 +1111,12 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 /* ═══════════════════════════════════════
    KONSTANTER
    ═══════════════════════════════════════ */
-const CELL=34,COLS=21,ROWS=16;
 const _perfParams=new URLSearchParams(location.search);
 const PERF_DEBUG=_perfParams.get('perf')==='1';
+// Developer preview only; production WEB keeps its existing 21 x 16 board.
+const BOARD_PREVIEW=PERF_DEBUG?_perfParams.get('boardPreview'):null;
+const CELL=34,COLS=['portrait','joystick'].includes(BOARD_PREVIEW)?14:21;
+const ROWS=BOARD_PREVIEW==='portrait'?20:BOARD_PREVIEW==='joystick'?23:16;
 const PERF_STRESS_LENGTH=PERF_DEBUG
   ?Math.min(COLS*ROWS,Math.max(0,Number.parseInt(_perfParams.get('segments')||'0',10)||0))
   :0;
@@ -6488,14 +6491,15 @@ function getFairyForestPalette(){
 function getFairyForestBackdrop(){
   const W=canvas.width,H=canvas.height;
   const mode=graphicsMode==='pixel'?'pixel':'toy';
-  if(!_fairyForestStyles.has(mode)){
+  const asset=BoardBackgrounds.forestAsset(mode,W,H);
+  if(!_fairyForestStyles.has(asset.key)){
     const entry={image:new Image(),status:'loading'};
     entry.image.onload=()=>{entry.status='ready';};
     entry.image.onerror=()=>{entry.status='failed';};
-    entry.image.src=`assets/sagoskog-${mode}.webp?v=1`;
-    _fairyForestStyles.set(mode,entry);
+    entry.image.src=asset.src;
+    _fairyForestStyles.set(asset.key,entry);
   }
-  const styled=_fairyForestStyles.get(mode);
+  const styled=_fairyForestStyles.get(asset.key);
   _fairyForestImage=styled.image;_fairyForestImageStatus=styled.status;
   if(styled.status==='ready')return styled.image;
   // Quiet, flat fallback while loading; no outdated perspective or blur.
