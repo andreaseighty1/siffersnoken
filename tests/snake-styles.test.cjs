@@ -10,7 +10,12 @@ for(const mode of ['toy','pixel'])for(const id of styles.config.skins){
     assert.ok(fs.existsSync(path.join(__dirname,'..',file)));
   }
 }
-assert.ok(!styles.supports('pixel','tiger'));assert.ok(!styles.supports('classic','klassisk'));
+assert.ok(!styles.supports('pixel','drake'));assert.ok(!styles.supports('classic','klassisk'));
+for(const id of ['tiger','katt']){
+  assert.equal(styles.config.animalProfiles[id],'feline');
+  assert.equal(styles.tailFrame(id,450),'tail-right');assert.equal(styles.tailFrame(id,1350),'tail-left');
+  assert.equal(styles.tailFrame(id,450,true),'tail','Reduced motion stops tail animation');
+}
 assert.deepEqual(styles.config,exporter.config());exporter.exportAssets({check:true});
 const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 for(const id of styles.config.skins)assert.ok(html.includes("id:'"+id+"'"),'Every exported skin has an existing game ID, preserving unlocks');
@@ -74,7 +79,7 @@ async function run(){
   const canvases=[],requestedUrls=[];let requests=0;
   const renderer=styles.createRenderer({createCanvas(){const c=fakeCanvas();canvases.push(c);return c;},
     createImage(){return {naturalWidth:32,set src(value){this.source=value;requests++;requestedUrls.push(value);queueMicrotask(()=>this.onload());}};}});
-  assert.equal(renderer.draw(fakeCanvas().getContext(),{mode:'pixel',id:'tiger'}),false);
+  assert.equal(renderer.draw(fakeCanvas().getContext(),{mode:'pixel',id:'drake'}),false);
   for(const mode of ['toy','pixel'])for(const id of styles.config.skins){
     await renderer.preload(mode,id);
     const main=fakeCanvas(),opts={mode,id,cell:34,cols:21,rows:16,points:Array.from({length:50},(_,i)=>({x:12-i%10,y:4+Math.floor(i/10)})),heading:{x:1,y:0},tailDirection:{x:-1,y:0},wrap:true};
@@ -95,6 +100,24 @@ async function run(){
       const head=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.includes('regnbage-head'))&&c.commands.some(cmd=>cmd[0]==='colorPixels'));
       assert.ok(head.commands.findIndex(cmd=>cmd[0]==='colorPixels')<head.commands.findIndex(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.includes('eyes-')),'Eyes are drawn after material recoloring');
       assert.equal(requests,loaded,'Rainbow variants do not download more files');
+    }
+    if(id==='tiger'||id==='katt'){
+      const head=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith(id+'-head-ears.webp')));
+      const ears=head.commands.findIndex(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith(id+'-head-ears.webp'));
+      const base=head.commands.findIndex(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.includes(id+'-head-base'));
+      const face=head.commands.findIndex(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith(id+'-head-face.webp'));
+      assert.ok(ears<base&&base<face,'Rear ears paint behind the unchanged head; nose paints in front');
+      for(const time of [0,150,450,1050,1350])renderer.draw(main.getContext(),{...opts,time});
+      const warm=canvases.length,downloads=requests;
+      for(let time=0;time<20000;time+=60)renderer.draw(main.getContext(),{...opts,time});
+      assert.equal(canvases.length,warm,'Feline tail animation reuses five pre-joined poses, no per-frame canvases');
+      assert.equal(requests,downloads,'No tail downloads during animation');
+      for(const pose of styles.config.tailAnimations[id].frames){
+        const joined=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith(id+'-'+pose+'.webp')));
+        assert.ok(joined?.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith(id+'-body.webp')),'Every animated tail is joined with the final body BEFORE fade');
+      }
+      // Restore the shared logical layer to the baseline test pose.
+      renderer.draw(main.getContext(),opts);
     }
     if(mode==='pixel'){
       const layer=canvases.find(c=>c.width===21*24&&c.height===16*24);

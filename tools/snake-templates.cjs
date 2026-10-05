@@ -1,6 +1,7 @@
 // Fixed head, tail and eye layers; builds both styles without changing the game.
 const fs=require('node:fs'),path=require('node:path');
 const body=require('./body-templates.cjs');
+const feline=require('./feline-templates.cjs');
 const spec=require('../skin-templates/snake-spec.json');
 const root=path.resolve(__dirname,'../skin-templates');
 const parts=['head-base','tail'];
@@ -36,7 +37,7 @@ function contour(part,size){
   }
   return `<polygon points="${left.concat(right).join(' ')}"/>`;
 }
-function toyPart(theme,part,facing='up'){
+function toyPart(theme,part,facing='up',bend=0){
   const size=body.spec.styles.toy.frame,p=theme.palette,id=`toy-${theme.id}-${part}`;
   const material=body.toyMaterial(p,id,size,{rx:spec.head.radiusX,ry:spec.head.radiusY,tail:part==='tail',lightCenter:lightCenter(facing),finish:theme.material});
   const seeds=part==='tail'?tailSeeds:headSeeds;
@@ -44,14 +45,16 @@ function toyPart(theme,part,facing='up'){
     :theme.pattern==='basketballSeams'?`<path d="M ${size*.5} 0 V ${size} M 0 ${size*.58} H ${size}" fill="none" stroke="${p.ink}" stroke-width="${size*.018}"/>`
     :theme.pattern==='emeraldInlay'?body.emeraldSvg(p,size,part):'';
   const surface=body.surfaceSvg(theme,size,part,lightCenter(facing));
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}${surface.defs}<mask id="${id}-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${contour(part,size)}</g></mask></defs><g mask="url(#${id}-mask)">${material.paint}${pattern}${surface.paint}</g></svg>`;
+  const mask=part==='tail'&&feline.isFeline(theme)?feline.tailContour(size,bend):contour(part,size);
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}${surface.defs}<mask id="${id}-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${mask}</g></mask></defs><g mask="url(#${id}-mask)">${material.paint}${pattern}${surface.paint}</g></svg>`;
 }
-function partGrid(theme,part,facing='up'){
+function partGrid(theme,part,facing='up',bend=0){
   const size=body.spec.styles.pixel.frame,p=theme.pixelPalette||theme.palette;
+  const hit=part==='tail'&&feline.isFeline(theme)?(x,y)=>feline.insideTail(x,y,bend):(x,y)=>inside(part,x,y);
   return Array.from({length:size},(_,y)=>Array.from({length:size},(_,x)=>{
     const nx=(x+.5)/size,ny=(y+.5)/size;
-    if(!inside(part,nx,ny))return null;
-    if([[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>!inside(part,nx+dx/size,ny+dy/size)))return p.ink;
+    if(!hit(nx,ny))return null;
+    if([[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>!hit(nx+dx/size,ny+dy/size)))return p.ink;
     const dx=(nx-.5)*size,dy=(ny-.5)*size,angle=facingAngles[facing]*Math.PI/180;
     const worldX=dx*Math.cos(angle)-dy*Math.sin(angle),worldY=dx*Math.sin(angle)+dy*Math.cos(angle);
     const sideways=facing==='right'||facing==='left';
@@ -67,11 +70,12 @@ function gridSvg(grid){
   for(let y=0;y<size;y++)for(let x=0;x<size;){const start=x,color=grid[y][x];while(x<size&&grid[y][x]===color)x++;if(color)rects.push(`<rect x="${start}" y="${y}" width="${x-start}" height="1" fill="${color}"/>`);}
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges">${rects.join('')}</svg>`;
 }
-function partSvg(style,theme,part,{facing='up'}={}){
+function partSvg(style,theme,part,{facing='up',bend=0}={}){
   body.validateTheme(theme);if(!parts.includes(part))throw new Error('Unknown part: '+part);
   if(!Object.hasOwn(facingAngles,facing))throw new Error('Unknown facing: '+facing);
-  if(style==='toy')return toyPart(theme,part,facing);
-  if(style==='pixel')return gridSvg(partGrid(theme,part,facing));
+  if(!spec.feline.tailBends.includes(bend))throw new Error('Unknown tail bend');
+  if(style==='toy')return toyPart(theme,part,facing,bend);
+  if(style==='pixel')return gridSvg(partGrid(theme,part,facing,bend));
   throw new Error('Unknown style: '+style);
 }
 function eyesSvg(style,blink=false){
@@ -110,6 +114,29 @@ function tongueSvg(){
   for(const [x,y] of [[14,2],[15,2],[16,2],[17,2],[13,1],[14,1],[17,1],[18,1],[13,0],[18,0]])grid[y][x]='#eb343b';
   return gridSvg(grid);
 }
+function felineLayer(style,theme,part){
+  const size=body.spec.styles[style].frame,p=style==='pixel'?(theme.pixelPalette||theme.palette):theme.palette;
+  const pink=theme.id==='tiger'?'#b97050':'#cd927f';
+  if(part==='head-ears'){
+    if(style==='toy'){
+      const defs=`<linearGradient id="ear-fur" x2=".4" y2="1"><stop stop-color="${p.light}"/><stop offset=".5" stop-color="${p.base}"/><stop offset="1" stop-color="${p.shade}"/></linearGradient><linearGradient id="ear-inner" x2=".4" y2="1"><stop stop-color="#f5bc9f"/><stop offset="1" stop-color="${pink}"/></linearGradient>`;
+      const ear=`<g fill="url(#ear-fur)">${feline.polygonSvg(feline.ear,size)}</g><g fill="url(#ear-inner)">${feline.polygonSvg(feline.earInner,size)}</g>`;
+      return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><defs>${defs}</defs>${ear}<g transform="translate(${size} 0) scale(-1 1)">${ear}</g></svg>`;
+    }
+    return gridSvg(Array.from({length:size},(_,y)=>Array.from({length:size},(_,x)=>{
+      const nx=(x+.5)/size,ny=(y+.5)/size;if(!feline.earHit(nx,ny))return null;
+      if([[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>!feline.earHit(nx+dx/size,ny+dy/size)))return p.ink;
+      if(feline.earHit(nx,ny,true))return pink;
+      return ny<.77?p.light:p.shade;
+    })));
+  }
+  if(part!=='head-face')throw Error('Unknown feline layer');
+  if(style==='toy')return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><path d="M ${size*.463} ${size*.115} Q ${size*.5} ${size*.097} ${size*.537} ${size*.115} Q ${size*.523} ${size*.151} ${size*.5} ${size*.154} Q ${size*.477} ${size*.151} ${size*.463} ${size*.115}" fill="${pink}"/><path d="M ${size*.5} ${size*.153} V ${size*.174} M ${size*.395} ${size*.142} L ${size*.295} ${size*.116} M ${size*.605} ${size*.142} L ${size*.705} ${size*.116}" fill="none" stroke="${p.ink}" stroke-opacity=".68" stroke-width="${size*.008}" stroke-linecap="round"/></svg>`;
+  const grid=Array.from({length:size},()=>Array(size).fill(null));
+  for(const [x,y] of [[15,3],[16,3],[15,4],[16,4]])grid[y][x]=pink;
+  for(const [x,y] of [[15,5],[9,3],[10,3],[11,4],[20,4],[21,3],[22,3]])grid[y][x]=p.ink;
+  return gridSvg(grid);
+}
 // The attachment plane meets the circular body on a chord, not at its center.
 // Its corners touch the disk; only the tiny circular cap sits behind the tail.
 function joinGeometry(style){
@@ -137,9 +164,10 @@ function snakePreview(style,theme,variant='corner',fade=false){
   const segments=layout.points.map((p,i)=>image('body',p,0,fade?Math.max(.35,1-(i+1)*.13):1)).reverse().join('');
   const tail=`<img class="material" src="generated/${style}/${theme.id}-tail.webp" alt="" style="left:${layout.tailPivot[0]/w*100}%;top:${layout.tailPivot[1]/h*100}%;width:${layout.draw/w*100}%;transform-origin:50% ${layout.join.baseY/body.spec.styles[style].frame*100}%;transform:translate(-50%,-${layout.join.baseY/body.spec.styles[style].frame*100}%) rotate(${layout.tailAngle}deg);opacity:${fade?Math.max(.35,1-layout.points.length*.13):1}">`;
   const eyes=`<img src="generated/${style}/eyes-open.webp" alt="" style="left:${layout.head[0]/w*100}%;top:${layout.head[1]/h*100}%;width:${layout.headDraw/w*100}%;transform:translate(-50%,-50%) rotate(${layout.headAngle}deg)">`;
-  const decoration=theme.id==='jordgubbe'?image('head-decoration',layout.head,layout.headAngle):'';
+  const decoration=theme.id==='jordgubbe'?image('head-decoration',layout.head,layout.headAngle):feline.isFeline(theme)?image('head-face',layout.head,layout.headAngle):'';
+  const ears=feline.isFeline(theme)?image('head-ears',layout.head,layout.headAngle):'';
   const tongue=style==='pixel'?`<img src="generated/pixel/tongue.webp" alt="" style="left:${(layout.head[0]+layout.headDraw*.13)/w*100}%;top:${layout.head[1]/h*100}%;width:${layout.headDraw/w*100}%;transform:translate(-50%,-50%) rotate(${layout.headAngle}deg)">`:'';
-  return `<div class="snake" role="img" aria-label="${esc(theme.label)}: ${variant==='straight'?'rak snok':'snok med sväng'}${fade?', nedtonad kropp och svans':''}">${tail}${segments}${tongue}${image('head-base',layout.head,layout.headAngle)}${decoration}${eyes}</div>`;
+  return `<div class="snake" role="img" aria-label="${esc(theme.label)}: ${variant==='straight'?'rak snok':'snok med sväng'}${fade?', nedtonad kropp och svans':''}">${tail}${segments}${tongue}${ears}${image('head-base',layout.head,layout.headAngle)}${decoration}${eyes}</div>`;
 }
 function targetsHtml(){
   const crops={toy:{x:1110,y:104,w:548,h:805},pixel:{x:1068,y:89,w:604,h:835}};
@@ -165,6 +193,10 @@ async function build({sharpModule,check=false}={}){
     for(const theme of body.themes)for(const part of parts)await emit(style,theme.id+'-'+part,partSvg(style,theme,part),{id:theme.id,part,assetFacing:spec.assetFacing,...(part==='tail'?{attachment:joinGeometry(style).pivot}:{eyes:style==='pixel'?spec.head.pixelEyes:spec.head.eyes,renderScale:body.spec.styles[style].headRenderScale})});
     for(const blink of [false,true])await emit(style,'eyes-'+(blink?'blink':'open'),eyesSvg(style,blink),{part:'eyes-'+(blink?'blink':'open'),assetFacing:spec.assetFacing});
     await emit(style,'jordgubbe-head-decoration',decorationSvg(style),{id:'jordgubbe',part:'head-decoration',assetFacing:spec.assetFacing});
+    for(const theme of body.themes.filter(feline.isFeline)){
+      for(const part of ['head-ears','head-face'])await emit(style,theme.id+'-'+part,felineLayer(style,theme,part),{id:theme.id,part,animalProfile:'feline',assetFacing:spec.assetFacing});
+      for(let i=0;i<spec.feline.tailFrames.length;i++)if(i!==2)await emit(style,theme.id+'-'+spec.feline.tailFrames[i],partSvg(style,theme,'tail',{bend:spec.feline.tailBends[i]}),{id:theme.id,part:'tail',animalProfile:'feline',bend:spec.feline.tailBends[i],attachment:joinGeometry(style).pivot,assetFacing:spec.assetFacing});
+    }
     for(const theme of body.themes)for(const facing of ['right','down','left'])await emit(style,theme.id+'-head-base-'+facing,partSvg(style,theme,'head-base',{facing}),{id:theme.id,part:'head-base',assetFacing:spec.assetFacing,renderFacing:facing,renderRotation:facingAngles[facing],renderScale:body.spec.styles[style].headRenderScale,eyes:style==='pixel'?spec.head.pixelEyes:spec.head.eyes});
   }
   await emit('pixel','tongue',tongueSvg(),{part:'tongue',assetFacing:spec.assetFacing,attachment:[.5,.20],headAnchor:[.5,.07],offsetY:-.13});
@@ -174,5 +206,5 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,parts,facingAngles,lightCenter,inside,partGrid,partSvg,eyesSvg,decorationSvg,tongueSvg,joinGeometry,pose,previewHtml,targetsHtml,build};
+module.exports={spec,parts,facingAngles,lightCenter,inside,partGrid,partSvg,eyesSvg,decorationSvg,tongueSvg,felineLayer,joinGeometry,pose,previewHtml,targetsHtml,build};
 if(require.main===module){const args=process.argv.slice(2),index=args.indexOf('--sharp');if(index!==-1&&!args[index+1])throw new Error('Supply an installed sharp module path');build({sharpModule:index===-1?undefined:args[index+1],check:args.includes('--check')}).then(outputs=>console.log(`${args.includes('--check')?'CHECKED':'BUILT'}: ${outputs.length} body, head, tail and eye assets. Existing game unchanged.`)).catch(error=>{console.error(error);process.exitCode=1;});}

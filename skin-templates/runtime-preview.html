@@ -6,24 +6,25 @@
 <style>
 *{box-sizing:border-box}body{margin:0;padding:24px;background:#f5f0e4;color:#183b35;font:16px system-ui,sans-serif}main{max-width:1160px;margin:auto}h1{margin:0 0 8px;font-size:26px}p{line-height:1.5}button{font:inherit;padding:8px 14px;border:1px solid #789184;border-radius:10px;background:#fffaf0;color:inherit;cursor:pointer}article{margin:22px 0;padding:20px;border:1px solid #cdd6c9;border-radius:18px;background:#fffaf0}h2{margin:0 0 12px;font-size:23px}.styles{display:grid;grid-template-columns:1fr 1fr;gap:22px}h3{margin:0 0 8px;font-size:16px}canvas{display:block;width:100%;height:auto;background:#e4edde;border-radius:12px;image-rendering:auto}.note{margin:12px 0 0;font-size:13px;color:#456057}@media(max-width:650px){body{padding:12px}.styles{grid-template-columns:1fr}article{padding:14px}}
 </style>
-<main><h1>SifferSnoken · riktiga skinpreviews</h1><p>Samma WebP-filer, former, ögon och svansfästen som i spelet. Utan längdnedtoning; Ghost behåller sin genomskinlighet.</p><button id="pause">Pausa färgerna</button><div id="previews"></div><p id="status" role="status">Laddar tillgångar…</p></main>
-<script src="../snake-style-config.js?v=snake-styles-23"></script>
+<main><h1>SifferSnoken · riktiga skinpreviews</h1><p>Samma WebP-filer, former, ögon och svansfästen som i spelet. Utan längdnedtoning; Ghost behåller sin genomskinlighet.</p><button id="pause">Pausa animationen</button><div id="previews"></div><p id="status" role="status">Laddar tillgångar…</p></main>
+<script src="../snake-style-config.js?v=snake-styles-24"></script>
 <script src="../snake-colors.js?v=snake-styles-4"></script>
 <script src="../snake-headwear-designs.js?v=headwear-3"></script>
 <script src="../snake-headwear.js?v=headwear-3"></script>
-<script src="../snake-styles.js?v=snake-styles-10"></script>
+<script src="../snake-styles.js?v=snake-styles-11"></script>
 <script>
 const renderer=SnakeStyles.createRenderer({assetPrefix:'../'});
 let paused=false,frozenTime=0,lastPhase=-1;
 const reduced=matchMedia('(prefers-reduced-motion: reduce)'),cards=[];
 const points=Array.from({length:11},(_,i)=>({x:11-i,y:2}));
 const opts={cell:34,cols:14,rows:5,points,heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false};
-document.getElementById('pause').onclick=()=>{paused=!paused;frozenTime=performance.now();lastPhase=-1;document.getElementById('pause').textContent=paused?'Starta färgerna':'Pausa färgerna';};
+const animalOpts={...opts,cell:46,cols:476/46,rows:170/46,points:Array.from({length:8},(_,i)=>({x:8-i,y:170/46/2-.5}))};
+document.getElementById('pause').onclick=()=>{paused=!paused;frozenTime=performance.now();lastPhase=-1;document.getElementById('pause').textContent=paused?'Starta animationen':'Pausa animationen';};
 (async()=>{
   const themes=await (await fetch('themes.json')).json();
   const requested=(new URLSearchParams(location.search).get('skins')||'regnbage,guld').split(',');
   const chosen=themes.filter(t=>requested.includes(t.id)&&SnakeStyles.config.skins.includes(t.id));
-  const animated=chosen.some(t=>t.colorCycle);
+  const animated=chosen.some(t=>t.colorCycle||t.animalProfile);
   document.getElementById('pause').hidden=!animated;
   for(const theme of chosen){
     const article=document.createElement('article');article.id='preview-'+theme.id;
@@ -34,20 +35,20 @@ document.getElementById('pause').onclick=()=>{paused=!paused;frozenTime=performa
       title.textContent=label;canvas.width=476;canvas.height=170;canvas.setAttribute('aria-label',theme.label+' i '+label);
       section.append(title,canvas);group.append(section);
       if(!await renderer.preload(mode,theme.id))throw Error('Kunde inte ladda '+theme.label+' '+mode);
-      cards.push({canvas,mode,id:theme.id});
+      cards.push({canvas,mode,id:theme.id,options:theme.animalProfile?animalOpts:opts});
     }
-    const note=document.createElement('p');note.className='note';note.textContent=theme.materialOpacity!==undefined?'Riktig genomskinlighet på hela snoken. Bakgrundens linjer syns igenom utan mörka skarvar; samma material på huvud och svans.':theme.colorCycle?'Sju färger längs kroppen. Färgerna växlar lugnt i spelet; svans och sista kroppsdel har samma färg.':'Fast orientering på kroppen, samma material på huvud och svans.';article.append(note);
+    const note=document.createElement('p');note.className='note';note.textContent=theme.animalProfile?'Gemensamma bakåtsatta öron och smal kattsvans. Svansen vickar med ett fast fäste; kroppen roterar inte i svängar.':theme.materialOpacity!==undefined?'Riktig genomskinlighet på hela snoken. Bakgrundens linjer syns igenom utan mörka skarvar; samma material på huvud och svans.':theme.colorCycle?'Sju färger längs kroppen. Färgerna växlar lugnt i spelet; svans och sista kroppsdel har samma färg.':'Fast orientering på kroppen, samma material på huvud och svans.';article.append(note);
     document.getElementById('previews').append(article);
   }
   document.getElementById('status').textContent='Tillgångarna är laddade.';
   function frame(now){
-    const time=paused?frozenTime:now,phase=!animated||reduced.matches?0:Math.floor(time/1400);
+    const time=paused?frozenTime:now,phase=chosen.map(t=>t.colorCycle?Math.floor((reduced.matches?0:time)/1400):SnakeStyles.tailFrame(t.id,time,reduced.matches)).join('|');
     if(phase!==lastPhase){lastPhase=phase;for(const card of cards){const c=card.canvas.getContext('2d');c.clearRect(0,0,476,170);
       if(SnakeStyles.config.materialOpacities[card.id]<1){
         c.fillStyle='#d5e4cc';c.fillRect(0,0,476,170);c.strokeStyle='rgba(46,95,59,.28)';c.lineWidth=1;
         c.beginPath();for(let x=0;x<476;x+=24){c.moveTo(x,0);c.lineTo(x,170);}for(let y=0;y<170;y+=24){c.moveTo(0,y);c.lineTo(476,y);}c.stroke();
       }
-      renderer.draw(c,{...opts,mode:card.mode,id:card.id,time,reducedMotion:reduced.matches,accessory:SnakeStyles.config.headAccessories[card.id]||null});}}
+      renderer.draw(c,{...card.options,mode:card.mode,id:card.id,time,reducedMotion:reduced.matches,accessory:SnakeStyles.config.headAccessories[card.id]||null});}}
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

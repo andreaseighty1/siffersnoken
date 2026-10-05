@@ -262,6 +262,20 @@
       "file": "generated/toy/eld-body.webp"
     },
     {
+      "style": "toy",
+      "id": "tiger",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/tiger-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "katt",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/katt-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -519,6 +533,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/eld-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "tiger",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/tiger-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "katt",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/katt-body.webp"
     },
     {
       "style": "toy",
@@ -1670,6 +1698,68 @@
     {
       "style": "toy",
       "frame": 512,
+      "file": "generated/toy/tiger-head-base.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-tail.webp",
+      "id": "tiger",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-head-base.webp",
+      "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-tail.webp",
+      "id": "katt",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
       "file": "generated/toy/eyes-open.webp",
       "part": "eyes-open",
       "assetFacing": "up"
@@ -1687,6 +1777,154 @@
       "file": "generated/toy/jordgubbe-head-decoration.webp",
       "id": "jordgubbe",
       "part": "head-decoration",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-head-ears.webp",
+      "id": "tiger",
+      "part": "head-ears",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-head-face.webp",
+      "id": "tiger",
+      "part": "head-face",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-tail-left.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.1,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-tail-left-soft.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.05,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-tail-right-soft.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.05,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-tail-right.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.1,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-head-ears.webp",
+      "id": "katt",
+      "part": "head-ears",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-head-face.webp",
+      "id": "katt",
+      "part": "head-face",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-tail-left.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.1,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-tail-left-soft.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.05,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-tail-right-soft.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.05,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-tail-right.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.1,
+      "attachment": [
+        256,
+        64
+      ],
       "assetFacing": "up"
     },
     {
@@ -4021,6 +4259,132 @@
       ]
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-head-base-right.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-head-base-down.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/tiger-head-base-left.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-head-base-right.webp",
+      "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-head-base-down.webp",
+      "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/katt-head-base-left.webp",
+      "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -5170,6 +5534,68 @@
     {
       "style": "pixel",
       "frame": 32,
+      "file": "generated/pixel/tiger-head-base.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-tail.webp",
+      "id": "tiger",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-head-base.webp",
+      "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-tail.webp",
+      "id": "katt",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
       "file": "generated/pixel/eyes-open.webp",
       "part": "eyes-open",
       "assetFacing": "up"
@@ -5187,6 +5613,154 @@
       "file": "generated/pixel/jordgubbe-head-decoration.webp",
       "id": "jordgubbe",
       "part": "head-decoration",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-head-ears.webp",
+      "id": "tiger",
+      "part": "head-ears",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-head-face.webp",
+      "id": "tiger",
+      "part": "head-face",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-tail-left.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.1,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-tail-left-soft.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.05,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-tail-right-soft.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.05,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-tail-right.webp",
+      "id": "tiger",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.1,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-head-ears.webp",
+      "id": "katt",
+      "part": "head-ears",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-head-face.webp",
+      "id": "katt",
+      "part": "head-face",
+      "animalProfile": "feline",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-tail-left.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.1,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-tail-left-soft.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": -0.05,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-tail-right-soft.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.05,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-tail-right.webp",
+      "id": "katt",
+      "part": "tail",
+      "animalProfile": "feline",
+      "bend": 0.1,
+      "attachment": [
+        16,
+        4
+      ],
       "assetFacing": "up"
     },
     {
@@ -7504,6 +8078,132 @@
       "frame": 32,
       "file": "generated/pixel/eld-head-base-left.webp",
       "id": "eld",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-head-base-right.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-head-base-down.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/tiger-head-base-left.webp",
+      "id": "tiger",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-head-base-right.webp",
+      "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-head-base-down.webp",
+      "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/katt-head-base-left.webp",
+      "id": "katt",
       "part": "head-base",
       "assetFacing": "up",
       "renderFacing": "left",

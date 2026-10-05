@@ -15,11 +15,19 @@
     const phase=reducedMotion?0:Math.floor(Math.max(0,time)/cycle.intervalMs);
     return cycle.hues[(index+phase)%cycle.hues.length];
   }
+  function tailFrame(id,time=0,reducedMotion=false){
+    const animation=config.tailAnimations?.[id];
+    if(!animation||reducedMotion)return 'tail';
+    const phase=Math.sin(Math.max(0,time)/animation.periodMs*Math.PI*2);
+    return animation.frames[Math.round((phase+1)*(animation.frames.length-1)/2)];
+  }
   function paths(mode,id){
     if(!supports(mode,id))return [];
     const dir=`skins/styles/${normalizeMode(mode)}/`;
     return ['body','tail','head-base','head-base-right','head-base-down','head-base-left'].map(p=>dir+id+'-'+p+'.webp')
-      .concat([dir+'eyes-open.webp',dir+'eyes-blink.webp'],id==='jordgubbe'?[dir+'jordgubbe-head-decoration.webp']:[],normalizeMode(mode)==='pixel'?[dir+'tongue.webp']:[]);
+      .concat([dir+'eyes-open.webp',dir+'eyes-blink.webp'],id==='jordgubbe'?[dir+'jordgubbe-head-decoration.webp']:[],
+        config.animalProfiles?.[id]==='feline'?['head-ears','head-face',...config.tailAnimations[id].frames.filter(p=>p!=='tail')].map(p=>dir+id+'-'+p+'.webp'):[],
+        normalizeMode(mode)==='pixel'?[dir+'tongue.webp']:[]);
   }
   function createRenderer({createCanvas=()=>document.createElement('canvas'),createImage=()=>new Image(),assetPrefix=''}={}){
     const images=new Map(),sprites=new Map();
@@ -62,11 +70,11 @@
       const c=out.getContext('2d'),pixels=c.getImageData(0,0,out.width,out.height);
       colors.recolorPixels(pixels.data,hue);c.putImageData(pixels,0,0);
     }
-    function sprite(mode,id,part,cell,direction='up',blink=false,hue=0,accessory=null){
+    function sprite(mode,id,part,cell,direction='up',blink=false,hue=0,accessory=null,tailPose='tail'){
       if(part==='body')direction='up';
       if(part!=='head')blink=false;
       accessory=part==='head'&&headwear.supports(mode,accessory)?accessory:null;
-      const key=[mode,id,part,cell,direction,blink,hue,accessory].join('|');
+      const key=[mode,id,part,cell,direction,blink,hue,accessory,part==='tail'?tailPose:''].join('|');
       if(sprites.has(key))return sprites.get(key);
       const pixel=mode==='pixel',s=config.styles[mode];
       const bodySize=pixel?32:cell*s.bodyScale;
@@ -78,18 +86,20 @@
       if(part==='tail'){
         c.save();c.translate(center,center);c.rotate(angles[direction]-Math.PI);
         const chord=s.chord/s.frame*bodySize;
-        c.drawImage(image(mode,id+'-tail'),-size/2,chord-s.pivot[1]/s.frame*size,size,size);
+        c.drawImage(image(mode,id+'-'+tailPose),-size/2,chord-s.pivot[1]/s.frame*size,size,size);
         c.restore();
       }
       if(part==='head'){
         c.save();c.translate(center,center);c.rotate(angles[direction]);
         const base=id+'-head-base'+(direction==='up'?'':'-'+direction);
         const start=pixel?-Math.floor(size/2):-size/2;
+        if(config.animalProfiles?.[id]==='feline')c.drawImage(image(mode,id+'-head-ears'),start,start,size,size);
         c.drawImage(image(mode,base),start,start,size,size);
         // Color the material BEFORE painting eyes/tongue/decorations.
         recolorMaterial(out,hue);
         if(mode==='pixel')c.drawImage(image(mode,'tongue'),start,start+Math.round(-.13*size),size,size);
         if(id==='jordgubbe')c.drawImage(image(mode,'jordgubbe-head-decoration'),start,start,size,size);
+        if(config.animalProfiles?.[id]==='feline')c.drawImage(image(mode,id+'-head-face'),start,start,size,size);
         c.drawImage(image(mode,'eyes-'+(blink?'blink':'open')),start,start,size,size);
         c.restore();
       }else{
@@ -136,10 +146,11 @@
       }
       target.save();target.imageSmoothingEnabled=!pixel;target.shadowBlur=0;
       const w=cols*pitch,h=rows*pitch;
+      const selectedTail=tailFrame(id,time,reducedMotion);
       for(let i=points.length-1;i>=0;i--){
         const part=i===0?'head':i===points.length-1?'tail':'body';
         const direction=facing(i===0?heading:tailDirection);
-        const cached=sprite(mode,id,part,pitch,direction,i===0&&blink,colorHue(id,i,time,reducedMotion),accessory);
+        const cached=sprite(mode,id,part,pitch,direction,i===0&&blink,colorHue(id,i,time,reducedMotion),accessory,selectedTail);
         const x=(points[i].x+.5)*pitch,y=(points[i].y+.5)*pitch;
         target.globalAlpha=fade&&i?alpha(i):1;
         // Only a real logical crossing may mirror a segment. Oversized sprites
@@ -165,6 +176,6 @@
     }
     return {preload,draw,cacheSize:()=>sprites.size};
   }
-  const api={config,normalizeMode,supports,paths,alpha,colorHue,facing,createRenderer};
+  const api={config,normalizeMode,supports,paths,alpha,colorHue,tailFrame,facing,createRenderer};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.SnakeStyles=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

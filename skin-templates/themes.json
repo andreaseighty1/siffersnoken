@@ -208,5 +208,17 @@
     "palette": { "base": "#86273e", "light": "#d65b60", "shade": "#321d31", "edge": "#231829", "ink": "#1d1424", "detail": "#ffd59d" },
     "patternPalette": { "base": "#cb423d", "light": "#ff9879", "shade": "#8f2338", "edge": "#582235", "ink": "#1d1424", "detail": "#ffe3b1" },
     "pixelPalette": { "base": "#a93647", "light": "#e65755", "shade": "#542739", "edge": "#ef8c66", "ink": "#22172b", "detail": "#ffd59d" }
+  },
+  {
+    "id": "tiger", "label": "Tiger", "pattern": "tigerStripes", "animalProfile": "feline", "bodyOrientation": "fixed",
+    "palette": { "base": "#ee941e", "light": "#ffd373", "shade": "#a95310", "edge": "#78401d", "ink": "#30241d", "detail": "#fff1d1" },
+    "patternPalette": { "base": "#30241d", "light": "#5e4531", "shade": "#191c1a", "edge": "#201c18", "ink": "#241e18", "detail": "#fff1d1" },
+    "pixelPalette": { "base": "#ee9828", "light": "#ffbf50", "shade": "#a45b20", "edge": "#79502b", "ink": "#30241d", "detail": "#ffe5af" }
+  },
+  {
+    "id": "katt", "label": "Katt", "pattern": "catPatches", "animalProfile": "feline", "bodyOrientation": "fixed",
+    "palette": { "base": "#ded0b9", "light": "#fff0d6", "shade": "#a8967d", "edge": "#796652", "ink": "#514337", "detail": "#fff6df" },
+    "patternPalette": { "base": "#ab8263", "light": "#d7b593", "shade": "#735540", "edge": "#574536", "ink": "#514337", "detail": "#fff6df" },
+    "pixelPalette": { "base": "#d6c3a8", "light": "#f5e2c5", "shade": "#a48366", "edge": "#886750", "ink": "#514337", "detail": "#fff6df" }
   }
 ]

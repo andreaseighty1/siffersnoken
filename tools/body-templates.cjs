@@ -5,6 +5,7 @@ const path=require('node:path');
 const spec=require('../skin-templates/body-spec.json');
 const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
+const feline=require('./feline-templates.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
 const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist','royalBrocade','teamRibbons','teamColorBands']);
@@ -15,7 +16,8 @@ const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const seeds=[[-.37,-.31],[.30,-.39],[-.27,.30],[.36,.26],[.02,-.01]];
 function validateTheme(theme){
   if(!/^[a-z][a-z0-9-]*$/.test(theme.id))throw new Error('Invalid theme id');
-  if(!patterns.has(theme.pattern)&&theme.pattern!=='lunarCopper')throw new Error('Unsupported pattern: '+theme.pattern);
+  if(!patterns.has(theme.pattern)&&!['lunarCopper','tigerStripes','catPatches'].includes(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
+  if(theme.animalProfile!==undefined&&theme.animalProfile!=='feline')throw new Error('Unsupported animal profile');
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
   if(theme.assetRevision!==undefined&&(!Number.isSafeInteger(theme.assetRevision)||theme.assetRevision<1))throw new Error('Invalid asset revision');
   if(theme.material!==undefined&&theme.material!=='gold')throw new Error('Unsupported material');
@@ -75,6 +77,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['tigerStripes','catPatches'].includes(theme.pattern))return felineSvg(theme,size,part,lightCenter);
   if(theme.pattern==='lunarCopper')return lunarSvg(theme,size,part,lightCenter);
   if(theme.pattern==='teamColorBands')return teamColorSvg(theme,size,part,lightCenter);
   if(['royalBrocade','teamRibbons'].includes(theme.pattern))return royalTeamSvg(theme,size,part,lightCenter);
@@ -122,6 +125,18 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(['tigerStripes','catPatches'].includes(theme.pattern)){
+    if(part==='tail'){
+      const t=(ny-snakeSpec.tail.attachment[1])/(snakeSpec.feline.tailTipY-snakeSpec.tail.attachment[1]);
+      if(theme.pattern==='tigerStripes'&&(t>.84||[.25,.50,.73].some(v=>Math.abs(t-v)<.055)))return p.ink;
+      if(theme.pattern==='catPatches'&&t>.72)return p.detail;
+      return color;
+    }
+    if(theme.pattern==='tigerStripes'&&felineStripes(part).some(poly=>felinePoint(poly,nx,ny)))return p.ink;
+    if(theme.pattern==='catPatches'&&catPatch(nx,ny,part))return color===p.light?p.shade:p.edge;
+    if(part==='head-base'&&((nx-.5)/.20)**2+((ny-.13)/.09)**2<1)return p.detail;
+    return color;
+  }
   if(theme.pattern==='lunarCopper'){
     const [u,v]=surfaceCoordinates(nx,ny,part);
     const distance=Math.hypot((u-.66)/.53,(v-.46)/.65);
@@ -400,6 +415,38 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+function felinePoint(poly,x,y){
+  let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit;
+  }return hit;
+}
+function felineStripes(part){
+  const bands=part==='head-base'?[.61,.81]:[.16,.42,.69];
+  return bands.flatMap((y,i)=>{
+    const tip=part==='head-base'?.35:.44-(i%2)*.035;
+    const one=[...cubicPoints([-.08,y],[.10,y-.07],[.25,y+.075],[tip,y+.015]),
+      ...cubicPoints([tip,y+.015],[.24,y+.105],[.10,y+.075],[-.08,y+.145])];
+    return [one,one.map(([x,v])=>[1-x,v+.065])];
+  });
+}
+function catPatch(x,y,part){
+  const cy=part==='head-base'?.76:.30;
+  return ((x-.20)/.27)**2+((y-cy)/.31)**2<1||part==='body'&&((x-.81)/.18)**2+((y-.78)/.22)**2<1;
+}
+function felineSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,material=toyMaterial(theme.patternPalette,id,size,{tail:part==='tail',lightCenter});
+  let shapes;
+  if(part==='tail'){
+    if(theme.pattern==='tigerStripes')shapes=[.25,.50,.73].map(t=>`<rect x="0" y="${size*(snakeSpec.tail.attachment[1]+(t-.055)*(snakeSpec.feline.tailTipY-snakeSpec.tail.attachment[1]))}" width="${size}" height="${size*.067}"/>`).join('')+`<rect x="0" y="${size*.6374}" width="${size}" height="${size}"/>`;
+    else {
+      const tip=toyMaterial({...theme.palette,base:theme.palette.detail,light:'#fffaf0',shade:theme.palette.light},id+'-tip',size,{tail:true});
+      return {defs:tip.defs+`<mask id="${id}-tip-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><rect x="0" y="${size*.5642}" width="${size}" height="${size}" fill="white"/></mask>`,paint:`<g mask="url(#${id}-tip-mask)">${tip.paint}</g>`};
+    }
+  }else if(theme.pattern==='tigerStripes')shapes=felineStripes(part).map(poly=>feline.polygonSvg(poly,size)).join('');
+  else shapes=`<ellipse cx="${size*.20}" cy="${size*(part==='head-base'?.76:.30)}" rx="${size*.27}" ry="${size*.31}"/>`+(part==='body'?`<ellipse cx="${size*.81}" cy="${size*.78}" rx="${size*.18}" ry="${size*.22}"/>`:'');
+  const face=part==='head-base'?`<ellipse cx="${size*.5}" cy="${size*.13}" rx="${size*.20}" ry="${size*.09}" fill="${theme.palette.detail}"/>`:'';
+  return {defs:material.defs+`<mask id="${id}-mark" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${shapes}</g></mask>`,paint:`<g mask="url(#${id}-mark)">${material.paint}</g>`+face};
+}
 // Copper moon rim and sparse open crater grooves, not a repeated round badge.
 const moonGrooves=[cubicPoints([.24,.56],[.16,.34],[.36,.27],[.43,.38]),
   cubicPoints([.55,.78],[.46,.65],[.62,.57],[.70,.65])];

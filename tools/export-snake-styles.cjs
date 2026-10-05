@@ -6,6 +6,8 @@ const ids=body.themes.filter(t=>t.id!=='neutral').map(t=>t.id);
 function config(){
   return {skins:ids,rendering:body.spec.rendering,headAttachment:snake.spec.head,
     headAccessories:Object.fromEntries(body.themes.filter(t=>t.headAccessory).map(t=>[t.id,t.headAccessory])),
+    animalProfiles:Object.fromEntries(body.themes.filter(t=>t.animalProfile).map(t=>[t.id,t.animalProfile])),
+    tailAnimations:Object.fromEntries(body.themes.filter(t=>t.animalProfile==='feline').map(t=>[t.id,{frames:snake.spec.feline.tailFrames,periodMs:snake.spec.feline.tailPeriodMs}])),
     materialOpacities:Object.fromEntries(body.themes.filter(t=>t.materialOpacity!==undefined).map(t=>[t.id,t.materialOpacity])),
     assetRevisions:Object.fromEntries(body.themes.filter(t=>t.assetRevision).map(t=>[t.id,t.assetRevision])),
     colorCycles:Object.fromEntries(body.themes.filter(t=>t.colorCycle).map(t=>[t.id,t.colorCycle])),

@@ -262,6 +262,20 @@
       "file": "generated/toy/eld-body.webp"
     },
     {
+      "style": "toy",
+      "id": "tiger",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/tiger-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "katt",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/katt-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -519,6 +533,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/eld-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "tiger",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/tiger-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "katt",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/katt-body.webp"
     }
   ]
 }

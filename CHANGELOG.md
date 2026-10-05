@@ -2,6 +2,14 @@
 
 ## 2026-10-05
 
+### Tiger och Katt: gemensamma specialformer
+
+- Båda skins färdiga i Modern och Pixelretro. Tiger har skulpterad orange päls och böjda mörka ränder; Katt har crème-/sandfärgad päls med asymmetriska bruna fält. Kroppar och huvudbaser behåller de låsta runda maskerna och skalorna.
+- Delad `feline`-mall: små rundat triangulära öron bakom ögonen och smal böjd svans. Separata öron-/noslager, samma geometriska former för båda teman.
+- Fem förlustfria WebP-svanslägen vickar kring samma fasta fästkant. Svans och sista kropp sätts ihop i rendercachen före gemensam transparens. Inga bildavläsningar, shaders, ny canvas eller extra hämtningar i varm animation. Reducerad rörelse stoppar vickningen.
+- 38 av 41 skins klara. Hund, Ko och Drake återstår. Original, äldre modernbilder och upplåsningar bevaras. Nyhetsraden och antalet uppdaterade på tre språk.
+- Nya tester säkrar delade öron/svansar, oförändrade huvud/kroppsmasker, sammanhängande fäste i alla fem lägen, liten native pixelpalett och återanvändning av animationscachen.
+
 ### Ny Sagoskog, Blodmåne och korrekta kantpassager
 
 - Sagoskogen följer godkänt koncept i separata Modern/Pixelretro-bilder: skarpa former, blågrön lugn mitt och detaljer längs ytterkanterna. Opak WebP 1536 × 1024, ungefär 76/97 KiB. Övriga banor väntar på omritning.

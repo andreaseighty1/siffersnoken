@@ -12,7 +12,7 @@ for(const [x,y] of snake.spec.head.rearDecorationAnchors){assert.ok(snake.inside
 for(const part of snake.parts){
   const mask=snake.partGrid(neutral,part).map(row=>row.map(Boolean));
   for(const theme of body.themes){
-    assert.deepEqual(snake.partGrid(theme,part).map(row=>row.map(Boolean)),mask,'Every theme uses the same part silhouette');
+    if(part!=='tail'||!theme.animalProfile)assert.deepEqual(snake.partGrid(theme,part).map(row=>row.map(Boolean)),mask,'Head masks and non-special tails stay unchanged');
     for(const style of ['toy','pixel'])assert.equal(snake.partSvg(style,theme,part),snake.partSvg(style,theme,part));
   }
   for(let y=0;y<32;y++)for(let x=0;x<32;x++)assert.equal(mask[y][x],mask[y][31-x],'Centered symmetric silhouette');
@@ -80,7 +80,7 @@ for(const style of ['toy','pixel'])for(const variant of ['straight','corner']){
   }
 }
 async function main(){
-  const outputs=await snake.build({check:true});assert.equal(outputs.length,body.themes.length*12+7);
+  const outputs=await snake.build({check:true});assert.equal(outputs.length,body.themes.length*12+7+body.themes.filter(t=>t.animalProfile==='feline').length*12);
   const index=process.argv.indexOf('--sharp');
   if(index!==-1){
     const sharp=require(path.resolve(process.argv[index+1])),masks={};
@@ -90,7 +90,9 @@ async function main(){
       const {data,info}=await sharp(file).ensureAlpha().raw().toBuffer({resolveWithObject:true});
       const alpha=Array.from({length:info.width*info.height},(_,i)=>data[i*info.channels+info.channels-1]);
       assert.ok(alpha.some(a=>a===255)&&alpha.some(a=>a===0));assert.equal(alpha[0],0);
-      const key=output.style+':'+(output.part||'body');
+      const theme=body.themes.find(t=>t.id===output.id);
+      const profile=output.part==='tail'&&theme?.animalProfile?':'+theme.animalProfile+':'+(output.bend||0):'';
+      const key=output.style+':'+(output.part||'body')+profile;
       if(masks[key])assert.deepEqual(alpha,masks[key],'Actual WebP alpha is identical across themes');else masks[key]=alpha;
       if(output.style==='pixel'){
         assert.ok(alpha.every(a=>a===0||a===255),'Hard pixel alpha');
@@ -100,6 +102,7 @@ async function main(){
       if(output.part==='head-decoration'){
         for(let y=0;y<info.height;y++)for(let x=0;x<info.width;x++)if(alpha[y*info.width+x])assert.ok(y/info.height>=snake.spec.head.decorationMinimumY,'Actual leaves stay behind the eye zone');
       }
+      if(output.part==='head-ears')for(let y=0;y<info.height;y++)for(let x=0;x<info.width;x++)if(alpha[y*info.width+x])assert.ok(y/info.height>=snake.spec.feline.earMinimumY-.005,'Shared feline ears stay behind eyes');
     }
     for(const style of ['toy','pixel'])for(const state of ['open','blink']){
       const head=masks[style+':head-base'],eyes=masks[style+':eyes-'+state];
