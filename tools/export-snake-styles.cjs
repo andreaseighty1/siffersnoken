@@ -5,6 +5,7 @@ const root=path.resolve(__dirname,'..');
 const ids=body.themes.filter(t=>t.id!=='neutral').map(t=>t.id);
 function config(){
   return {skins:ids,rendering:body.spec.rendering,
+    materialOpacities:Object.fromEntries(body.themes.filter(t=>t.materialOpacity!==undefined).map(t=>[t.id,t.materialOpacity])),
     assetRevisions:Object.fromEntries(body.themes.filter(t=>t.assetRevision).map(t=>[t.id,t.assetRevision])),
     colorCycles:Object.fromEntries(body.themes.filter(t=>t.colorCycle).map(t=>[t.id,t.colorCycle])),
     outlineColors:Object.fromEntries(body.themes.filter(t=>ids.includes(t.id)).map(t=>[t.id,t.palette.ink])),

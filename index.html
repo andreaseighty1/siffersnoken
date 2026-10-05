@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SifferSnoken V3.11 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
+<title>SifferSnoken V3.12 🐍 2026 © 42 Improbable Owls & Andreas Jonsson</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@400;600;800&family=Nunito:wght@700;900&display=swap');
 :root{
@@ -139,7 +139,7 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
   box-sizing:border-box;
   flex:0 0 auto;
   padding:0 16px;
-  animation:menuNewsScroll 40s linear infinite;
+  animation:menuNewsScroll 52s linear infinite;
 }
 .menu-news-item{
   font-size:11px;
@@ -711,8 +711,8 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
   <div class="menu-news-wrap" id="menuNewsWrap">
     <div class="menu-news-track" id="menuNewsTrack">
-      <span class="menu-news-item" id="menuNewsA">Nytt! <strong>Negativa tal (+/−)</strong> – öva separat eller blanda · <strong>Basketboll</strong> – lås upp med 5 rätt i rad · <strong>Basketplan</strong> och fler moderna skins!</span>
-      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt! <strong>Negativa tal (+/−)</strong> – öva separat eller blanda · <strong>Basketboll</strong> – lås upp med 5 rätt i rad · <strong>Basketplan</strong> och fler moderna skins!</span>
+      <span class="menu-news-item" id="menuNewsA">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 33 skins i båda nya stilarna, nu även Stjärnhimmel och genomskinliga Ghost · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
+      <span class="menu-news-item" id="menuNewsB" aria-hidden="true">Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 33 skins i båda nya stilarna, nu även Stjärnhimmel och genomskinliga Ghost · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!</span>
     </div>
   </div>
   <!-- Snabbval -->
@@ -781,7 +781,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
       <span style="color:var(--text);font-weight:600"><span style="color:var(--accent)">42</span> Improbable Owls</span>
     </span>
   </a>
-  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.11</div>
+  <div class="copyright" id="copyrightEl">© 2026 42 Improbable Owls &amp; Andreas Jonsson 🐍 &nbsp;·&nbsp; v3.12</div>
   <button id="btnAbout" style="margin-top:4px;background:none;border:none;color:var(--muted);font-family:'Exo 2',sans-serif;font-size:11px;cursor:pointer;letter-spacing:.05em;padding:2px 8px;border-radius:6px;transition:.12s;" onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--muted)'">ℹ️ Om SifferSnoken</button>
 </div>
 
@@ -885,11 +885,11 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
         <div class="menu-panel">
           <div class="panel-title" id="graphicsModeTitle">🖼️ Grafikläge</div>
           <div class="toggle-row" style="flex-wrap:wrap;gap:5px;">
-            <button class="toggle-btn graphics-mode-btn sel" data-graphics="classic" id="graphicsClassicBtn">🧩 Klassisk</button>
-            <button class="toggle-btn graphics-mode-btn" data-graphics="toy" id="graphicsModernBtn">✨ Modern</button>
+            <button class="toggle-btn graphics-mode-btn sel" data-graphics="toy" id="graphicsModernBtn">✨ Modern</button>
             <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
+            <button class="toggle-btn graphics-mode-btn" data-graphics="classic" id="graphicsClassicBtn">🧩 Original</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Modern har mjuka leksaksformer. 31 skins är klara i både Modern och Pixelretro; övriga behåller tills vidare sitt tidigare utseende.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. 33 skins är klara i båda nya stilarna; övriga behåller tills vidare sitt tidigare utseende.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="musicStyleTitle">🎵 Musikstil</div>
@@ -1092,10 +1092,10 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div class="flash-bad"  id="flashBad"></div>
 <div id="medalToast"></div>
 
-<script src="translations.js?v=snake-styles-4"></script>
-<script src="snake-style-config.js?v=snake-styles-16"></script>
+<script src="translations.js?v=3.12"></script>
+<script src="snake-style-config.js?v=snake-styles-17"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
-<script src="snake-styles.js?v=snake-styles-5"></script>
+<script src="snake-styles.js?v=snake-styles-6"></script>
 <script>
 /* ═══════════════════════════════════════
    KONSTANTER
@@ -1325,9 +1325,9 @@ function pickLangText(sv,en,de=en){
 }
 function getVersionNewsHtml(){
   return pickLangText(
-    'Nytt! <strong>Negativa tal (+/−)</strong> – öva separat eller blanda · <strong>Basketboll</strong> – lås upp med 5 rätt i rad · <strong>Basketplan</strong> och fler moderna skins!',
-    'New! <strong>Negative numbers (+/−)</strong> – practise alone or mix · <strong>Basketball</strong> – unlock with 5 correct in a row · <strong>Basketball court</strong> and more modern skins!',
-    'Neu! <strong>Negative Zahlen (+/−)</strong> – einzeln üben oder mischen · <strong>Basketball</strong> – mit 5 richtigen Antworten in Folge freischalten · <strong>Basketballfeld</strong> und weitere moderne Skins!'
+    'Nytt i 3.12! <strong>Modern</strong> är standard för nya spelare · Välj även <strong>Pixelretro</strong> eller <strong>Original</strong> i Inställningar · 33 skins i båda nya stilarna, nu även Stjärnhimmel och genomskinliga Ghost · <strong>Negativa tal (+/−)</strong> – öva separat eller blanda!',
+    'New in 3.12! <strong>Modern</strong> is the default for new players · Also choose <strong>Pixel retro</strong> or <strong>Original</strong> in Settings · 33 skins in both new styles, now including Starry Sky and translucent Ghost · <strong>Negative numbers (+/−)</strong> – practise alone or mix!',
+    'Neu in 3.12! <strong>Modern</strong> ist Standard für neue Spieler · Auch <strong>Pixelretro</strong> oder <strong>Original</strong> in den Einstellungen wählen · 33 Skins in beiden neuen Stilen, jetzt auch Sternenhimmel und durchscheinender Geist · <strong>Negative Zahlen (+/−)</strong> – einzeln üben oder mischen!'
   );
 }
 function getRangeLabel(range){
@@ -1604,7 +1604,7 @@ function applyLang(){
   if($('musicStyleDesc'))$('musicStyleDesc').textContent=pickLangText('Välj soundtrack för meny och spel.','Choose the soundtrack for menu and gameplay.','Wähle den Soundtrack für Menü und Spiel.');
   if($('graphicsModeTitle'))$('graphicsModeTitle').textContent=tOr('panelGraphicsMode','🖼️ Grafikläge','🖼️ Graphics mode','🖼️ Grafikmodus');
   updateGraphicsModeDescription();
-  if($('graphicsClassicBtn'))$('graphicsClassicBtn').textContent=tOr('graphicsClassic','🧩 Klassisk','🧩 Classic','🧩 Klassisch');
+  if($('graphicsClassicBtn'))$('graphicsClassicBtn').textContent=tOr('graphicsClassic','🧩 Original','🧩 Original','🧩 Original');
   if($('graphicsModernBtn'))$('graphicsModernBtn').textContent=tOr('graphicsModern','✨ Modern','✨ Modern','✨ Modern');
   if($('graphicsPixelBtn'))$('graphicsPixelBtn').textContent=tOr('graphicsPixel','👾 Pixelretro','👾 Pixel retro','👾 Pixelretro');
   document.querySelectorAll('.graphics-mode-btn').forEach(b=>b.classList.toggle('sel',b.dataset.graphics===graphicsMode));
@@ -2923,7 +2923,7 @@ function loadSettings(){
 let activeOps=new Set(['+','-']),numRange=20,tables=new Set([2,5,10]);
 let speedMode='none',wallWrap=true,multiTableSelect=false,musicGenre='original';
 let mysteryEventsEnabled=true,portalEventsEnabled=true,bonusLivesEnabled=true;
-let graphicsMode='classic';
+let graphicsMode='toy';
 function isCalmRound(){return !mysteryEventsEnabled&&!portalEventsEnabled&&!bonusLivesEnabled;}
 function updateBonusEventControls(){
   const state={mystery:mysteryEventsEnabled,portals:portalEventsEnabled,lives:bonusLivesEnabled};
@@ -8487,9 +8487,9 @@ function applyGraphicsMode(mode,{persist=true}={}){
 }
 function updateGraphicsModeDescription(){
   if($('graphicsModeDesc'))$('graphicsModeDesc').textContent=tOr('graphicsModeDesc',
-    'Modern har mjuka leksaksformer. {n} skins är klara i både Modern och Pixelretro; övriga behåller tills vidare sitt tidigare utseende.',
-    'Modern uses soft toy shapes. {n} skins are ready in both Modern and Pixel retro; other skins temporarily keep their previous appearance.',
-    'Modern verwendet weiche Spielzeugformen. {n} Skins sind in Modern und Pixelretro fertig; andere behalten vorerst ihr bisheriges Aussehen.').replace('{n}',SnakeStyles.config.skins.length);
+    'Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. {n} skins är klara i båda nya stilarna; övriga behåller tills vidare sitt tidigare utseende.',
+    'Modern is the default for new players and uses soft toy shapes. Choose Modern, Pixel retro or Original. {n} skins are ready in both new styles; other skins temporarily keep their previous appearance.',
+    'Modern ist Standard für neue Spieler und verwendet weiche Spielzeugformen. Wähle Modern, Pixelretro oder Original. {n} Skins sind in beiden neuen Stilen fertig; andere behalten vorerst ihr bisheriges Aussehen.').replace('{n}',SnakeStyles.config.skins.length);
 }
 
 /* ═══════════════════════════════════════
@@ -8514,7 +8514,7 @@ function goToSettings(){updateBonusEventControls();showScreen('settingsScreen');
 
 function showAbout(){
   if($('aboutTitleEl'))$('aboutTitleEl').textContent=pickLangText('SifferSnoken','NumNoodle','NumNoodle');
-  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.11';
+  if($('aboutVersionEl'))$('aboutVersionEl').textContent='Version 3.12';
   if($('aboutDevEl'))$('aboutDevEl').textContent='© 2026 42 Improbable Owls & Andreas Jonsson';
   if($('aboutThanksLabel'))$('aboutThanksLabel').textContent=pickLangText('Tack till','Special thanks','Besonderer Dank');
   if($('aboutThanksText'))$('aboutThanksText').textContent=pickLangText(
@@ -8535,7 +8535,7 @@ function updateMenuSettingsSummary(){
   const bonusStr=enabledCount===0
     ?' · '+pickLangText('🌿 Lugn runda','🌿 Calm round','🌿 Ruhige Runde')
     :enabledCount<3?' · 🎉 Bonus '+enabledCount+'/3':'';
-  const graphicsStr=graphicsMode==='toy'?' · ✨ Modern':graphicsMode==='pixel'?' · 👾 '+pickLangText('Pixelretro','Pixel retro','Pixelretro'):'';
+  const graphicsStr=graphicsMode==='toy'?' · ✨ Modern':graphicsMode==='pixel'?' · 👾 '+pickLangText('Pixelretro','Pixel retro','Pixelretro'):' · 🧩 Original';
   el.textContent=opsStr+' · '+getPracticeRangeLabel(numRange,activeOps)+tStr+bonusStr+graphicsStr;
 }
 

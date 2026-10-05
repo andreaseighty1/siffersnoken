@@ -2,7 +2,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('n
 const styles=require('../snake-styles.js'),exporter=require('../tools/export-snake-styles.cjs');
 assert.equal(styles.normalizeMode('modern'),'toy');
 for(const mode of ['classic','toy','pixel'])assert.equal(styles.normalizeMode(mode),mode);
-assert.equal(styles.normalizeMode('unknown'),'classic');
+for(const mode of [undefined,null,'unknown','','__proto__','constructor'])assert.equal(styles.normalizeMode(mode),'toy');
 for(const mode of ['toy','pixel'])for(const id of styles.config.skins){
   assert.ok(styles.supports(mode,id));
   for(const file of styles.paths(mode,id)){
@@ -15,10 +15,11 @@ assert.deepEqual(styles.config,exporter.config());exporter.exportAssets({check:t
 const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 new vm.Script(html.match(/<script>([^]*?)<\/script>/)[1]);
 const modes=[...html.matchAll(/class="toggle-btn graphics-mode-btn[^]*?data-graphics="([^"]+)"/g)].map(m=>m[1]);
-assert.deepEqual(modes,['classic','toy','pixel']);
+assert.deepEqual(modes,['toy','pixel','classic']);
+assert.ok(html.includes('data-graphics="classic" id="graphicsClassicBtn">🧩 Original'));
 assert.ok(html.includes('image-rendering:auto;'));
 assert.ok(!html.includes('image-rendering:pixelated'),'Do not pixelate the whole board, number tiles or text');
-for(const id of ['isbla','rosa','lila','smaragd','regnbage','guld','polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium','tidvatten','museumvaktaren','stjarnarkiv','solregent'])assert.ok(styles.supports('toy',id)&&styles.supports('pixel',id));
+for(const id of ['isbla','rosa','lila','smaragd','regnbage','guld','polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium','tidvatten','museumvaktaren','stjarnarkiv','solregent','stjarnhimmel','ghost'])assert.ok(styles.supports('toy',id)&&styles.supports('pixel',id));
 assert.equal(styles.alpha(0),1);assert.equal(styles.alpha(20),.75);assert.equal(styles.alpha(200),.75);
 for(let i=1;i<=336;i++){assert.ok(styles.alpha(i)<=styles.alpha(i-1));assert.ok(styles.alpha(i)>=.75);}
 assert.ok(html.includes('drawCtx.globalAlpha=SnakeStyles.alpha(index)'),'Legacy Modern uses the same readable opacity');
@@ -30,6 +31,17 @@ const context=vm.createContext({SnakeStyles:styles,localStorage:{getItem:()=>sto
 vm.runInContext(html.match(/function loadSettings\([^]*?\n}/)[0],context);context.loadSettings();
 assert.equal(context.graphicsMode,'toy');assert.deepEqual(JSON.parse(stored),{...saved,graphicsMode:'toy'});
 assert.deepEqual([...context.activeOps],['signed']);assert.equal(context.wallWrap,false);
+// Actual fresh startup and old settings without graphics now use Modern.
+for(const settings of [null,{}, {ops:['+']},{graphicsMode:'classic'},{graphicsMode:'toy'},{graphicsMode:'pixel'},{graphicsMode:'modern'},{graphicsMode:'unknown'}]){
+  let value=JSON.stringify(settings),writes=0;
+  const fresh=vm.createContext({SnakeStyles:styles,SETTINGS_KEY:'settings',activeOps:new Set(['+']),tables:new Set(),
+    localStorage:{getItem:()=>value,setItem:(key,next)=>{value=next;writes++;}}});
+  vm.runInContext(html.match(/let graphicsMode='[^']+';/)[0],fresh);
+  vm.runInContext(html.match(/function loadSettings\([^]*?\n}/)[0],fresh);fresh.loadSettings();
+  assert.equal(vm.runInContext('graphicsMode',fresh),settings?.graphicsMode==='classic'?'classic':settings?.graphicsMode==='pixel'?'pixel':'toy');
+  assert.equal(writes,settings?.graphicsMode==='modern'?1:0,'Only legacy Modern migration writes settings');
+}
+assert.deepEqual(styles.config.materialOpacities,{ghost:.68},'Other skins retain their original opacity');
 // Descriptions derive their count from the shared configuration, in every language.
 const translations=fs.readFileSync(path.join(__dirname,'../translations.js'),'utf8');
 for(const text of [...translations.matchAll(/graphicsModeDesc:'([^']+)'/g)].map(m=>m[1])){
@@ -51,7 +63,7 @@ function fakeCanvas(){
   const ctx={globalAlpha:1,imageSmoothingEnabled:true,globalCompositeOperation:'source-over',shadowBlur:0,
     save(){stack.push(Object.fromEntries(stateKeys.map(k=>[k,this[k]])));},restore(){Object.assign(this,stack.pop());},
     scale(...a){c.commands.push(['scale',...a]);},rotate(...a){c.commands.push(['rotate',...a]);},
-    translate(...a){c.commands.push(['translate',...a]);},setTransform(){},fillRect(){},clearRect(){},
+    translate(...a){c.commands.push(['translate',...a]);},setTransform(){},fillRect(){},clearRect(){c.commands.length=0;},
     getImageData(){c.commands.push(['readPixels']);return {data:new Uint8ClampedArray(c.width*c.height*4)};},
     putImageData(){c.commands.push(['colorPixels']);},
     drawImage(...a){c.commands.push(['draw',this.globalAlpha,this.imageSmoothingEnabled,...a]);}};
@@ -91,6 +103,18 @@ async function run(){
       assert.equal(draws[0][1],styles.alpha(49),'Tail uses final body opacity');
       assert.equal(main.commands[0][2],true,'Only the final layer blit enables gentle smoothing');
     }
+  }
+  // Composite Ghost as a whole before translucency, in both styles. This
+  // prevents opaque intersections and a darker tail/body seam.
+  for(const mode of ['toy','pixel']){
+    const main=fakeCanvas(),opts={mode,id:'ghost',cell:34,cols:21,rows:16,points:[{x:8,y:4},{x:7,y:4},{x:6,y:4}],heading:{x:1,y:0},tailDirection:{x:-1,y:0},fade:false};
+    assert.equal(renderer.draw(main.getContext(),opts),true);
+    const blits=main.commands.filter(c=>c[0]==='draw');
+    assert.equal(blits.length,1,'Transparency uses one assembled snake layer');
+    assert.equal(blits[0][1],.68,'Background really shows through Ghost');
+    assert.equal(main.getContext().globalAlpha,1,'Ghost opacity cannot leak into answer tiles');
+    const layer=blits[0][3];
+    assert.ok(layer.commands.filter(c=>c[0]==='draw').slice(-3).every(c=>c[1]===1),'Parts compose at full opacity before the single translucent blit');
   }
   // End sprite has both tail and body painted at full opacity, before frame fade.
   for(const id of ['inferno','radioaktiv','plasma'])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v=2')).length,12,'Corrected '+id+' fetches revised WebPs in both modes');

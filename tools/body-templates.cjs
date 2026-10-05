@@ -7,7 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
-const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays']);
+const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist']);
 // Git may check text assets out with CRLF on Windows. Compare logical source,
 // while keeping deterministic LF output from the generator itself.
 const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
@@ -19,6 +19,7 @@ function validateTheme(theme){
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
   if(theme.assetRevision!==undefined&&(!Number.isSafeInteger(theme.assetRevision)||theme.assetRevision<1))throw new Error('Invalid asset revision');
   if(theme.material!==undefined&&theme.material!=='gold')throw new Error('Unsupported material');
+  if(theme.materialOpacity!==undefined&&(!Number.isFinite(theme.materialOpacity)||theme.materialOpacity<.5||theme.materialOpacity>1))throw new Error('Invalid material opacity');
   if(theme.colorCycle&&(!Array.isArray(theme.colorCycle.hues)||theme.colorCycle.hues.length!==7||
     new Set(theme.colorCycle.hues).size!==7||theme.colorCycle.hues.some(h=>!Number.isInteger(h)||h<0||h>=360)||
     !Number.isFinite(theme.colorCycle.intervalMs)||theme.colorCycle.intervalMs<500))throw new Error('Invalid color cycle');
@@ -74,6 +75,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['meteorNight','spectralMist'].includes(theme.pattern))return nightGhostSvg(theme,size,part,lightCenter);
   if(['celestialChart','solarRays'].includes(theme.pattern))return celestialSvg(theme,size,part,lightCenter);
   if(['tidalGlass','keeperInlay'].includes(theme.pattern))return tideKeeperSvg(theme,size,part,lightCenter);
   if(['candyPrism','shadowVeils'].includes(theme.pattern))return mysteryCandySvg(theme,size,part,lightCenter);
@@ -117,6 +119,20 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(theme.pattern==='meteorNight'||theme.pattern==='spectralMist'){
+    const [u,v]=surfaceCoordinates(nx,ny,part),ghost=theme.pattern==='spectralMist';
+    const paths=ghost?spectralPaths:nightClouds,dist=Math.min(...paths.map(line=>openPathDistance(line,u,v)));
+    if(ghost){
+      if(dist<.018)return p.detail;
+      if(dist<.065)return color===p.shade||color===p.edge?p.edge:p.light;
+      return color;
+    }
+    const [mu,mv]=motifCoordinates(nx,ny,part);
+    if(nightStars.some(shape=>football.contains(shape,mu,mv)))return p.detail;
+    if(dist<.028)return p.edge;
+    if(dist<.105)return color===p.shade||color===p.edge?p.base:p.light;
+    return color===p.light||color===p.detail?p.base:color===p.edge?p.shade:color;
+  }
   if(theme.pattern==='celestialChart'||theme.pattern==='solarRays'){
     const [u,v]=surfaceCoordinates(nx,ny,part);
     if(theme.pattern==='solarRays'){
@@ -358,6 +374,26 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+const nightClouds=[
+  cubicPoints([-.12,.78],[.30,.25],[.57,.80],[1.12,.09]),
+  cubicPoints([-.12,.88],[.44,.87],[.34,.40],[1.12,.53])
+];
+const spectralPaths=[
+  cubicPoints([-.12,.67],[.22,-.02],[.35,1.03],[1.12,.31]),
+  cubicPoints([-.12,.83],[.38,.37],[.73,.97],[1.12,.48])
+];
+const nightStars=[chartStar(.27,.28,.063),chartStar(.69,.36,.034),chartStar(.60,.76,.048),chartStar(.21,.67,.021)];
+function nightGhostSvg(theme,size,part,lightCenter){
+  const ghost=theme.pattern==='spectralMist',tail=part==='tail',id=`${theme.id}-${part}-surface`;
+  const f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1},mf=motifFrame(part);
+  const data=(points,frame=f)=>'M '+points.map(([u,v])=>`${size*(frame.x+u*frame.w)},${size*(frame.y+v*frame.h)}`).join(' L ');
+  const stroke=(points,width,color,opacity=1)=>`<path d="${data(points)}" fill="none" stroke="${color}" stroke-width="${size*width*f.w}" stroke-opacity="${opacity}" stroke-linecap="round"/>`;
+  const paths=ghost?spectralPaths:nightClouds,material=toyMaterial(theme.patternPalette,id,size,{tail,lightCenter});
+  const mask=`<mask id="${id}-mist" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${paths.map(line=>stroke(line,ghost?.13:.21,'white',ghost?.8:.7)).join('')}</mask>`;
+  const cores=paths.map((line,i)=>stroke(line,ghost?.019:.011,theme.patternPalette.detail,ghost?.92:i===0?.72:.28)).join('');
+  const stars=ghost?'':nightStars.map(shape=>`<path d="${data(shape,mf)} Z" fill="${theme.palette.detail}"/>`).join('');
+  return {defs:material.defs+mask,paint:`<g mask="url(#${id}-mist)">${material.paint}</g>`+cores+stars};
+}
 // A star map and a radiating sun material, not repeated central emblems.
 // All curves, stars and ray bevels are baked inside the common part masks.
 const chartArc=cubicPoints([-.12,.60],[.38,1.01],[.67,.02],[1.12,.34]);

@@ -50,12 +50,19 @@ assert.equal(emerald.pattern,'emeraldInlay');
 const plainEmerald=pixelGrid({...emerald,pattern:'none'}),engravedEmerald=pixelGrid(emerald);
 assert.ok(engravedEmerald.flat().filter((color,i)=>color!==plainEmerald.flat()[i]).length>15,'Emerald has a visible gem motif, not just a green recolor');
 assert.ok(bodySvg('toy',emerald).includes('stroke-opacity=".32"'),'Subtle engraving preserves the sculpted toy volume');
-for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium','tidvatten','museumvaktaren','stjarnarkiv','solregent']){
+for(const id of ['polkagris','galax','vattenmelon','fotboll','miamisunset','inferno','aurora','hav','lava','obsidian','blackpink','skog','radioaktiv','plasma','clockwork','runorm','prismagodis','skuggmysterium','tidvatten','museumvaktaren','stjarnarkiv','solregent','stjarnhimmel','ghost']){
   const theme=themes.find(t=>t.id===id),plain=pixelGrid({...theme,pattern:'none'}).flat(),patterned=pixelGrid(theme).flat();
   assert.ok(patterned.filter((color,i)=>color!==plain[i]).length>20,id+' has a visible surface design, not just a recolor');
   assert.ok(bodySvg('toy',theme).includes(id+'-body-surface'));
 }
 const candy=themes.find(t=>t.id==='polkagris'),candyColors=pixelGrid(candy).flat();
+const night=themes.find(t=>t.id==='stjarnhimmel'),nightColors=pixelGrid(night).flat();
+assert.ok(nightColors.filter(c=>c===night.pixelPalette.light).length>100,'Starry Sky has broad violet mist');
+assert.ok(nightColors.filter(c=>c===night.pixelPalette.detail).length>=8,'Native pixel stars stay visible');
+const ghost=themes.find(t=>t.id==='ghost'),ghostColors=pixelGrid(ghost).flat();
+assert.equal(ghost.materialOpacity,.68,'Ghost has real, readable translucency in the renderer');
+assert.ok(ghostColors.filter(c=>c===ghost.pixelPalette.detail).length>50,'Spectral wisps have bright cores');
+assert.ok(ghostColors.filter(c=>[ghost.pixelPalette.ink,ghost.pixelPalette.edge].includes(c)).length>120,'Ghost retains contrasting rims');
 const archive=themes.find(t=>t.id==='stjarnarkiv'),archiveColors=pixelGrid(archive).flat();
 assert.ok(archiveColors.filter(c=>c===archive.pixelPalette.edge).length>65,'Star Archive has a broad cyan sky arc');
 assert.ok(archiveColors.filter(c=>c===archive.pixelPalette.detail).length>50,'Chart links and stars remain legible');

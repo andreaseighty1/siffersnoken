@@ -3,7 +3,7 @@
   'use strict';
   const config=typeof module!=='undefined'&&module.exports?require('./snake-style-config.js'):root.SnakeStyleConfig;
   const colors=typeof module!=='undefined'&&module.exports?require('./snake-colors.js'):root.SnakeColors;
-  const normalizeMode=mode=>mode==='modern'?'toy':config.styles[mode]?mode:'classic';
+  const normalizeMode=mode=>mode==='classic'||mode==='pixel'?mode:'toy';
   const supports=(mode,id)=>!!config.styles[normalizeMode(mode)]&&config.skins.includes(id);
   const facing=d=>d.x===1?'right':d.x===-1?'left':d.y===1?'down':'up';
   const angles={up:0,right:Math.PI/2,down:Math.PI,left:-Math.PI/2};
@@ -109,10 +109,12 @@
       if(!supports(mode,id))return false;
       if(!ready(mode,id)){preload(mode,id);return false;}
       const pixel=mode==='pixel',pitch=pixel?24:cell;
+      const opacity=config.materialOpacities[id]??1,composite=pixel||opacity<1;
       let target=context;
-      if(pixel){
+      if(composite){
         if(!layer)layer=createCanvas();
-        if(layer.width!==cols*pitch||layer.height!==rows*pitch){layer.width=cols*pitch;layer.height=rows*pitch;}
+        const width=Math.ceil(cols*pitch),height=Math.ceil(rows*pitch);
+        if(layer.width!==width||layer.height!==height){layer.width=width;layer.height=height;}
         target=layer.getContext('2d');target.clearRect(0,0,layer.width,layer.height);
       }
       target.save();target.imageSmoothingEnabled=!pixel;target.shadowBlur=0;
@@ -130,10 +132,13 @@
         }
       }
       target.restore();
-      if(pixel){
+      if(composite){
         context.save();context.shadowBlur=0;
+        // Ghost opacity belongs to the assembled snake, not individual parts:
+        // adjacent segments and the pre-joined tail cannot double the opacity.
+        context.globalAlpha*=opacity;
         // Soften only the final scaling, never the native sprites/logical grid.
-        context.imageSmoothingEnabled=config.rendering.pixelFinalSmoothing;
+        context.imageSmoothingEnabled=pixel?config.rendering.pixelFinalSmoothing:true;
         context.imageSmoothingQuality='low';
         context.drawImage(layer,0,0,cols*cell,rows*cell);context.restore();
       }

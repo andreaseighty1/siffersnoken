@@ -178,5 +178,17 @@
     "palette": { "base": "#ed8528", "light": "#ffd474", "shade": "#ac4520", "edge": "#81321b", "ink": "#552518", "detail": "#fffad0" },
     "patternPalette": { "base": "#ffd148", "light": "#fff3ae", "shade": "#d08a23", "edge": "#a45d21", "ink": "#552518", "detail": "#fffad0" },
     "pixelPalette": { "base": "#ed922d", "light": "#ffdf72", "shade": "#b65622", "edge": "#8b3b1d", "ink": "#59291b", "detail": "#fff9cd" }
+  },
+  {
+    "id": "stjarnhimmel", "label": "Stjärnhimmel", "pattern": "meteorNight", "bodyOrientation": "fixed",
+    "palette": { "base": "#38346c", "light": "#827cbc", "shade": "#1c244b", "edge": "#141a36", "ink": "#11152b", "detail": "#fff3c8" },
+    "patternPalette": { "base": "#8166bb", "light": "#d4bafa", "shade": "#4c4388", "edge": "#302d59", "ink": "#11152b", "detail": "#f5e3ff" },
+    "pixelPalette": { "base": "#51467f", "light": "#a78dd4", "shade": "#2d3058", "edge": "#d1b9ec", "ink": "#141b31", "detail": "#fff2c7" }
+  },
+  {
+    "id": "ghost", "label": "Ghost", "pattern": "spectralMist", "bodyOrientation": "fixed", "materialOpacity": 0.68,
+    "palette": { "base": "#d9f2ed", "light": "#ffffff", "shade": "#78b5c6", "edge": "#398aa9", "ink": "#1a526f", "detail": "#ffffff" },
+    "patternPalette": { "base": "#8fe6d6", "light": "#e4fff4", "shade": "#469cc0", "edge": "#2b729b", "ink": "#1a526f", "detail": "#ffffff" },
+    "pixelPalette": { "base": "#c9eee8", "light": "#ebfff6", "shade": "#80bfd0", "edge": "#44a4b3", "ink": "#235673", "detail": "#ffffff" }
   }
 ]
