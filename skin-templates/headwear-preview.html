@@ -8,8 +8,8 @@
 <main><h1>Huvudbonader · första passformsprovet</h1><p>Klassisk, Jordgubbe och Ghost, i alla fyra riktningar. Samma renderer och fästpunkter som i spelet. Ögon och huvudstorlekar är oförändrade.</p><label><input type="checkbox" id="blink">Visa blinkning</label><label><input type="checkbox" id="off">Utan bonad</label><div id="previews"></div><p id="status">Laddar…</p></main>
 <script src="../snake-style-config.js?v=snake-styles-18"></script>
 <script src="../snake-colors.js?v=snake-styles-4"></script>
-<script src="../snake-headwear.js?v=headwear-1"></script>
-<script src="../snake-styles.js?v=snake-styles-7"></script>
+<script src="../snake-headwear.js?v=headwear-2"></script>
+<script src="../snake-styles.js?v=snake-styles-8"></script>
 <script>
 const renderer=SnakeStyles.createRenderer({assetPrefix:'../'}),cards=[];
 const skins=[['klassisk','Klassisk'],['jordgubbe','Jordgubbe'],['ghost','Ghost · genomskinlig']];
@@ -29,7 +29,7 @@ function redraw(){
 }
 (async()=>{
   const requested=new URLSearchParams(location.search).get('hat');
-  for(const [accessory,label] of [['crown','Krona'],['beanie','Mössa'],['glasses','Glasögon']]){
+  for(const [accessory,label] of [['crown','Krona'],['beanie','Mössa'],['glasses','Glasögon'],['tiara','Tiara'],['tophat','Cylinder']]){
     if(requested&&requested!==accessory)continue;
     const article=document.createElement('article');article.id='preview-'+accessory;
     const h=document.createElement('h2');h.textContent=label;article.append(h);

@@ -105,6 +105,8 @@
         headwear.paint(hc,{mode,id:accessory,size:hat.width,direction});
         c.save();c.translate(center,center);c.rotate(angles[direction]);
         const start=pixel?-Math.floor(size/2):-size/2;
+        c.save();c.translate(start,start);
+        headwear.occludeHead(c,{mode,id:accessory,size});c.restore();
         c.drawImage(hat,start,start,size,size);c.restore();
       }
       // Cache contrast/shadows once. Never run morphology/blur per game frame.
