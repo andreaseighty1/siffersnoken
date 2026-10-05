@@ -7,11 +7,11 @@
 *{box-sizing:border-box}body{margin:0;padding:24px;background:#f5f0e4;color:#183b35;font:16px system-ui,sans-serif}main{max-width:1160px;margin:auto}h1{margin:0 0 8px;font-size:26px}p{line-height:1.5}button{font:inherit;padding:8px 14px;border:1px solid #789184;border-radius:10px;background:#fffaf0;color:inherit;cursor:pointer}article{margin:22px 0;padding:20px;border:1px solid #cdd6c9;border-radius:18px;background:#fffaf0}h2{margin:0 0 12px;font-size:23px}.styles{display:grid;grid-template-columns:1fr 1fr;gap:22px}h3{margin:0 0 8px;font-size:16px}canvas{display:block;width:100%;height:auto;background:#e4edde;border-radius:12px;image-rendering:auto}.note{margin:12px 0 0;font-size:13px;color:#456057}@media(max-width:650px){body{padding:12px}.styles{grid-template-columns:1fr}article{padding:14px}}
 </style>
 <main><h1>SifferSnoken · riktiga skinpreviews</h1><p>Samma WebP-filer, former, ögon och svansfästen som i spelet. Utan längdnedtoning; Ghost behåller sin genomskinlighet.</p><button id="pause">Pausa animationen</button> <label id="tailControl" hidden>Svansläge <select id="tailPose"><option value="animated">Animation</option><option value="left">Vänster</option><option value="left-soft">Lite vänster</option><option value="center">Mittläge</option><option value="right-soft">Lite höger</option><option value="right">Höger</option></select></label><div id="previews"></div><p id="status" role="status">Laddar tillgångar…</p></main>
-<script src="../snake-style-config.js?v=snake-styles-26"></script>
+<script src="../snake-style-config.js?v=snake-styles-27"></script>
 <script src="../snake-colors.js?v=snake-styles-4"></script>
 <script src="../snake-headwear-designs.js?v=headwear-3"></script>
 <script src="../snake-headwear.js?v=headwear-3"></script>
-<script src="../snake-styles.js?v=snake-styles-11"></script>
+<script src="../snake-styles.js?v=snake-styles-12"></script>
 <script>
 const renderer=SnakeStyles.createRenderer({assetPrefix:'../'});
 let paused=false,frozenTime=0,lastPhase=-1;
@@ -41,20 +41,21 @@ document.getElementById('pause').onclick=()=>{paused=!paused;frozenTime=performa
       if(!await renderer.preload(mode,theme.id))throw Error('Kunde inte ladda '+theme.label+' '+mode);
       cards.push({canvas,mode,id:theme.id,options:theme.animalProfile?animalOpts:opts});
     }
-    const note=document.createElement('p');note.className='note';note.textContent=theme.animalProfile?'Gemensamma bakåtsatta öron och smal kattsvans. Svansen vickar med ett fast fäste; kroppen roterar inte i svängar.':theme.materialOpacity!==undefined?'Riktig genomskinlighet på hela snoken. Bakgrundens linjer syns igenom utan mörka skarvar; samma material på huvud och svans.':theme.colorCycle?'Sju färger längs kroppen. Färgerna växlar lugnt i spelet; svans och sista kroppsdel har samma färg.':'Fast orientering på kroppen, samma material på huvud och svans.';article.append(note);
+    const animalNotes={feline:'Tiger/Katt delar bakåtsatta öron och smal kattsvans.',canine:'Mjuka hängöron, varm päls och en egen böjd hundsvans.',bovine:'Sidställda öron, små horn bakom ögonen, svartvit päls och tofs på svansen.',dragon:'Röd-guldfjäll, bakåtsatta horn och en smal svans med guldfärgad spets.'};
+    const note=document.createElement('p');note.className='note';note.textContent=theme.animalProfile?animalNotes[theme.animalProfile]+' Svansen vickar med ett fast fäste; kroppen roterar inte i svängar.':theme.materialOpacity!==undefined?'Riktig genomskinlighet på hela snoken. Bakgrundens linjer syns igenom utan mörka skarvar; samma material på huvud och svans.':theme.colorCycle?'Sju färger längs kroppen. Färgerna växlar lugnt i spelet; svans och sista kroppsdel har samma färg.':'Fast orientering på kroppen, samma material på huvud och svans.';article.append(note);
     document.getElementById('previews').append(article);
   }
   document.getElementById('status').textContent='Tillgångarna är laddade.';
   function frame(now){
     const fixedPose=animal&&Object.hasOwn(tailPhases,tailPose.value);
-    const time=fixedPose?tailPhases[tailPose.value]*SnakeStyles.config.tailAnimations[animal.id].periodMs:paused?frozenTime:now;
-    const phase=chosen.map(t=>t.colorCycle?Math.floor((reduced.matches?0:time)/1400):SnakeStyles.tailFrame(t.id,time,reduced.matches)).join('|');
+    const timeFor=id=>fixedPose&&SnakeStyles.config.tailAnimations[id]?tailPhases[tailPose.value]*SnakeStyles.config.tailAnimations[id].periodMs:paused?frozenTime:now;
+    const phase=chosen.map(t=>t.colorCycle?Math.floor((reduced.matches?0:timeFor(t.id))/1400):SnakeStyles.tailFrame(t.id,timeFor(t.id),reduced.matches)).join('|');
     if(phase!==lastPhase){lastPhase=phase;for(const card of cards){const c=card.canvas.getContext('2d');c.clearRect(0,0,476,170);
       if(SnakeStyles.config.materialOpacities[card.id]<1){
         c.fillStyle='#d5e4cc';c.fillRect(0,0,476,170);c.strokeStyle='rgba(46,95,59,.28)';c.lineWidth=1;
         c.beginPath();for(let x=0;x<476;x+=24){c.moveTo(x,0);c.lineTo(x,170);}for(let y=0;y<170;y+=24){c.moveTo(0,y);c.lineTo(476,y);}c.stroke();
       }
-      renderer.draw(c,{...card.options,mode:card.mode,id:card.id,time,reducedMotion:reduced.matches,accessory:SnakeStyles.config.headAccessories[card.id]||null});}}
+      renderer.draw(c,{...card.options,mode:card.mode,id:card.id,time:timeFor(card.id),reducedMotion:reduced.matches,accessory:SnakeStyles.config.headAccessories[card.id]||null});}}
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);

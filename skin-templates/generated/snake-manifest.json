@@ -276,6 +276,27 @@
       "file": "generated/toy/katt-body.webp"
     },
     {
+      "style": "toy",
+      "id": "hund",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/hund-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "bi",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/bi-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "drake",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/drake-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -547,6 +568,27 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/katt-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "hund",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/hund-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "bi",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/bi-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "drake",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/drake-body.webp"
     },
     {
       "style": "toy",
@@ -1760,6 +1802,99 @@
     {
       "style": "toy",
       "frame": 512,
+      "file": "generated/toy/hund-head-base.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-tail.webp",
+      "id": "hund",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-head-base.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-tail.webp",
+      "id": "bi",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-head-base.webp",
+      "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-tail.webp",
+      "id": "drake",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
       "file": "generated/toy/eyes-open.webp",
       "part": "eyes-open",
       "assetFacing": "up"
@@ -1920,6 +2055,228 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
+      "bend": 0.24,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-head-ears.webp",
+      "id": "hund",
+      "part": "head-ears",
+      "animalProfile": "canine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-head-face.webp",
+      "id": "hund",
+      "part": "head-face",
+      "animalProfile": "canine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-tail-left.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": -0.24,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-tail-left-soft.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": -0.12,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-tail-right-soft.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": 0.12,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-tail-right.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": 0.24,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-head-ears.webp",
+      "id": "bi",
+      "part": "head-ears",
+      "animalProfile": "bovine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-head-face.webp",
+      "id": "bi",
+      "part": "head-face",
+      "animalProfile": "bovine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-tail-left.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": -0.24,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-tail-left-soft.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": -0.12,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-tail-right-soft.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": 0.12,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-tail-right.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": 0.24,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-head-ears.webp",
+      "id": "drake",
+      "part": "head-ears",
+      "animalProfile": "dragon",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-head-face.webp",
+      "id": "drake",
+      "part": "head-face",
+      "animalProfile": "dragon",
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-tail-left.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
+      "bend": -0.24,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-tail-left-soft.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
+      "bend": -0.12,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-tail-right-soft.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
+      "bend": 0.12,
+      "attachment": [
+        256,
+        64
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-tail-right.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
       "bend": 0.24,
       "attachment": [
         256,
@@ -4385,6 +4742,195 @@
       ]
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-head-base-right.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-head-base-down.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/hund-head-base-left.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-head-base-right.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-head-base-down.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/bi-head-base-left.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-head-base-right.webp",
+      "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-head-base-down.webp",
+      "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/drake-head-base-left.webp",
+      "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -5596,6 +6142,99 @@
     {
       "style": "pixel",
       "frame": 32,
+      "file": "generated/pixel/hund-head-base.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-tail.webp",
+      "id": "hund",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-head-base.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-tail.webp",
+      "id": "bi",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-head-base.webp",
+      "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-tail.webp",
+      "id": "drake",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
       "file": "generated/pixel/eyes-open.webp",
       "part": "eyes-open",
       "assetFacing": "up"
@@ -5756,6 +6395,228 @@
       "id": "katt",
       "part": "tail",
       "animalProfile": "feline",
+      "bend": 0.24,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-head-ears.webp",
+      "id": "hund",
+      "part": "head-ears",
+      "animalProfile": "canine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-head-face.webp",
+      "id": "hund",
+      "part": "head-face",
+      "animalProfile": "canine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-tail-left.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": -0.24,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-tail-left-soft.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": -0.12,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-tail-right-soft.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": 0.12,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-tail-right.webp",
+      "id": "hund",
+      "part": "tail",
+      "animalProfile": "canine",
+      "bend": 0.24,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-head-ears.webp",
+      "id": "bi",
+      "part": "head-ears",
+      "animalProfile": "bovine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-head-face.webp",
+      "id": "bi",
+      "part": "head-face",
+      "animalProfile": "bovine",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-tail-left.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": -0.24,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-tail-left-soft.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": -0.12,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-tail-right-soft.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": 0.12,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-tail-right.webp",
+      "id": "bi",
+      "part": "tail",
+      "animalProfile": "bovine",
+      "bend": 0.24,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-head-ears.webp",
+      "id": "drake",
+      "part": "head-ears",
+      "animalProfile": "dragon",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-head-face.webp",
+      "id": "drake",
+      "part": "head-face",
+      "animalProfile": "dragon",
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-tail-left.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
+      "bend": -0.24,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-tail-left-soft.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
+      "bend": -0.12,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-tail-right-soft.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
+      "bend": 0.12,
+      "attachment": [
+        16,
+        4
+      ],
+      "assetFacing": "up"
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-tail-right.webp",
+      "id": "drake",
+      "part": "tail",
+      "animalProfile": "dragon",
       "bend": 0.24,
       "attachment": [
         16,
@@ -8204,6 +9065,195 @@
       "frame": 32,
       "file": "generated/pixel/katt-head-base-left.webp",
       "id": "katt",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-head-base-right.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-head-base-down.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/hund-head-base-left.webp",
+      "id": "hund",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-head-base-right.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-head-base-down.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/bi-head-base-left.webp",
+      "id": "bi",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-head-base-right.webp",
+      "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-head-base-down.webp",
+      "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/drake-head-base-left.webp",
+      "id": "drake",
       "part": "head-base",
       "assetFacing": "up",
       "renderFacing": "left",

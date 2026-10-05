@@ -80,7 +80,7 @@ for(const style of ['toy','pixel'])for(const variant of ['straight','corner']){
   }
 }
 async function main(){
-  const outputs=await snake.build({check:true});assert.equal(outputs.length,body.themes.length*12+7+body.themes.filter(t=>t.animalProfile==='feline').length*12);
+  const outputs=await snake.build({check:true});assert.equal(outputs.length,body.themes.length*12+7+body.themes.filter(t=>t.animalProfile).length*12);
   const index=process.argv.indexOf('--sharp');
   if(index!==-1){
     const sharp=require(path.resolve(process.argv[index+1])),masks={};
@@ -91,7 +91,7 @@ async function main(){
       const alpha=Array.from({length:info.width*info.height},(_,i)=>data[i*info.channels+info.channels-1]);
       assert.ok(alpha.some(a=>a===255)&&alpha.some(a=>a===0));assert.equal(alpha[0],0);
       const theme=body.themes.find(t=>t.id===output.id);
-      const profile=output.part==='tail'&&theme?.animalProfile?':'+theme.animalProfile+':'+(output.bend||0):'';
+      const profile=['tail','head-ears','head-face'].includes(output.part)&&theme?.animalProfile?':'+theme.animalProfile+':'+(output.bend||0):'';
       const key=output.style+':'+(output.part||'body')+profile;
       if(masks[key])assert.deepEqual(alpha,masks[key],'Actual WebP alpha is identical across themes');else masks[key]=alpha;
       if(output.style==='pixel'){

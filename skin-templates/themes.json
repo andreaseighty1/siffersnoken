@@ -220,5 +220,23 @@
     "palette": { "base": "#ded0b9", "light": "#fff0d6", "shade": "#a8967d", "edge": "#796652", "ink": "#514337", "detail": "#fff6df" },
     "patternPalette": { "base": "#ab8263", "light": "#d7b593", "shade": "#735540", "edge": "#574536", "ink": "#514337", "detail": "#fff6df" },
     "pixelPalette": { "base": "#d6c3a8", "light": "#f5e2c5", "shade": "#a48366", "edge": "#886750", "ink": "#514337", "detail": "#fff6df" }
+  },
+  {
+    "id": "hund", "label": "Hund", "pattern": "dogSaddle", "animalProfile": "canine", "bodyOrientation": "fixed",
+    "palette": { "base": "#ce9351", "light": "#f8d59b", "shade": "#91552f", "edge": "#704328", "ink": "#3c2b24", "detail": "#fff0d2" },
+    "patternPalette": { "base": "#71452d", "light": "#aa754c", "shade": "#4c3024", "edge": "#38261f", "ink": "#3c2b24", "detail": "#fff0d2" },
+    "pixelPalette": { "base": "#d89b54", "light": "#f2c681", "shade": "#965a32", "edge": "#6e442d", "ink": "#3c2b24", "detail": "#fff0d2" }
+  },
+  {
+    "id": "bi", "label": "Ko", "pattern": "cowPatches", "animalProfile": "bovine", "bodyOrientation": "fixed",
+    "palette": { "base": "#eee9dd", "light": "#fffdf1", "shade": "#b5b4aa", "edge": "#888b84", "ink": "#242c2d", "detail": "#e9a4a4" },
+    "patternPalette": { "base": "#293032", "light": "#556066", "shade": "#141c20", "edge": "#10171a", "ink": "#242c2d", "detail": "#e9a4a4" },
+    "pixelPalette": { "base": "#e9e7da", "light": "#fffdf1", "shade": "#b8bcb3", "edge": "#687477", "ink": "#242c2d", "detail": "#e9a4a4" }
+  },
+  {
+    "id": "drake", "label": "Drake", "pattern": "dragonScales", "animalProfile": "dragon", "bodyOrientation": "fixed",
+    "palette": { "base": "#a63431", "light": "#e67752", "shade": "#651e2a", "edge": "#431a25", "ink": "#331b23", "detail": "#ffdf8e" },
+    "patternPalette": { "base": "#c48b37", "light": "#ffe59a", "shade": "#935121", "edge": "#612f24", "ink": "#331b23", "detail": "#ffefb5" },
+    "pixelPalette": { "base": "#b53b35", "light": "#e47750", "shade": "#70212c", "edge": "#c48b37", "ink": "#331b23", "detail": "#ffdf8e" }
   }
 ]

@@ -10,11 +10,12 @@ for(const mode of ['toy','pixel'])for(const id of styles.config.skins){
     assert.ok(fs.existsSync(path.join(__dirname,'..',file)));
   }
 }
-assert.ok(!styles.supports('pixel','drake'));assert.ok(!styles.supports('classic','klassisk'));
-for(const id of ['tiger','katt']){
-  assert.equal(styles.config.animalProfiles[id],'feline');
+assert.ok(!styles.supports('pixel','unknown'));assert.ok(!styles.supports('classic','klassisk'));
+assert.equal(styles.config.skins.length,41,'All existing game skins have both new styles');
+for(const [id,profile] of Object.entries({tiger:'feline',katt:'feline',hund:'canine',bi:'bovine',drake:'dragon'})){
+  assert.equal(styles.config.animalProfiles[id],profile);
   const period=styles.config.tailAnimations[id].periodMs;
-  assert.equal(period,1400);
+  assert.equal(period,{feline:1400,canine:1100,bovine:1700,dragon:1600}[profile]);
   assert.equal(styles.tailFrame(id,period/4),'tail-right');assert.equal(styles.tailFrame(id,period*3/4),'tail-left');
   assert.equal(styles.tailFrame(id,period/4,true),'tail','Reduced motion stops tail animation');
 }
@@ -103,7 +104,7 @@ async function run(){
       assert.ok(head.commands.findIndex(cmd=>cmd[0]==='colorPixels')<head.commands.findIndex(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.includes('eyes-')),'Eyes are drawn after material recoloring');
       assert.equal(requests,loaded,'Rainbow variants do not download more files');
     }
-    if(id==='tiger'||id==='katt'){
+    if(styles.config.animalProfiles[id]){
       const head=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.split('?')[0].endsWith(id+'-head-ears.webp')));
       const ears=head.commands.findIndex(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.split('?')[0].endsWith(id+'-head-ears.webp'));
       const base=head.commands.findIndex(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.includes(id+'-head-base'));
@@ -112,7 +113,7 @@ async function run(){
       for(const fraction of [0,1/12,1/4,7/12,3/4])renderer.draw(main.getContext(),{...opts,time:fraction*styles.config.tailAnimations[id].periodMs});
       const warm=canvases.length,downloads=requests;
       for(let time=0;time<20000;time+=60)renderer.draw(main.getContext(),{...opts,time});
-      assert.equal(canvases.length,warm,'Feline tail animation reuses five pre-joined poses, no per-frame canvases');
+      assert.equal(canvases.length,warm,'Animal tail animation reuses five pre-joined poses, no per-frame canvases');
       assert.equal(requests,downloads,'No tail downloads during animation');
       for(const pose of styles.config.tailAnimations[id].frames){
         const joined=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.split('?')[0].endsWith(id+'-'+pose+'.webp')));

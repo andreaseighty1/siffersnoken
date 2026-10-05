@@ -26,7 +26,7 @@
     const dir=`skins/styles/${normalizeMode(mode)}/`;
     return ['body','tail','head-base','head-base-right','head-base-down','head-base-left'].map(p=>dir+id+'-'+p+'.webp')
       .concat([dir+'eyes-open.webp',dir+'eyes-blink.webp'],id==='jordgubbe'?[dir+'jordgubbe-head-decoration.webp']:[],
-        config.animalProfiles?.[id]==='feline'?['head-ears','head-face',...config.tailAnimations[id].frames.filter(p=>p!=='tail')].map(p=>dir+id+'-'+p+'.webp'):[],
+        config.animalProfiles?.[id]?['head-ears','head-face',...config.tailAnimations[id].frames.filter(p=>p!=='tail')].map(p=>dir+id+'-'+p+'.webp'):[],
         normalizeMode(mode)==='pixel'?[dir+'tongue.webp']:[]);
   }
   function createRenderer({createCanvas=()=>document.createElement('canvas'),createImage=()=>new Image(),assetPrefix=''}={}){
@@ -93,13 +93,13 @@
         c.save();c.translate(center,center);c.rotate(angles[direction]);
         const base=id+'-head-base'+(direction==='up'?'':'-'+direction);
         const start=pixel?-Math.floor(size/2):-size/2;
-        if(config.animalProfiles?.[id]==='feline')c.drawImage(image(mode,id+'-head-ears'),start,start,size,size);
+        if(config.animalProfiles?.[id])c.drawImage(image(mode,id+'-head-ears'),start,start,size,size);
         c.drawImage(image(mode,base),start,start,size,size);
         // Color the material BEFORE painting eyes/tongue/decorations.
         recolorMaterial(out,hue);
         if(mode==='pixel')c.drawImage(image(mode,'tongue'),start,start+Math.round(-.13*size),size,size);
         if(id==='jordgubbe')c.drawImage(image(mode,'jordgubbe-head-decoration'),start,start,size,size);
-        if(config.animalProfiles?.[id]==='feline')c.drawImage(image(mode,id+'-head-face'),start,start,size,size);
+        if(config.animalProfiles?.[id])c.drawImage(image(mode,id+'-head-face'),start,start,size,size);
         c.drawImage(image(mode,'eyes-'+(blink?'blink':'open')),start,start,size,size);
         c.restore();
       }else{

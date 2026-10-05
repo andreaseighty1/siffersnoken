@@ -6,6 +6,7 @@ const spec=require('../skin-templates/body-spec.json');
 const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const feline=require('./feline-templates.cjs');
+const animals=require('./animal-templates.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
 const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist','royalBrocade','teamRibbons','teamColorBands']);
@@ -16,8 +17,8 @@ const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const seeds=[[-.37,-.31],[.30,-.39],[-.27,.30],[.36,.26],[.02,-.01]];
 function validateTheme(theme){
   if(!/^[a-z][a-z0-9-]*$/.test(theme.id))throw new Error('Invalid theme id');
-  if(!patterns.has(theme.pattern)&&!['lunarCopper','tigerStripes','catPatches'].includes(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
-  if(theme.animalProfile!==undefined&&theme.animalProfile!=='feline')throw new Error('Unsupported animal profile');
+  if(!patterns.has(theme.pattern)&&!['lunarCopper','tigerStripes','catPatches','dogSaddle','cowPatches','dragonScales'].includes(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
+  if(theme.animalProfile!==undefined&&!['feline','canine','bovine','dragon'].includes(theme.animalProfile))throw new Error('Unsupported animal profile');
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
   if(theme.assetRevision!==undefined&&(!Number.isSafeInteger(theme.assetRevision)||theme.assetRevision<1))throw new Error('Invalid asset revision');
   if(theme.material!==undefined&&theme.material!=='gold')throw new Error('Unsupported material');
@@ -77,6 +78,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(['dogSaddle','cowPatches','dragonScales'].includes(theme.pattern))return animalSurfaceSvg(theme,size,part,lightCenter);
   if(['tigerStripes','catPatches'].includes(theme.pattern))return felineSvg(theme,size,part,lightCenter);
   if(theme.pattern==='lunarCopper')return lunarSvg(theme,size,part,lightCenter);
   if(theme.pattern==='teamColorBands')return teamColorSvg(theme,size,part,lightCenter);
@@ -125,6 +127,7 @@ function surfacePixel(theme,x,y,size,part,color){
     return color===p.edge||color===p.ink?p.shade:color===p.detail?p.light:color;
   }
   if(color===p.ink)return color;
+  if(['dogSaddle','cowPatches','dragonScales'].includes(theme.pattern))return animalSurfacePixel(theme,nx,ny,part,color);
   if(['tigerStripes','catPatches'].includes(theme.pattern)){
     if(part==='tail'){
       const t=(ny-snakeSpec.tail.attachment[1])/(snakeSpec.feline.tailTipY-snakeSpec.tail.attachment[1]);
@@ -415,6 +418,50 @@ function lightningSvg(theme,size,part){
   return {defs:`<!-- ${id}: full-surface electric flow -->`,paint:strokes(.19,p.light,.20)+strokes(.12,p.light,.40)+strokes(.067,p.detail,.86)+strokes(.024,p.detail,1)};
 }
 function surfaceCoordinates(nx,ny,part){return part==='tail'?[(nx-.34)/.32,(ny-.125)/.40]:[nx,ny];}
+function animalFrame(part){return part==='head-base'?{x:0,y:.60,w:1,h:.32}:{x:0,y:0,w:1,h:1};}
+function animalSurfaceSvg(theme,size,part,lightCenter){
+  const id=`${theme.id}-${part}-surface`,p=theme.patternPalette;
+  const mat=toyMaterial(p,id,size,{tail:part==='tail',lightCenter});
+  const f=animalFrame(part),poly=points=>feline.polygonSvg(points.map(([x,y])=>[f.x+x*f.w,f.y+y*f.h]),size);
+  const mask=shapes=>`<mask id="${id}-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${shapes}</g></mask>`;
+  if(part==='tail'){
+    const threshold=theme.animalProfile==='bovine'?.72:theme.animalProfile==='canine'?.77:.70;
+    const y=size*(snakeSpec.tail.attachment[1]+threshold*(animals.profile(theme).tailTipY-snakeSpec.tail.attachment[1]));
+    const tip=theme.animalProfile==='canine'?toyMaterial({...theme.palette,base:theme.palette.detail,light:'#fffaf0',shade:theme.palette.light},id+'-tip',size,{tail:true}):mat;
+    return {defs:tip.defs+mask(`<rect y="${y}" width="${size}" height="${size}"/>`),paint:`<g mask="url(#${id}-mask)">${tip.paint}</g>`};
+  }
+  if(theme.pattern!=='dragonScales'){
+    const shapes=(theme.pattern==='cowPatches'?animals.patches:[animals.saddle]).map(poly).join('');
+    const cream=theme.pattern==='dogSaddle'&&part==='body'?poly(animals.patches[1]):'';
+    return {defs:mat.defs+mask(shapes),paint:`<g mask="url(#${id}-mask)">${mat.paint}</g>`+(cream?`<g fill="${theme.palette.detail}" fill-opacity=".75">${cream}</g>`:'')};
+  }
+  const shapes=animals.scaleCenters.map(([x,y])=>animals.scaleShape(x,y));
+  const gilded=shapes.filter((_,i)=>i===5||i===10).map(poly).join('');
+  const edges=shapes.map(points=>`<g fill="none" stroke="${theme.palette.shade}" stroke-width="${size*.013}">${poly(points)}</g><g fill="none" stroke="${p.light}" stroke-opacity=".66" stroke-width="${size*.006}">${poly(points.slice(0,16))}</g>`).join('');
+  return {defs:mat.defs+mask(gilded),paint:`<g mask="url(#${id}-mask)">${mat.paint}</g>`+edges};
+}
+function animalSurfacePixel(theme,x,y,part,color){
+  const p=theme.pixelPalette||theme.palette;
+  if(part==='tail'){
+    const t=(y-snakeSpec.tail.attachment[1])/(animals.profile(theme).tailTipY-snakeSpec.tail.attachment[1]);
+    return t>(theme.animalProfile==='bovine'?.72:theme.animalProfile==='canine'?.77:.70)?(theme.animalProfile==='bovine'?p.ink:p.detail):color;
+  }
+  const f=animalFrame(part),u=(x-f.x)/f.w,v=(y-f.y)/f.h;
+  if(part==='head-base'&&y<.60)return color;
+  if(theme.pattern==='cowPatches')return animals.patches.some(poly=>felinePoint(poly,u,v))?(color===p.light||color===p.detail?p.edge:p.ink):color===p.detail?p.light:color;
+  if(theme.pattern==='dogSaddle'){
+    if(felinePoint(animals.saddle,u,v))return color===p.light||color===p.detail?p.shade:p.edge;
+    if(part==='body'&&felinePoint(animals.patches[1],u,v))return p.detail;
+    return color;
+  }
+  for(let i=0;i<animals.scaleCenters.length;i++){
+    const [cx,cy]=animals.scaleCenters[i],poly=animals.scaleShape(cx,cy);
+    if(openPathDistance(poly.slice(0,16),u,v)<.020)return p.detail;
+    if(openPathDistance([...poly,poly[0]],u,v)<.022)return p.ink;
+    if(felinePoint(poly,u,v))return i===5||i===10?p.edge:v>cy+.025?p.shade:color;
+  }
+  return color;
+}
 function felinePoint(poly,x,y){
   let hit=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){
     const a=poly[i],b=poly[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit;

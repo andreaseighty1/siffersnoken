@@ -2,6 +2,7 @@
 const fs=require('node:fs'),path=require('node:path');
 const body=require('./body-templates.cjs');
 const feline=require('./feline-templates.cjs');
+const animals=require('./animal-templates.cjs');
 const spec=require('../skin-templates/snake-spec.json');
 const root=path.resolve(__dirname,'../skin-templates');
 const parts=['head-base','tail'];
@@ -45,12 +46,12 @@ function toyPart(theme,part,facing='up',bend=0){
     :theme.pattern==='basketballSeams'?`<path d="M ${size*.5} 0 V ${size} M 0 ${size*.58} H ${size}" fill="none" stroke="${p.ink}" stroke-width="${size*.018}"/>`
     :theme.pattern==='emeraldInlay'?body.emeraldSvg(p,size,part):'';
   const surface=body.surfaceSvg(theme,size,part,lightCenter(facing));
-  const mask=part==='tail'&&feline.isFeline(theme)?feline.tailContour(size,bend):contour(part,size);
+  const mask=part==='tail'&&feline.isFeline(theme)?feline.tailContour(size,bend):part==='tail'&&animals.isSpecial(theme)?animals.tailContour(theme,size,bend):contour(part,size);
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}"><defs>${material.defs}${surface.defs}<mask id="${id}-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${mask}</g></mask></defs><g mask="url(#${id}-mask)">${material.paint}${pattern}${surface.paint}</g></svg>`;
 }
 function partGrid(theme,part,facing='up',bend=0){
   const size=body.spec.styles.pixel.frame,p=theme.pixelPalette||theme.palette;
-  const hit=part==='tail'&&feline.isFeline(theme)?(x,y)=>feline.insideTail(x,y,bend):(x,y)=>inside(part,x,y);
+  const hit=part==='tail'&&feline.isFeline(theme)?(x,y)=>feline.insideTail(x,y,bend):part==='tail'&&animals.isSpecial(theme)?(x,y)=>animals.insideTail(theme,x,y,bend):(x,y)=>inside(part,x,y);
   return Array.from({length:size},(_,y)=>Array.from({length:size},(_,x)=>{
     const nx=(x+.5)/size,ny=(y+.5)/size;
     if(!hit(nx,ny))return null;
@@ -137,6 +138,55 @@ function felineLayer(style,theme,part){
   for(const [x,y] of [[15,5],[9,3],[10,3],[11,4],[20,4],[21,3],[22,3]])grid[y][x]=p.ink;
   return gridSvg(grid);
 }
+function animalLayer(style,theme,part){
+  if(feline.isFeline(theme))return felineLayer(style,theme,part);
+  if(!animals.isSpecial(theme))throw Error('Unknown animal profile');
+  const size=body.spec.styles[style].frame,p=style==='pixel'?theme.pixelPalette:theme.palette;
+  const kind=theme.animalProfile,ear=animals.ear(theme),inner=animals.innerEar(theme),horn=animals.horn(theme);
+  const poly=points=>feline.polygonSvg(points,size),mirrored=points=>points.map(([x,y])=>[1-x,y]);
+  const ellipse=(cx,cy,rx,ry,color)=>`<ellipse cx="${cx*size}" cy="${cy*size}" rx="${rx*size}" ry="${ry*size}" fill="${color}"/>`;
+  const ellipseHit=(x,y,cx,cy,rx,ry)=>((x-cx)/rx)**2+((y-cy)/ry)**2<=1;
+  if(!['head-ears','head-face'].includes(part))throw Error('Unknown animal layer');
+  if(style==='toy'){
+    const base=kind==='canine'?theme.patternPalette:kind==='dragon'?theme.patternPalette:p;
+    const defs=`<linearGradient id="animal-ear" x2=".3" y2="1"><stop stop-color="${base.light}"/><stop offset=".5" stop-color="${base.base}"/><stop offset="1" stop-color="${base.shade}"/></linearGradient><linearGradient id="animal-inner" x2=".4" y2="1"><stop stop-color="${kind==='dragon'?base.light:'#f5c3ae'}"/><stop offset="1" stop-color="${kind==='dragon'?base.shade:'#c4887e'}"/></linearGradient><linearGradient id="animal-horn" x2=".4" y2="1"><stop stop-color="${kind==='dragon'?p.detail:'#fff6d9'}"/><stop offset="1" stop-color="${kind==='dragon'?theme.patternPalette.shade:'#bfa684'}"/></linearGradient><radialGradient id="animal-muzzle" cx="35%" cy="20%" r="85%"><stop stop-color="${kind==='bovine'?'#ffd2c7':p.detail}"/><stop offset="1" stop-color="${kind==='bovine'?'#cf858c':p.light}"/></radialGradient>`;
+    const pair=(points,color,outline='')=>`<g fill="${color}"${outline}>${poly(points)}${poly(mirrored(points))}</g>`;
+    const ears=pair(ear,'url(#animal-ear)')+pair(inner,'url(#animal-inner)');
+    const horns=horn.length?pair(horn,'url(#animal-horn)',kind==='bovine'?` stroke="#8b775c" stroke-width="${size*.007}" stroke-linejoin="round"`:''):'';
+    const muzzle=kind==='dragon'?ellipse(.45,.137,.027,.016,p.ink)+ellipse(.55,.137,.027,.016,p.ink):
+      ellipse(.5,.14,kind==='bovine'?.215:.19,kind==='bovine'?.075:.065,'url(#animal-muzzle)')+
+      (kind==='bovine'?ellipse(.405,.145,.023,.025,'#80545c')+ellipse(.595,.145,.023,.025,'#80545c'):ellipse(.5,.105,.060,.029,p.ink)+`<path d="M ${size*.5} ${size*.128} V ${size*.177}" stroke="${p.ink}" stroke-width="${size*.009}" stroke-linecap="round"/>`);
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><defs>${defs}</defs>${part==='head-ears'?ears:(kind==='canine'?ears:horns)+muzzle}</svg>`;
+  }
+  const grid=Array.from({length:size},()=>Array(size).fill(null));
+  const hit=(shape,x,y)=>felinePolyHit(shape,Math.min(x,1-x),y);
+  for(let y=0;y<size;y++)for(let x=0;x<size;x++){
+    const nx=(x+.5)/size,ny=(y+.5)/size;
+    if((part==='head-ears'||part==='head-face'&&kind==='canine')&&hit(ear,nx,ny)){
+      const edge=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>!hit(ear,nx+dx/size,ny+dy/size));
+      grid[y][x]=edge?p.ink:hit(inner,nx,ny)?(kind==='dragon'?p.detail:kind==='canine'?'#bc7d69':p.detail):kind==='canine'?(ny<.78?p.shade:p.edge):ny<.78?p.light:p.shade;
+    }
+    if(part==='head-face'){
+      if(horn.length&&hit(horn,nx,ny)){
+        const boundary=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>!hit(horn,nx+dx/size,ny+dy/size));
+        grid[y][x]=kind==='bovine'&&boundary?p.ink:ny<.74?(kind==='dragon'?p.detail:p.light):(kind==='dragon'?p.edge:p.shade);
+      }
+      if(kind==='dragon'){
+        if(ellipseHit(nx,ny,.45,.137,.03,.02)||ellipseHit(nx,ny,.55,.137,.03,.02))grid[y][x]=p.ink;
+      }else{
+        if(ellipseHit(nx,ny,.5,.14,kind==='bovine'?.215:.19,kind==='bovine'?.075:.065))grid[y][x]=p.detail;
+        if(kind==='bovine'&&(ellipseHit(nx,ny,.405,.145,.027,.027)||ellipseHit(nx,ny,.595,.145,.027,.027)))grid[y][x]=p.ink;
+        if(kind==='canine'&&(ellipseHit(nx,ny,.5,.105,.06,.03)||Math.abs(nx-.5)<.017&&ny>.13&&ny<.18))grid[y][x]=p.ink;
+      }
+    }
+  }
+  return gridSvg(grid);
+}
+function felinePolyHit(points,x,y){
+  let hit=false;for(let i=0,j=points.length-1;i<points.length;j=i++){
+    const a=points[i],b=points[j];if((a[1]>y)!==(b[1]>y)&&x<(b[0]-a[0])*(y-a[1])/(b[1]-a[1])+a[0])hit=!hit;
+  }return hit;
+}
 // The attachment plane meets the circular body on a chord, not at its center.
 // Its corners touch the disk; only the tiny circular cap sits behind the tail.
 function joinGeometry(style){
@@ -164,8 +214,8 @@ function snakePreview(style,theme,variant='corner',fade=false){
   const segments=layout.points.map((p,i)=>image('body',p,0,fade?Math.max(.35,1-(i+1)*.13):1)).reverse().join('');
   const tail=`<img class="material" src="generated/${style}/${theme.id}-tail.webp" alt="" style="left:${layout.tailPivot[0]/w*100}%;top:${layout.tailPivot[1]/h*100}%;width:${layout.draw/w*100}%;transform-origin:50% ${layout.join.baseY/body.spec.styles[style].frame*100}%;transform:translate(-50%,-${layout.join.baseY/body.spec.styles[style].frame*100}%) rotate(${layout.tailAngle}deg);opacity:${fade?Math.max(.35,1-layout.points.length*.13):1}">`;
   const eyes=`<img src="generated/${style}/eyes-open.webp" alt="" style="left:${layout.head[0]/w*100}%;top:${layout.head[1]/h*100}%;width:${layout.headDraw/w*100}%;transform:translate(-50%,-50%) rotate(${layout.headAngle}deg)">`;
-  const decoration=theme.id==='jordgubbe'?image('head-decoration',layout.head,layout.headAngle):feline.isFeline(theme)?image('head-face',layout.head,layout.headAngle):'';
-  const ears=feline.isFeline(theme)?image('head-ears',layout.head,layout.headAngle):'';
+  const decoration=theme.id==='jordgubbe'?image('head-decoration',layout.head,layout.headAngle):theme.animalProfile?image('head-face',layout.head,layout.headAngle):'';
+  const ears=theme.animalProfile?image('head-ears',layout.head,layout.headAngle):'';
   const tongue=style==='pixel'?`<img src="generated/pixel/tongue.webp" alt="" style="left:${(layout.head[0]+layout.headDraw*.13)/w*100}%;top:${layout.head[1]/h*100}%;width:${layout.headDraw/w*100}%;transform:translate(-50%,-50%) rotate(${layout.headAngle}deg)">`:'';
   return `<div class="snake" role="img" aria-label="${esc(theme.label)}: ${variant==='straight'?'rak snok':'snok med sväng'}${fade?', nedtonad kropp och svans':''}">${tail}${segments}${tongue}${ears}${image('head-base',layout.head,layout.headAngle)}${decoration}${eyes}</div>`;
 }
@@ -186,16 +236,21 @@ async function build({sharpModule,check=false}={}){
   async function emit(style,name,svg,metadata){
     const folder=path.join(root,'generated',style),file=path.join(folder,name+'.svg');
     if(check){if(fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n')!==svg)throw new Error('Stale template: '+file);}
-    else{fs.mkdirSync(folder,{recursive:true});fs.writeFileSync(file,svg);if(sharp)await sharp(Buffer.from(svg)).webp({lossless:true,alphaQuality:100,effort:6}).toFile(path.join(folder,name+'.webp'));}
+    else{
+      const bitmap=path.join(folder,name+'.webp');
+      const unchanged=fs.existsSync(file)&&fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n')===svg&&fs.existsSync(bitmap);
+      fs.mkdirSync(folder,{recursive:true});fs.writeFileSync(file,svg);
+      if(sharp&&!unchanged)await sharp(Buffer.from(svg)).webp({lossless:true,alphaQuality:100,effort:6}).toFile(bitmap);
+    }
     outputs.push({style,frame:body.spec.styles[style].frame,file:`generated/${style}/${name}.webp`,...metadata});
   }
   for(const style of Object.keys(body.spec.styles)){
     for(const theme of body.themes)for(const part of parts)await emit(style,theme.id+'-'+part,partSvg(style,theme,part),{id:theme.id,part,assetFacing:spec.assetFacing,...(part==='tail'?{attachment:joinGeometry(style).pivot}:{eyes:style==='pixel'?spec.head.pixelEyes:spec.head.eyes,renderScale:body.spec.styles[style].headRenderScale})});
     for(const blink of [false,true])await emit(style,'eyes-'+(blink?'blink':'open'),eyesSvg(style,blink),{part:'eyes-'+(blink?'blink':'open'),assetFacing:spec.assetFacing});
     await emit(style,'jordgubbe-head-decoration',decorationSvg(style),{id:'jordgubbe',part:'head-decoration',assetFacing:spec.assetFacing});
-    for(const theme of body.themes.filter(feline.isFeline)){
-      for(const part of ['head-ears','head-face'])await emit(style,theme.id+'-'+part,felineLayer(style,theme,part),{id:theme.id,part,animalProfile:'feline',assetFacing:spec.assetFacing});
-      for(let i=0;i<spec.feline.tailFrames.length;i++)if(i!==2)await emit(style,theme.id+'-'+spec.feline.tailFrames[i],partSvg(style,theme,'tail',{bend:spec.feline.tailBends[i]}),{id:theme.id,part:'tail',animalProfile:'feline',bend:spec.feline.tailBends[i],attachment:joinGeometry(style).pivot,assetFacing:spec.assetFacing});
+    for(const theme of body.themes.filter(t=>t.animalProfile)){
+      for(const part of ['head-ears','head-face'])await emit(style,theme.id+'-'+part,animalLayer(style,theme,part),{id:theme.id,part,animalProfile:theme.animalProfile,assetFacing:spec.assetFacing});
+      for(let i=0;i<spec.feline.tailFrames.length;i++)if(i!==2)await emit(style,theme.id+'-'+spec.feline.tailFrames[i],partSvg(style,theme,'tail',{bend:spec.feline.tailBends[i]}),{id:theme.id,part:'tail',animalProfile:theme.animalProfile,bend:spec.feline.tailBends[i],attachment:joinGeometry(style).pivot,assetFacing:spec.assetFacing});
     }
     for(const theme of body.themes)for(const facing of ['right','down','left'])await emit(style,theme.id+'-head-base-'+facing,partSvg(style,theme,'head-base',{facing}),{id:theme.id,part:'head-base',assetFacing:spec.assetFacing,renderFacing:facing,renderRotation:facingAngles[facing],renderScale:body.spec.styles[style].headRenderScale,eyes:style==='pixel'?spec.head.pixelEyes:spec.head.eyes});
   }
@@ -206,5 +261,5 @@ async function build({sharpModule,check=false}={}){
   }
   return outputs;
 }
-module.exports={spec,parts,facingAngles,lightCenter,inside,partGrid,partSvg,eyesSvg,decorationSvg,tongueSvg,felineLayer,joinGeometry,pose,previewHtml,targetsHtml,build};
+module.exports={spec,parts,facingAngles,lightCenter,inside,partGrid,partSvg,eyesSvg,decorationSvg,tongueSvg,felineLayer,animalLayer,joinGeometry,pose,previewHtml,targetsHtml,build};
 if(require.main===module){const args=process.argv.slice(2),index=args.indexOf('--sharp');if(index!==-1&&!args[index+1])throw new Error('Supply an installed sharp module path');build({sharpModule:index===-1?undefined:args[index+1],check:args.includes('--check')}).then(outputs=>console.log(`${args.includes('--check')?'CHECKED':'BUILT'}: ${outputs.length} body, head, tail and eye assets. Existing game unchanged.`)).catch(error=>{console.error(error);process.exitCode=1;});}

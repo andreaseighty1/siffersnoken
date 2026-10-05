@@ -276,6 +276,27 @@
       "file": "generated/toy/katt-body.webp"
     },
     {
+      "style": "toy",
+      "id": "hund",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/hund-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "bi",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/bi-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "drake",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/drake-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -547,6 +568,27 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/katt-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "hund",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/hund-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "bi",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/bi-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "drake",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/drake-body.webp"
     }
   ]
 }

@@ -25,6 +25,11 @@
     "tailPeriodMs": 1400,
     "earMinimumY": 0.63
   },
+  "animals": {
+    "canine": { "tailTipY": 0.69, "tailPeriodMs": 1100 },
+    "bovine": { "tailTipY": 0.79, "tailPeriodMs": 1700 },
+    "dragon": { "tailTipY": 0.72, "tailPeriodMs": 1600 }
+  },
   "eyesPalette": { "white": "#fffdf3", "ink": "#171512", "pupilShade": "#352317", "whiteShade": "#d7d9c8" },
   "preview": { "bodyCenters": [[192, 48], [144, 48], [96, 48], [96, 96], [96, 144]], "headCenter": [240, 48], "frame": [324, 252] }
 }
