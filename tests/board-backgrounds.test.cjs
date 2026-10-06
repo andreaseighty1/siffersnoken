@@ -33,7 +33,23 @@ for(const mode of ['toy','pixel'])for(const layout of ['wide','portrait']){
   assert.equal(backgrounds.forestAsset(mode,476,782).key,`${mode}|portrait`,'Joystick reuses portrait art');
 }
 assert.equal(backgrounds.forestAsset('classic',714,544).key,'toy|wide');
-assert.ok(html.includes('BoardBackgrounds.forestAsset(mode,W,H)'));
+assert.equal(Object.keys(backgrounds.themes).length,12);
+assert.ok(html.includes('styledBoardLoader.get(id,graphicsMode,canvas.width,canvas.height)'));
+const downloads=[],loader=backgrounds.createLoader({createImage:()=>({set src(value){this.url=value;downloads.push(this);}})});
+for(const id of Object.keys(backgrounds.themes))for(const mode of ['toy','pixel'])for(const layout of ['wide','portrait']){
+  const w=layout==='wide'?714:476,h=layout==='wide'?544:680;
+  const selected=backgrounds.asset(id,mode,w,h),entry=loader.get(id,mode,w,h);
+  assert.ok(fs.existsSync(path.join(__dirname,'..',selected.src.split('?')[0])),'Every selected WebP exists');
+  assert.equal(entry.image.url,selected.src);assert.equal(entry.status,'loading');
+  const before=downloads.length;assert.equal(loader.get(id,mode,w,h),entry);assert.equal(downloads.length,before,'Revisit does not re-download retained art');
+  entry.image.onload();assert.equal(entry.status,'ready');
+  assert.ok(loader.cacheSize()<=4,'At most four decoded images retained');
+  assert.equal(backgrounds.asset(id,mode,476,782).src,backgrounds.asset(id,mode,476,680).src,'Android formats share portrait composition');
+}
+assert.equal(backgrounds.asset('portal','toy',714,544),null,'Portal remains separate');
+for(const id of ['unknown','constructor','__proto__'])assert.equal(backgrounds.asset(id,'toy',714,544),null,'Only own theme IDs are assets');
+loader.clear();assert.equal(loader.cacheSize(),0);
+const failure=loader.get('crystal','toy',714,544);failure.image.onerror();assert.equal(failure.status,'failed');
 for(const id of Object.keys(backgrounds.palettes))renderer.draw(ctx,{source:art,id,width:714,height:544});
 assert.equal(renderer.cacheSize(),2,'Visiting every scene leaves at most two cached boards');
 const count=made.length;renderer.draw(ctx,{source:art,id:'forest',width:390,height:300,enabled:false});
@@ -67,15 +83,24 @@ for(const [sw,sh,w,h] of [[1536,1024,714,544],[1049,1499,476,680],[1049,1500,476
 }
 assert.equal(backgrounds.forestSlices(0,0,476,680),null);
 assert.equal(backgrounds.forestSlices(1536,1024,714,1),null,'Unsupported tiny targets fail safely');
+for(const id of Object.keys(backgrounds.themes))for(const [sw,sh,w,h] of [[1536,1024,714,544],[1049,1499,476,680],[1049,1500,476,782]]){
+  const slices=backgrounds.compositionSlices(id,sw,sh,w,h);
+  assert.equal(slices.length,3);
+  assert.equal(slices.reduce((sum,r)=>sum+r[3],0),sh,'All source rows are preserved');
+  assert.equal(slices.reduce((sum,r)=>sum+r[7],0),h,'All destination rows covered without gaps');
+  assert.equal(slices[1][5],slices[0][7]);
+  assert.equal(slices[2][5],slices[0][7]+slices[1][7]);
+  for(const r of [slices[0],slices[2]])assert.ok(Math.abs(r[7]-r[3]*w/sw)<=.5,'Corner and end-zone shapes never stretch');
+}
 const boardSetup=html.match(/const _perfParams=[^]*?const ROWS=[^]*?;/)[0];
 for(const [search,cols,rows] of [['',21,16],['?boardPreview=portrait',21,16],['?perf=1',21,16],['?perf=1&boardPreview=unknown',21,16],['?perf=1&boardPreview=portrait',14,20],['?perf=1&boardPreview=joystick',14,23]]){
   const setup=vm.runInNewContext(boardSetup+'\n({COLS,ROWS})',{location:{search},URLSearchParams});
   assert.equal(setup.COLS,cols);assert.equal(setup.ROWS,rows,'Only explicit developer previews alter board dimensions');
 }
 const downloaded=[],loading=vm.createContext({canvas:{width:714,height:544},graphicsMode:'toy',BoardBackgrounds:backgrounds,
-  _fairyForestStyles:new Map(),_fairyForestImage:null,_fairyForestImageStatus:'',_fairyForestBackdropSprite:null,_fairyForestBackdropKey:'',
-  Image:class{set src(value){this.url=value;downloaded.push(this);}},createSpriteCanvas:fakeCanvas});
-vm.runInContext(source('getFairyForestBackdrop'),loading);
+  styledBoardLoader:backgrounds.createLoader({createImage:()=>({set src(value){this.url=value;downloaded.push(this);}})}),
+  _fairyForestImage:null,_fairyForestImageStatus:''});
+vm.runInContext(source('getFairyForestBackdrop')+'\n'+source('getStyledBoardBackdrop'),loading);
 for(const [mode,w,h] of [['toy',714,544],['pixel',714,544],['toy',476,680],['pixel',476,782]]){
   loading.graphicsMode=mode;loading.canvas.width=w;loading.canvas.height=h;
   loading.getFairyForestBackdrop();const image=downloaded.at(-1);

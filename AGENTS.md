@@ -9,7 +9,8 @@
 - Placera temadetaljer och de starkaste färg-/ljuskontrasterna huvudsakligen längs ytterkanterna.
 - Bakgrunder får inte innehålla snokar, figurer, siffror, läsbar text, UI eller logotyper.
 - Runtimeformat är ogenomskinlig WebP. Befintliga breda banor använder 1536 × 1024; mobilanpassade teman ska ha separat bred och stående komposition i både Modern och Pixelretro.
-- Välj komposition efter spelplanens logiska proportioner, inte skärmens orientering. Kontrollera WEB 21:16, Android touch 14:20 och joystick 14:23. Förläng bara en godkänd tom mittzon; sträck inte hörndetaljer och beskär inte viktiga motiv. Sagoskogen är pilot, övriga teman är ännu inte anpassade.
+- Välj komposition efter spelplanens logiska proportioner, inte skärmens orientering. Kontrollera WEB 21:16, Android touch 14:20 och joystick 14:23. Förläng bara en godkänd tom mittzon; sträck inte hörndetaljer och beskär inte viktiga motiv. Alla tolv vanliga teman har nu fyra varianter; portalens bonusbana är separat. Android-koden är ännu inte migrerad.
+- Fotbollsplan och Hockeyrink ska ha exakt två mål, Basketplan exakt två korgar, på motsatta kortsidor. Visa bara uppifrån-former och undvik täta låd-/burformade nät. Mittfältet ska fortsatt vara lågkontrast.
 - Kontrollera alltid den färdiga banan tillsammans med en modern snok i själva spelet innan leverans.
 
 ## Moderna snokskins

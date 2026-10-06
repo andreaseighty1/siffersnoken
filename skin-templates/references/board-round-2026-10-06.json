@@ -1,0 +1,446 @@
+{
+  "date": "2026-10-06",
+  "mode": "Built-in imagegen, one call per asset; four football replacements simplified to strict overhead goal footprints",
+  "jobs": [
+    {
+      "id": "crystal",
+      "stem": "kristallgrotta",
+      "name": "Kristallgrotta",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/kristallgrotta-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Kristallgrotta. Scene: Compact rounded amethyst, turquoise and pale blue crystal facet TOPS and smooth stone TOPS in the corners; absolutely no standing crystal side faces. Floor: muted deep blue-teal.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-c9433199-5d27-4659-b6d4-15a81bd49903.png"
+    },
+    {
+      "id": "crystal",
+      "stem": "kristallgrotta",
+      "name": "Kristallgrotta",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/kristallgrotta-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Kristallgrotta. Scene: Compact rounded amethyst, turquoise and pale blue crystal facet TOPS and smooth stone TOPS in the corners; absolutely no standing crystal side faces. Floor: muted deep blue-teal.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-9ba53c39-e516-47f1-a33b-75d22d8a6e42.png"
+    },
+    {
+      "id": "crystal",
+      "stem": "kristallgrotta",
+      "name": "Kristallgrotta",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/kristallgrotta-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Kristallgrotta. Scene: Compact rounded amethyst, turquoise and pale blue crystal facet TOPS and smooth stone TOPS in the corners; absolutely no standing crystal side faces. Floor: muted deep blue-teal.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-c09b93bb-9445-48d9-b038-d83656926367.png"
+    },
+    {
+      "id": "crystal",
+      "stem": "kristallgrotta",
+      "name": "Kristallgrotta",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/kristallgrotta-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Kristallgrotta. Scene: Compact rounded amethyst, turquoise and pale blue crystal facet TOPS and smooth stone TOPS in the corners; absolutely no standing crystal side faces. Floor: muted deep blue-teal.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-f3dea8ee-26db-4de5-9e97-e7824f1ec5b5.png"
+    },
+    {
+      "id": "sunTemple",
+      "stem": "soltemplet",
+      "name": "Soltemplet",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/soltemplet-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Soltemplet. Scene: Small rounded sandstone tile TOPS, a flat gold sun medallion ornament with no face or letters, terracotta pebble TOPS and sparse ochre leaves in corners. No pillars, staircases, walls or 3D temple façade. Floor: muted warm sandy taupe.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-97482890-bb8c-4801-8ead-ce0afeda2e7b.png"
+    },
+    {
+      "id": "sunTemple",
+      "stem": "soltemplet",
+      "name": "Soltemplet",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/soltemplet-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Soltemplet. Scene: Small rounded sandstone tile TOPS, a flat gold sun medallion ornament with no face or letters, terracotta pebble TOPS and sparse ochre leaves in corners. No pillars, staircases, walls or 3D temple façade. Floor: muted warm sandy taupe.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-616cd8be-2478-41f2-b993-82ac910d9a8f.png"
+    },
+    {
+      "id": "sunTemple",
+      "stem": "soltemplet",
+      "name": "Soltemplet",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/soltemplet-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Soltemplet. Scene: Small rounded sandstone tile TOPS, a flat gold sun medallion ornament with no face or letters, terracotta pebble TOPS and sparse ochre leaves in corners. No pillars, staircases, walls or 3D temple façade. Floor: muted warm sandy taupe.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-ce38c2a9-9c81-4509-99b0-4bcb0248fa71.png"
+    },
+    {
+      "id": "sunTemple",
+      "stem": "soltemplet",
+      "name": "Soltemplet",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/soltemplet-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Soltemplet. Scene: Small rounded sandstone tile TOPS, a flat gold sun medallion ornament with no face or letters, terracotta pebble TOPS and sparse ochre leaves in corners. No pillars, staircases, walls or 3D temple façade. Floor: muted warm sandy taupe.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-2a43ab7d-0413-4eeb-966d-0a892df2314f.png"
+    },
+    {
+      "id": "footballPitch",
+      "stem": "fotbollsplan",
+      "name": "Fotbollsplan",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/fotbollsplan-toy.webp",
+      "prompt": "Use case: precise-object-edit. This is an edit of the supplied football game background. Preserve its full-bleed landscape composition, top/bottom placement of EXACTLY TWO goals, corner cones, low-contrast penalty-area markings, palette and rounded toy material. Change ONLY (1) the two goals into mathematically strict 90-degree overhead plan views and (2) the grass floor material. Critical: NO vertical goal legs visible, no front faces, no bench-like frame, no eye-level perspective. Each goal is a flat TOP-VIEW footprint: a slender horizontal WHITE FRONT CROSSBAR facing the pitch, two short rearward WHITE SIDE rails, a very faint GREY REAR NET BAR behind it, and 3 very faint grey parallel net threads in the horizontal roof footprint. Readable small real football net TOP, not a cage or stool. The upper goal's front is its bottom edge; lower goal front is its top edge. No body-depth thickness or shadow displacement suggestive of front view. Reduce grass texture dramatically to a near-uniform matte muted blue-green football floor: NO speckles, mottling, noise, grain, bushy pixels, gradients or cracks in the entire middle 80% of the board. Keep just imperceptible uniform material variation, with all floor details subdued. Outer corner grass tufts and cones unchanged. Keep the white field markings faint and outside the middle zone. No new objects, no text, UI, snake, balls or central line/circle. This is final production art, not a labeled comparison.",
+      "source": "exec-4dc8cafe-bdda-4f2f-9aff-29e82bfdaf36.png"
+    },
+    {
+      "id": "footballPitch",
+      "stem": "fotbollsplan",
+      "name": "Fotbollsplan",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/fotbollsplan-toy-portrait.webp",
+      "prompt": "Use case: precise-object-edit. This is an edit of the supplied football game background. Preserve its full-bleed portrait composition, top/bottom placement of EXACTLY TWO goals, corner cones, low-contrast penalty-area markings, palette and rounded toy material. Change ONLY (1) the two goals into mathematically strict 90-degree overhead plan views and (2) the grass floor material. Critical: NO vertical goal legs visible, no front faces, no bench-like frame, no eye-level perspective. Each goal is a flat TOP-VIEW footprint: a slender horizontal WHITE FRONT CROSSBAR facing the pitch, two short rearward WHITE SIDE rails, a very faint GREY REAR NET BAR behind it, and 3 very faint grey parallel net threads in the horizontal roof footprint. Readable small real football net TOP, not a cage or stool. The upper goal's front is its bottom edge; lower goal front is its top edge. No body-depth thickness or shadow displacement suggestive of front view. Reduce grass texture dramatically to a near-uniform matte muted blue-green football floor: NO speckles, mottling, noise, grain, bushy pixels, gradients or cracks in the entire middle 80% of the board. Keep just imperceptible uniform material variation, with all floor details subdued. Outer corner grass tufts and cones unchanged. Keep the white field markings faint and outside the middle zone. No new objects, no text, UI, snake, balls or central line/circle. This is final production art, not a labeled comparison.",
+      "source": "exec-20aed967-bf41-4df6-8788-c966ceeaa4a4.png"
+    },
+    {
+      "id": "footballPitch",
+      "stem": "fotbollsplan",
+      "name": "Fotbollsplan",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/fotbollsplan-pixel.webp",
+      "prompt": "Use case: precise-object-edit. This is an edit of the supplied football game background. Preserve its full-bleed landscape composition, top/bottom placement of EXACTLY TWO goals, corner cones, low-contrast penalty-area markings, palette and authored crisp pixel clusters with stepped edges and limited palette. Change ONLY (1) the two goals into mathematically strict 90-degree overhead plan views and (2) the grass floor material. Critical: NO vertical goal legs visible, no front faces, no bench-like frame, no eye-level perspective. Each goal is a flat TOP-VIEW footprint: a slender horizontal WHITE FRONT CROSSBAR facing the pitch, two short rearward WHITE SIDE rails, a very faint GREY REAR NET BAR behind it, and 3 very faint grey parallel net threads in the horizontal roof footprint. Readable small real football net TOP, not a cage or stool. The upper goal's front is its bottom edge; lower goal front is its top edge. No body-depth thickness or shadow displacement suggestive of front view. Reduce grass texture dramatically to a near-uniform matte muted blue-green football floor: NO speckles, mottling, noise, grain, bushy pixels, gradients or cracks in the entire middle 80% of the board. Keep just imperceptible uniform material variation, with all floor details subdued. Outer corner grass tufts and cones unchanged. Keep the white field markings faint and outside the middle zone. No new objects, no text, UI, snake, balls or central line/circle. This is final production art, not a labeled comparison. Keep genuine pixelretro artwork with intentional square pixel clusters, no blur or smooth 3D rendering.",
+      "source": "exec-779c74ac-cea5-420c-afce-29e9a7731720.png"
+    },
+    {
+      "id": "footballPitch",
+      "stem": "fotbollsplan",
+      "name": "Fotbollsplan",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/fotbollsplan-pixel-portrait.webp",
+      "prompt": "Use case: precise-object-edit. This is an edit of the supplied football game background. Preserve its full-bleed portrait composition, top/bottom placement of EXACTLY TWO goals, corner cones, low-contrast penalty-area markings, palette and authored crisp pixel clusters with stepped edges and limited palette. Change ONLY (1) the two goals into mathematically strict 90-degree overhead plan views and (2) the grass floor material. Critical: NO vertical goal legs visible, no front faces, no bench-like frame, no eye-level perspective. Each goal is a flat TOP-VIEW footprint: a slender horizontal WHITE FRONT CROSSBAR facing the pitch, two short rearward WHITE SIDE rails, a very faint GREY REAR NET BAR behind it, and 3 very faint grey parallel net threads in the horizontal roof footprint. Readable small real football net TOP, not a cage or stool. The upper goal's front is its bottom edge; lower goal front is its top edge. No body-depth thickness or shadow displacement suggestive of front view. Reduce grass texture dramatically to a near-uniform matte muted blue-green football floor: NO speckles, mottling, noise, grain, bushy pixels, gradients or cracks in the entire middle 80% of the board. Keep just imperceptible uniform material variation, with all floor details subdued. Outer corner grass tufts and cones unchanged. Keep the white field markings faint and outside the middle zone. No new objects, no text, UI, snake, balls or central line/circle. This is final production art, not a labeled comparison. Keep genuine pixelretro artwork with intentional square pixel clusters, no blur or smooth 3D rendering.",
+      "source": "exec-0d33473e-a699-4a0a-b7fc-9b5b62d5571b.png"
+    },
+    {
+      "id": "basketballCourt",
+      "stem": "basketplan",
+      "name": "Basketplan",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/basketplan-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Basketplan. Scene: Quiet basketball court floor with EXACTLY TWO small basket/hoop TOP footprints centered at opposite top and bottom short edges, including subtle top-down ring circles and backboard footprints, absolutely no upright backboard fronts. Corner orange rubber mat TOPS; very faint key outlines only near top/bottom ends. No basketballs, crowd, seats, center circle, court text or strong parquet seams. Floor: muted warm honey brown.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-62d71631-67ca-45a0-8bcf-1536dfe5cdbc.png"
+    },
+    {
+      "id": "basketballCourt",
+      "stem": "basketplan",
+      "name": "Basketplan",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/basketplan-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Basketplan. Scene: Quiet basketball court floor with EXACTLY TWO small basket/hoop TOP footprints centered at opposite top and bottom short edges, including subtle top-down ring circles and backboard footprints, absolutely no upright backboard fronts. Corner orange rubber mat TOPS; very faint key outlines only near top/bottom ends. No basketballs, crowd, seats, center circle, court text or strong parquet seams. Floor: muted warm honey brown.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-119c7573-62e0-4605-ac90-7f6cd7c95f1c.png"
+    },
+    {
+      "id": "basketballCourt",
+      "stem": "basketplan",
+      "name": "Basketplan",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/basketplan-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Basketplan. Scene: Quiet basketball court floor with EXACTLY TWO small basket/hoop TOP footprints centered at opposite top and bottom short edges, including subtle top-down ring circles and backboard footprints, absolutely no upright backboard fronts. Corner orange rubber mat TOPS; very faint key outlines only near top/bottom ends. No basketballs, crowd, seats, center circle, court text or strong parquet seams. Floor: muted warm honey brown.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-20b2ea4d-7ad9-4b2c-83ca-4faf736f3815.png"
+    },
+    {
+      "id": "basketballCourt",
+      "stem": "basketplan",
+      "name": "Basketplan",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/basketplan-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Basketplan. Scene: Quiet basketball court floor with EXACTLY TWO small basket/hoop TOP footprints centered at opposite top and bottom short edges, including subtle top-down ring circles and backboard footprints, absolutely no upright backboard fronts. Corner orange rubber mat TOPS; very faint key outlines only near top/bottom ends. No basketballs, crowd, seats, center circle, court text or strong parquet seams. Floor: muted warm honey brown.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-ed9a2772-e752-4ea1-832a-3c0c1fc7c391.png"
+    },
+    {
+      "id": "hockeyRink",
+      "stem": "hockeyrink",
+      "name": "Hockeyrink",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/hockeyrink-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Hockeyrink. Scene: Quiet ice hockey rink surface with EXACTLY TWO small red goal TOP footprints centered near opposite top and bottom short edges. Show net roofs only, no goal front faces. Sparse pale blue ice chip TOPS at corners. Faint red and blue line stubs at end zones only, no center lines/circles. No puck, players, sticks or stands. Floor: muted medium desaturated icy blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-6c25a3c8-0d04-488d-8ac4-9a65d7ee8288.png"
+    },
+    {
+      "id": "hockeyRink",
+      "stem": "hockeyrink",
+      "name": "Hockeyrink",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/hockeyrink-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Hockeyrink. Scene: Quiet ice hockey rink surface with EXACTLY TWO small red goal TOP footprints centered near opposite top and bottom short edges. Show net roofs only, no goal front faces. Sparse pale blue ice chip TOPS at corners. Faint red and blue line stubs at end zones only, no center lines/circles. No puck, players, sticks or stands. Floor: muted medium desaturated icy blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-150ce87f-ccdc-447e-a40a-57b64309a2e5.png"
+    },
+    {
+      "id": "hockeyRink",
+      "stem": "hockeyrink",
+      "name": "Hockeyrink",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/hockeyrink-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Hockeyrink. Scene: Quiet ice hockey rink surface with EXACTLY TWO small red goal TOP footprints centered near opposite top and bottom short edges. Show net roofs only, no goal front faces. Sparse pale blue ice chip TOPS at corners. Faint red and blue line stubs at end zones only, no center lines/circles. No puck, players, sticks or stands. Floor: muted medium desaturated icy blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-8a0021dd-601e-4392-b6b0-39113b319627.png"
+    },
+    {
+      "id": "hockeyRink",
+      "stem": "hockeyrink",
+      "name": "Hockeyrink",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/hockeyrink-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Hockeyrink. Scene: Quiet ice hockey rink surface with EXACTLY TWO small red goal TOP footprints centered near opposite top and bottom short edges. Show net roofs only, no goal front faces. Sparse pale blue ice chip TOPS at corners. Faint red and blue line stubs at end zones only, no center lines/circles. No puck, players, sticks or stands. Floor: muted medium desaturated icy blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-785c2b4d-b0ed-47b3-97a5-4eee1619e6c0.png"
+    },
+    {
+      "id": "coralReef",
+      "stem": "korallrev",
+      "name": "Korallrev",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/korallrev-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Korallrev. Scene: Compact rounded coral, sea anemone and small seashell TOPS in dusty peach, soft mauve, aqua and sand near the corners only; all seabed objects strictly from above. No fish, animals, water caustics or central bubbles. Floor: muted deep ocean turquoise.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-a383e15e-5f0e-4cf3-afba-ce6dba7e1e61.png"
+    },
+    {
+      "id": "coralReef",
+      "stem": "korallrev",
+      "name": "Korallrev",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/korallrev-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Korallrev. Scene: Compact rounded coral, sea anemone and small seashell TOPS in dusty peach, soft mauve, aqua and sand near the corners only; all seabed objects strictly from above. No fish, animals, water caustics or central bubbles. Floor: muted deep ocean turquoise.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-d799a454-6b21-4311-ac03-f701ae3c031e.png"
+    },
+    {
+      "id": "coralReef",
+      "stem": "korallrev",
+      "name": "Korallrev",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/korallrev-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Korallrev. Scene: Compact rounded coral, sea anemone and small seashell TOPS in dusty peach, soft mauve, aqua and sand near the corners only; all seabed objects strictly from above. No fish, animals, water caustics or central bubbles. Floor: muted deep ocean turquoise.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-64399867-6929-44c0-91f6-9b29670b94b1.png"
+    },
+    {
+      "id": "coralReef",
+      "stem": "korallrev",
+      "name": "Korallrev",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/korallrev-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Korallrev. Scene: Compact rounded coral, sea anemone and small seashell TOPS in dusty peach, soft mauve, aqua and sand near the corners only; all seabed objects strictly from above. No fish, animals, water caustics or central bubbles. Floor: muted deep ocean turquoise.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-ee207e0c-3de8-4a84-a96d-d3f7a401dc4a.png"
+    },
+    {
+      "id": "cloudCity",
+      "stem": "molnstaden",
+      "name": "Molnstaden",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/molnstaden-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Molnstaden. Scene: Sparse soft cloud TOPS and 2 tiny round cream-and-gold rooftop footprints tucked into the four corners. Buildings must look like flat roof plans: no walls, windows, façades, fronts, city skyline or isometric forms. No characters. Floor: muted medium dusty sky blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-f177b475-7e04-47ea-be4f-0760ebb8cb6e.png"
+    },
+    {
+      "id": "cloudCity",
+      "stem": "molnstaden",
+      "name": "Molnstaden",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/molnstaden-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Molnstaden. Scene: Sparse soft cloud TOPS and 2 tiny round cream-and-gold rooftop footprints tucked into the four corners. Buildings must look like flat roof plans: no walls, windows, façades, fronts, city skyline or isometric forms. No characters. Floor: muted medium dusty sky blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-cec68eb8-a5dc-467f-a923-80d19f7a83e3.png"
+    },
+    {
+      "id": "cloudCity",
+      "stem": "molnstaden",
+      "name": "Molnstaden",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/molnstaden-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Molnstaden. Scene: Sparse soft cloud TOPS and 2 tiny round cream-and-gold rooftop footprints tucked into the four corners. Buildings must look like flat roof plans: no walls, windows, façades, fronts, city skyline or isometric forms. No characters. Floor: muted medium dusty sky blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-3b4a80f2-d04c-4fda-a794-21fe67317caa.png"
+    },
+    {
+      "id": "cloudCity",
+      "stem": "molnstaden",
+      "name": "Molnstaden",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/molnstaden-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Molnstaden. Scene: Sparse soft cloud TOPS and 2 tiny round cream-and-gold rooftop footprints tucked into the four corners. Buildings must look like flat roof plans: no walls, windows, façades, fronts, city skyline or isometric forms. No characters. Floor: muted medium dusty sky blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-c59e5416-e6fc-4220-b92c-7f02ddfc7e07.png"
+    },
+    {
+      "id": "volcanoIsland",
+      "stem": "vulkanon",
+      "name": "Vulkanön",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/vulkanon-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Vulkanön. Scene: A few dark rounded basalt rock TOPS with tiny warm orange lava seams confined under corner stones; compact island pebble TOPS. No volcano mountain seen from side, no cliffs, no central crater or lava river. Floor: muted smoky warm slate.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-6d837236-b054-4aab-91f6-ac797117752f.png"
+    },
+    {
+      "id": "volcanoIsland",
+      "stem": "vulkanon",
+      "name": "Vulkanön",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/vulkanon-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Vulkanön. Scene: A few dark rounded basalt rock TOPS with tiny warm orange lava seams confined under corner stones; compact island pebble TOPS. No volcano mountain seen from side, no cliffs, no central crater or lava river. Floor: muted smoky warm slate.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-a1fb5b9b-298a-41be-923a-c292f93627ac.png"
+    },
+    {
+      "id": "volcanoIsland",
+      "stem": "vulkanon",
+      "name": "Vulkanön",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/vulkanon-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Vulkanön. Scene: A few dark rounded basalt rock TOPS with tiny warm orange lava seams confined under corner stones; compact island pebble TOPS. No volcano mountain seen from side, no cliffs, no central crater or lava river. Floor: muted smoky warm slate.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-92dbfbea-4422-4066-9672-25ecbc2228ff.png"
+    },
+    {
+      "id": "volcanoIsland",
+      "stem": "vulkanon",
+      "name": "Vulkanön",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/vulkanon-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Vulkanön. Scene: A few dark rounded basalt rock TOPS with tiny warm orange lava seams confined under corner stones; compact island pebble TOPS. No volcano mountain seen from side, no cliffs, no central crater or lava river. Floor: muted smoky warm slate.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-db4f97fb-4f2b-411f-9e70-8d3693571d04.png"
+    },
+    {
+      "id": "enchantedLibrary",
+      "stem": "magiska-biblioteket",
+      "name": "Magiska biblioteket",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/magiska-biblioteket-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Magiska biblioteket. Scene: Small closed rounded book-cover TOPS with abstract embossed shapes but NO writing, a tiny brass telescope TOP footprint and emerald leaf sprig confined to corners. No book spines facing camera, upright bookshelves, walls, furniture sides or central floor pattern. Floor: muted warm plum taupe.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-741f502d-d6af-404b-ba2d-37d3024c3961.png"
+    },
+    {
+      "id": "enchantedLibrary",
+      "stem": "magiska-biblioteket",
+      "name": "Magiska biblioteket",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/magiska-biblioteket-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Magiska biblioteket. Scene: Small closed rounded book-cover TOPS with abstract embossed shapes but NO writing, a tiny brass telescope TOP footprint and emerald leaf sprig confined to corners. No book spines facing camera, upright bookshelves, walls, furniture sides or central floor pattern. Floor: muted warm plum taupe.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-dad42e3c-2024-4a94-910b-8bf0e60de14d.png"
+    },
+    {
+      "id": "enchantedLibrary",
+      "stem": "magiska-biblioteket",
+      "name": "Magiska biblioteket",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/magiska-biblioteket-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Magiska biblioteket. Scene: Small closed rounded book-cover TOPS with abstract embossed shapes but NO writing, a tiny brass telescope TOP footprint and emerald leaf sprig confined to corners. No book spines facing camera, upright bookshelves, walls, furniture sides or central floor pattern. Floor: muted warm plum taupe.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-398e406f-474c-4fd7-ba7e-c0781744609e.png"
+    },
+    {
+      "id": "enchantedLibrary",
+      "stem": "magiska-biblioteket",
+      "name": "Magiska biblioteket",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/magiska-biblioteket-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Magiska biblioteket. Scene: Small closed rounded book-cover TOPS with abstract embossed shapes but NO writing, a tiny brass telescope TOP footprint and emerald leaf sprig confined to corners. No book spines facing camera, upright bookshelves, walls, furniture sides or central floor pattern. Floor: muted warm plum taupe.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-896b476a-6318-4fb6-8dbe-aafcd3e1f0d3.png"
+    },
+    {
+      "id": "neonArcade",
+      "stem": "neonarkaden",
+      "name": "Neonarkaden",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/neonarkaden-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Neonarkaden. Scene: Tiny rounded retro arcade joystick-base TOPS, button TOPS and simple neon cyan/pink light strips confined to corner clusters. No upright arcade cabinet fronts, screens, readable lettering, checkerboard floor or glowing trails across center. Floor: muted deep indigo blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-d2d7bebc-a2e5-43d3-884e-4e2c9763f193.png"
+    },
+    {
+      "id": "neonArcade",
+      "stem": "neonarkaden",
+      "name": "Neonarkaden",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/neonarkaden-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Neonarkaden. Scene: Tiny rounded retro arcade joystick-base TOPS, button TOPS and simple neon cyan/pink light strips confined to corner clusters. No upright arcade cabinet fronts, screens, readable lettering, checkerboard floor or glowing trails across center. Floor: muted deep indigo blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-bef6dda4-2012-4fa5-8302-7e8a92df3b74.png"
+    },
+    {
+      "id": "neonArcade",
+      "stem": "neonarkaden",
+      "name": "Neonarkaden",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/neonarkaden-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Neonarkaden. Scene: Tiny rounded retro arcade joystick-base TOPS, button TOPS and simple neon cyan/pink light strips confined to corner clusters. No upright arcade cabinet fronts, screens, readable lettering, checkerboard floor or glowing trails across center. Floor: muted deep indigo blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-07f80477-2dc3-4718-b2d5-4f6bff630fd8.png"
+    },
+    {
+      "id": "neonArcade",
+      "stem": "neonarkaden",
+      "name": "Neonarkaden",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/neonarkaden-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Neonarkaden. Scene: Tiny rounded retro arcade joystick-base TOPS, button TOPS and simple neon cyan/pink light strips confined to corner clusters. No upright arcade cabinet fronts, screens, readable lettering, checkerboard floor or glowing trails across center. Floor: muted deep indigo blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-2b1ee654-b17b-4941-ae60-cad37ab824aa.png"
+    },
+    {
+      "id": "moonGarden",
+      "stem": "mantradgarden",
+      "name": "Månträdgården",
+      "style": "toy",
+      "layout": "wide",
+      "file": "assets/mantradgarden-toy.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Månträdgården. Scene: Sparse silvery broad leaf TOPS, smooth moonstone TOPS and 3 tiny cream flowers at corners, a small flat crescent-moon ornament in one corner. No sky, horizon, giant central moon, stars sprinkled across center or animals. Floor: muted medium dusty midnight blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-5e7af0fc-06fd-408e-b873-06737a83425d.png"
+    },
+    {
+      "id": "moonGarden",
+      "stem": "mantradgarden",
+      "name": "Månträdgården",
+      "style": "toy",
+      "layout": "portrait",
+      "file": "assets/mantradgarden-toy-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Månträdgården. Scene: Sparse silvery broad leaf TOPS, smooth moonstone TOPS and 3 tiny cream flowers at corners, a small flat crescent-moon ornament in one corner. No sky, horizon, giant central moon, stars sprinkled across center or animals. Floor: muted medium dusty midnight blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: premium charming matte sculpted rounded TOY/CLAY materials, subtle carved features, crisp smooth contours, restrained soft shadows immediately under perimeter objects only.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-116baac5-4d38-4b7a-80d7-8af58bfd4e5b.png"
+    },
+    {
+      "id": "moonGarden",
+      "stem": "mantradgarden",
+      "name": "Månträdgården",
+      "style": "pixel",
+      "layout": "wide",
+      "file": "assets/mantradgarden-pixel.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Månträdgården. Scene: Sparse silvery broad leaf TOPS, smooth moonstone TOPS and 3 tiny cream flowers at corners, a small flat crescent-moon ornament in one corner. No sky, horizon, giant central moon, stars sprinkled across center or animals. Floor: muted medium dusty midnight blue.\nComposition: ONE LANDSCAPE 1536 x 1024 image, aspect 3:2.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-67c3ce22-91d3-4898-bfec-d9b191a14c8e.png"
+    },
+    {
+      "id": "moonGarden",
+      "stem": "mantradgarden",
+      "name": "Månträdgården",
+      "style": "pixel",
+      "layout": "portrait",
+      "file": "assets/mantradgarden-pixel-portrait.webp",
+      "prompt": "Use case: stylized-concept. Asset type: ONE final standalone SifferSnoken game-board background. Full-bleed opaque rectangle, no rounded frame, margins or comparison layout. STRICT straight-down 90-degree orthographic overhead camera. Only TOP surfaces or flat footprints; never front/side faces, perspective, horizon or isometric view. Compact decorations at FOUR CORNERS at most 18% width/18% height. At least 80% of playable area must be quiet. The ENTIRE full-width horizontal band from 28% to 72% image height, INCLUDING outermost left/right edges, must be completely empty uniform floor: no objects, shadows, lines, paths, speckles, cracks or significant gradient. It will be extended to fit taller game boards. Central inner 80% by 80% must be clear low contrast. Very subtle uniform material variation only. Crisp focused edges; NO blur, haze, depth-of-field, bloom, vignetting or washing overlay. No snake, animals, characters, text, labels, numbers, answer tiles, UI, logos or watermark.\nTheme: Månträdgården. Scene: Sparse silvery broad leaf TOPS, smooth moonstone TOPS and 3 tiny cream flowers at corners, a small flat crescent-moon ornament in one corner. No sky, horizon, giant central moon, stars sprinkled across center or animals. Floor: muted medium dusty midnight blue.\nComposition: ONE PORTRAIT approximately 1024 x 1463 image, aspect 14:20; newly composed tall layout, NOT a crop or stretch of a landscape.\nStyle: dedicated charming authored 16-bit PIXEL ART, consistent small square pixel clusters and crisp stepped silhouettes, restricted palette, no antialiasing, no smoothly rendered object edges, NOT a mosaic filter.\nReference image is ONLY a visual style and quiet composition reference. Replace the forest subject with this new theme; do not copy its leaves.",
+      "source": "exec-bfee60aa-762a-4537-8f48-6bd490f246fa.png"
+    }
+  ]
+}

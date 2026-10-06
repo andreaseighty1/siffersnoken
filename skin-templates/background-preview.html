@@ -1,12 +1,12 @@
 <!doctype html><html lang="sv"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SifferSnoken · lugnare banbakgrunder</title>
 <style>body{margin:20px;background:#f5f0e4;color:#183b35;font:15px system-ui}main{max-width:1050px;margin:auto}h1{font-size:26px}p{line-height:1.5}.boards{display:grid;grid-template-columns:1fr 1fr;gap:20px}iframe{width:100%;height:650px;border:1px solid #789184;border-radius:14px;background:#163136}.boards[data-format="portrait"] iframe{height:940px}.boards[data-format="joystick"] iframe{height:1040px}label{display:inline-block;margin:0 12px 10px 0}select{font:inherit}@media(max-width:650px){.boards{grid-template-columns:1fr}}</style>
-<main><h1>SifferSnoken · lugnare bakgrunder</h1><p>Spelets riktiga grafik, samma snok och brickor i båda vyerna. Skarpa former och lugn mitt. Sagoskogen har en egen bakgrund i varje stil.</p>
+<main><h1>SifferSnoken · lugnare bakgrunder</h1><p>Spelets riktiga grafik, samma snok och brickor i båda vyerna. Alla tolv banor har egna breda och stående bilder i Modern och Pixelretro.</p>
 <label>Bana <select id="board"><option value="forest">Sagoskogen</option><option value="crystal">Kristallgrotta</option><option value="sunTemple">Soltemplet</option><option value="footballPitch">Fotbollsplan</option><option value="basketballCourt">Basketplan</option><option value="hockeyRink">Hockeyrink</option><option value="coralReef">Korallrev</option><option value="cloudCity">Molnstaden</option><option value="volcanoIsland">Vulkanön</option><option value="enchantedLibrary">Magiska biblioteket</option><option value="neonArcade">Neonarkaden</option><option value="moonGarden">Månträdgården</option></select></label>
 <label>Grafik <select id="mode"><option value="pair">Båda stilarna</option><option value="toy">Modern</option><option value="pixel">Pixelretro</option><option value="classic">Original</option></select></label>
 <label>Skin <select id="skin"><option value="eld">Blodmåne</option><option value="hv71">HV71</option><option value="klassisk">Klassisk</option><option value="jordgubbe">Jordgubbe</option><option value="ghost">Ghost</option></select></label>
 <label>Banformat <select id="format"><option value="web">WEB · 21 × 16</option><option value="portrait">Android touch · 14 × 20</option><option value="joystick">Android joystick · 14 × 23</option></select></label>
-<p>Android-valen provar banans proportioner med webbens renderer, inte Android-appens gränssnitt. Endast Sagoskogen har mobilanpassade bilder hittills. Musik är av i alla prov.</p>
+<p>Android-valen provar banans proportioner med webbens renderer, inte Android-appens gränssnitt. Alla teman har mobilanpassade bilder. Musik är av i alla prov.</p>
 <div class="boards" data-format="web"><section><h2>Bakgrunder på</h2><iframe title="Bakgrunder på" id="on" src="../index.html?perf=1"></iframe></section><section><h2>Bakgrunder av</h2><iframe title="Bakgrunder av" id="off" src="../index.html?perf=1"></iframe></section></div><p id="status">Laddar…</p></main>
 <script>
 const frames=[document.getElementById('on'),document.getElementById('off')],ready=new Set();let revision=0;
@@ -23,12 +23,11 @@ async function update(){
       applyGraphicsMode(${JSON.stringify(mode)},{persist:false});modernBoardThemeId=${JSON.stringify(board)};
       applyBoardBackgrounds(${enabled},{persist:false});`);
     if(w.SnakeStyles.supports(mode,skin))await w.eval(`snakeStyleRenderer.preload(${JSON.stringify(mode)},${JSON.stringify(skin)})`);
-    if(enabled&&mode!=='classic')await w.eval(`new Promise(resolve=>{
+    if(enabled&&mode!=='classic')await w.eval(`new Promise((resolve,reject)=>{
       (MODERN_BOARD_BACKDROPS[modernBoardThemeId]||getFairyForestBackdrop)();
-      const image=({forest:_fairyForestImage,crystal:_crystalCaveImage,sunTemple:_sunTempleImage,footballPitch:_footballPitchImage,
-        basketballCourt:_basketballCourtImage,hockeyRink:_hockeyRinkImage,coralReef:_coralReefImage,cloudCity:_cloudCityImage,
-        volcanoIsland:_volcanoIslandImage,enchantedLibrary:_enchantedLibraryImage,neonArcade:_neonArcadeImage,moonGarden:_moonGardenImage})[modernBoardThemeId];
-      if(!image||image.complete)resolve();else{image.addEventListener('load',resolve,{once:true});image.addEventListener('error',resolve,{once:true});}
+      const image=styledBoardLoader.get(modernBoardThemeId,graphicsMode,canvas.width,canvas.height)?.image;
+      const checked=()=>image&&image.naturalWidth>0?resolve():reject(new Error('Banbild saknas: '+modernBoardThemeId+' / '+graphicsMode));
+      if(!image||image.complete)checked();else{image.addEventListener('load',checked,{once:true});image.addEventListener('error',()=>reject(new Error('Banbild kunde inte laddas')),{once:true});}
     })`);
     if(current!==revision)return;
     w.eval(`dir={x:1,y:0};nextDir={...dir};pendingDirs.length=0;

@@ -1101,7 +1101,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <div id="medalToast"></div>
 
 <script src="translations.js?v=3.12-animals-1"></script>
-<script src="board-backgrounds.js?v=3"></script>
+<script src="board-backgrounds.js?v=4"></script>
 <script src="snake-style-config.js?v=snake-styles-27"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
 <script src="snake-headwear-designs.js?v=headwear-3"></script>
@@ -3006,6 +3006,7 @@ function toggleBonusEvent(type){
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 canvas.width=COLS*CELL;canvas.height=ROWS*CELL;
 const boardBackgroundRenderer=BoardBackgrounds.createRenderer();
+const styledBoardLoader=BoardBackgrounds.createLoader();
 const _tileSpriteCache=new Map();
 const _headAccessoryCache=new Map();
 const _scaleTextureSpriteCache=new Map();
@@ -6423,11 +6424,7 @@ const FAIRY_FOREST_LEAVES=[
   [.76,.47,7,-.2],[.9,.55,6,.7],[.35,.55,5,.2],[.82,.12,6,-.7]
 ];
 const MODERN_BOARD_THEME_IDS=['forest','crystal','sunTemple','footballPitch','basketballCourt','hockeyRink','coralReef','cloudCity','volcanoIsland','enchantedLibrary','neonArcade','moonGarden'];
-const MODERN_BOARD_BACKDROPS={forest:getFairyForestBackdrop,crystal:getCrystalCaveBackdrop,
-  sunTemple:getSunTempleBackdrop,footballPitch:getFootballPitchBackdrop,basketballCourt:getBasketballCourtBackdrop,
-  hockeyRink:getHockeyRinkBackdrop,coralReef:getCoralReefBackdrop,cloudCity:getCloudCityBackdrop,
-  volcanoIsland:getVolcanoIslandBackdrop,enchantedLibrary:getEnchantedLibraryBackdrop,
-  neonArcade:getNeonArcadeBackdrop,moonGarden:getMoonGardenBackdrop};
+const MODERN_BOARD_BACKDROPS=Object.fromEntries(MODERN_BOARD_THEME_IDS.map(id=>[id,()=>getStyledBoardBackdrop(id)]));
 const CRYSTAL_CAVE_SPARKLES=[
   [.08,.14,1.5,.2],[.18,.9,1.2,1.1],[.31,.08,1.3,2.4],[.47,.94,1.6,.7],
   [.62,.1,1.2,1.8],[.77,.91,1.5,2.8],[.91,.18,1.4,1.4],[.94,.7,1.2,.4],
@@ -6489,26 +6486,14 @@ function getFairyForestPalette(){
   return {top:'#071d25',mid:'#0b4547',bottom:'#164d3d',hill:'#26705a',hill2:'#3f9167',leaf:'#a8df9a',light:'#ffe28a'};
 }
 function getFairyForestBackdrop(){
-  const W=canvas.width,H=canvas.height;
-  const mode=graphicsMode==='pixel'?'pixel':'toy';
-  const asset=BoardBackgrounds.forestAsset(mode,W,H);
-  if(!_fairyForestStyles.has(asset.key)){
-    const entry={image:new Image(),status:'loading'};
-    entry.image.onload=()=>{entry.status='ready';};
-    entry.image.onerror=()=>{entry.status='failed';};
-    entry.image.src=asset.src;
-    _fairyForestStyles.set(asset.key,entry);
-  }
-  const styled=_fairyForestStyles.get(asset.key);
-  _fairyForestImage=styled.image;_fairyForestImageStatus=styled.status;
-  if(styled.status==='ready')return styled.image;
-  // Quiet, flat fallback while loading; no outdated perspective or blur.
-  const fallbackKey=`${W}x${H}|${mode}|fallback`;
-  if(_fairyForestBackdropSprite&&_fairyForestBackdropKey===fallbackKey)return _fairyForestBackdropSprite;
-  const fallback=createSpriteCanvas(W);fallback.height=H;
-  const fallbackCtx=fallback.getContext('2d');fallbackCtx.fillStyle='#216a76';fallbackCtx.fillRect(0,0,W,H);
-  _fairyForestBackdropSprite=fallback;_fairyForestBackdropKey=fallbackKey;
-  return fallback;
+  return getStyledBoardBackdrop('forest');
+}
+function getStyledBoardBackdrop(id){
+  const styled=styledBoardLoader.get(id,graphicsMode,canvas.width,canvas.height);
+  if(!styled)return null;
+  // Retain the forest diagnostic hooks used by existing game QA fixtures.
+  if(id==='forest'){_fairyForestImage=styled.image;_fairyForestImageStatus=styled.status;}
+  return styled.status==='ready'?styled.image:null;
 }
 function drawFairyForestAnimations(){
   const T=(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)?0:_renderNow;
@@ -6940,7 +6925,7 @@ function drawBackground(theme){
   if(isModernGraphics()){
     const source=(MODERN_BOARD_BACKDROPS[modernBoardThemeId]||getFairyForestBackdrop)();
     boardBackgroundRenderer.draw(ctx,{source,id:modernBoardThemeId,width:canvas.width,height:canvas.height,
-      pixel:graphicsMode==='pixel'&&modernBoardThemeId==='forest'});
+      pixel:graphicsMode==='pixel'});
     return;
   }
   ctx.fillStyle=theme.bgA||'#060c08';
