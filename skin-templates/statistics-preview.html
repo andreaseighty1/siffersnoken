@@ -1,0 +1,23 @@
+<!doctype html><html lang="sv"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Statistik · testdata</title>
+<style>body{margin:0;background:#f5f0e4;color:#183b35;font:16px system-ui}header{padding:12px}label{display:block}select{font:inherit;max-width:100%;padding:6px}iframe{width:100%;height:1400px;border:0;display:block}p{margin:6px 0}</style>
+<header><label>Testdata · inte sparade spelarresultat <select id="scenario"><option value="recurring">Upprepade missar</option><option value="single">Enstaka miss</option><option value="perfect">100 % rätt</option><option value="resolved">Tre senaste rätt</option><option value="legacy">Äldre statistik</option><option value="mixed">Två spelare</option></select></label><p id="status">Laddar…</p></header>
+<iframe id="app" title="Spelets riktiga statistikvy med testdata" src="../index.html?perf=1"></iframe>
+<script>
+const frame=document.getElementById('app');let ready=false;
+const q=(correct,wrong,lastResults=[])=>({expr:'7 × 8',op:'*',category:'*',answer:56,correct,wrong,lastResults});
+const fill=n=>({expr:'7 × 2',op:'*',category:'*',answer:14,correct:n,wrong:0,lastResults:[true]});
+const session=(questions,player='Testspelare')=>({player,date:'2026-10-06',time:'12:00',total:questions.reduce((n,q)=>n+q.correct+q.wrong,0),correct:questions.reduce((n,q)=>n+q.correct,0),ops:{'*':{total:questions.reduce((n,q)=>n+q.correct+q.wrong,0),correct:questions.reduce((n,q)=>n+q.correct,0)}},selectedOps:['*'],numRange:100,tables:[7],practiceMode:true,questionStats:{version:2,questions}});
+function update(){
+ if(!ready)return;const mode=document.getElementById('scenario').value;
+ const repeated=[session([q(0,2,[false,false]),fill(8)]),session([q(0,1,[false]),fill(9)])];
+ const histories={recurring:repeated,single:[session([q(0,1,[false]),fill(9)]),session([fill(10)])],perfect:[session([fill(10)]),session([fill(10)])],resolved:[...repeated,session([q(3,0,[true,true,true])])],legacy:[{player:'Testspelare',date:'2026-10-01',correct:8,total:10,ops:{'*':{correct:8,total:10}},wrongMap:{'7 × 8':2}}],mixed:[repeated[0],session([q(0,1,[false]),fill(9)],'Annan spelare')]};
+ const w=frame.contentWindow;
+ w.eval(`state='paused';musicOn=false;stopTitelMusic(true);getLang=()=>'sv';loadHistory=()=>${JSON.stringify(histories[mode])};renderStatsTeacherPage(${mode==='mixed'?'null':JSON.stringify('Testspelare')});showScreen('statsScreen');`);
+ // Never clear or alter real browser storage from this test fixture.
+ w.confirm=()=>false;
+ w.document.getElementById('btnClearStats').disabled=true;
+ document.getElementById('status').textContent='Klart · musik av · inga resultat sparas';
+}
+frame.onload=()=>{ready=true;update();};document.getElementById('scenario').onchange=update;
+</script></html>

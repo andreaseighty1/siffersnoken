@@ -266,6 +266,9 @@ body{display:flex;flex-direction:column;align-items:center;justify-content:cente
 /* ── STATISTIKSIDA ── */
 .stats-page{width:100%;max-width:680px;padding:8px 0 40px;}
 .stats-section{margin-bottom:18px;}
+.stats-explanation{font-size:12px;color:var(--muted);line-height:1.6;margin:12px 0;}
+.stats-player-label{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:12px 0;}
+#statsPlayerFilter{font:inherit;max-width:100%;padding:10px;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:8px;}
 .stats-section-title{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
   font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--line);}
 .stats-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px;}
@@ -1102,6 +1105,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 
 <script src="translations.js?v=3.12-animals-1"></script>
 <script src="board-backgrounds.js?v=4"></script>
+<script src="practice-statistics.js?v=1"></script>
 <script src="snake-style-config.js?v=snake-styles-27"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
 <script src="snake-headwear-designs.js?v=headwear-3"></script>
@@ -3182,6 +3186,7 @@ let sessionCorrect=0,sessionTotal=0;
 let sessionOpStats={};
 // Faktiska felsvar under sessionen: {expr: count}
 let sessionWrongMap={};
+let sessionQuestionTracker=PracticeStatistics.createTracker();
 
 // Fel-pool: problem som eleven svarat fel på, visas mer frekvent
 const MAX_WRONG_POOL=6;
@@ -5902,6 +5907,7 @@ function startGame(){
   portalBox=null;portalRun=null;portalSnapshot=null;portalOverlayMode='intro';portalSpawnCount=0;portalAnsweredCheckpoint=0;portalPityCorrect=0;
   wrongPool=[];
   sessionCorrect=0;sessionTotal=0;sessionOpStats={};sessionWrongMap={};
+  sessionQuestionTracker=PracticeStatistics.createTracker();
   if(isModernGraphics())selectModernBoardTheme();
   const mx=Math.floor(COLS/2),my=Math.floor(ROWS/2);
   snake=[];for(let i=0;i<4;i++)snake.push({x:mx-i,y:my,px:mx-i,py:my});
@@ -6060,6 +6066,7 @@ function tick(){
   if(ti!==-1){
     const tile=tiles.splice(ti,1)[0];
     sessionTotal++;
+    sessionQuestionTracker.record(problem,tile.value);
     const statsCategory=problem.category||problem.op;
     if(!sessionOpStats[statsCategory])sessionOpStats[statsCategory]={correct:0,total:0};
     sessionOpStats[statsCategory].total++;
@@ -8606,6 +8613,7 @@ function recordSession(){
     practiceMode,
     ops:{...sessionOpStats},
     wrongMap:{...sessionWrongMap},
+    questionStats:sessionQuestionTracker.snapshot(),
     wrongExprs:wrongPool.map(p=>p.expr)
   };
   hist.push(entry);
@@ -8735,367 +8743,75 @@ function renderStatsPage(){
   });
 }
 
-function renderStatsTeacherPage(){
-  const el=$('statsPageContent');
-  const hist=loadHistory();
-  if(!hist.length){
-    el.innerHTML='<div style="color:var(--muted);text-align:center;padding:40px 0;font-size:14px;">'+t('statsEmpty')+'</div>';
-    return;
-  }
-
-  const l=getLang();
-  const txt=l==='de'
-    ? {
-        totalGames:'Spiele gesamt',
-        totalAnswered:'Beantwortete Aufgaben',
-        recentAcc:'Treffsicherheit letzte 10',
-        teacherTitle:'🧑‍🏫 Lehrkraft-Überblick',
-        strongTitle:'Stärkste Seite gerade',
-        weakTitle:'Braucht Übung',
-        nextTitle:'Empfohlener nächster Schritt',
-        opTitle:'📊 Treffsicherheit nach Rechenart',
-        opCount:(c,t)=>`${c}/${t} richtig`,
-        tableTitle:'🔎 Einmaleins zum Beobachten',
-        tableEmpty:'Noch kein klares Einmaleins-Muster.',
-        wrongTitle:'❌ Häufige Fehler im Moment',
-        wrongEmpty:'Noch keine Fehler registriert! 🎉',
-        historyTitle:'📅 Letzte 10 Sitzungen',
-        clearBtn:'🗑️ Alle Statistiken löschen',
-        clearConfirm:'Alle gespeicherten Statistiken löschen? Das kann nicht rückgängig gemacht werden.',
-        noData:'Noch keine Daten',
-        stable:'→ Stabiles Niveau',
-        recentUp:n=>`↑ +${n}% in den letzten 5 Spielen`,
-        recentDown:n=>`↓ ${n}% in den letzten 5 Spielen`,
-        strongSub:(pct,total)=>`${pct}% bei ${total} Antworten`,
-        weakSub:(pct,total)=>`${pct}% bei ${total} Antworten`,
-        nextFallbackMain:'Bleib erst einmal auf dem aktuellen Niveau',
-        nextFallbackSub:'Ein paar weitere Spiele helfen für eine genauere Empfehlung.',
-        narrowTablesMain:'Einmaleins-Auswahl eingrenzen',
-        narrowTablesSub:'Wähle ein oder zwei Reihen gleichzeitig, bis die Treffsicherheit stabil wird.',
-        tablePracticeMain:n=>`Konzentriere dich auf die ${n}er-Reihe`,
-        tablePracticeSub:'Wähle nur diese Reihe und spiele ein paar kurze Übungsrunden.',
-        opPracticeMain:n=>`${n} gezielt üben`,
-        opPracticeRange:r=>`Bleib für ein paar kurze Runden bei ${r}.`,
-        opPracticeSub:'Halte das Niveau für ein paar kurze Runden klar und begrenzt.',
-        sessionModePractice:'übung',
-        sessionModeStandard:'standard',
-        tableChip:(n,c)=>`${n}er · ${c}`,
-        tablesLabel:'Einmaleins'
-      }
-    : l!=='sv'
-    ? {
-        totalGames:'Games played',
-        totalAnswered:'Questions answered',
-        recentAcc:'Accuracy last 10',
-        teacherTitle:'Teacher overview',
-        strongTitle:'Strongest now',
-        weakTitle:'Needs practice',
-        nextTitle:'Recommended next step',
-        opTitle:'📊 Accuracy by operation',
-        opCount:(c,t)=>`${c}/${t} correct`,
-        tableTitle:'🔎 Tables worth checking',
-        tableEmpty:'No clear table pattern yet.',
-        wrongTitle:'❌ Frequent mistakes right now',
-        wrongEmpty:'No mistakes recorded yet! 🎉',
-        historyTitle:'📅 Latest 10 sessions',
-        clearBtn:'🗑️ Clear all statistics',
-        clearConfirm:'Clear all saved statistics? This cannot be undone.',
-        noData:'No data yet',
-        stable:'→ Stable level',
-        recentUp:n=>`↑ +${n}% in the latest 5 games`,
-        recentDown:n=>`↓ ${n}% in the latest 5 games`,
-        strongSub:(pct,total)=>`${pct}% across ${total} answers`,
-        weakSub:(pct,total)=>`${pct}% across ${total} answers`,
-        nextFallbackMain:'Keep the current level',
-        nextFallbackSub:'A few more sessions are needed for a sharper recommendation.',
-        narrowTablesMain:'Narrow the table mix',
-        narrowTablesSub:'Choose one or two tables at a time until accuracy becomes steady.',
-        tablePracticeMain:n=>`Focus on the ${n} times table`,
-        tablePracticeSub:'Choose only that table and run a few short practice rounds.',
-        opPracticeMain:n=>`Practice ${n.toLowerCase()}`,
-        opPracticeRange:r=>`Keep the work up to ${r} for a few short rounds.`,
-        opPracticeSub:'Stay on a clear and limited level for a few short rounds.',
-        sessionModePractice:'practice',
-        sessionModeStandard:'standard',
-        tableChip:(n,c)=>`${n}× · ${c}`,
-        tablesLabel:'tables'
-      }
-    : {
-        totalGames:'Spel totalt',
-        totalAnswered:'Svar besvarade',
-        recentAcc:'Träffsäkerhet senaste 10',
-        teacherTitle:'🧑‍🏫 Läraröversikt',
-        strongTitle:'Starkast just nu',
-        weakTitle:'Behöver träna',
-        nextTitle:'Rekommenderat nästa steg',
-        opTitle:'📊 Träffsäkerhet per räknesätt',
-        opCount:(c,t)=>`${c}/${t} rätt`,
-        tableTitle:'🔎 Tabeller att titta extra på',
-        tableEmpty:'Inga tydliga tabellmönster ännu.',
-        wrongTitle:'❌ Vanliga fel just nu',
-        wrongEmpty:'Inga fel registrerade ännu! 🎉',
-        historyTitle:'📅 Senaste 10 sessioner',
-        clearBtn:'🗑️ Rensa all statistik',
-        clearConfirm:'Rensa all sparad statistik? Detta går inte att ångra.',
-        noData:'Ingen data ännu',
-        stable:'→ Stabil nivå',
-        recentUp:n=>`↑ +${n}% senaste 5 spelen`,
-        recentDown:n=>`↓ ${n}% senaste 5 spelen`,
-        strongSub:(pct,total)=>`${pct}% på ${total} svar`,
-        weakSub:(pct,total)=>`${pct}% på ${total} svar`,
-        nextFallbackMain:'Fortsätt med nuvarande nivå',
-        nextFallbackSub:'Några fler spel behövs för en säkrare rekommendation.',
-        narrowTablesMain:'Smalna av tabellvalet',
-        narrowTablesSub:'Välj en eller två tabeller åt gången tills träffsäkerheten blir stabil.',
-        tablePracticeMain:n=>`Fokusera på ${n}:ans tabell`,
-        tablePracticeSub:'Välj bara den tabellen och kör några korta övningsomgångar.',
-        opPracticeMain:n=>`Träna ${n.toLowerCase()}`,
-        opPracticeRange:r=>`Håll dig till upp till ${r} i några korta omgångar.`,
-        opPracticeSub:'Håll nivån tydlig och avgränsad i några korta omgångar.',
-        sessionModePractice:'övning',
-        sessionModeStandard:'standard',
-        tableChip:(n,c)=>`${n}:an · ${c}`,
-        tablesLabel:'tabeller'
-      };
-  const opLabel={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
-  const opLabelEn={'+':'➕ Addition','-':'➖ Subtraction','*':'✖️ Multiplication','/':'➗ Division'};
-  const opName={'+':'Addition','-':'Subtraktion','*':'Multiplikation','/':'Division'};
-  const opNameEn={'+':'Addition','-':'Subtraction','*':'Multiplication','/':'Division'};
-  const opSym={'+':'+','-':'−','*':'×','/':'÷'};
-  const opLabelDe={'+':'➕ Addition','-':'➖ Subtraktion','*':'✖️ Multiplikation','/':'➗ Division'};
-  const opNameDe={'+':'Addition','-':'Subtraktion','*':'Multiplikation','/':'Division'};
-  opLabel.signed=opLabelEn.signed=opLabelDe.signed=t('signedOpLabel');
-  opName.signed=opNameEn.signed=opNameDe.signed=t('signedOpLabel');
-  opSym.signed='±';
-  const pct=(correct,total)=>total>0?Math.round(correct/total*100):0;
-  const getWrongPairs=h=>{
-    if(h&&h.wrongMap&&typeof h.wrongMap==='object'&&Object.keys(h.wrongMap).length){
-      return Object.entries(h.wrongMap);
-    }
-    return (h.wrongExprs||[]).map(expr=>[expr,1]);
+function renderStatsTeacherPage(player=loadPlayer()||null){
+  const el=$('statsPageContent'),all=loadHistory();
+  const l=getLang(),txt=l==='sv'?{
+    player:'Spelare',all:'Alla spelare · endast spelstatistik',saved:'Sparade omgångar',attempts:'Registrerade försök',accuracy:'Spelträffsäkerhet · senaste 10',
+    raw:'Spelutfall per räknesätt',patterns:'Återkommande övningsmönster',next:'Förslag till nästa övning',levels:'Underlag per nivå',
+    noPattern:'Inget tydligt återkommande mönster ännu.',insufficient:'Inte tillräckligt med underlag ännu',
+    explanation:'Felstyrningar och felräkningar går inte att skilja åt. Procentsiffrorna visar träffar i spelet, inte ett kunskapstest.',
+    rule:'Ett övningsmönster kräver minst 3 missar på samma uppgift över minst 2 omgångar, minst 25 % missar på uppgiften och minst 20 försök över 2 omgångar på samma nivå. Tre senaste rätta försök på uppgiften tar bort markeringen.',
+    legacy:'Äldre omgångar finns kvar i spelstatistiken. Detaljer för upprepningsanalysen samlas från denna uppdatering; inga gamla rätta svar återskapas.',
+    mixed:'Välj en spelare för övningsmönster. Olika spelares resultat ska inte bli en gemensam rekommendation.',
+    count:(c,t)=>`${c}/${t} rätt`,evidence:(w,t,s)=>`${w}/${t} missar · ${s} omgångar med missar`,
+    sample:(t,s)=>`${t} försök · ${s} omgångar`,suggest:e=>`Öva gärna ${e} i en lugn, kort runda.`,
+    history:'Senaste 10 sparade omgångar',empty:'Inga sparade omgångar för denna spelare ännu.',clear:'Rensa all statistik',confirm:'Rensa all sparad statistik för alla spelare? Detta går inte att ångra.',practice:'Övning',standard:'Standard',tables:'Tabeller',range:'Talområde',enough:'Underlag finns',limited:'Visar upp till 100 sparade omgångar. Övningsmönster använder de senaste 10 och håller nivåer isär.'
+  }:l==='de'?{
+    player:'Spieler',all:'Alle Spieler · nur Spielstatistik',saved:'Gespeicherte Runden',attempts:'Registrierte Versuche',accuracy:'Spieltrefferquote · letzte 10',
+    raw:'Spielergebnisse nach Rechenart',patterns:'Wiederkehrende Übungsmuster',next:'Vorschlag für die nächste Übung',levels:'Daten je Niveau',
+    noPattern:'Noch kein klares wiederkehrendes Muster.',insufficient:'Noch nicht genug Daten',
+    explanation:'Steuerfehler und Rechenfehler lassen sich nicht unterscheiden. Die Prozentwerte zeigen Spieltreffer, keinen Wissenstest.',
+    rule:'Ein Muster braucht mindestens 3 Fehler bei derselben Aufgabe in mindestens 2 Runden, mindestens 25 % Fehler bei der Aufgabe und 20 Versuche in 2 Runden auf demselben Niveau. Drei letzte richtige Versuche entfernen die Markierung.',
+    legacy:'Ältere Runden bleiben in der Spielstatistik. Details werden ab diesem Update gesammelt; alte richtige Antworten werden nicht rekonstruiert.',
+    mixed:'Wähle einen Spieler für Übungsmuster. Ergebnisse verschiedener Spieler ergeben keine gemeinsame Empfehlung.',
+    count:(c,t)=>`${c}/${t} richtig`,evidence:(w,t,s)=>`${w}/${t} Fehler · ${s} Runden mit Fehlern`,
+    sample:(t,s)=>`${t} Versuche · ${s} Runden`,suggest:e=>`Übe ${e} in einer kurzen, ruhigen Runde.`,
+    history:'Letzte 10 gespeicherte Runden',empty:'Noch keine gespeicherten Runden für diesen Spieler.',clear:'Alle Statistiken löschen',confirm:'Alle gespeicherten Statistiken für alle Spieler löschen? Das kann nicht rückgängig gemacht werden.',practice:'Übung',standard:'Standard',tables:'Reihen',range:'Zahlenbereich',enough:'Daten vorhanden',limited:'Bis zu 100 gespeicherte Runden. Übungsmuster nutzen die letzten 10 und trennen die Niveaus.'
+  }:{
+    player:'Player',all:'All players · game statistics only',saved:'Saved rounds',attempts:'Recorded attempts',accuracy:'Game accuracy · latest 10',
+    raw:'Game results by operation',patterns:'Recurring practice patterns',next:'Suggested next practice',levels:'Evidence by level',
+    noPattern:'No clear recurring pattern yet.',insufficient:'Not enough evidence yet',
+    explanation:'Steering mistakes and calculation mistakes cannot be distinguished. Percentages show game hits, not a knowledge test.',
+    rule:'A pattern needs at least 3 misses on the same question across 2 rounds, at least 25% misses on that question, and 20 attempts across 2 rounds at the same level. Three latest correct attempts on the question remove the flag.',
+    legacy:'Older rounds remain in game statistics. Details are collected from this update; old correct answers are not reconstructed.',
+    mixed:'Choose one player for practice patterns. Different players must not receive a shared recommendation.',
+    count:(c,t)=>`${c}/${t} correct`,evidence:(w,t,s)=>`${w}/${t} misses · ${s} rounds with misses`,
+    sample:(t,s)=>`${t} attempts · ${s} rounds`,suggest:e=>`Try ${e} in a short, calm practice round.`,
+    history:'Latest 10 saved rounds',empty:'No saved rounds for this player yet.',clear:'Clear all statistics',confirm:'Clear all saved statistics for all players? This cannot be undone.',practice:'Practice',standard:'Standard',tables:'Tables',range:'Range',enough:'Evidence available',limited:'Up to 100 saved rounds. Practice patterns use the latest 10 and keep levels separate.'
   };
-  const getSessionOps=h=>{
-    if(Array.isArray(h.selectedOps)&&h.selectedOps.length)return h.selectedOps;
-    return Object.keys(h.ops||{});
-  };
-  const getMostCommonRangeForOp=op=>{
-    const counts={};
-    hist.forEach(h=>{
-      if(getSessionOps(h).includes(op)&&h.numRange){
-        counts[h.numRange]=(counts[h.numRange]||0)+1;
-      }
-    });
-    return Object.entries(counts).sort((a,b)=>b[1]-a[1]||Number(a[0])-Number(b[0]))[0]?.[0]||'';
-  };
-  const sessionMetaText=h=>{
-    const bits=[];
-    const ops=getSessionOps(h);
-    const opsText=ops.map(o=>getOperationLabel(o)).join(' ');
-    if(h.player)bits.push(h.player);
-    if(opsText)bits.push(opsText);
-    if(h.numRange)bits.push(getPracticeRangeLabel(h.numRange,ops));
-    if(Array.isArray(h.tables)&&h.tables.length&&(ops.includes('*')||ops.includes('/'))){
-      bits.push(`${txt.tablesLabel} ${h.tables.slice().sort((a,b)=>a-b).join(',')}`);
-    }
-    if(typeof h.practiceMode==='boolean')bits.push(h.practiceMode?txt.sessionModePractice:txt.sessionModeStandard);
-    return bits.join(' · ');
-  };
-
-  const totalGames=getTotalGamesPlayed();
-  const totalAnswered=hist.reduce((s,h)=>s+(h.total||0),0);
-  const recent10=hist.slice(-10);
-  const recentAcc=pct(
-    recent10.reduce((s,h)=>s+(h.correct||0),0),
-    recent10.reduce((s,h)=>s+(h.total||0),0)
-  );
-
-  let trendHtml=`<div class="stats-trend flat">${txt.stable}</div>`;
-  if(hist.length>=6){
-    const last5=hist.slice(-5);
-    const prev5=hist.slice(-10,-5);
-    const lastPct=pct(last5.reduce((s,h)=>s+(h.correct||0),0),last5.reduce((s,h)=>s+(h.total||0),0));
-    const prevPct=pct(prev5.reduce((s,h)=>s+(h.correct||0),0),prev5.reduce((s,h)=>s+(h.total||0),0));
-    const diff=lastPct-prevPct;
-    if(diff>2)trendHtml=`<div class="stats-trend up">${txt.recentUp(diff)}</div>`;
-    else if(diff<-2)trendHtml=`<div class="stats-trend down">${txt.recentDown(diff)}</div>`;
-  }
-
-  const opAcc={};
-  hist.forEach(h=>{
-    Object.entries(h.ops||{}).forEach(([op,d])=>{
-      if(!opAcc[op])opAcc[op]={correct:0,total:0};
-      opAcc[op].correct+=d.correct||0;
-      opAcc[op].total+=d.total||0;
-    });
-  });
-  const opStats=['+','-','*','/','signed']
-    .map(op=>({
-      op,
-      correct:opAcc[op]?.correct||0,
-      total:opAcc[op]?.total||0,
-      pct:pct(opAcc[op]?.correct||0,opAcc[op]?.total||0)
-    }))
-    .filter(d=>d.total>0);
-  const strongest=opStats.slice().sort((a,b)=>b.pct-a.pct||b.total-a.total)[0]||null;
-  const weakest=opStats.slice().sort((a,b)=>a.pct-b.pct||b.total-a.total)[0]||null;
-
-  const opRows=opStats.map(d=>{
-    const col=d.pct>=80?'#00ff88':d.pct>=50?'#ffcc00':'#ff4444';
-    const lbl=pickLangText(opLabel[d.op]||d.op,opLabelEn[d.op]||d.op,opLabelDe[d.op]||d.op);
-    return `<div class="stats-op-row">
-      <div class="stats-op-name">${opSym[d.op]||d.op}</div>
-      <div style="flex:1">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">${lbl}</div>
-        <div class="stats-op-bar-wrap"><div class="stats-op-bar" style="width:${d.pct}%;background:${col}"></div></div>
-        <div class="stats-op-meta">${txt.opCount(d.correct,d.total)}</div>
-      </div>
-      <div class="stats-op-pct" style="color:${col}">${d.pct}%</div>
-    </div>`;
+  const data=PracticeStatistics.analyze(all,{player});
+  const attr=s=>esc(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  const names=[...new Set(all.map(h=>h.player).filter(n=>typeof n==='string'))];
+  if(player&&!names.includes(player))names.push(player);
+  const symbols={'+':'+','-':'−','*':'×','/':'÷',signed:'±'};
+  const level=g=>(['*','/'].includes(g.op)?txt.tables+' '+g.tables.slice().sort((a,b)=>a-b).join(', '):txt.range+' '+(g.numRange==null?'—':getPracticeRangeLabel(g.numRange,[g.op])))+' · '+(g.practiceMode?txt.practice:txt.standard);
+  const section=(title,body)=>`<section class="stats-section"><h2 class="stats-section-title">${title}</h2>${body}</section>`;
+  const rawRows=Object.entries(data.raw.ops).filter(([,d])=>d.total>0).map(([op,d])=>{
+    const pct=Math.round(d.correct/d.total*100);
+    return `<div class="stats-op-row"><div class="stats-op-name">${symbols[op]||esc(op)}</div><div style="flex:1"><div>${esc(getOperationLabel(op))}</div><div class="stats-op-bar-wrap"><div class="stats-op-bar" style="width:${pct}%;background:var(--accent)"></div></div><div class="stats-op-meta">${txt.count(d.correct,d.total)}</div></div><div class="stats-op-pct">${pct}%</div></div>`;
   }).join('');
-
-  const wrongCount={};
-  const tableFocus={};
-  hist.forEach(h=>{
-    const selectedTables=Array.isArray(h.tables)?h.tables.map(n=>parseInt(n,10)).filter(Number.isFinite):[];
-    getWrongPairs(h).forEach(([expr,countRaw])=>{
-      const count=Math.max(1,parseInt(countRaw,10)||1);
-      wrongCount[expr]=(wrongCount[expr]||0)+count;
-
-      const divMatch=expr.match(/(\d+)\s*[÷/]\s*(\d+)/);
-      if(divMatch){
-        const d=parseInt(divMatch[2],10);
-        if(Number.isFinite(d)&&d>=1&&d<=12)tableFocus[d]=(tableFocus[d]||0)+count;
-        return;
-      }
-
-      const multMatch=expr.match(/(\d+)\s*[×x]\s*(\d+)/i);
-      if(!multMatch)return;
-      const a=parseInt(multMatch[1],10),b=parseInt(multMatch[2],10);
-      let candidates=[];
-      if(selectedTables.length===1)candidates=[selectedTables[0]];
-      else if(selectedTables.length>1)candidates=[a,b].filter(n=>selectedTables.includes(n));
-      else candidates=[a,b].filter(n=>n>=1&&n<=12);
-      [...new Set(candidates)].forEach(n=>{
-        if(Number.isFinite(n)&&n>=1&&n<=12)tableFocus[n]=(tableFocus[n]||0)+count;
-      });
-    });
-  });
-  const topWrong=Object.entries(wrongCount).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).slice(0,12);
-  const topTables=Object.entries(tableFocus).sort((a,b)=>b[1]-a[1]||Number(a[0])-Number(b[0])).slice(0,6);
-
-  let nextStepMain=txt.nextFallbackMain;
-  let nextStepSub=txt.nextFallbackSub;
-  if(weakest){
-    const weakestName=pickLangText(opName[weakest.op]||weakest.op,opNameEn[weakest.op]||weakest.op,opNameDe[weakest.op]||weakest.op);
-    if((weakest.op==='*'||weakest.op==='/')&&topTables.length){
-      const table=topTables[0][0];
-      nextStepMain=txt.tablePracticeMain(table);
-      nextStepSub=txt.tablePracticeSub;
-    }else if(weakest.op==='*'||weakest.op==='/'){
-      nextStepMain=txt.narrowTablesMain;
-      nextStepSub=txt.narrowTablesSub;
-    }else{
-      const commonRange=getMostCommonRangeForOp(weakest.op);
-      nextStepMain=txt.opPracticeMain(weakestName);
-      nextStepSub=commonRange?txt.opPracticeRange(commonRange):txt.opPracticeSub;
-    }
-  }
-
-  const wrongHtml=topWrong.length
-    ? `<div class="stats-wrong-list">${topWrong.map(([expr,n])=>
-        `<div class="stats-wrong-item">${expr}<span class="stats-wrong-count">×${n}</span></div>`).join('')}</div>`
-    : `<div style="color:var(--muted);font-size:12px;">${txt.wrongEmpty}</div>`;
-
-  const tableHtml=topTables.length
-    ? `<div class="stats-focus-list">${topTables.map(([table,count])=>
-        `<div class="stats-focus-chip">${txt.tableChip(table,count)}</div>`).join('')}</div>`
-    : `<div style="color:var(--muted);font-size:12px;">${txt.tableEmpty}</div>`;
-
-  const recent=hist.slice(-10).reverse();
-  const histRows=recent.map(h=>{
-    const sessionPct=pct(h.correct||0,h.total||0);
-    const col=sessionPct>=80?'#00ff88':sessionPct>=50?'#ffcc00':'#ff4444';
-    return `<div class="stats-hist-row">
-      <div class="stats-hist-date-wrap">
-        <div class="stats-hist-date">${h.date} ${h.time}</div>
-        <div class="stats-hist-meta">${esc(sessionMetaText(h))}</div>
-      </div>
-      <div class="stats-hist-bar-wrap"><div class="stats-hist-bar" style="width:${sessionPct}%;background:${col}"></div></div>
-      <span class="stats-hist-pct" style="color:${col}">${sessionPct}%</span>
-      <span class="stats-hist-score">${h.score}p</span>
-    </div>`;
+  const patternRows=data.patterns.map(q=>`<div class="stats-insight-card"><div class="stats-insight-main">${esc(q.expr)} = ${esc(String(q.answer))}</div><div class="stats-insight-sub">${txt.evidence(q.wrong,q.total,q.wrongSessions)}<br>${esc(level(q.group))}</div></div>`).join('');
+  const levelRows=data.learning.map(g=>`<div class="stats-insight-card"><div class="stats-insight-main">${esc(getOperationLabel(g.op))}</div><div class="stats-insight-sub">${esc(level(g))}<br>${txt.sample(g.total,g.sessions)} · ${g.enough?txt.enough:txt.insufficient}</div></div>`).join('');
+  const advice=data.mixedPlayers?txt.mixed:data.patterns.length?txt.suggest(data.patterns[0].expr):data.learning.some(g=>g.enough)?txt.noPattern:txt.insufficient;
+  const historyRows=data.recent.slice().reverse().map(h=>{
+    const pct=h.total>0?Math.round((h.correct||0)/h.total*100):null;
+    const ops=Array.isArray(h.selectedOps)?h.selectedOps:Object.keys(h.ops||{});
+    return `<div class="stats-hist-row"><div class="stats-hist-date-wrap"><div class="stats-hist-date">${esc(h.date||'')} ${esc(h.time||'')}</div><div class="stats-hist-meta">${esc(h.player||'')} · ${esc(ops.map(getOperationLabel).join(' '))} · ${esc(h.numRange==null?'—':getPracticeRangeLabel(h.numRange,ops))}</div></div><div class="stats-hist-bar-wrap"><div class="stats-hist-bar" style="width:${pct||0}%;background:var(--accent)"></div></div><span class="stats-hist-pct">${pct===null?'—':pct+'%'}</span></div>`;
   }).join('');
-
-  const strongestMain=strongest
-    ? `${pickLangText(opLabel[strongest.op],opLabelEn[strongest.op],opLabelDe[strongest.op])} · ${strongest.pct}%`
-    : txt.noData;
-  const strongestSub=strongest?txt.strongSub(strongest.pct,strongest.total):'';
-  const weakestMain=weakest
-    ? `${pickLangText(opLabel[weakest.op],opLabelEn[weakest.op],opLabelDe[weakest.op])} · ${weakest.pct}%`
-    : txt.noData;
-  const weakestSub=weakest
-    ? txt.weakSub(weakest.pct,weakest.total)+(topTables.length&&['*','/'].includes(weakest.op)?` · ${txt.tableChip(topTables[0][0],topTables[0][1])}`:'')
-    : '';
-
   el.innerHTML=`
-    <div class="stats-section">
-      <div class="stats-summary-grid">
-        <div class="stats-summary-card">
-          <div class="stats-summary-val">${totalGames}</div>
-          <div class="stats-summary-lbl">${txt.totalGames}</div>
-        </div>
-        <div class="stats-summary-card">
-          <div class="stats-summary-val">${totalAnswered}</div>
-          <div class="stats-summary-lbl">${txt.totalAnswered}</div>
-        </div>
-        <div class="stats-summary-card">
-          <div class="stats-summary-val" style="color:${recentAcc>=80?'#00ff88':recentAcc>=50?'#ffcc00':'#ff4444'}">${recentAcc}%</div>
-          <div class="stats-summary-lbl">${txt.recentAcc}</div>
-          ${trendHtml}
-        </div>
-      </div>
-    </div>
-    <div class="stats-section">
-      <div class="stats-section-title">${txt.teacherTitle}</div>
-      <div class="stats-teacher-grid">
-        <div class="stats-insight-card">
-          <div class="stats-insight-kicker">${txt.strongTitle}</div>
-          <div class="stats-insight-main">${strongestMain}</div>
-          <div class="stats-insight-sub">${strongestSub}</div>
-        </div>
-        <div class="stats-insight-card">
-          <div class="stats-insight-kicker">${txt.weakTitle}</div>
-          <div class="stats-insight-main">${weakestMain}</div>
-          <div class="stats-insight-sub">${weakestSub}</div>
-        </div>
-        <div class="stats-insight-card">
-          <div class="stats-insight-kicker">${txt.nextTitle}</div>
-          <div class="stats-insight-main">${nextStepMain}</div>
-          <div class="stats-insight-sub">${nextStepSub}</div>
-        </div>
-      </div>
-    </div>
-    <div class="stats-section">
-      <div class="stats-section-title">${txt.opTitle}</div>
-      ${opRows||'<div style="color:var(--muted);font-size:12px;">'+txt.noData+'</div>'}
-    </div>
-    <div class="stats-section">
-      <div class="stats-section-title">${txt.tableTitle}</div>
-      ${tableHtml}
-    </div>
-    <div class="stats-section">
-      <div class="stats-section-title">${txt.wrongTitle}</div>
-      ${wrongHtml}
-    </div>
-    <div class="stats-section">
-      <div class="stats-section-title">${txt.historyTitle}</div>
-      ${histRows}
-    </div>
-    <button class="stats-clear-btn" id="btnClearStats">${txt.clearBtn}</button>
-  `;
-  $('btnClearStats').addEventListener('click',()=>{
-    if(confirm(txt.clearConfirm)){saveHistory([]);renderStatsTeacherPage();}
-  });
+    <label class="stats-player-label">${txt.player} <select id="statsPlayerFilter"><option value="" ${player===null?'selected':''}>${txt.all}</option>${names.map(n=>`<option value="${attr(n)}" ${n===player?'selected':''}>${esc(n)}</option>`).join('')}</select></label>
+    <p class="stats-explanation">${txt.explanation}</p>
+    <div class="stats-summary-grid">${[[data.hist.length,txt.saved],[data.raw.total,txt.attempts],[data.recentPct===null?'—':data.recentPct+'%',txt.accuracy]].map(([v,label])=>`<div class="stats-summary-card"><div class="stats-summary-val">${v}</div><div class="stats-summary-lbl">${label}</div></div>`).join('')}</div>
+    <p class="stats-explanation">${txt.limited}</p>
+    ${data.hist.length?section(txt.raw,rawRows):`<p>${txt.empty}</p>`}
+    ${section(txt.patterns,`<p class="stats-explanation">${txt.rule}</p>`+(data.mixedPlayers?`<p>${txt.mixed}</p>`:patternRows||`<p>${txt.noPattern}</p>`))}
+    ${section(txt.next,`<p>${esc(advice)}</p>`)}
+    ${!data.mixedPlayers&&levelRows?section(txt.levels,`<div class="stats-teacher-grid">${levelRows}</div>`):''}
+    ${data.detailedSessions<data.recent.length?`<p class="stats-explanation">${txt.legacy}</p>`:''}
+    ${section(txt.history,historyRows)}
+    <button class="stats-clear-btn" id="btnClearStats">${txt.clear}</button>`;
+  $('statsPlayerFilter').addEventListener('change',e=>renderStatsTeacherPage(e.target.value||null));
+  $('btnClearStats').addEventListener('click',()=>{if(confirm(txt.confirm)){saveHistory([]);renderStatsTeacherPage(player);}});
 }
 
 function exportSessionStats(){

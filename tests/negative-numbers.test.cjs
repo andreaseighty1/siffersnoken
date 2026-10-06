@@ -21,6 +21,7 @@ const element=id=>{
 const storage=new Map();
 const context=vm.createContext({
   SnakeStyles:require('../snake-styles.js'),
+  PracticeStatistics:require('../practice-statistics.js'),sessionQuestionTracker:require('../practice-statistics.js').createTracker(),
   Math:math, window:{}, currentLang:'sv',
   localStorage:{getItem:key=>storage.get(key)||null,setItem:(key,value)=>storage.set(key,value)},
   document:{getElementById:element,querySelectorAll:()=>[]},
@@ -141,12 +142,17 @@ assert.ok(!element('statsPageContent').innerHTML.includes('undefined'));
 let history=[];context.loadHistory=()=>history;
 context.sessionTotal=3;context.sessionCorrect=2;context.sessionOpStats={signed:{correct:2,total:3}};
 context.sessionWrongMap={'3 − 8':1};context.activeOps=new Set(['signed','+']);
+context.sessionQuestionTracker.record({expr:'3 − 8',op:'-',category:'signed',answer:-5},-4);
 context.saveHistory=entries=>{history=entries;};context.recordSession();
 assert.deepEqual(Array.from(history[0].selectedOps),['signed','+']);
 assert.equal(history[0].ops.signed.total,3);
 assert.equal(history[0].ops.signed.correct,2);
 assert.equal(history[0].wrongMap['3 − 8'],1);
 assert.equal(history[0].numRange,20);
+const restored=JSON.parse(JSON.stringify(history[0]));
+assert.equal(restored.questionStats.version,2);
+assert.equal(restored.questionStats.questions[0].wrongAnswers['-4'],1);
+assert.equal(restored.questionStats.questions[0].category,'signed');
 assert.ok(html.includes("['+','-','*','/'].every(op=>activeOps.has(op))"),'Genius medal requires all four ordinary operations, not any four categories');
 new vm.Script(html.match(/<script>([^]*?)<\/script>/)[1]);
 console.log('PASS: 20,000 bounded beginner signed questions; positive second operands only; temperature examples and zero-crossing; mixed/ordinary selection; unique distractors and fallback; bonus/museum questions; wrong-pool metadata; saved/legacy settings; three languages; HUD/history/stats; medal guard; app syntax.');
