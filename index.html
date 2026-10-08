@@ -8336,7 +8336,7 @@ const labels={weeklyBtnLabel:['VECKANS UTMANING','WEEKLY CHALLENGE','WOCHENCHALL
 Object.entries(labels).forEach(([id,texts])=>{$(id).textContent=pickLangText(...texts);});
 $('hsTabs').setAttribute('aria-label',pickLangText('Topplistor','Leaderboards','Bestenlisten'));
 }
-function selectHSView(view){const weekly=view==='weekly';$('btnHSLocal').setAttribute('aria-pressed',String(!weekly));$('btnHSWeekly').setAttribute('aria-pressed',String(weekly));$('weeklyHSContent').hidden=!weekly;$('hsPageContent').hidden=weekly;$('btnClearHS').hidden=weekly;$('hsPageCount').hidden=weekly;renderWeeklyLabels();if(!weekly)renderHSPage();}
+function selectHSView(view){const weekly=view==='weekly';$('btnHSLocal').setAttribute('aria-pressed',String(!weekly));$('btnHSWeekly').setAttribute('aria-pressed',String(weekly));$('weeklyHSContent').hidden=!weekly;$('hsPageContent').hidden=weekly;$('btnClearHS').hidden=weekly;$('hsPageCount').hidden=weekly;renderWeeklyLabels();if(typeof WeeklyChallenge!=='undefined')WeeklyChallenge.labels();if(!weekly)renderHSPage();}
 function goToHS(){selectHSView('local');showScreen('hsScreen');}
 function goToWeekly(){selectHSView('weekly');showScreen('hsScreen');}
 function renderHSPage(){
