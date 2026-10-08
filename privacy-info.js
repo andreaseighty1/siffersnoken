@@ -16,7 +16,7 @@ const PrivacyInfo=(()=>{
   const el=$('aboutPrivacy');el.replaceChildren();content.forEach((a,i)=>{const node=document.createElement(i%2?'p':'h3');node.textContent=tr(...a);el.append(node);});
   const link=document.createElement('a');link.href='mailto:support@42improbableowls.com';link.textContent='support@42improbableowls.com';el.append(link);
  }
- function select(view){render();const privacy=view==='privacy';$('aboutDetails').hidden=privacy;$('aboutPrivacy').hidden=!privacy;$('aboutTabInfo').setAttribute('aria-pressed',String(!privacy));$('aboutTabPrivacy').setAttribute('aria-pressed',String(privacy));}
+ function select(view){render();const privacy=view==='privacy';$('aboutDetails').hidden=privacy;$('aboutPrivacy').hidden=!privacy;$('aboutTabInfo').setAttribute('aria-pressed',String(!privacy));$('aboutTabPrivacy').setAttribute('aria-pressed',String(privacy));$('aboutOverlay').querySelector('.ov-card').scrollTop=0;}
  function open(){showAbout();select('privacy');}
  const details=$('aboutThanksText').parentElement;details.id='aboutDetails';const tabs=document.createElement('div');tabs.id='aboutTabs';tabs.setAttribute('role','group');tabs.innerHTML='<button class="export-btn" id="aboutTabInfo" aria-pressed="true"></button><button class="export-btn" id="aboutTabPrivacy" aria-pressed="false"></button>';details.before(tabs);const body=document.createElement('div');body.id='aboutPrivacy';body.hidden=true;details.after(body);$('aboutTabInfo').addEventListener('click',()=>select('about'));$('aboutTabPrivacy').addEventListener('click',()=>select('privacy'));select('about');
  return{select,open};
