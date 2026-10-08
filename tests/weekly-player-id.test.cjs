@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm'),crypto=require('node:crypto').webcrypto;
+const src=fs.readFileSync(require('node:path').join(__dirname,'../weekly-challenge.js'),'utf8');
+const code=src.slice(src.indexOf("  const PROFILE_KEY="),src.indexOf('  const api='));
+const storage=new Map();let player='Alva';
+const context=vm.createContext({crypto,loadPlayer:()=>player,localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)}});vm.runInContext(code,context);
+const a=context.profileIdentity();assert.match(a.id,/^[a-f0-9]{64}$/);assert.equal(context.profileIdentity().id,a.id);
+context.rememberName(a.profile,'SuperSnok');assert.equal(context.profileIdentity().name,'SuperSnok');assert.equal(context.profileIdentity().id,a.id);
+player='ALVA';assert.equal(context.profileIdentity().id,a.id);player='Olle';assert.notEqual(context.profileIdentity().id,a.id);player='Alva';assert.equal(context.profileIdentity().id,a.id);
+const reload=vm.createContext({crypto,loadPlayer:()=>player,localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)}});vm.runInContext(code,reload);assert.equal(reload.profileIdentity().id,a.id);
+player='__proto__';assert.match(context.profileIdentity().id,/^[a-f0-9]{64}$/);assert.equal(context.profileIdentity().id,context.profileIdentity().id);
+console.log('PASS: stable random IDs, nickname changes, case-normalized local profiles, shared-device separation, page reload and special object keys.');

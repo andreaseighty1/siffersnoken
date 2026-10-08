@@ -1481,6 +1481,7 @@ function renderOwnButtonIcons(){
   Object.entries(dpadLabels).forEach(([id,[icon,label]])=>setOwnIconOnly($(id),icon,label));
 }
 function pageTitleIconMarkup(name){
+  if(name==='stats')return '<span class="page-title-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="100%" height="100%">'+SS_ICONS.stats+'</svg></span>';
   const illustratedSrc=SS_MENU_ICON_ASSETS[name];
   const src=illustratedSrc||SS_ICON_ASSETS[name];
   return src?`<span class="page-title-icon${illustratedSrc?' illustrated':''}" aria-hidden="true"><img src="${src}" alt="" draggable="false"></span>`:'';
@@ -8995,8 +8996,8 @@ if(!loadPlayer())showNameModal();
 // WebView2: försök låsa upp audio utan user gesture
 setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
 </script>
-<script src="privacy-info.js?v=3.13"></script>
+<script src="privacy-info.js?v=3.13-id2"></script>
 <script src="weekly-config.js"></script>
-<script src="weekly-challenge.js"></script>
+<script src="weekly-challenge.js?v=3.13-id2"></script>
 </body>
 </html>

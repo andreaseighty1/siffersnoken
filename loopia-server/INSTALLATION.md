@@ -21,6 +21,10 @@ Namnen kontrolleras på servern, med 3–12 tecken och ett grundfilter för sven
 
 Varje resultat kräver en tidsbegränsad engångstoken från servern. Poäng, längd och tidsåtgång rimlighetskontrolleras. Detta är **grundskydd, inte verifierat fusksäkert spel**: resultat beräknas fortfarande i webbläsaren. CORS är inte autentisering. Starkare skydd kräver serververifiering av spelhändelser.
 
-Topplistan sparar tävlingsnamn, poäng, längd, utmaning och publiceringstid. Den lagrar inte spelstatistik eller bestående spelar-ID. Spambegränsningen använder en roterande HMAC av IP-adressen som raderas efter högst en timme vid nästa skrivande anrop. Kontrollera också Loopias webbserverloggar och deras lagring. Informera besökare om offentlig publicering och bestäm hur länge arkivresultat ska sparas.
+Topplistan sparar tävlingsnamn, poäng, längd, utmaning och publiceringstid. Den lagrar inte spelstatistik. Ett slumpat tävlings-ID per lokal spelarprofil sparas i webbläsaren; servern sparar en HMAC av ID:t för att hålla ihop spelarens bästa poäng och längsta orm per vecka. Topplistorna visar upp till 50 spelare. Namnbyte vid publicering ger ingen extra plats. Ny webbläsare, rensad webbplatsdata eller en annan lokal spelarprofil kan skapa en ny identitet, så detta är ett praktiskt skydd utan konton. Spambegränsningen använder en roterande HMAC av IP-adressen som raderas efter högst en timme vid nästa skrivande anrop. Kontrollera också Loopias webbserverloggar och deras lagring. Informera besökare om offentlig publicering och bestäm hur länge arkivresultat ska sparas.
 
 Den första versionen visar aktuell vecka i gränssnittet. Äldre veckor kan hämtas med `action=leaderboard&week=2026-W41`; ett arkivval i gränssnittet kan läggas till senare.
+
+## Uppgradera en befintlig installation
+
+Följ UPGRADE-3.13.md: importera upgrade-player-id.sql i befintlig databas och ersätt sedan api.php och lib.php. Behåll den privata konfigurationen och serverhemligheten.

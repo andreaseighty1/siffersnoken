@@ -67,3 +67,22 @@ function rateLimit(string $action,int $max): void {
     $q=$pdo->prepare('SELECT hits FROM ss_limits WHERE bucket=?');$q->execute([$key]);if((int)$q->fetchColumn()>$max)throw new DomainException('För många försök. Försök senare.');
     $pdo->exec('DELETE FROM ss_limits WHERE expires_at < '.time());$pdo->exec('DELETE FROM ss_runs WHERE expires_at < '.time());
 }
+
+function identityStorageReady(): bool {
+    static $ready;
+    if($ready===null)$ready=(bool)db()->query("SHOW COLUMNS FROM ss_results LIKE 'player_key'")->fetch();
+    return $ready;
+}
+function leaderboardEntries(PDO $pdo,string $week,string $column,bool $identityReady): array {
+    if(!in_array($column,['score','length'],true))throw new InvalidArgumentException('Invalid leaderboard column.');
+    $identity=$identityReady?"COALESCE(player_key, CONCAT('legacy:', LOWER(name)))":"LOWER(name)";
+    // Legacy rows have no reliable owner ID: merge only their identical names.
+    $sql="SELECT r.name,b.score,b.length FROM ss_results r JOIN (SELECT MIN(id) AS first_id,MAX(score) AS score,MAX(length) AS length FROM ss_results WHERE challenge_id=? GROUP BY $identity) b ON r.id=b.first_id ORDER BY b.$column DESC,r.created_at ASC,r.id ASC LIMIT 50";
+    $q=$pdo->prepare($sql);$q->execute([$week]);
+    return array_map(fn($r)=>['name'=>$r['name'],'score'=>(int)$r['score'],'length'=>(int)$r['length']],$q->fetchAll());
+}
+function storePersonalBest(PDO $pdo,string $week,string $name,int $score,int $length,string $playerKey): void {
+    // Unique (week, player_key) serializes concurrent updates and preserves each maximum independently.
+    $q=$pdo->prepare('INSERT INTO ss_results (challenge_id,name,score,length,created_at,player_key) VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE name=VALUES(name),score=GREATEST(score,VALUES(score)),length=GREATEST(length,VALUES(length))');
+    $q->execute([$week,$name,$score,$length,time(),$playerKey]);
+}

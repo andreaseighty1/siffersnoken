@@ -19,9 +19,11 @@ CREATE TABLE IF NOT EXISTS ss_results (
  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
  challenge_id VARCHAR(8) NOT NULL,
  name VARCHAR(12) NOT NULL,
+ player_key CHAR(64) CHARACTER SET ascii COLLATE ascii_bin NULL,
  score INT UNSIGNED NOT NULL,
  length SMALLINT UNSIGNED NOT NULL,
  created_at BIGINT UNSIGNED NOT NULL,
+ UNIQUE KEY ss_player_week (challenge_id,player_key),
  INDEX (challenge_id, score), INDEX (challenge_id, length)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE TABLE IF NOT EXISTS ss_limits (
