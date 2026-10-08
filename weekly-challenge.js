@@ -1,0 +1,68 @@
+/* Web only. A failed service never prevents ordinary play. */
+const WeeklyChallenge = (() => {
+  let challenge=null, saved=null, run=null, finished=null, loading=null;
+  const text=(sv,en,de=en)=>pickLangText(sv,en,de);
+  const api=()=>String(window.SIFFER_WEEKLY_API||'').replace(/\/$/,'');
+  async function request(action,data){
+    if(!api())throw Error(text('Topplistan är inte ansluten ännu.','The leaderboard is not connected yet.'));
+    const response=await fetch(api()+'/api.php?action='+action,{method:data?'POST':'GET',headers:data?{'Content-Type':'application/json'}:{},body:data?JSON.stringify(data):undefined,signal:AbortSignal.timeout(12000),cache:'no-store'});
+    const result=await response.json();if(!response.ok)throw Error(result.error||text('Tjänsten kunde inte nås.','Service unavailable.'));return result;
+  }
+  function status(message){$('weeklyStatus').textContent=message;}
+  function render(){
+    if(!challenge)return;
+    $('weeklyBtnStatus').textContent=text('Vecka ','Week ','Woche ')+challenge.week;
+    $('weeklyTitle').textContent=text('Veckans utmaning','Weekly challenge','Wochenchallenge')+' · '+challenge.year+' / '+challenge.week;
+    const r=challenge.rules;
+    $('weeklyIntro').textContent=r.ops.map(getOperationLabel).join(' / ')+' · '+(r.tables.length?text('Tabeller ','Tables ')+r.tables.join(', '):'0–'+r.range)+' · '+text('3 liv · fast fart · inga bonushändelser','3 lives · fixed speed · no bonus events');
+    $('btnWeeklyStart').disabled=false;
+  }
+  async function load(force=false){
+    if(loading)return loading;
+    if(challenge&&!force){render();return;}
+    loading=(async()=>{try{challenge=await request('challenge');render();status(text('Redo för veckans utmaning!','Ready for the weekly challenge!'));await leaders();}catch(e){status(e.message);$('btnWeeklyStart').disabled=true;}finally{loading=null;}})();return loading;
+  }
+  function table(id,rows,field){
+    const el=$(id);el.replaceChildren();
+    if(!rows.length){el.textContent=text('Ingen har publicerat ett resultat ännu.','No results published yet.');return;}
+    rows.forEach((row,i)=>{const line=document.createElement('div');line.className='hs-row';const name=document.createElement('span');name.className='hs-name';name.textContent=(i+1)+'. '+row.name;const value=document.createElement('span');value.className='hs-score';value.textContent=row[field];line.append(name,value);el.append(line);});
+  }
+  async function leaders(){if(!challenge)return;const result=await request('leaderboard&week='+encodeURIComponent(challenge.id));table('weeklyScores',result.scores,'score');table('weeklyLengths',result.lengths,'length');}
+  async function start(){
+    $('btnWeeklyStart').disabled=true;
+    try{
+      if(COLS!==21||ROWS!==16||PERF_STRESS_LENGTH)throw Error(text('Öppna spelet utan testinställningar för att delta.','Open the game without preview settings to participate.'));
+      const data=await request('start',{});challenge=data.challenge;
+      if(!saved)saved={ops:[...activeOps],range:numRange,tables:[...tables],speed:speedMode,wrap:wallWrap,practice:practiceMode,mystery:mysteryEventsEnabled,portal:portalEventsEnabled,bonus:bonusLivesEnabled};
+      activeOps=new Set(challenge.rules.ops);numRange=challenge.rules.range;tables=new Set(challenge.rules.tables);speedMode='none';wallWrap=true;practiceMode=false;mysteryEventsEnabled=false;portalEventsEnabled=false;bonusLivesEnabled=false;
+      run={token:data.token,maxLength:4};finished=null;startGame();
+    }catch(e){status(e.message);}finally{$('btnWeeklyStart').disabled=false;}
+  }
+  function sample(){if(run)run.maxLength=Math.max(run.maxLength,snake.length);}
+  function finish(){
+    $('weeklyPublishBox').hidden=!run;
+    if(!run)return;sample();finished={token:run.token,score,length:run.maxLength,correct:sessionCorrect,total:sessionTotal};
+    $('weeklyPublishStatus').textContent=text('Ditt resultat: ','Your result: ')+score+text(' poäng · längsta orm: ',' points · longest snake: ')+run.maxLength;
+    $('weeklyName').value='';$('btnPublishWeekly').disabled=false;
+  }
+  function restore(){
+    if(saved){activeOps=new Set(saved.ops);numRange=saved.range;tables=new Set(saved.tables);speedMode=saved.speed;wallWrap=saved.wrap;practiceMode=saved.practice;mysteryEventsEnabled=saved.mystery;portalEventsEnabled=saved.portal;bonusLivesEnabled=saved.bonus;saved=null;}
+    run=null;finished=null;$('weeklyPublishBox').hidden=true;
+  }
+  async function publish(){
+    if(!finished)return;
+    const name=$('weeklyName').value.normalize('NFC');
+    if(!/^[A-Za-zÅÄÖåäö0-9]{3,12}$/.test(name)){$('weeklyPublishStatus').textContent=text('Använd 3–12 bokstäver eller siffror.','Use 3–12 letters or digits.');return;}
+    $('btnPublishWeekly').disabled=true;
+    try{await request('submit',{...finished,name});finished=null;$('weeklyPublishStatus').textContent=text('Resultatet är publicerat!','Your result is published!');}catch(e){$('weeklyPublishStatus').textContent=e.message;$('btnPublishWeekly').disabled=false;}
+  }
+  function init(){
+    const panel=document.createElement('div');panel.innerHTML='<button class="export-btn" id="btnWeeklyStart" disabled></button><div class="weekly-leader-columns"><section><h3 id="weeklyScoresTitle"></h3><div id="weeklyScores"></div></section><section><h3 id="weeklyLengthsTitle"></h3><div id="weeklyLengths"></div></section></div>';$('weeklyHSContent').append(panel);
+    const box=document.createElement('div');box.id='weeklyPublishBox';box.hidden=true;box.innerHTML='<p id="weeklyNameHint"></p><label for="weeklyName" id="weeklyNameLabel"></label><input id="weeklyName" maxlength="12" autocomplete="off" spellcheck="false" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px"><button class="ov-btn primary" id="btnPublishWeekly"></button><p id="weeklyPublishStatus" role="status"></p>';$('goStats').after(box);
+    $('btnWeeklyStart').addEventListener('click',start);$('btnPublishWeekly').addEventListener('click',publish);$('btnGoWeekly').addEventListener('click',()=>load(true));$('btnHSWeekly').addEventListener('click',()=>load(true));
+    labels();load();
+  }
+  function labels(){if(!$('btnWeeklyStart'))return;$('btnWeeklyStart').textContent=text('Delta i veckans utmaning','Join the weekly challenge');$('weeklyScoresTitle').textContent=text('Högsta poäng','Highest score');$('weeklyLengthsTitle').textContent=text('Längsta orm','Longest snake');$('weeklyNameHint').textContent=text('Frivilligt: visa resultatet för alla. Välj ett förnamn eller smeknamn. Skriv inte efternamn eller personliga uppgifter.','Optional: show your result to everyone. Choose a first name or nickname. Do not enter surnames or personal information.');$('weeklyNameLabel').textContent=text('Tävlingsnamn (3–12 tecken)','Competition name (3–12 characters)');$('btnPublishWeekly').textContent=text('Publicera resultat','Publish result');render();}
+  return{init,load,finish,restore,sample,labels,active:()=>!!run};
+})();
+WeeklyChallenge.init();

@@ -624,7 +624,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 /* ── GAMEWRAPPER (Windows/WebView2) ── */
 
 /* ── TITELSKÄRM NAV-GRID ── */
-.menu-nav-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;width:100%;max-width:800px;margin-top:10px;}
+.menu-nav-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;width:100%;max-width:920px;margin-top:10px;}
 .menu-nav-btn{padding:8px 4px;border:0;border-radius:18px;background:transparent;
   color:var(--muted);font-family:'Exo 2',sans-serif;font-size:12px;font-weight:800;cursor:pointer;
   transition:transform .18s ease,filter .18s ease,opacity .18s ease;
@@ -676,6 +676,8 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 
 /* ── INSTÄLLNINGSSUMMERING PÅ MENY ── */
 .menu-settings-summary{font-size:12px;color:var(--muted);margin-bottom:6px;letter-spacing:.04em;}
+.hs-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}.hs-tabs .export-btn{flex:1;min-height:44px}.hs-tabs .export-btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--panel)}.weekly-preview-card{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:24px;text-align:center}.weekly-preview-card h2{font-size:20px;color:var(--accent);margin:0 0 14px}.weekly-preview-card p{line-height:1.6;font-size:14px}.weekly-metrics{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:20px 0}.weekly-metrics span{border:1px solid var(--line);border-radius:12px;padding:10px 14px;color:var(--accent);font-size:13px}#weeklyStatus{color:var(--muted)}.weekly-menu-icon{position:relative}.weekly-menu-icon::after{content:'7';position:absolute;right:0;bottom:0;background:var(--panel);color:var(--accent);border:1px solid var(--accent);border-radius:7px;padding:3px 6px;font:700 13px sans-serif}
+.weekly-leader-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:18px}.weekly-leader-columns h3{color:var(--accent);font-size:14px}#btnWeeklyStart{margin-top:16px;min-height:44px;width:100%}#weeklyPublishBox{margin:12px 0;text-align:left;font-size:13px;line-height:1.5}#weeklyPublishBox[hidden]{display:none}@media(max-width:540px){.weekly-leader-columns{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -708,7 +710,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
     <button id="btnMenuMusic" aria-label="Musik"><span class="topbar-action-label">Musik</span></button>
     <button id="btnGoStats" aria-label="Statistik"><span class="topbar-action-label" id="statsBtnLabel">Statistik</span></button>
   </div>
-  <img id="menuBanner" src="siffersnoken_banner.png"
+  <img id="menuBanner" src="assets/logo-siffersnoken.png"
        style="width:min(380px,70vw);margin-bottom:8px;filter:drop-shadow(0 0 22px rgba(0,200,80,.5))"
        alt="SifferSnoken">
   <div class="menu-sub" id="menuSub">Ät rätt svar — väx! Fel svar — krymper!</div>
@@ -731,6 +733,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
       <span class="ss-button-label">STARTA SPELET</span>
       <span class="nav-count" aria-hidden="true"></span>
     </button>
+    <button class="menu-nav-btn" id="btnGoWeekly"><span class="nav-emoji weekly-menu-icon">🏆</span><span class="nav-label" id="weeklyBtnLabel">VECKANS UTMANING</span><span class="nav-count" id="weeklyBtnStatus">Kommer snart</span></button>
     <button class="menu-nav-btn" id="btnGoSettings">
       <span class="nav-emoji">⚙️</span>
       <span class="nav-label" id="settingsBtnLabel">INSTÄLLNINGAR</span>
@@ -937,6 +940,8 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
       <div class="mp-title" id="hsTitleEl">🏆 HIGHSCORE</div>
       <div class="mp-count" id="hsPageCount"></div>
     </div>
+    <div class="hs-tabs" role="group" id="hsTabs" aria-label="Topplistor"><button class="export-btn" id="btnHSLocal" aria-pressed="true">På denna enhet</button><button class="export-btn" id="btnHSWeekly" aria-pressed="false">Veckans topplista</button></div>
+    <div id="weeklyHSContent" hidden><div class="weekly-preview-card"><h2 id="weeklyTitle">Veckans utmaning</h2><p id="weeklyIntro"></p><div class="weekly-metrics"><span id="weeklyScoreLabel"></span><span id="weeklyLengthLabel"></span></div><p id="weeklyStatus" role="status"></p></div></div>
     <div id="hsPageContent"></div>
     <div class="export-row" style="margin-top:12px">
       <button class="export-btn" id="btnClearHS">🗑️ Rensa highscore</button>
@@ -1462,7 +1467,7 @@ function setOwnIconOnly(el,icon,ariaLabel){
 function renderOwnButtonIcons(){
   setOwnButtonContent($('btnPlay'),'play',t('btnPlay'));
   renderTopbarActions();
-  const navIcons={btnGoSettings:'settings',btnGoMedals:'medals',btnGoHS:'trophy',btnGoSkins:'palette',btnGoMuseum:'gift'};
+  const navIcons={btnGoWeekly:'trophy',btnGoSettings:'settings',btnGoMedals:'medals',btnGoHS:'trophy',btnGoSkins:'palette',btnGoMuseum:'gift'};
   Object.entries(navIcons).forEach(([id,icon])=>{
     const el=$(id)?.querySelector('.nav-emoji');
     if(el)el.innerHTML=ownMenuIcon(icon);
@@ -1491,7 +1496,7 @@ function renderPageTitleIcons(){
 function applyLang(){
   const l=getLang();
   const banner=$('menuBanner');
-  if(banner)banner.src=l!=='sv'?'siffersnoken_banner_en.png':'siffersnoken_banner.png';
+  if(banner){banner.src=l!=='sv'?'assets/logo-numnoodle.webp':'assets/logo-siffersnoken.png';banner.alt=l==='sv'?'SifferSnoken':'Numnoodle';}
   // Namnmodal
   $('nameModalTitle').textContent=t('nameModalTitle');
   $('nameModalSub').textContent=t('nameModalSub');
@@ -1557,6 +1562,8 @@ function applyLang(){
   if($('btnBackFromSkins'))$('btnBackFromSkins').textContent=t('btnBack');
   if($('btnBackFromMuseum'))$('btnBackFromMuseum').textContent=t('btnBack');
   if($('btnClearHS'))$('btnClearHS').textContent=t('btnClearHS');
+  renderWeeklyLabels();
+  if(typeof WeeklyChallenge!=='undefined')WeeklyChallenge.labels();
   if($('skinsBtnLabel'))$('skinsBtnLabel').textContent=t('skinsBtnLabel');
   if($('museumBtnLabel'))$('museumBtnLabel').textContent=pickLangText('MYSTERIEMUSEUM','MYSTERY MUSEUM','MYSTERIENMUSEUM');
   if($('medalsLabel'))$('medalsLabel').textContent=t('medalsLabel');
@@ -2910,6 +2917,7 @@ function toggleHeadAccessory(){cycleHeadAccessory();}
    INSTÄLLNINGAR
    ═══════════════════════════════════════ */
 function saveSettings(){
+  if(typeof WeeklyChallenge!=='undefined'&&WeeklyChallenge.active())return;
   localStorage.setItem(SETTINGS_KEY,JSON.stringify({
     ops:[...activeOps],numRange,tables:[...tables],speedMode,wallWrap,multiTableSelect,musicGenre,
     mysteryEventsEnabled,portalEventsEnabled,bonusLivesEnabled,graphicsMode,boardBackgroundsEnabled
@@ -5895,6 +5903,7 @@ function placeTiles(){
    SPEL: START & LOOP
    ═══════════════════════════════════════ */
 function startGame(){
+  if(typeof WeeklyChallenge!=='undefined'&&!WeeklyChallenge.active())WeeklyChallenge.restore();
   if(!activeOps.size){alert('Välj minst ett räknesätt!');return;}
   if((activeOps.has('*')||activeOps.has('/'))&&!tables.size){alert('Välj minst en multiplikationstabell!');return;}
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}
@@ -6029,6 +6038,7 @@ function tick(){
 
   snake.unshift({x:hx,y:hy,px:old[0].x,py:old[0].y});
   if(growPending>0)growPending--;else snake.pop();
+  if(typeof WeeklyChallenge!=='undefined')WeeklyChallenge.sample();
   for(let i=1;i<snake.length;i++){
     if(old[i]){
       snake[i].px=old[i].x;
@@ -8191,6 +8201,7 @@ function flashFx(type){
    GAME OVER — med statistik
    ═══════════════════════════════════════ */
 function triggerGameOver(){
+  if(typeof WeeklyChallenge!=='undefined')WeeklyChallenge.finish();
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
   clearMysteryQuestionTimer();
   clearResumeCountdown();
@@ -8221,8 +8232,8 @@ function triggerGameOver(){
 
   if($('btnPracticeList'))$('btnPracticeList').style.display=wrongPool.length>0?'':'none';
   if($('goPracticeNote'))$('goPracticeNote').classList.toggle('show',practiceMode);
-  $('hsNameInp').style.display=practiceMode?'none':'';
-  $('btnSaveScore').style.display=practiceMode?'none':'';
+  $('hsNameInp').style.display=(practiceMode||(typeof WeeklyChallenge!=='undefined'&&WeeklyChallenge.active()))?'none':'';
+  $('btnSaveScore').style.display=(practiceMode||(typeof WeeklyChallenge!=='undefined'&&WeeklyChallenge.active()))?'none':'';
   $('btnGoMenu').textContent=practiceMode?'🏠 '+t('btnBack'):t('btnGoMenu');
   $('gameoverOverlay').classList.add('show');
   try{exportSessionStats();}catch(e){console.warn('exportSessionStats failed',e);}
@@ -8297,6 +8308,7 @@ function showScreen(id){
 window.addEventListener('resize',()=>requestAnimationFrame(updateGameCanvasLayout));
 if(window.visualViewport)window.visualViewport.addEventListener('resize',()=>requestAnimationFrame(updateGameCanvasLayout));
 function goToMenu(){
+  if(typeof WeeklyChallenge!=='undefined')WeeklyChallenge.restore();
   state='menu';bgMusic.pause();bgMusic.currentTime=0;fastMusic.pause();fastMusic.currentTime=0;isFastMusic=false;
   if(goldTimeout){clearTimeout(goldTimeout);goldTimeout=null;}goldPhase=false;
   clearMysteryQuestionTimer();
@@ -8311,7 +8323,14 @@ function goToMenu(){
 }
 function goToMedals(){renderMedalsPage();showScreen('medalsScreen');}
 function goToMuseum(){renderMuseumPage();showScreen('museumScreen');}
-function goToHS(){renderHSPage();showScreen('hsScreen');}
+function renderWeeklyLabels(){
+const labels={weeklyBtnLabel:['VECKANS UTMANING','WEEKLY CHALLENGE','WOCHENCHALLENGE'],weeklyBtnStatus:['Kommer snart','Coming soon','Demnächst'],btnHSLocal:['På denna enhet','On this device','Auf diesem Gerät'],btnHSWeekly:['Veckans topplista','Weekly leaderboard','Wochenbestenliste'],weeklyTitle:['Veckans utmaning','Weekly challenge','Wochenchallenge'],weeklyIntro:['En gemensam utmaning med samma spelregler för alla.','A shared challenge with the same rules for everyone.','Eine gemeinsame Challenge mit denselben Regeln für alle.'],weeklyScoreLabel:['Högsta poäng','Highest score','Höchste Punktzahl'],weeklyLengthLabel:['Längsta orm','Longest snake','Längste Schlange'],weeklyStatus:['Kommer snart! Veckans utmaning och topplistor är inte öppna ännu.','Coming soon! The weekly challenge and leaderboards are not open yet.','Demnächst! Die Wochenchallenge und Bestenlisten sind noch nicht geöffnet.']};
+Object.entries(labels).forEach(([id,texts])=>{$(id).textContent=pickLangText(...texts);});
+$('hsTabs').setAttribute('aria-label',pickLangText('Topplistor','Leaderboards','Bestenlisten'));
+}
+function selectHSView(view){const weekly=view==='weekly';$('btnHSLocal').setAttribute('aria-pressed',String(!weekly));$('btnHSWeekly').setAttribute('aria-pressed',String(weekly));$('weeklyHSContent').hidden=!weekly;$('hsPageContent').hidden=weekly;$('btnClearHS').hidden=weekly;$('hsPageCount').hidden=weekly;renderWeeklyLabels();if(!weekly)renderHSPage();}
+function goToHS(){selectHSView('local');showScreen('hsScreen');}
+function goToWeekly(){selectHSView('weekly');showScreen('hsScreen');}
 function renderHSPage(){
   const hs=loadHS();
   $('hsPageCount').textContent=`${hs.length} / 10 ${t('hsEntries')}`;
@@ -8864,6 +8883,9 @@ document.querySelectorAll('.board-background-btn').forEach(btn=>btn.addEventList
 document.querySelectorAll('.music-style-btn').forEach(btn=>btn.addEventListener('click',()=>applyMusicGenre(btn.dataset.genre)));
 $('btnGoMedals').addEventListener('click',goToMedals);
 $('btnGoHS').addEventListener('click',goToHS);
+$('btnGoWeekly').addEventListener('click',goToWeekly);
+$('btnHSLocal').addEventListener('click',()=>selectHSView('local'));
+$('btnHSWeekly').addEventListener('click',()=>selectHSView('weekly'));
 $('btnGoSettings').addEventListener('click',goToSettings);
 $('btnBackFromSettings').addEventListener('click',()=>showScreen('menuScreen'));
 $('btnBackFromMedals').addEventListener('click',()=>showScreen('menuScreen'));
@@ -8964,5 +8986,7 @@ if(!loadPlayer())showNameModal();
 // WebView2: försök låsa upp audio utan user gesture
 setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
 </script>
+<script src="weekly-config.js"></script>
+<script src="weekly-challenge.js"></script>
 </body>
 </html>
