@@ -14,7 +14,10 @@ const WeeklyChallenge = (() => {
     $('weeklyBtnStatus').textContent=text('Vecka ','Week ','Woche ')+challenge.week;
     $('weeklyTitle').textContent=text('Veckans utmaning','Weekly challenge','Wochenchallenge')+' · '+challenge.year+' / '+challenge.week;
     const r=challenge.rules;
-    $('weeklyIntro').textContent=r.ops.map(getOperationLabel).join(' / ')+' · '+(r.tables.length?text('Tabeller ','Tables ')+r.tables.join(', '):'0–'+r.range)+' · '+text('3 liv · fast fart · inga bonushändelser','3 lives · fixed speed · no bonus events');
+    const speeds={none:text('Fast fart','Fixed speed','Festes Tempo'),score:text('Farten ökar med poängen','Speed increases with score','Tempo steigt mit den Punkten'),length:text('Farten ökar med ormlängden','Speed increases with snake length','Tempo steigt mit der Schlangenlänge')};
+    const speed=speeds[r.speed||'none'];
+    const walls=(r.wallWrap??true)?text('Väggpassage','Wraparound walls','Durch Wände gleiten'):text('Väggkrock avslutar rundan','Hitting a wall ends the round','Wandkontakt beendet die Runde');
+    $('weeklyIntro').textContent=r.ops.map(getOperationLabel).join(' / ')+' · '+(r.tables.length?text('Tabeller ','Tables ','Einmaleins ')+r.tables.join(', '):'0–'+r.range)+' · '+speed+' · '+walls+' · '+text('3 liv · inga bonushändelser','3 lives · no bonus events','3 Leben · keine Bonusereignisse');
     $('btnWeeklyStart').disabled=false;
   }
   async function load(force=false){
@@ -34,7 +37,7 @@ const WeeklyChallenge = (() => {
       if(COLS!==21||ROWS!==16||PERF_STRESS_LENGTH)throw Error(text('Öppna spelet utan testinställningar för att delta.','Open the game without preview settings to participate.'));
       const data=await request('start',{});challenge=data.challenge;
       if(!saved)saved={ops:[...activeOps],range:numRange,tables:[...tables],speed:speedMode,wrap:wallWrap,practice:practiceMode,mystery:mysteryEventsEnabled,portal:portalEventsEnabled,bonus:bonusLivesEnabled};
-      activeOps=new Set(challenge.rules.ops);numRange=challenge.rules.range;tables=new Set(challenge.rules.tables);speedMode='none';wallWrap=true;practiceMode=false;mysteryEventsEnabled=false;portalEventsEnabled=false;bonusLivesEnabled=false;
+      activeOps=new Set(challenge.rules.ops);numRange=challenge.rules.range;tables=new Set(challenge.rules.tables);speedMode=challenge.rules.speed||'none';wallWrap=challenge.rules.wallWrap??true;practiceMode=false;mysteryEventsEnabled=false;portalEventsEnabled=false;bonusLivesEnabled=false;
       run={token:data.token,maxLength:4};finished=null;startGame();
     }catch(e){status(e.message);}finally{$('btnWeeklyStart').disabled=false;}
   }

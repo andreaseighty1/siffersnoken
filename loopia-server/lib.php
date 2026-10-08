@@ -20,9 +20,11 @@ function combinations(): array {
     $out=[];
     foreach ([10,20,50,100] as $range) foreach ([['+'],['-'],['+','-']] as $ops) $out[]=['ops'=>$ops,'range'=>$range,'tables'=>[]];
     foreach ([[2,5,10],[2,3,4,5],[6,7,8,9],[2,3,4,5,6,7,8,9,10]] as $tables) foreach ([['*'],['/'],['*','/']] as $ops) $out[]=['ops'=>$ops,'range'=>100,'tables'=>$tables];
-    return $out;
+    $variants=[];
+    foreach($out as $base) foreach(['none','score','length'] as $speed) foreach([true,false] as $wrap) $variants[]=$base+['speed'=>$speed,'wallWrap'=>$wrap];
+    return $variants;
 }
-function combinationKey(array $rules): string {return implode('', $rules['ops']).':'.$rules['range'].':'.implode(',', $rules['tables']);}
+function combinationKey(array $rules): string {return implode('', $rules['ops']).':'.$rules['range'].':'.implode(',', $rules['tables']).':'.($rules['speed']??'none').':'.(($rules['wallWrap']??true)?'wrap':'walls');}
 function chooseRules(?string $previous): array {
     $choices=array_values(array_filter(combinations(),fn($r)=>combinationKey($r)!==$previous));
     return $choices[random_int(0,count($choices)-1)];
@@ -39,7 +41,7 @@ function currentChallenge(): array {
     try {
         $q=$pdo->prepare('SELECT * FROM ss_challenges WHERE id=?');$q->execute([$p['id']]);$row=$q->fetch();if($row)return publicChallenge($row);
         $q->execute([$p['previous']]);$previous=$q->fetch();
-        $rules=chooseRules($previous ? $previous['combination'] : null);
+        $rules=chooseRules($previous ? combinationKey(json_decode($previous['rules_json'],true,512,JSON_THROW_ON_ERROR)) : null);
         $insert=$pdo->prepare('INSERT INTO ss_challenges (id,iso_year,iso_week,combination,rules_json,starts_at,ends_at) VALUES (?,?,?,?,?,?,?)');
         $insert->execute([$p['id'],$p['year'],$p['week'],combinationKey($rules),json_encode($rules,JSON_THROW_ON_ERROR),$p['start'],$p['end']]);
         $q->execute([$p['id']]);return publicChallenge($q->fetch());

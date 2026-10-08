@@ -13,7 +13,7 @@ Webbspelet ligger kvar på GitHub Pages. PHP-filerna ska köras på Loopia, inte
 
 ## Veckor och regler
 
-Servern använder Europe/Stockholm och ISO-veckans år (årsskiften hanteras). Vid första anropet varje vecka lottas en av 24 uppgiftskombinationer. Förra kalenderveckans kombination utesluts. Databaslås förhindrar att samtidiga besök skapar olika utmaningar. Inget cron-jobb behövs. Tre liv, fast fart, väggpassage och avstängda bonushändelser gäller alla utmaningar. Tidigare veckors regler och resultat sparas.
+Servern använder Europe/Stockholm och ISO-veckans år (årsskiften hanteras). Vid första anropet varje vecka lottas en av 144 kombinationer av uppgifter, hastighet och väggregler. Förra kalenderveckans kombination utesluts. Databaslås förhindrar att samtidiga besök skapar olika utmaningar. Inget cron-jobb behövs. Tre liv och avstängda bonushändelser gäller alla utmaningar. Hastigheten lottas mellan fast fart, ökning med poäng och ökning med ormlängd. Väggpassage eller väggkrock som avslutar rundan lottas också. Redan skapade veckor behåller sina sparade regler; äldre regler utan speed/wallWrap använder fast fart och väggpassage. Tidigare veckors regler och resultat sparas.
 
 ## Skydd och begränsningar
 
