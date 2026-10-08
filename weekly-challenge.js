@@ -28,7 +28,7 @@ const WeeklyChallenge = (() => {
   function table(id,rows,field){
     const el=$(id);el.replaceChildren();
     if(!rows.length){el.textContent=text('Ingen har publicerat ett resultat ännu.','No results published yet.');return;}
-    rows.forEach((row,i)=>{const line=document.createElement('div');line.className='hs-row';const name=document.createElement('span');name.className='hs-name';name.textContent=(i+1)+'. '+row.name;const value=document.createElement('span');value.className='hs-score';value.textContent=row[field];line.append(name,value);el.append(line);});
+    rows.forEach((row,i)=>{const line=document.createElement('div');line.className='hs-row';const rank=document.createElement('span');rank.className='hs-rank';rank.textContent=['🥇','🥈','🥉'][i]||String(i+1)+'.';const name=document.createElement('span');name.className='hs-name';name.textContent=row.name;const value=document.createElement('span');value.className='hs-score';value.textContent=row[field];line.append(rank,name,value);el.append(line);});
   }
   async function leaders(){if(!challenge)return;const result=await request('leaderboard&week='+encodeURIComponent(challenge.id));table('weeklyScores',result.scores,'score');table('weeklyLengths',result.lengths,'length');}
   async function start(){
@@ -57,7 +57,7 @@ const WeeklyChallenge = (() => {
     const name=$('weeklyName').value.normalize('NFC');
     if(!/^[A-Za-zÅÄÖåäö0-9]{3,12}$/.test(name)){$('weeklyPublishStatus').textContent=text('Använd 3–12 bokstäver eller siffror.','Use 3–12 letters or digits.');return;}
     $('btnPublishWeekly').disabled=true;
-    try{await request('submit',{...finished,name});finished=null;$('weeklyPublishStatus').textContent=text('Resultatet är publicerat!','Your result is published!');}catch(e){$('weeklyPublishStatus').textContent=e.message;$('btnPublishWeekly').disabled=false;}
+    try{await request('submit',{...finished,name});finished=null;goToMenu();goToWeekly();status(text('Resultatet är publicerat!','Your result is published!'));try{await leaders();}catch(e){status(text('Resultatet är publicerat. Listan kunde inte uppdateras just nu.','Your result is published. The leaderboard could not refresh right now.'));}}catch(e){$('weeklyPublishStatus').textContent=e.message;$('btnPublishWeekly').disabled=false;}
   }
   function init(){
     const panel=document.createElement('div');panel.innerHTML='<button class="export-btn" id="btnWeeklyStart" disabled></button><div class="weekly-leader-columns"><section><h3 id="weeklyScoresTitle"></h3><div id="weeklyScores"></div></section><section><h3 id="weeklyLengthsTitle"></h3><div id="weeklyLengths"></div></section></div>';$('weeklyHSContent').append(panel);
