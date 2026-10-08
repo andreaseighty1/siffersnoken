@@ -27,7 +27,12 @@ function combinations(): array {
 function combinationKey(array $rules): string {return implode('', $rules['ops']).':'.$rules['range'].':'.implode(',', $rules['tables']).':'.($rules['speed']??'none').':'.(($rules['wallWrap']??true)?'wrap':'walls');}
 function chooseRules(?string $previous): array {
     $choices=array_values(array_filter(combinations(),fn($r)=>combinationKey($r)!==$previous));
-    return $choices[random_int(0,count($choices)-1)];
+    // Base probabilities: 70% fixed speed, 15% per score, 15% per length;
+    // 80% wall wrap, 20% fatal walls. Excluding last week adjusts them slightly.
+    $weights=array_map(fn($r)=>(['none'=>70,'score'=>15,'length'=>15][$r['speed']])*($r['wallWrap']?80:20),$choices);
+    $pick=random_int(1,array_sum($weights));
+    foreach($choices as $i=>$rules){$pick-=$weights[$i];if($pick<=0)return $rules;}
+    throw new LogicException('Invalid weekly weights.');
 }
 function period(?DateTimeImmutable $date=null): array {
     $date=$date??new DateTimeImmutable('now',new DateTimeZone('Europe/Stockholm'));
