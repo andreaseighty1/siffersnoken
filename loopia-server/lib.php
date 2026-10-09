@@ -56,9 +56,9 @@ function allowedName(string $name): bool {
     if (!preg_match('/\A[A-Za-zÅÄÖåäö0-9]{3,12}\z/u',$name))return false;
     $normalized=strtolower(strtr($name,['Å'=>'a','Ä'=>'a','Ö'=>'o','å'=>'a','ä'=>'a','ö'=>'o','0'=>'o','1'=>'i','3'=>'e','4'=>'a','5'=>'s','7'=>'t']));
     $short=preg_replace('/(.)\1+/','$1',$normalized);
-    $words=['fuck','shit','bitch','cunt','hora','horunge','kuk','fitta','knulla','jävel','javel','jävla','javla','helvete','nigger','neger','nazist','hitler'];
-    foreach(array_merge($words,settings()['blocked_names']??[]) as $word) {if(str_contains($normalized,$word)||str_contains($short,preg_replace('/(.)\1+/','$1',$word)))return false;}
-    return !in_array($normalized,['fan','faan'],true);
+    $words=['fuck','shit','bitch','cunt','hora','horunge','kuk','fitta','knulla','jävel','javel','jävla','javla','helvete','bajs','penis','snopp','snippa','röv','arsle','pung','ollon','sperma','dildo','anus','skit','idiot','cpbarn','vagina','cock','dick','pussy','asshole','arsehole','wanker','bastard','motherfucker','bullshit','bollocks','slut','whore','nigga','faggot','retard','nigger','neger','nazist','hitler'];
+    foreach(array_merge($words,settings()['blocked_names']??[]) as $word) {$word=strtolower(strtr($word,['Å'=>'a','Ä'=>'a','Ö'=>'o','å'=>'a','ä'=>'a','ö'=>'o']));if($word!=='' && (str_contains($normalized,$word)||str_contains($short,preg_replace('/(.)\1+/','$1',$word))))return false;}
+    return !in_array($normalized,['fan','faan','ass','arse','cum','fag','cp'],true);
 }
 function rateLimit(string $action,int $max): void {
     // Rotating HMAC of IP, retained for <= 1 hour; never stored with scores.
