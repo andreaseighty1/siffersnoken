@@ -680,6 +680,8 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 .weekly-leader-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:18px}.weekly-leader-columns h3{color:var(--accent);font-size:14px}#btnWeeklyStart{margin-top:16px;min-height:44px;width:100%}#weeklyPublishBox{margin:12px 0;text-align:left;font-size:13px;line-height:1.5}#weeklyPublishBox[hidden]{display:none}@media(max-width:540px){.weekly-leader-columns{grid-template-columns:1fr}}
 .android-promo{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px 20px;margin:14px 0 4px;max-width:760px}.play-store-link{display:flex;align-items:center;gap:9px;padding:10px 14px;min-height:24px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);font-size:12px;text-decoration:none}.play-store-link:hover{border-color:var(--accent)}.teacher-seal{display:flex;align-items:center;gap:9px;color:var(--accent);text-decoration:none}.teacher-seal-mark{display:grid;place-items:center;width:34px;height:34px;border:2px solid currentColor;outline:1px dashed currentColor;outline-offset:3px;border-radius:50%;font-size:22px;font-weight:900}.teacher-seal strong{display:block;font-size:12px}.teacher-seal small{display:block;font-size:10px;color:var(--muted);margin-top:3px}.android-promo a:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
 .weekly-leader-columns .hs-row{padding:8px 4px;font-size:13px}.weekly-leader-columns .hs-name{font-size:13px;min-width:0;overflow-wrap:anywhere}.weekly-leader-columns .hs-score{font-size:14px}.weekly-leader-columns .hs-rank{font-size:16px;width:28px;flex-shrink:0}
+.weekly-attempts-hint{padding:12px 14px;border:1px solid var(--accent);border-radius:12px;background:var(--panel);color:var(--text);font-size:14px;font-weight:700;line-height:1.5}.weekly-retry-hint{font-size:12px;line-height:1.5;color:var(--muted)}#weeklyRetryStatus:empty{display:none}#btnWeeklyRetry{min-height:44px}#btnWeeklyRetry[hidden]{display:none}
+#gameoverOverlay .ov-card{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow-y:auto}
 #aboutOverlay .ov-card{max-width:min(520px,90vw)!important;max-height:85dvh;overflow-y:auto}#aboutPrivacy{font-size:13px;line-height:1.65;text-align:left}#aboutPrivacy h3{font-size:14px;color:var(--accent);margin:16px 0 5px}#aboutPrivacy p{margin:0 0 10px}#aboutPrivacy a{color:var(--accent)}#aboutTabs{display:flex;gap:8px;margin-bottom:14px}#aboutTabs button{flex:1;min-height:40px}#aboutTabs button[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
 </style>
 </head>
@@ -8264,7 +8266,7 @@ function triggerGameOver(){
   if($('goPracticeNote'))$('goPracticeNote').classList.toggle('show',practiceMode);
   $('hsNameInp').style.display=(practiceMode||(typeof WeeklyChallenge!=='undefined'&&WeeklyChallenge.active()))?'none':'';
   $('btnSaveScore').style.display=(practiceMode||(typeof WeeklyChallenge!=='undefined'&&WeeklyChallenge.active()))?'none':'';
-  $('btnGoMenu').textContent=practiceMode?'🏠 '+t('btnBack'):t('btnGoMenu');
+  $('btnGoMenu').textContent=(typeof WeeklyChallenge!=='undefined'&&WeeklyChallenge.active())?'🏠 '+pickLangText('Till menyn','Main menu','Hauptmenü'):practiceMode?'🏠 '+t('btnBack'):t('btnGoMenu');
   $('gameoverOverlay').classList.add('show');
   try{exportSessionStats();}catch(e){console.warn('exportSessionStats failed',e);}
   try{recordSession();}catch(e){console.warn('recordSession failed',e);}
@@ -9020,6 +9022,6 @@ setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
 <script src="privacy-info.js?v=3.13-id2"></script>
 <script src="weekly-config.js"></script>
 <script src="weekly-rewards.js?v=1"></script>
-<script src="weekly-challenge.js?v=3.13-rewards1"></script>
+<script src="weekly-challenge.js?v=3.13-retry1"></script>
 </body>
 </html>

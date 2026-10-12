@@ -2,6 +2,14 @@
 
 ## 2026-10-12
 
+### Tydligare återförsök i veckans utmaning
+
+- Svenska, engelska och tyska förklarar att man kan försöka igen hela veckan och att topplistan behåller bästa publicerade poängen och längsta snoken.
+- Ny knapp efter en avslutad veckorunda: Försök igen. Den startar en ny runda med ny servertoken, nollställda poäng och normal startlängd. Publicering är fortsatt frivillig; en påminnelse berättar att föregående resultat behöver publiceras först om det ska med på topplistan.
+- Dubbelklick och samtidiga återförsök/publiceringar spärras. Misslyckad start behåller föregående resultat; sena serversvar får inte återstarta spelet eller byta sida efter att spelaren gått till menyn. Vanliga spelinställningar återställs när veckoläget lämnas.
+- Game over-rutan kan rullas på små skärmar. Knappen visas inte i vanliga rundor. Inga PHP-ändringar.
+- Alla Node-testsviter samt sex isolerade browserprov (tre språk, dator/mobil) passerar. Proverna använder mockad API och publicerar inget på den riktiga topplistan.
+
 ### HV71, basketboll och veckobelöningar
 
 - HV71 revision 5: rik marinblå volym, gul kärna, tunn vit ytterkant och blå-vit diagonal färgaccent. Inga logotyper, puckar eller klubbor. Endast webbversionen.
