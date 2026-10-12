@@ -297,6 +297,20 @@
       "file": "generated/toy/drake-body.webp"
     },
     {
+      "style": "toy",
+      "id": "kopparglans",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/kopparglans-body.webp"
+    },
+    {
+      "style": "toy",
+      "id": "parlemor",
+      "frame": 512,
+      "bodyOrientation": "fixed",
+      "file": "generated/toy/parlemor-body.webp"
+    },
+    {
       "style": "pixel",
       "id": "neutral",
       "frame": 32,
@@ -589,6 +603,20 @@
       "frame": 32,
       "bodyOrientation": "fixed",
       "file": "generated/pixel/drake-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "kopparglans",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/kopparglans-body.webp"
+    },
+    {
+      "style": "pixel",
+      "id": "parlemor",
+      "frame": 32,
+      "bodyOrientation": "fixed",
+      "file": "generated/pixel/parlemor-body.webp"
     },
     {
       "style": "toy",
@@ -1885,6 +1913,68 @@
       "frame": 512,
       "file": "generated/toy/drake-tail.webp",
       "id": "drake",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/kopparglans-head-base.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/kopparglans-tail.webp",
+      "id": "kopparglans",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        256,
+        64
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/parlemor-head-base.webp",
+      "id": "parlemor",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ],
+      "renderScale": 1.12
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/parlemor-tail.webp",
+      "id": "parlemor",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -4931,6 +5021,132 @@
       ]
     },
     {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/kopparglans-head-base-right.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/kopparglans-head-base-down.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/kopparglans-head-base-left.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/parlemor-head-base-right.webp",
+      "id": "parlemor",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/parlemor-head-base-down.webp",
+      "id": "parlemor",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
+      "style": "toy",
+      "frame": 512,
+      "file": "generated/toy/parlemor-head-base-left.webp",
+      "id": "parlemor",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.12,
+      "eyes": [
+        [
+          0.3,
+          0.29
+        ],
+        [
+          0.7,
+          0.29
+        ]
+      ]
+    },
+    {
       "style": "pixel",
       "frame": 32,
       "file": "generated/pixel/neutral-head-base.webp",
@@ -6225,6 +6441,68 @@
       "frame": 32,
       "file": "generated/pixel/drake-tail.webp",
       "id": "drake",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/kopparglans-head-base.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/kopparglans-tail.webp",
+      "id": "kopparglans",
+      "part": "tail",
+      "assetFacing": "up",
+      "attachment": [
+        16,
+        4
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/parlemor-head-base.webp",
+      "id": "parlemor",
+      "part": "head-base",
+      "assetFacing": "up",
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ],
+      "renderScale": 1.03
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/parlemor-tail.webp",
+      "id": "parlemor",
       "part": "tail",
       "assetFacing": "up",
       "attachment": [
@@ -9254,6 +9532,132 @@
       "frame": 32,
       "file": "generated/pixel/drake-head-base-left.webp",
       "id": "drake",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/kopparglans-head-base-right.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/kopparglans-head-base-down.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/kopparglans-head-base-left.webp",
+      "id": "kopparglans",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "left",
+      "renderRotation": -90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/parlemor-head-base-right.webp",
+      "id": "parlemor",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "right",
+      "renderRotation": 90,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/parlemor-head-base-down.webp",
+      "id": "parlemor",
+      "part": "head-base",
+      "assetFacing": "up",
+      "renderFacing": "down",
+      "renderRotation": 180,
+      "renderScale": 1.03,
+      "eyes": [
+        [
+          0.3,
+          0.34
+        ],
+        [
+          0.7,
+          0.34
+        ]
+      ]
+    },
+    {
+      "style": "pixel",
+      "frame": 32,
+      "file": "generated/pixel/parlemor-head-base-left.webp",
+      "id": "parlemor",
       "part": "head-base",
       "assetFacing": "up",
       "renderFacing": "left",

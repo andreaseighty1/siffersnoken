@@ -902,7 +902,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
             <button class="toggle-btn graphics-mode-btn" data-graphics="pixel" id="graphicsPixelBtn">👾 Pixelretro</button>
             <button class="toggle-btn graphics-mode-btn" data-graphics="classic" id="graphicsClassicBtn">🧩 Original</button>
           </div>
-          <div class="panel-desc" id="graphicsModeDesc">Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. Alla 41 skins finns i båda nya stilarna.</div>
+          <div class="panel-desc" id="graphicsModeDesc">Modern är standard för nya spelare och har mjuka leksaksformer. Du kan välja Modern, Pixelretro eller Original. Alla 43 skins finns i båda nya stilarna.</div>
         </div>
         <div class="menu-panel">
           <div class="panel-title" id="boardBackgroundTitle">🌿 Banbakgrunder</div>
@@ -1118,7 +1118,7 @@ body[data-graphics="pixel"] #c,body[data-graphics="pixel"] .skin-canvas-wrap can
 <script src="translations.js?v=3.13-animals-1"></script>
 <script src="board-backgrounds.js?v=4"></script>
 <script src="practice-statistics.js?v=1"></script>
-<script src="snake-style-config.js?v=snake-styles-27"></script>
+<script src="snake-style-config.js?v=snake-styles-28"></script>
 <script src="snake-colors.js?v=snake-styles-4"></script>
 <script src="snake-headwear-designs.js?v=headwear-3"></script>
 <script src="snake-headwear.js?v=headwear-3"></script>
@@ -1819,11 +1819,25 @@ const SKINS_DEF=[
      cx.beginPath();
      cx.moveTo(px+s*.5,py);cx.lineTo(px+s*.5,py+s);
      cx.moveTo(px,py+s*.5);cx.lineTo(px+s,py+s*.5);
-     cx.moveTo(px+s*.08,py);cx.bezierCurveTo(px+s*.62,py+s*.22,px+s*.62,py+s*.78,px+s*.08,py+s);
-     cx.moveTo(px+s*.92,py);cx.bezierCurveTo(px+s*.38,py+s*.22,px+s*.38,py+s*.78,px+s*.92,py+s);
+     cx.moveTo(px+s*.08,py);cx.bezierCurveTo(px+s*.35,py+s*.22,px+s*.35,py+s*.78,px+s*.08,py+s);
+     cx.moveTo(px+s*.92,py);cx.bezierCurveTo(px+s*.65,py+s*.22,px+s*.65,py+s*.78,px+s*.92,py+s);
      cx.stroke();
    },
    previewCss:'radial-gradient(circle at 35% 30%,#ffb14d,#ed7a20 55%,#b84309)'},
+  {id:'kopparglans', emoji:'🟠', name:'Kopparglans', nameEn:'Copper Gleam',
+   free:false, unlockWeekly:1,
+   descSv:'Veckoutmaning: minst 1 000 poäng i en runda', descEn:'Weekly challenge: at least 1,000 points in one round',
+   headA:'#65b3a6',headB:'#163b3d',shadow:'#ca764c',
+   bodyFn:a=>`rgba(36,91,85,${a})`,
+   overlayFn:(cx,px,py,s)=>{cx.strokeStyle='#ca764c';cx.lineWidth=s*.08;cx.beginPath();cx.moveTo(px,py+s*.24);cx.bezierCurveTo(px+s*.32,py,px+s*.22,py+s*.79,px+s,py+s*.73);cx.moveTo(px,py+s*.73);cx.bezierCurveTo(px+s*.63,py+s,px+s*.48,py+s*.12,px+s,py+s*.28);cx.stroke();},
+   previewCss:'linear-gradient(135deg,#65b3a6,#245b55 45%,#ca764c 65%,#163b3d)'},
+  {id:'parlemor', emoji:'🐚', name:'Pärlemor', nameEn:'Mother of Pearl',
+   free:false, unlockWeekly:3,
+   descSv:'Veckoutmaning: minst 1 000 poäng under 3 olika veckor', descEn:'Weekly challenge: at least 1,000 points in 3 different weeks',
+   headA:'#fff7ed',headB:'#95adcb',shadow:'#b6ccec',
+   bodyFn:a=>`rgba(197,216,235,${a})`,
+   overlayFn:(cx,px,py,s)=>{cx.lineWidth=s*.10;cx.strokeStyle='#91d8cd';cx.beginPath();cx.moveTo(px,py+s*.58);cx.bezierCurveTo(px+s*.12,py-s*.25,px+s*.76,py+s*.05,px+s,py+s*.55);cx.stroke();cx.strokeStyle='#a58fca';cx.beginPath();cx.moveTo(px,py+s*.82);cx.bezierCurveTo(px+s*.14,py+s*.02,px+s*.79,py+s*.22,px+s,py+s*.79);cx.stroke();},
+   previewCss:'linear-gradient(135deg,#fff7ed,#91d8cd 30%,#c5d8eb 55%,#a58fca)'},
   {id:'hund', emoji:'🐶', name:'Hund', nameEn:'Dog',
    free:false, unlockMedal:'mul10000',
    descSv:'Lås upp: Tabellmästare-medaljen', descEn:'Unlock: Table Master medal',
@@ -2766,6 +2780,8 @@ const SKIN_I18N_DE={
   ghost:{name:'Geist',desc:'Freischalten: Medaille „Mythische Schlange“ (Länge 100)'},
   fotboll:{name:'Fussball',desc:'Freischalten: 100 Spiele spielen'},
   basketboll:{name:'Basketball',desc:'Freischalten: 5 richtige Antworten in Folge'},
+  kopparglans:{name:'Kupferglanz',desc:'Wochenchallenge: mindestens 1.000 Punkte in einer Runde'},
+  parlemor:{name:'Perlmutt',desc:'Wochenchallenge: mindestens 1.000 Punkte in 3 verschiedenen Wochen'},
   hund:{name:'Hund',desc:'Freischalten: Medaille „Tabellenmeister“'},
   katt:{name:'Katze',desc:'Freischalten: Medaille „Additionsmeister“'},
   jordgubbe:{name:'Erdbeere',desc:'Freischalten: Medaille „Subtraktionsmeister“'},
@@ -4934,7 +4950,8 @@ async function exportData(){
     stats:loadStats(),highscores:loadHS(),
     unlockedSkins:[...loadUnlockedSkins()],activeSkin:loadActiveSkin(),
     museum:loadMuseum(),
-    exportedAt,version:5};
+    weeklyRewardWeeks:typeof WeeklyRewards!=='undefined'?WeeklyRewards.createTracker(localStorage).weeks():[],
+    exportedAt,version:6};
   const json=JSON.stringify(data,null,2);
   const blob=new Blob([json],{type:'application/json'});
   const fname=`matteormen_${(loadPlayer()||'spelare').replace(/\s+/g,'_')}_${exportedAt}.json`;
@@ -4964,6 +4981,10 @@ function importData(file){
       if(Array.isArray(d.unlockedSkins))saveUnlockedSkins(new Set(d.unlockedSkins));
       if(d.activeSkin)saveActiveSkin(d.activeSkin);
       if(d.museum)saveMuseum(d.museum);
+      if(Array.isArray(d.weeklyRewardWeeks)&&typeof WeeklyRewards!=='undefined'){
+        const tracker=WeeklyRewards.createTracker(localStorage);tracker.importWeeks(d.weeklyRewardWeeks);tracker.eligible().forEach(unlockSkin);
+        if(typeof WeeklyChallenge!=='undefined')WeeklyChallenge.labels();
+      }
       syncSkinsFromMedals();
       syncMuseumSkins();
       updatePlayerBar();updateMedalNavBtn();renderHS();updateSkinNavBtn();updateMuseumNavBtn();
@@ -8998,6 +9019,7 @@ setTimeout(()=>{if(musicOn)tryTitelMusic();},300);
 </script>
 <script src="privacy-info.js?v=3.13-id2"></script>
 <script src="weekly-config.js"></script>
-<script src="weekly-challenge.js?v=3.13-id2"></script>
+<script src="weekly-rewards.js?v=1"></script>
+<script src="weekly-challenge.js?v=3.13-rewards1"></script>
 </body>
 </html>

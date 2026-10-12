@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-12
+
+### HV71, basketboll och veckobelöningar
+
+- HV71 revision 5: rik marinblå volym, gul kärna, tunn vit ytterkant och blå-vit diagonal färgaccent. Inga logotyper, puckar eller klubbor. Endast webbversionen.
+- Basketboll revision 2: två raka och två böjda sömmar på kropp, huvud och svans, gemensam mönsterdefinition för Modern/Pixelretro. Kroppen behåller fast orientering i svängar. Originalets två sidokurvor är också korrigerade.
+- Två nya skins i båda stilarna: Kopparglans med kopparinlägg över petrolgrön volym, och Pärlemor med svepande pärlband.
+- Kopparglans låses upp efter minst 1 000 poäng i en avslutad veckorunda. Pärlemor efter minst 1 000 poäng i rundor under tre olika ISO-veckor. Flera rundor samma vecka räknas en gång; veckorna behöver inte vara i följd. Ett resultat behöver inte publiceras.
+- Framsteg sparas lokalt på enheten, som övriga skinupplåsningar. Sparfil version 6 inkluderar kvalificerade veckor; import sammanfogar med befintliga framsteg. Äldre sparfiler fungerar fortsatt. Tävlings-ID, namnfilter och serverns start/submit-format är oförändrade.
+- 43 spelbara teman och 583 runtime-WebP-bilder. Bara korrigerade/nya skins byggs om; oförändrade WebP-bilder behålls byte-för-byte.
+- Tester: exakta trösklar, ISO-årsbyte, deduplicering, reload/import, mallmasker/paletter, cacheadresser och samtliga Node-sviter. Lokal browser-QA täcker Modern/Pixelretro på desktop/390 px, 33-segmentsfixturer och vanligt spel; alla topplisteanrop är mockade.
+- Basketfixen överförd selektivt till Android-källan och kontrollbyggd. HV71 förblir borttaget där. Veckobelöningarna överförs inte till Android före själva veckoutmaningsfunktionen. Ingen publicering eller serverändring i denna runda.
+
 ## 2026-10-05
 
 ### Tiger: pälsmönster efter användarens fotografiska förlaga

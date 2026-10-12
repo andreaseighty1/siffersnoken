@@ -3,6 +3,7 @@ const fs=require('node:fs'),path=require('node:path');
 const body=require('./body-templates.cjs');
 const feline=require('./feline-templates.cjs');
 const animals=require('./animal-templates.cjs');
+const basketball=require('./basketball-seams.cjs');
 const spec=require('../skin-templates/snake-spec.json');
 const root=path.resolve(__dirname,'../skin-templates');
 const parts=['head-base','tail'];
@@ -43,7 +44,7 @@ function toyPart(theme,part,facing='up',bend=0){
   const material=body.toyMaterial(p,id,size,{rx:spec.head.radiusX,ry:spec.head.radiusY,tail:part==='tail',lightCenter:lightCenter(facing),finish:theme.material});
   const seeds=part==='tail'?tailSeeds:headSeeds;
   const pattern=theme.pattern==='strawberrySeeds'?seeds.filter(([,y])=>y<spec.tail.tipY||part!=='tail').map(([x,y])=>`<ellipse cx="${x*size}" cy="${y*size}" rx="${size*.024}" ry="${size*.030}" fill="${p.detail}"/>`).join('')
-    :theme.pattern==='basketballSeams'?`<path d="M ${size*.5} 0 V ${size} M 0 ${size*.58} H ${size}" fill="none" stroke="${p.ink}" stroke-width="${size*.018}"/>`
+    :theme.pattern==='basketballSeams'?basketball.svg(p,size,part)
     :theme.pattern==='emeraldInlay'?body.emeraldSvg(p,size,part):'';
   const surface=body.surfaceSvg(theme,size,part,lightCenter(facing));
   const mask=part==='tail'&&feline.isFeline(theme)?feline.tailContour(size,bend):part==='tail'&&animals.isSpecial(theme)?animals.tailContour(theme,size,bend):contour(part,size);
@@ -61,7 +62,7 @@ function partGrid(theme,part,facing='up',bend=0){
     const sideways=facing==='right'||facing==='left';
     let color=part==='tail'?(nx<.48?p.light:p.base):body.pixelMaterial(p,worldX,worldY,(sideways?spec.head.radiusY:spec.head.radiusX)*size,(sideways?spec.head.radiusX:spec.head.radiusY)*size);
     if(theme.pattern==='strawberrySeeds'&&(part==='tail'?tailSeeds:headSeeds).some(([sx,sy])=>Math.abs(nx-sx)<.038&&Math.abs(ny-sy)<.038))color=p.detail;
-    if(theme.pattern==='basketballSeams'&&(x===16||y===18))color=p.ink;
+    if(theme.pattern==='basketballSeams'&&basketball.pixel(x,y,size,part))color=p.ink;
     if(theme.pattern==='emeraldInlay'&&body.emeraldPixel(x,y,size,part))color=p.detail;
     return body.surfacePixel(theme,x,y,size,part,color);
   }));

@@ -14,7 +14,7 @@
     "pixelPalette": { "base": "#e92631", "light": "#ff3f37", "shade": "#b01722", "edge": "#75121b", "ink": "#290b11", "detail": "#ffdf86" }
   },
   {
-    "id": "basketboll", "label": "Basketboll", "pattern": "basketballSeams", "bodyOrientation": "fixed",
+    "id": "basketboll", "label": "Basketboll", "pattern": "basketballSeams", "assetRevision": 2, "bodyOrientation": "fixed",
     "palette": { "base": "#ff891a", "light": "#ffb757", "shade": "#b94b08", "edge": "#773611", "ink": "#43240f", "detail": "#fff1c4" },
     "pixelPalette": { "base": "#f9891c", "light": "#ffa329", "shade": "#c7610b", "edge": "#85360c", "ink": "#3f190b", "detail": "#ffda8e" }
   },
@@ -198,9 +198,9 @@
     "pixelPalette": { "base": "#8b4db1", "light": "#c581d7", "shade": "#502f6d", "edge": "#dfb055", "ink": "#2e203c", "detail": "#fff1b1" }
   },
   {
-    "id": "hv71", "label": "HV71", "pattern": "teamColorBands", "assetRevision": 4, "bodyOrientation": "fixed",
+    "id": "hv71", "label": "HV71", "pattern": "teamColorBands", "assetRevision": 5, "bodyOrientation": "fixed",
     "palette": { "base": "#ffcb01", "light": "#fff08a", "shade": "#c99700", "edge": "#9a7404", "ink": "#ffffff", "detail": "#ffffff" },
-    "patternPalette": { "base": "#0a2240", "light": "#4b7296", "shade": "#06162b", "edge": "#040f1e", "ink": "#0a2240", "detail": "#ffcb01" },
+    "patternPalette": { "base": "#0a2240", "light": "#244c74", "shade": "#06162b", "edge": "#040f1e", "ink": "#0a2240", "detail": "#ffcb01" },
     "pixelPalette": { "base": "#ffcb01", "light": "#fff08a", "shade": "#c99700", "edge": "#304d70", "ink": "#ffffff", "detail": "#0a2240" }
   },
   {
@@ -238,5 +238,16 @@
     "palette": { "base": "#a63431", "light": "#e67752", "shade": "#651e2a", "edge": "#431a25", "ink": "#331b23", "detail": "#ffdf8e" },
     "patternPalette": { "base": "#c48b37", "light": "#ffe59a", "shade": "#935121", "edge": "#612f24", "ink": "#331b23", "detail": "#ffefb5" },
     "pixelPalette": { "base": "#b53b35", "light": "#e47750", "shade": "#70212c", "edge": "#c48b37", "ink": "#331b23", "detail": "#ffdf8e" }
+  },
+  {
+    "id": "kopparglans", "label": "Kopparglans", "pattern": "copperInlay", "bodyOrientation": "fixed",
+    "palette": { "base": "#245b55", "light": "#65b3a6", "shade": "#163b3d", "edge": "#0e272d", "ink": "#10272c", "detail": "#ffd5a6" },
+    "patternPalette": { "base": "#ca764c", "light": "#ffd5a6", "shade": "#8c3f31", "edge": "#592c29", "ink": "#10272c", "detail": "#ffe7cc" },
+    "pixelPalette": { "base": "#245b55", "light": "#65b3a6", "shade": "#163b3d", "edge": "#b87350", "ink": "#10272c", "detail": "#ffd5a6" }
+  },
+  {
+    "id": "parlemor", "label": "Pärlemor", "pattern": "pearlShell", "bodyOrientation": "fixed",
+    "palette": { "base": "#dceaf0", "light": "#fff7ed", "shade": "#95adcb", "edge": "#6786aa", "ink": "#284659", "detail": "#c9f1df" },
+    "pixelPalette": { "base": "#c5d8eb", "light": "#fff4dc", "shade": "#99aecf", "edge": "#a58fca", "ink": "#27465b", "detail": "#91d8cd" }
   }
 ]

@@ -48,14 +48,14 @@ for(const part of ['body','head-base','tail']){
   assert.ok(bodySvg('toy',moon).includes('#cb423d'),'Copper-red material, not a renamed solid red skin');
 }
 const hockey=themes.find(t=>t.id==='hv71'),hockeyTools=require('../tools/body-templates.cjs');
-assert.equal(hockey.pattern,'teamColorBands');assert.equal(hockey.assetRevision,4);
+assert.equal(hockey.pattern,'teamColorBands');assert.equal(hockey.assetRevision,5);
 assert.equal(hockey.patternPalette.base,'#0a2240');assert.equal(hockey.patternPalette.detail,'#ffcb01');
 assert.equal(hockey.palette.ink,'#ffffff');
 const hockeyColors=pixelGrid(hockey).flat().filter(Boolean);
 assert.ok(hockeyColors.filter(c=>[hockey.pixelPalette.base,hockey.pixelPalette.light,hockey.pixelPalette.shade].includes(c)).length>hockeyColors.length*.40,'Yellow is the main sculpted core');
 assert.ok(hockeyColors.filter(c=>c===hockey.pixelPalette.ink).length<hockeyColors.length*.22,'White is a thin outside line, not a broad stripe');
 assert.ok(hockeyColors.includes('#ffcb01')&&hockeyColors.includes('#0a2240'));
-assert.deepEqual(hockeyTools.teamColorBands,{whiteOuter:.97,blueInner:.74});
+assert.deepEqual(hockeyTools.teamColorBands,{whiteOuter:.95,blueInner:.73});
 assert.equal(hockeyTools.surfacePixel(hockey,16,16,32,'body',hockey.pixelPalette.base),'#ffcb01');
 assert.equal(hockeyTools.surfacePixel(hockey,27,16,32,'body',hockey.pixelPalette.base),'#0a2240');
 for(const part of ['body','head-base','tail']){

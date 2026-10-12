@@ -1,6 +1,8 @@
 /* Web only. A failed service never prevents ordinary play. */
 const WeeklyChallenge = (() => {
   let challenge=null, saved=null, run=null, finished=null, loading=null;
+  const rewardsAvailable=typeof WeeklyRewards!=='undefined'&&typeof WeeklyRewards.createTracker==='function';
+  const rewards=rewardsAvailable?WeeklyRewards.createTracker(localStorage):{weeks:()=>[],eligible:()=>[],record:()=>({accepted:false})};
   const text=(sv,en,de=en)=>pickLangText(sv,en,de);
   const PROFILE_KEY='mattormen_weekly_profiles_v1';
   function profileIdentity(){
@@ -51,13 +53,14 @@ const WeeklyChallenge = (() => {
       const data=await request('start',{});challenge=data.challenge;
       if(!saved)saved={ops:[...activeOps],range:numRange,tables:[...tables],speed:speedMode,wrap:wallWrap,practice:practiceMode,mystery:mysteryEventsEnabled,portal:portalEventsEnabled,bonus:bonusLivesEnabled};
       activeOps=new Set(challenge.rules.ops);numRange=challenge.rules.range;tables=new Set(challenge.rules.tables);speedMode=challenge.rules.speed||'none';wallWrap=challenge.rules.wallWrap??true;practiceMode=false;mysteryEventsEnabled=false;portalEventsEnabled=false;bonusLivesEnabled=false;
-      run={token:data.token,maxLength:4,identity:profileIdentity()};finished=null;startGame();
+      run={token:data.token,weekId:data.challenge.id,maxLength:4,identity:profileIdentity()};finished=null;startGame();
     }catch(e){if(saved&&!run)restore();status(e.message);}finally{$('btnWeeklyStart').disabled=false;}
   }
   function sample(){if(run)run.maxLength=Math.max(run.maxLength,snake.length);}
   function finish(){
     $('weeklyPublishBox').hidden=!run;
     if(!run)return;sample();finished={token:run.token,score,length:run.maxLength,correct:sessionCorrect,total:sessionTotal,playerId:run.identity.id};
+    try{rewards.record({weekId:run.weekId,score,correct:sessionCorrect,total:sessionTotal});rewards.eligible().forEach(unlockSkin);renderRewards();}catch(e){console.warn('Weekly rewards could not be saved');}
     $('weeklyPublishStatus').textContent=text('Ditt resultat: ','Your result: ')+score+text(' poäng · längsta orm: ',' points · longest snake: ')+run.maxLength;
     $('weeklyName').value=run.identity.name||'';$('btnPublishWeekly').disabled=false;
   }
@@ -73,12 +76,21 @@ const WeeklyChallenge = (() => {
     try{await request('submit',{...finished,name});rememberName(run.identity.profile,name);finished=null;goToMenu();goToWeekly();status(text('Resultatet är publicerat!','Your result is published!'));try{await leaders();}catch(e){status(text('Resultatet är publicerat. Listan kunde inte uppdateras just nu.','Your result is published. The leaderboard could not refresh right now.'));}}catch(e){$('weeklyPublishStatus').textContent=e.message;$('btnPublishWeekly').disabled=false;}
   }
   function init(){
+    rewards.eligible().forEach(unlockSkin);
+    const rewardInfo=document.createElement('p');rewardInfo.id='weeklyRewardsInfo';$('weeklyHSContent').append(rewardInfo);
     const panel=document.createElement('div');panel.innerHTML='<button class="export-btn" id="btnWeeklyStart" disabled></button><div class="weekly-leader-columns"><section><h3 id="weeklyScoresTitle"></h3><div id="weeklyScores"></div></section><section><h3 id="weeklyLengthsTitle"></h3><div id="weeklyLengths"></div></section></div>';$('weeklyHSContent').append(panel);
     const box=document.createElement('div');box.id='weeklyPublishBox';box.hidden=true;box.innerHTML='<p id="weeklyNameHint"></p><button class="export-btn" type="button" id="btnWeeklyPrivacy"></button><label for="weeklyName" id="weeklyNameLabel"></label><input id="weeklyName" maxlength="12" autocomplete="off" spellcheck="false" style="width:100%;box-sizing:border-box;padding:10px;border-radius:10px"><button class="ov-btn primary" id="btnPublishWeekly"></button><p id="weeklyPublishStatus" role="status"></p>';$('goStats').after(box);
     $('btnWeeklyPrivacy').addEventListener('click',()=>PrivacyInfo.open());$('btnWeeklyStart').addEventListener('click',start);$('btnPublishWeekly').addEventListener('click',publish);$('btnGoWeekly').addEventListener('click',()=>load(true));$('btnHSWeekly').addEventListener('click',()=>load(true));
     labels();load();
   }
   function labels(){if(!$('btnWeeklyStart'))return;$('btnWeeklyPrivacy').textContent=text('Om topplistan och dina uppgifter','About the leaderboard and your data','Bestenliste und deine Daten');$('btnWeeklyStart').textContent=text('Delta i veckans utmaning','Join the weekly challenge');$('weeklyScoresTitle').textContent=text('Högsta poäng · topp 50','Highest score · top 50','Höchste Punktzahl · Top 50');$('weeklyLengthsTitle').textContent=text('Längsta orm · topp 50','Longest snake · top 50','Längste Schlange · Top 50');$('weeklyNameHint').textContent=text('Frivilligt: visa resultatet för alla. Ett slumpat tävlings-ID håller ihop dina rekord. Välj ett förnamn eller smeknamn, utan efternamn eller personliga uppgifter.','Optional: show your result to everyone. A random competition ID connects your records. Choose a first name or nickname without surnames or personal information.');$('weeklyNameLabel').textContent=text('Tävlingsnamn (3–12 tecken)','Competition name (3–12 characters)');$('btnPublishWeekly').textContent=text('Publicera resultat','Publish result');render();}
+  function renderRewards(){
+    const el=$('weeklyRewardsInfo');if(!el)return;
+    if(!rewardsAvailable){el.textContent=text('Veckobelöningarna kunde inte laddas. Ladda om sidan för att aktivera dem. Vanligt spel fungerar fortfarande.','Weekly rewards could not load. Reload to enable them. Ordinary play still works.','Wochenbelohnungen konnten nicht geladen werden. Lade die Seite neu. Normales Spielen funktioniert weiterhin.');return;}
+    el.textContent=text('Veckobelöningar: Kopparglans efter minst 1 000 poäng i en veckorunda. Pärlemor efter minst 1 000 poäng under 3 olika veckor. Framsteg på denna enhet: ','Weekly rewards: Copper Gleam after at least 1,000 points in a weekly round. Mother of Pearl after at least 1,000 points in 3 different weeks. Progress on this device: ','Wochenbelohnungen: Kupferglanz nach mindestens 1.000 Punkten in einer Wochenrunde. Perlmutt nach mindestens 1.000 Punkten in 3 verschiedenen Wochen. Fortschritt auf diesem Gerät: ')+rewards.weeks().length+'/3. '+text('Du behöver inte publicera ditt resultat.','You do not need to publish your result.','Du musst dein Ergebnis nicht veröffentlichen.');
+  }
+  const originalLabels=labels;
+  labels=function(){originalLabels();renderRewards();};
   return{init,load,finish,restore,sample,labels,active:()=>!!run};
 })();
 WeeklyChallenge.init();

@@ -1,5 +1,33 @@
 # Fasta snokmallar: leksaksformer och pixelretro
 
+## Aktuell skinrunda – 12 oktober 2026
+
+Nu finns **43 spelbara teman** i Modern och Pixelretro. Kopparglans och
+Pärlemor är nya veckobelöningar, med samma låsta cirkel, huvudskalor,
+ögon och svansfäste som övriga mallar. Kopparglans har skulpterad
+petrolgrön volym med två svepande kopparinlägg. Pärlemor har ljus
+pärlvolym och tre egna parallella, iriserande band – inget korsmönster.
+Pixelversionerna använder native 32 × 32 och högst sex färger.
+
+Basketboll revision 2 använder `tools/basketball-seams.cjs` för två raka
+och två böjda sömmar på alla tre kroppsdelstyperna. Kroppsmönstret roterar
+inte. HV71 revision 5 behåller gul kärna, marinblå kant och tunn vit
+ytterlinje, med en blå-vit diagonal accent inom kärnan. Loggan används
+bara som färgreferens; inga bokstäver eller hockeyföremål bakas in.
+
+Kopparglans: minst **1 000 poäng** i en avslutad veckorunda.
+Pärlemor: samma poängkrav under **tre olika ISO-veckor**, inte nödvändigtvis
+i följd. Bara en kvalificering per vecka. Upplåsning kräver ingen
+publicering eller tävlingsnamn. Framsteg finns lokalt och i sparfil
+version 6; import bevarar redan intjänade veckor. Runtime-previews:
+`runtime-preview.html?skins=hv71,basketboll,kopparglans,parlemor`.
+
+Den fullständiga uppsättningen omfattar 595 byggtillgångar och 583
+runtime-WebP-bilder. Basketfixen är även överförd till Android-källan.
+HV71 är fortfarande web-exklusivt; veckoskinnen registreras inte i
+Android före veckoutmaningsfunktionen. Äldre status-/antalnoteringar
+nedan beskriver tidigare skinrundor.
+
 Det här är produktionsmallar för kropp, huvud, svans och separata ögonlager. **Klassisk, Isblå, Rosa, Lila, Smaragd, Jordgubbe, Basketboll, Regnbåge, Guld, Polkagris, Galax, Vattenmelon, Fotboll, Miami Sunset, Blixt, Aurora, Hav, Lava, Obsidian, Night Rose, Skog, Radioaktiv, Plasma, Clockwork, Runorm, Prismagodis, Skuggmysterium, Tidvatten, Museiväktaren, Stjärnarkiv, Solregent, Stjärnhimmel, Ghost, Kunglig, HV71, Blodmåne, Tiger, Katt, Hund, Ko och Drake är inkopplade i spelet i båda stilarna.** Leksaksformerna ersätter tidigare Modern men menyvalet heter fortfarande Modern. Grafikvalen är Modern, Pixelretro och Original; Original behåller runtime-id `classic` och ska inte förväxlas med skinnet Klassisk. Alla 41 skins finns nu i båda nya stilarna; tidigare modernbilder bevaras för Original/övergångskod. Upplåsningskraven är oförändrade.
 
 ## Runtimeexport och integration

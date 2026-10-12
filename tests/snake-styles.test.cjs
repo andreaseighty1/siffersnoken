@@ -11,7 +11,7 @@ for(const mode of ['toy','pixel'])for(const id of styles.config.skins){
   }
 }
 assert.ok(!styles.supports('pixel','unknown'));assert.ok(!styles.supports('classic','klassisk'));
-assert.equal(styles.config.skins.length,41,'All existing game skins have both new styles');
+assert.equal(styles.config.skins.length,43,'All existing and weekly reward skins have both new styles');
 for(const [id,profile] of Object.entries({tiger:'feline',katt:'feline',hund:'canine',bi:'bovine',drake:'dragon'})){
   assert.equal(styles.config.animalProfiles[id],profile);
   const period=styles.config.tailAnimations[id].periodMs;
@@ -162,8 +162,8 @@ async function run(){
     assert.ok(layer.commands.filter(c=>c[0]==='draw').slice(-3).every(c=>c[1]===1),'Parts compose at full opacity before the single translucent blit');
   }
   // End sprite has both tail and body painted at full opacity, before frame fade.
-  for(const [id,revision,count] of [['inferno',2,12],['radioaktiv',2,12],['plasma',2,12],['hv71',4,12],['tiger',3,24],['katt',2,24]])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v='+revision)).length,count,'Corrected '+id+' fetches revised WebPs in both modes');
-  assert.ok(requestedUrls.filter(url=>!['inferno','radioaktiv','plasma','hv71','tiger','katt'].some(id=>url.includes('/'+id+'-'))).every(url=>!url.includes('?v=')),'Shared eyes and unchanged themes keep their existing cache');
+  for(const [id,revision,count] of [['inferno',2,12],['radioaktiv',2,12],['plasma',2,12],['hv71',5,12],['basketboll',2,12],['tiger',3,24],['katt',2,24]])assert.equal(requestedUrls.filter(url=>url.includes('/'+id+'-')&&url.endsWith('?v='+revision)).length,count,'Corrected '+id+' fetches revised WebPs in both modes');
+  assert.ok(requestedUrls.filter(url=>!['inferno','radioaktiv','plasma','hv71','basketboll','tiger','katt'].some(id=>url.includes('/'+id+'-'))).every(url=>!url.includes('?v=')),'Shared eyes and unchanged themes keep their existing cache');
   const joined=canvases.find(c=>c.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-tail.webp')));
   assert.ok(joined.commands.some(cmd=>cmd[0]==='draw'&&cmd[3]?.source?.endsWith('klassisk-body.webp')));
   console.log('PASS: three modes, legacy migration, only runtime WebPs, all themes/facings/blink, fixed pixel grid, joined tail alpha, wrapping, reused caches and app syntax.');

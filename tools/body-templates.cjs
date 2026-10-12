@@ -7,6 +7,7 @@ const themes=require('../skin-templates/themes.json');
 const snakeSpec=require('../skin-templates/snake-spec.json'),football=require('./football-panels.cjs');
 const feline=require('./feline-templates.cjs');
 const animals=require('./animal-templates.cjs');
+const basketball=require('./basketball-seams.cjs');
 const templateRoot=path.resolve(__dirname,'../skin-templates');
 const generatedRoot=path.join(templateRoot,'generated');
 const patterns=new Set(['none','strawberrySeeds','basketballSeams','emeraldInlay','candyBands','galaxyClouds','melonRind','footballPanels','sunsetWaves','electricCurrent','auroraRibbons','oceanFoam','magmaCracks','obsidianSheen','rosePetals','forestLeaves','nuclearFlux','plasmaStreams','brassMechanism','runestone','candyPrism','shadowVeils','tidalGlass','keeperInlay','celestialChart','solarRays','meteorNight','spectralMist','royalBrocade','teamRibbons','teamColorBands']);
@@ -17,7 +18,7 @@ const readGenerated=file=>fs.readFileSync(file,'utf8').replace(/\r\n/g,'\n');
 const seeds=[[-.37,-.31],[.30,-.39],[-.27,.30],[.36,.26],[.02,-.01]];
 function validateTheme(theme){
   if(!/^[a-z][a-z0-9-]*$/.test(theme.id))throw new Error('Invalid theme id');
-  if(!patterns.has(theme.pattern)&&!['lunarCopper','tigerStripes','catPatches','dogSaddle','cowPatches','dragonScales'].includes(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
+  if(!patterns.has(theme.pattern)&&!['lunarCopper','tigerStripes','catPatches','dogSaddle','cowPatches','dragonScales','copperInlay','pearlShell'].includes(theme.pattern))throw new Error('Unsupported pattern: '+theme.pattern);
   if(theme.animalProfile!==undefined&&!['feline','canine','bovine','dragon'].includes(theme.animalProfile))throw new Error('Unsupported animal profile');
   if(!['fixed','directional'].includes(theme.bodyOrientation))throw new Error('Invalid body orientation');
   if(theme.assetRevision!==undefined&&(!Number.isSafeInteger(theme.assetRevision)||theme.assetRevision<1))throw new Error('Invalid asset revision');
@@ -78,6 +79,7 @@ function galaxyCloud(nx,ny,part){
   return ((dx*.82-dy*.57)/rx)**2+((dx*.57+dy*.82)/ry)**2;
 }
 function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
+  if(theme.pattern==='copperInlay'||theme.pattern==='pearlShell')return rewardSvg(theme,size,part,lightCenter);
   if(['dogSaddle','cowPatches','dragonScales'].includes(theme.pattern))return animalSurfaceSvg(theme,size,part,lightCenter);
   if(['tigerStripes','catPatches'].includes(theme.pattern))return felineSvg(theme,size,part,lightCenter);
   if(theme.pattern==='lunarCopper')return lunarSvg(theme,size,part,lightCenter);
@@ -114,6 +116,7 @@ function surfaceSvg(theme,size,part,lightCenter=[.38,.30]){
 }
 function surfacePixel(theme,x,y,size,part,color){
   const p=theme.pixelPalette||theme.palette,nx=(x+.5)/size,ny=(y+.5)/size;
+  if(color!==p.ink&&(theme.pattern==='copperInlay'||theme.pattern==='pearlShell'))return rewardPixel(theme,nx,ny,part,color);
   if(theme.pattern==='melonRind'){
     const radius=melonRadius(nx,ny,part);
     if(color===p.ink)return color;
@@ -152,6 +155,9 @@ function surfacePixel(theme,x,y,size,part,color){
     const radius=melonRadius(nx,ny,part);
     if(radius>teamColorBands.whiteOuter)return p.ink;
     if(radius>teamColorBands.blueInner)return color===p.light||color===p.detail?p.edge:p.detail;
+    const [u,v]=surfaceCoordinates(nx,ny,part),slash=v-u;
+    if(slash>-.32&&slash<-.19)return p.detail;
+    if(slash>-.35&&slash<-.16)return p.ink;
     return color===p.edge?p.shade:color===p.detail?p.light:color;
   }
   if(['royalBrocade','teamRibbons'].includes(theme.pattern)){
@@ -533,7 +539,7 @@ function lunarSvg(theme,size,part,lightCenter){
   return {defs:material.defs+mask,paint:`<g mask="url(#${id}-rim)">${material.paint}</g>`+grooves};
 }
 // Thin white outside, navy around a sculpted yellow core. Color only, no badge.
-const teamColorBands={whiteOuter:.97,blueInner:.74};
+const teamColorBands={whiteOuter:.95,blueInner:.73};
 function teamColorSvg(theme,size,part,lightCenter){
   const tail=part==='tail',id=`${theme.id}-${part}-color-bands`;
   const rx=part==='head-base'?snakeSpec.head.radiusX:spec.geometry.outerRadius;
@@ -541,8 +547,11 @@ function teamColorSvg(theme,size,part,lightCenter){
   const blue=toyMaterial(theme.patternPalette,id+'-navy',size,{rx,ry,tail,lightCenter});
   const yellow=toyMaterial(theme.palette,id+'-yellow',size,{rx,ry,tail,lightCenter});
   const mask=(name,fraction)=>`<mask id="${id}-${name}" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${melonShape(size,part,fraction)}</g></mask>`;
-  return {defs:blue.defs+yellow.defs+mask('blue',teamColorBands.whiteOuter)+mask('yellow',teamColorBands.blueInner),
-    paint:`<rect width="${size}" height="${size}" fill="#ffffff"/><g mask="url(#${id}-blue)">${blue.paint}</g><g mask="url(#${id}-yellow)">${yellow.paint}</g>`};
+  const f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};
+  const polygon=(lo,hi)=>`<polygon points="${[[0,lo],[1,1+lo],[1,1+hi],[0,hi]].map(([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`).join(' ')}"/>`;
+  const stripe=`<mask id="${id}-sash" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}"><g fill="white">${polygon(-.32,-.19)}</g></mask>`;
+  return {defs:blue.defs+yellow.defs+mask('blue',teamColorBands.whiteOuter)+mask('yellow',teamColorBands.blueInner)+stripe,
+    paint:`<rect width="${size}" height="${size}" fill="#ffffff"/><g mask="url(#${id}-blue)">${blue.paint}</g><g mask="url(#${id}-yellow)">${yellow.paint}<g fill="#ffffff">${polygon(-.35,-.16)}</g><g mask="url(#${id}-sash)">${blue.paint}</g></g>`};
 }
 const royalTrim=[cubicPoints([-.12,.25],[.48,.03],[.19,.82],[1.12,.73]),cubicPoints([-.12,.70],[.61,1.13],[.59,.19],[1.12,.25])];
 const teamTrim=[[[.00,.20],[1.0,.66]],[[.0,.42],[1.0,.88]]];
@@ -857,13 +866,37 @@ function footballSvg(theme,size,part,lightCenter){
   const seams=football.panels.map(panel=>`<path d="${path(panel)}" fill="none" stroke="${theme.palette.ink}" stroke-opacity=".32" stroke-width="${size*.007}" stroke-linejoin="round"/>`).join('');
   return {defs:black.defs+`<mask id="${id}-patches" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${patches}</mask>`,paint:`<g mask="url(#${id}-patches)">${black.paint}</g>`+seams};
 }
+const rewardBands=[cubicPoints([-.12,.24],[.32,-.02],[.22,.79],[1.12,.73]),cubicPoints([-.10,.73],[.63,1.11],[.48,.12],[1.12,.28])];
+const pearlBands=[cubicPoints([-.12,.58],[.12,-.25],[.76,.05],[1.12,.55]),cubicPoints([-.10,.82],[.14,.02],[.79,.22],[1.12,.79]),cubicPoints([.12,1.10],[.26,.57],[.79,.54],[1.11,.92])];
+function rewardSvg(theme,size,part,lightCenter){
+  const id=theme.id+'-'+part+'-surface',tail=part==='tail',f=tail?{x:.34,y:.125,w:.32,h:.40}:{x:0,y:0,w:1,h:1};
+  const data=line=>'M '+line.map(([u,v])=>`${size*(f.x+u*f.w)},${size*(f.y+v*f.h)}`).join(' L ');
+  if(theme.pattern==='copperInlay'){
+    const copper=toyMaterial(theme.patternPalette,id,size,{tail,lightCenter,finish:'gold'});
+    const strokes=rewardBands.map(line=>`<path d="${data(line)}" fill="none" stroke="white" stroke-width="${size*f.w*.098}"/>`).join('');
+    const edge=rewardBands.map(line=>`<path d="${data(line)}" transform="translate(0 ${-size*f.h*.024})" fill="none" stroke="${theme.patternPalette.light}" stroke-opacity=".65" stroke-width="${size*f.w*.012}"/>`).join('');
+    return {defs:copper.defs+`<mask id="${id}-inlay" maskUnits="userSpaceOnUse" x="0" y="0" width="${size}" height="${size}">${strokes}</mask>`,paint:`<g mask="url(#${id}-inlay)">${copper.paint}</g>`+edge};
+  }
+  const defs=`<linearGradient id="${id}-pearl" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#a8e0d8"/><stop offset=".42" stop-color="#c5b2e6"/><stop offset=".75" stop-color="#f2cbd4"/><stop offset="1" stop-color="#b2dbe7"/></linearGradient>`;
+  const washes=pearlBands.map((line,i)=>`<path d="${data(line)}" fill="none" stroke="url(#${id}-pearl)" stroke-opacity="${i?.58:.78}" stroke-width="${size*f.w*.16}"/>`).join('');
+  const glints=pearlBands.map(line=>`<path d="${data(line)}" transform="translate(0 ${-size*f.h*.040})" fill="none" stroke="${theme.palette.light}" stroke-opacity=".85" stroke-width="${size*f.w*.018}"/>`).join('');
+  return {defs,paint:washes+glints};
+}
+function rewardPixel(theme,nx,ny,part,color){
+  const p=theme.pixelPalette,[u,v]=surfaceCoordinates(nx,ny,part);
+  const distance=Math.min(...(theme.pattern==='pearlShell'?pearlBands:rewardBands).map(line=>openPathDistance(line,u,v)));
+  if(theme.pattern==='copperInlay')return distance<.017?p.detail:distance<.067?p.edge:color;
+  if(distance<.021)return p.light;
+  if(distance<.098)return v<.53?p.detail:p.edge;
+  return color;
+}
 function toyBody(theme){
   const size=spec.styles.toy.frame,c=size/2,r=size*spec.geometry.outerRadius,p=theme.palette;
   const maskId='toy-'+theme.id+'-body',material=toyMaterial(p,'toy-'+theme.id,size,{finish:theme.material});
   const pattern=theme.pattern==='strawberrySeeds'
     ?seeds.map(([x,y])=>`<ellipse cx="${c+x*r}" cy="${c+y*r}" rx="${r*.06}" ry="${r*.074}" fill="${p.detail}"/>`).join('')
     :theme.pattern==='basketballSeams'
-      ?`<path d="M ${c} ${c-r} V ${c+r} M ${c-r} ${c} H ${c+r}" fill="none" stroke="${p.ink}" stroke-width="${r*.035}"/>`
+      ?basketball.svg(p,size,'body')
       :theme.pattern==='emeraldInlay'?emeraldSvg(p,size,'body'):'';
   // One diffuse sculpted material; no shiny circular spot or grain texture.
   // Composite one complete opaque material, then apply the outer alpha mask ONCE.
@@ -880,7 +913,7 @@ function pixelGrid(theme){
     if(color===p.ink)return color;
     if(theme.pattern==='strawberrySeeds'&&seeds.some(([sx,sy])=>
       Math.abs(dx-sx*r)<1.05&&Math.abs(dy-sy*r)<1.20))color=p.detail;
-    if(theme.pattern==='basketballSeams'&&(x===16||y===16))color=p.ink;
+    if(theme.pattern==='basketballSeams'&&basketball.pixel(x,y,size,'body'))color=p.ink;
     if(theme.pattern==='emeraldInlay'&&emeraldPixel(x,y,size,'body'))color=p.detail;
     return surfacePixel(theme,x,y,size,'body',color);
   }));
@@ -924,12 +957,13 @@ async function build({sharpModule,check=false}={}){
   for(const [style,def] of Object.entries(spec.styles)){
     for(const theme of themes){
       const svg=bodySvg(style,theme),folder=path.join(generatedRoot,style),file=path.join(folder,theme.id+'-body.svg');
+      const unchanged=fs.existsSync(file)&&readGenerated(file)===svg&&fs.existsSync(path.join(folder,theme.id+'-body.webp'));
       if(check){
         if(readGenerated(file)!==svg)throw new Error('Stale template: '+file);
       }else{
         fs.mkdirSync(folder,{recursive:true});fs.writeFileSync(file,svg);
       }
-      if(sharp&&!check)await sharp(Buffer.from(svg)).webp({lossless:true,alphaQuality:100,effort:6}).toFile(path.join(folder,theme.id+'-body.webp'));
+      if(sharp&&!check&&!unchanged)await sharp(Buffer.from(svg)).webp({lossless:true,alphaQuality:100,effort:6}).toFile(path.join(folder,theme.id+'-body.webp'));
       outputs.push({style,id:theme.id,frame:def.frame,bodyOrientation:theme.bodyOrientation,file:'generated/'+style+'/'+theme.id+'-body.webp'});
     }
   }
